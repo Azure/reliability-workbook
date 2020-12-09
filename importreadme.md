@@ -4,3 +4,4 @@ To import the workbook:
 3. New ![+ New](/png/import1.png)
 4. Advanced Editor (</>) ![Advanced Editor (</>)](/png/import2.png)
 5. Paste json into Gallery Template ![Paste json into Gallery Template](/png/import3.png)
+6. Apply
