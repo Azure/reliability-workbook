@@ -1,4 +1,4 @@
-# Reliablity Workbook
+# Reliability Workbook
 
 This workbook focus on the Reliability pillar of the Azure Well-Architected Framework and provides insights into the reliability aspects deployed in Azure subscriptions.
 
