@@ -12,6 +12,7 @@
             "name": "Cloud",
             "type": 2,
             "isRequired": true,
+            "value": "GovernmentCloud",
             "typeSettings": {
               "additionalResourceOptions": [],
               "showDefault": false
@@ -1581,6 +1582,11 @@
                         }
                       ]
                     }
+                  },
+                  "conditionalVisibility": {
+                    "parameterName": "Cloud",
+                    "comparison": "isEqualTo",
+                    "value": "AzureCloud"
                   },
                   "name": "query - 2"
                 }
@@ -9673,7 +9679,7 @@
     }
   ],
   "fallbackResourceIds": [
-    "Azure Monitor"
+    "azure monitor"
   ],
   "$schema": "https://github.com/Microsoft/Application-Insights-Workbooks/blob/master/schema/workbook.json"
 }
