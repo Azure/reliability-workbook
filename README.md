@@ -1,5 +1,7 @@
 # Reliability Workbook
 
+[![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FtsubasaxZZZ%2Freliability-workbook%2Fmain%2Fworkbooks%2FReliability%2520v2.4.azuredeploy.json)
+
 This workbook focus on the Reliability pillar of the Azure Well-Architected Framework and provides insights into the reliability aspects deployed in Azure subscriptions.
 
 User needs to import the Azure Monitor workbook available in this repository, the detailed instructions have been provided: [Import Workbook](import.md)
