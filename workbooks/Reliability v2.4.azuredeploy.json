@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.7.4.23292",
-      "templateHash": "11265722701980385642"
+      "templateHash": "4489531279216733606"
     }
   },
   "parameters": {
@@ -13,28 +13,14 @@
       "type": "string",
       "defaultValue": "FTA - Reliability Workbook",
       "metadata": {
-        "description": "ギャラリーまたは保存リストで使用されているブックのフレンドリ名。この名前は、リソース グループ内で一意である必要があります。"
-      }
-    },
-    "workbookType": {
-      "type": "string",
-      "defaultValue": "workbook",
-      "metadata": {
-        "description": "ブックが表示されるギャラリー。サポートされる値には、ブック、tsg などがあります。通常、これは 'ブック' です"
-      }
-    },
-    "workbookSourceId": {
-      "type": "string",
-      "defaultValue": "azure monitor",
-      "metadata": {
-        "description": "ブックを関連付けるリソース インスタンスの ID"
+        "description": "Name of Workbook"
       }
     },
     "workbookId": {
       "type": "string",
       "defaultValue": "[newGuid()]",
       "metadata": {
-        "description": "このブック インスタンスの一意の GUID"
+        "description": "GUID of Workbook"
       }
     }
   },
@@ -9737,8 +9723,8 @@
         "displayName": "[parameters('workbookDisplayName')]",
         "serializedData": "[string(variables('workbookContent'))]",
         "version": "1.0",
-        "sourceId": "[parameters('workbookSourceId')]",
-        "category": "[parameters('workbookType')]"
+        "sourceId": "azure monitor",
+        "category": "workbook"
       }
     }
   ],
