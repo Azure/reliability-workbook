@@ -3,9 +3,12 @@ name: Release Drafter
 on:
   push:
     branches: [main]
+    path:
+      - 'workbooks/**'
   pull_request:
     branches: [main]
-
+    path:
+      - 'workbooks/**'
 
 # on:
 #   push:
@@ -44,3 +47,23 @@ jobs:
         #   disable-autolabeler: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+    # Checkout code
+    - uses: actions/checkout@main
+    # Runs the bicep CLI action - individual files
+    - name: Run Bicep build
+      uses: aliencube/bicep-build-actions@v0.3
+      with:
+        files: workbooks/azuredeploy.bicep
+
+  attach-to-release:
+    runs-on: ubuntu-latest
+    needs: build-and-deploy
+    steps:
+    - uses: shogo82148/actions-upload-release-asset@v1
+      with:
+        upload_url: ${{ steps.build-and-deploy.outputs.upload_url }}
+        asset_path: workbooks/azuredeploy.json
