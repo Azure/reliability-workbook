@@ -1,4 +1,4 @@
-name: Release Drafter
+name: Build Bicep and create Release draft
 
 on:
   push:
@@ -49,6 +49,7 @@ jobs:
       pull-requests: write  # for release-drafter/release-drafter to add label to PR
     runs-on: ubuntu-latest
     if: github.event_name	== 'push'
+    needs: build-and-attach
     steps:
       # (Optional) GitHub Enterprise requires GHE_HOST variable set
       #- name: Set GHE_HOST
