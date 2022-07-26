@@ -29,11 +29,3 @@ template: |
   ## Changes
 
   $CHANGES
-autolabeler:
-  - label: feature
-    branch:
-      - '/^main/'
-    files:
-      - 'workbooks/*.bicep'
-      - 'workbooks/*.json'
-
