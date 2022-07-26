@@ -1,6 +1,6 @@
 # Reliability Workbook
 
-[![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FtsubasaxZZZ%2Freliability-workbook%2Fmain%2Fworkbooks%2FReliability%2520v2.4.azuredeploy.json)
+[![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FAzure%2Freliability-workbook%2Fmain%2Fworkbooks%2Fazuredeploy.json)
 
 This workbook focus on the Reliability pillar of the Azure Well-Architected Framework and provides insights into the reliability aspects deployed in Azure subscriptions.
 
