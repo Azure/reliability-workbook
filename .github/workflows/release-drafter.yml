@@ -73,4 +73,5 @@ jobs:
         with:
           upload_url: ${{ steps.release_drafter.outputs.upload_url }}
           asset_path: azuredeploy.json
+          overwrite: true
 
