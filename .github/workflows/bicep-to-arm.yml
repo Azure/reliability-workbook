@@ -1,0 +1,39 @@
+name: Bicep to Azure ARM
+
+on:
+  push:
+    branches: [main]
+    path:
+      - 'workbooks/**'
+  workflow_run:
+    workflows: ["Release Drafter"]
+    branches: [main]
+    types:
+      - completed
+#  release:
+#    types: [published]
+  pull_request:
+    branches: [main]
+    path:
+      - 'workbooks/**'
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+    # Checkout code
+    - uses: actions/checkout@main
+    # Runs the bicep CLI action - individual files
+    - name: Run Bicep build
+      uses: aliencube/bicep-build-actions@v0.3
+      with:
+        files: workbooks/azuredeploy.bicep
+
+  attach-to-release:
+    runs-on: ubuntu-latest
+    steps:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    - uses: shogo82148/actions-upload-release-asset@v1
+      with:
+        upload_url: ${{ github.event.release.upload_url }}
+        asset_path: workbooks/azuredeploy.json
