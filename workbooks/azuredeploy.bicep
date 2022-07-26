@@ -4,6 +4,7 @@ param workbookDisplayName string = 'FTA - Reliability Workbook'
 @description('GUID of Workbook')
 param workbookId string = newGuid()
 
+// If change json file name, please change the name of the filename below
 var workbookContent = loadJsonContent('Reliability v2.4.json')
 
 resource workbookId_resource 'microsoft.insights/workbooks@2021-03-08' = {
