@@ -8,8 +8,6 @@ User needs to import the Azure Monitor workbook available in this repository, th
 
 User needs to have at least [Workbook Contributor](https://docs.microsoft.com/en-us/azure/role-based-access-control/built-in-roles#workbook-contributor) access to import the workbook and [Monitoring Reader](https://docs.microsoft.com/en-us/azure/role-based-access-control/built-in-roles#monitoring-reader) to have access to monitoring information.
 
-
-
 ### Note
 * Azure Security Center with Azure Defender is required for VM backup information.
 * VMs have to be running for disk information to be available.
