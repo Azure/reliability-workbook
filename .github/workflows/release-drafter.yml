@@ -58,12 +58,7 @@ jobs:
       uses: aliencube/bicep-build-actions@v0.3
       with:
         files: workbooks/azuredeploy.bicep
-
-  attach-to-release:
-    runs-on: ubuntu-latest
-    needs: build-and-deploy
-    steps:
     - uses: shogo82148/actions-upload-release-asset@v1
       with:
-        upload_url: ${{ steps.build-and-deploy.outputs.upload_url }}
+        upload_url: ${{ steps.update_release_draft.outputs.upload_url }}
         asset_path: workbooks/azuredeploy.json
