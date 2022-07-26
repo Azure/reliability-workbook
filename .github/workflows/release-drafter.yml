@@ -3,11 +3,11 @@ name: Release Drafter
 on:
   push:
     branches: [main]
-    path:
+    paths:
       - 'workbooks/**'
   pull_request:
     branches: [main]
-    path:
+    paths:
       - 'workbooks/**'
 
 # on:
@@ -27,11 +27,28 @@ permissions:
   contents: read
 
 jobs:
+  build-and-attach:
+    runs-on: ubuntu-latest
+    steps:
+      # Checkout code
+      - uses: actions/checkout@main
+      # Runs the bicep CLI action - individual files
+      - name: Run Bicep build
+        uses: aliencube/bicep-build-actions@v0.3
+        with:
+          files: workbooks/azuredeploy.bicep
+      - name: Upload asset
+        uses: actions/upload-artifact@v3
+        with:
+          name: azuredeploy.json
+          path: workbooks/azuredeploy.json
+
   update_release_draft:
     permissions:
       contents: write  # for release-drafter/release-drafter to create a github release
       pull-requests: write  # for release-drafter/release-drafter to add label to PR
     runs-on: ubuntu-latest
+    if: github.event_name	== 'push'
     steps:
       # (Optional) GitHub Enterprise requires GHE_HOST variable set
       #- name: Set GHE_HOST
@@ -47,16 +64,12 @@ jobs:
         #   disable-autolabeler: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      # Checkout code
-      - uses: actions/checkout@main
-      # Runs the bicep CLI action - individual files
-      - name: Run Bicep build
-        uses: aliencube/bicep-build-actions@v0.3
+      - name: Download asset
+        uses: actions/download-artifact@v3
         with:
-          files: workbooks/azuredeploy.bicep
-      - name: test
-        run: echo "${{ steps.release_drafter.outputs.upload_url }}"
+          name: azuredeploy.json
       - uses: shogo82148/actions-upload-release-asset@v1
         with:
           upload_url: ${{ steps.release_drafter.outputs.upload_url }}
-          asset_path: workbooks/azuredeploy.json
+          asset_path: azuredeploy.json
+
