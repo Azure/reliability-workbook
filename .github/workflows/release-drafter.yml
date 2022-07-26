@@ -47,18 +47,14 @@ jobs:
         #   disable-autolabeler: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-  build-and-deploy:
-    runs-on: ubuntu-latest
-    steps:
-    # Checkout code
-    - uses: actions/checkout@main
-    # Runs the bicep CLI action - individual files
-    - name: Run Bicep build
-      uses: aliencube/bicep-build-actions@v0.3
-      with:
-        files: workbooks/azuredeploy.bicep
-    - uses: shogo82148/actions-upload-release-asset@v1
-      with:
-        upload_url: ${{ steps.update_release_draft.outputs.upload_url }}
-        asset_path: workbooks/azuredeploy.json
+      # Checkout code
+      - uses: actions/checkout@main
+      # Runs the bicep CLI action - individual files
+      - name: Run Bicep build
+        uses: aliencube/bicep-build-actions@v0.3
+        with:
+          files: workbooks/azuredeploy.bicep
+      - uses: shogo82148/actions-upload-release-asset@v1
+        with:
+          upload_url: ${{ steps.release_drafter.outputs.upload_url }}
+          asset_path: workbooks/azuredeploy.json
