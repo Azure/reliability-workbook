@@ -32,6 +32,8 @@ jobs:
     steps:
       # Checkout code
       - uses: actions/checkout@main
+      - name: Remove old ARM template
+        run: rm -f workbooks/azuredeploy.json
       # Runs the bicep CLI action - individual files
       - name: Run Bicep build
         uses: aliencube/bicep-build-actions@v0.3
@@ -65,6 +67,8 @@ jobs:
         #   disable-autolabeler: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      # Checkout code
+      - uses: actions/checkout@main
       - name: Download asset
         uses: actions/download-artifact@v3
         with:
@@ -74,4 +78,12 @@ jobs:
           upload_url: ${{ steps.release_drafter.outputs.upload_url }}
           asset_path: azuredeploy.json
           overwrite: true
-
+      - name: Move asset
+        run: |
+          mv -f azuredeploy.json workbooks/azuredeploy.json
+      - uses: EndBug/add-and-commit@v9.0.1
+        with:
+          author_name: github-actions
+          author_email: '41898282+github-actions[bot]@users.noreply.github.com'
+          message: Update Bicep-ARM template
+          add: workbooks/azuredeploy.json
