@@ -1,6 +1,6 @@
 # Reliability Workbook
 
-[![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fgithub.com%2Fazure%2Freliability-workbook%2Freleases%2Flatest%2Fdownload%2Fazuredeploy.json)
+[![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FAzure%2Freliability-workbook%2Fmain%2Fworkbooks%2Fazuredeploy.json)
 
 This workbook focus on the Reliability pillar of the Azure Well-Architected Framework and provides insights into the reliability aspects deployed in Azure subscriptions.
 
@@ -33,5 +33,3 @@ trademarks or logos is subject to and must follow
 [Microsoft's Trademark & Brand Guidelines](https://www.microsoft.com/en-us/legal/intellectualproperty/trademarks/usage/general).
 Use of Microsoft trademarks or logos in modified versions of this project must not cause confusion or imply Microsoft sponsorship.
 Any use of third-party trademarks or logos are subject to those third-party's policies.
-
-test

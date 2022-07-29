@@ -74,4 +74,9 @@ jobs:
           upload_url: ${{ steps.release_drafter.outputs.upload_url }}
           asset_path: azuredeploy.json
           overwrite: true
-
+      - uses: EndBug/add-and-commit@v9.0.1
+        with:
+          author_name: github-actions
+          author_email: '41898282+github-actions[bot]@users.noreply.github.com'
+          message: Update Bicep-ARM template
+          add: workbooks/azuredeploy.json
