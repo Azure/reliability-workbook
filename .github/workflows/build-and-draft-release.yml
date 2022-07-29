@@ -33,7 +33,7 @@ jobs:
       # Checkout code
       - uses: actions/checkout@main
       - name: Remove old ARM template
-        run: rm -f workbooks/azuredeploy.bicep
+        run: rm -f workbooks/azuredeploy.json
       # Runs the bicep CLI action - individual files
       - name: Run Bicep build
         uses: aliencube/bicep-build-actions@v0.3
