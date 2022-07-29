@@ -5,13 +5,13 @@
     "_generator": {
       "name": "bicep",
       "version": "0.8.9.13224",
-      "templateHash": "4826621560607142095"
+      "templateHash": "4900730218517983156"
     }
   },
   "parameters": {
     "workbookDisplayName": {
       "type": "string",
-      "defaultValue": "FTA - Reliability Workbook",
+      "defaultValue": "FTA - Reliability Workbook v2.4",
       "metadata": {
         "description": "Name of Workbook"
       }
