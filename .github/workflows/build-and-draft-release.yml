@@ -68,18 +68,18 @@ jobs:
       # Checkout code
       - uses: actions/checkout@main
       - name: Download asset
-        working-directory: workbooks
         uses: actions/download-artifact@v3
         with:
           name: azuredeploy.json
       - uses: shogo82148/actions-upload-release-asset@v1
-        working-directory: workbooks
         with:
           upload_url: ${{ steps.release_drafter.outputs.upload_url }}
           asset_path: azuredeploy.json
           overwrite: true
+      - name: Move asset
+        run: |
+          mv -f azuredeploy.json workbooks/azuredeploy.json
       - uses: EndBug/add-and-commit@v9.0.1
-        working-directory: workbooks
         with:
           author_name: github-actions
           author_email: '41898282+github-actions[bot]@users.noreply.github.com'
