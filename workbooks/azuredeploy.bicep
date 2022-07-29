@@ -1,5 +1,6 @@
 @description('Name of Workbook')
-param workbookDisplayName string = 'FTA - Reliability Workbook'
+param workbookDisplayName string = 'FTA - Reliability Workbook v2.4'
+
 @description('GUID of Workbook')
 param workbookId string = newGuid()
 
