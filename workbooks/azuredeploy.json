@@ -4,8 +4,8 @@
   "metadata": {
     "_generator": {
       "name": "bicep",
-      "version": "0.8.9.13224",
-      "templateHash": "4826621560607142095"
+      "version": "0.9.1.41621",
+      "templateHash": "14776259526775072176"
     }
   },
   "parameters": {
@@ -39,7 +39,6 @@
                 "name": "Cloud",
                 "type": 2,
                 "isRequired": true,
-                "value": "GovernmentCloud",
                 "typeSettings": {
                   "additionalResourceOptions": [],
                   "showDefault": false
@@ -48,6 +47,27 @@
                 "timeContext": {
                   "durationMs": 86400000
                 }
+              },
+              {
+                "id": "aa0176d8-14ff-4dc5-9ae7-b8029f565674",
+                "version": "KqlParameterItem/1.0",
+                "name": "Subscriptions",
+                "type": 6,
+                "isRequired": true,
+                "multiSelect": true,
+                "quote": "'",
+                "delimiter": ",",
+                "typeSettings": {
+                  "additionalResourceOptions": [
+                    "value::all"
+                  ],
+                  "includeAll": true,
+                  "showDefault": false
+                },
+                "defaultValue": "value::all",
+                "value": [
+                  "value::all"
+                ]
               }
             ],
             "style": "pills",
@@ -55,6 +75,113 @@
             "resourceType": "microsoft.operationalinsights/workspaces"
           },
           "name": "parameters - 13"
+        },
+        {
+          "type": 9,
+          "content": {
+            "version": "KqlParameterItem/1.0",
+            "crossComponentResources": [
+              "{Subscriptions}"
+            ],
+            "parameters": [
+              {
+                "id": "ac7e3b53-0894-4426-bc96-4e91af261f53",
+                "version": "KqlParameterItem/1.0",
+                "name": "ResourceGroup",
+                "label": "Resource Group",
+                "type": 2,
+                "isRequired": true,
+                "multiSelect": true,
+                "quote": "'",
+                "delimiter": ",",
+                "query": "resources\r\n| distinct resourceGroup",
+                "crossComponentResources": [
+                  "{Subscriptions}"
+                ],
+                "typeSettings": {
+                  "additionalResourceOptions": [
+                    "value::all"
+                  ],
+                  "showDefault": false
+                },
+                "defaultValue": "value::all",
+                "queryType": 1,
+                "resourceType": "microsoft.resourcegraph/resources",
+                "value": [
+                  "value::all"
+                ]
+              },
+              {
+                "id": "972eba34-11d9-42e3-8005-b0334b3a301b",
+                "version": "KqlParameterItem/1.0",
+                "name": "Criticality",
+                "type": 2,
+                "multiSelect": true,
+                "quote": "'",
+                "delimiter": ",",
+                "query": "resources\r\n| extend Criticality = case(tags.Criticality <> \"\", tags.Criticality,\r\n\t\t    \"Undefined\")\r\n| distinct Criticality",
+                "crossComponentResources": [
+                  "{Subscriptions}"
+                ],
+                "typeSettings": {
+                  "additionalResourceOptions": [
+                    "value::all"
+                  ],
+                  "showDefault": false
+                },
+                "defaultValue": "value::all",
+                "queryType": 1,
+                "resourceType": "microsoft.resourcegraph/resources"
+              },
+              {
+                "id": "5c4674db-3151-4a5f-bb5a-e5e886cc2c17",
+                "version": "KqlParameterItem/1.0",
+                "name": "Environment",
+                "type": 2,
+                "multiSelect": true,
+                "quote": "'",
+                "delimiter": ",",
+                "query": "resources\r\n| extend Environment = case(\r\ntags.Environment <> \"\", tags.Environment,\r\ntags.environment <> \"\", tags.environment,\r\ntags.Env <> \"\", tags.Env,\r\ntags.env <> \"\", tags.env,\r\ntolower(name) contains \"prod\", \"Production\",\r\ntolower(name) contains \"dev\", \"Development\",\r\ntolower(name) contains \"qa\", \"QA\",\r\ntolower(name) contains \"uat\", \"UAT\",\r\ntolower(name) contains \"sit\", \"SIT\",\r\ntolower(name) contains \"test\", \"Test\",\r\n\"Undefined\")\r\n| distinct Environment",
+                "crossComponentResources": [
+                  "{Subscriptions}"
+                ],
+                "typeSettings": {
+                  "additionalResourceOptions": [
+                    "value::all"
+                  ],
+                  "showDefault": false
+                },
+                "defaultValue": "value::all",
+                "queryType": 1,
+                "resourceType": "microsoft.resourcegraph/resources",
+                "value": [
+                  "value::all"
+                ]
+              },
+              {
+                "id": "945162bf-cf6d-4956-952c-606acfd2c5e5",
+                "version": "KqlParameterItem/1.0",
+                "name": "Help",
+                "label": "Show Help",
+                "type": 10,
+                "description": "This will show additional information, and any prerequisites that may apply to the workbook.",
+                "isRequired": true,
+                "isHiddenWhenLocked": true,
+                "typeSettings": {
+                  "additionalResourceOptions": [],
+                  "showDefault": false
+                },
+                "jsonData": "[[{ \"value\": \"Yes\", \"label\": \"Yes\"},\r\n {\"value\": \"No\", \"label\": \"No\", \"selected\":true }]",
+                "timeContext": {
+                  "durationMs": 86400000
+                }
+              }
+            ],
+            "style": "pills",
+            "queryType": 1,
+            "resourceType": "microsoft.resourcegraph/resources"
+          },
+          "name": "parameters - 0 - Copy - Copy - Copy - Copy"
         },
         {
           "type": 11,
@@ -176,57 +303,6 @@
                     "{Subscriptions}"
                   ],
                   "parameters": [
-                    {
-                      "id": "e4edb4c3-543b-419b-86dc-9539f3279c35",
-                      "version": "KqlParameterItem/1.0",
-                      "name": "Subscriptions",
-                      "type": 6,
-                      "description": "Lists all subscriptions.",
-                      "isRequired": true,
-                      "multiSelect": true,
-                      "quote": "'",
-                      "delimiter": ",",
-                      "typeSettings": {
-                        "additionalResourceOptions": [
-                          "value::all"
-                        ],
-                        "includeAll": true,
-                        "showDefault": false
-                      },
-                      "timeContext": {
-                        "durationMs": 86400000
-                      },
-                      "defaultValue": "value::all",
-                      "value": [
-                        "value::all"
-                      ]
-                    },
-                    {
-                      "id": "c6b39aae-6fef-4ab7-beee-5b59dfe15c74",
-                      "version": "KqlParameterItem/1.0",
-                      "name": "ResourceGroup",
-                      "label": "Resource Group",
-                      "type": 2,
-                      "isRequired": true,
-                      "multiSelect": true,
-                      "quote": "'",
-                      "delimiter": ",",
-                      "query": "resources\r\n| distinct resourceGroup",
-                      "crossComponentResources": [
-                        "{Subscriptions}"
-                      ],
-                      "value": [
-                        "value::all"
-                      ],
-                      "typeSettings": {
-                        "additionalResourceOptions": [
-                          "value::all"
-                        ]
-                      },
-                      "defaultValue": "value::all",
-                      "queryType": 1,
-                      "resourceType": "microsoft.resourcegraph/resources"
-                    },
                     {
                       "id": "ec96194d-d118-47b7-aee5-da4ae8d314c5",
                       "version": "KqlParameterItem/1.0",
@@ -488,135 +564,6 @@
             "version": "NotebookGroup/1.0",
             "groupType": "editable",
             "items": [
-              {
-                "type": 9,
-                "content": {
-                  "version": "KqlParameterItem/1.0",
-                  "crossComponentResources": [
-                    "value::all"
-                  ],
-                  "parameters": [
-                    {
-                      "id": "059f8eeb-be9a-48dd-b4cd-1176d8dc529f",
-                      "version": "KqlParameterItem/1.0",
-                      "name": "Subscriptions",
-                      "type": 6,
-                      "description": "Lists all subscriptions.",
-                      "isRequired": true,
-                      "multiSelect": true,
-                      "quote": "'",
-                      "delimiter": ",",
-                      "value": [
-                        "value::all"
-                      ],
-                      "typeSettings": {
-                        "additionalResourceOptions": [
-                          "value::all"
-                        ],
-                        "includeAll": true,
-                        "showDefault": false
-                      },
-                      "defaultValue": "value::all"
-                    },
-                    {
-                      "id": "ac7e3b53-0894-4426-bc96-4e91af261f53",
-                      "version": "KqlParameterItem/1.0",
-                      "name": "ResourceGroup",
-                      "label": "Resource Group",
-                      "type": 2,
-                      "isRequired": true,
-                      "multiSelect": true,
-                      "quote": "'",
-                      "delimiter": ",",
-                      "query": "resources\r\n| distinct resourceGroup",
-                      "crossComponentResources": [
-                        "{Subscriptions}"
-                      ],
-                      "value": [
-                        "value::all"
-                      ],
-                      "typeSettings": {
-                        "additionalResourceOptions": [
-                          "value::all"
-                        ]
-                      },
-                      "defaultValue": "value::all",
-                      "queryType": 1,
-                      "resourceType": "microsoft.resourcegraph/resources"
-                    },
-                    {
-                      "id": "972eba34-11d9-42e3-8005-b0334b3a301b",
-                      "version": "KqlParameterItem/1.0",
-                      "name": "Criticality",
-                      "type": 2,
-                      "multiSelect": true,
-                      "quote": "'",
-                      "delimiter": ",",
-                      "query": "resources\r\n| extend Criticality = case(tags.Criticality <> \"\", tags.Criticality,\r\n\t\t    \"Undefined\")\r\n| distinct Criticality",
-                      "crossComponentResources": [
-                        "{Subscriptions}"
-                      ],
-                      "typeSettings": {
-                        "additionalResourceOptions": [
-                          "value::all"
-                        ]
-                      },
-                      "defaultValue": "value::all",
-                      "queryType": 1,
-                      "resourceType": "microsoft.resourcegraph/resources",
-                      "value": [
-                        "value::all"
-                      ]
-                    },
-                    {
-                      "id": "5c4674db-3151-4a5f-bb5a-e5e886cc2c17",
-                      "version": "KqlParameterItem/1.0",
-                      "name": "Environment",
-                      "type": 2,
-                      "multiSelect": true,
-                      "quote": "'",
-                      "delimiter": ",",
-                      "query": "resources\r\n| extend Environment = case(\r\ntags.Environment <> \"\", tags.Environment,\r\ntags.environment <> \"\", tags.environment,\r\ntags.Env <> \"\", tags.Env,\r\ntags.env <> \"\", tags.env,\r\ntolower(name) contains \"prod\", \"Production\",\r\ntolower(name) contains \"dev\", \"Development\",\r\ntolower(name) contains \"qa\", \"QA\",\r\ntolower(name) contains \"uat\", \"UAT\",\r\ntolower(name) contains \"sit\", \"SIT\",\r\ntolower(name) contains \"test\", \"Test\",\r\n\"Undefined\")\r\n| distinct Environment",
-                      "crossComponentResources": [
-                        "{Subscriptions}"
-                      ],
-                      "typeSettings": {
-                        "additionalResourceOptions": [
-                          "value::all"
-                        ]
-                      },
-                      "defaultValue": "value::all",
-                      "queryType": 1,
-                      "resourceType": "microsoft.resourcegraph/resources",
-                      "value": [
-                        "value::all"
-                      ]
-                    },
-                    {
-                      "id": "945162bf-cf6d-4956-952c-606acfd2c5e5",
-                      "version": "KqlParameterItem/1.0",
-                      "name": "Help",
-                      "label": "Show Help",
-                      "type": 10,
-                      "description": "This will show additional information, and any prerequisites that may apply to the workbook.",
-                      "isRequired": true,
-                      "isHiddenWhenLocked": true,
-                      "typeSettings": {
-                        "additionalResourceOptions": [],
-                        "showDefault": false
-                      },
-                      "jsonData": "[[{ \"value\": \"Yes\", \"label\": \"Yes\"},\r\n {\"value\": \"No\", \"label\": \"No\", \"selected\":true }]",
-                      "timeContext": {
-                        "durationMs": 86400000
-                      }
-                    }
-                  ],
-                  "style": "pills",
-                  "queryType": 1,
-                  "resourceType": "microsoft.resourcegraph/resources"
-                },
-                "name": "parameters - 0 - Copy - Copy - Copy - Copy"
-              },
               {
                 "type": 12,
                 "content": {
@@ -1038,102 +985,6 @@
                     "value::all"
                   ],
                   "parameters": [
-                    {
-                      "id": "059f8eeb-be9a-48dd-b4cd-1176d8dc529f",
-                      "version": "KqlParameterItem/1.0",
-                      "name": "Subscriptions",
-                      "type": 6,
-                      "description": "Lists all subscriptions.",
-                      "isRequired": true,
-                      "multiSelect": true,
-                      "quote": "'",
-                      "delimiter": ",",
-                      "value": [
-                        "value::all"
-                      ],
-                      "typeSettings": {
-                        "additionalResourceOptions": [
-                          "value::all"
-                        ],
-                        "includeAll": true,
-                        "showDefault": false
-                      },
-                      "defaultValue": "value::all"
-                    },
-                    {
-                      "id": "ac7e3b53-0894-4426-bc96-4e91af261f53",
-                      "version": "KqlParameterItem/1.0",
-                      "name": "ResourceGroup",
-                      "label": "Resource Group",
-                      "type": 2,
-                      "isRequired": true,
-                      "multiSelect": true,
-                      "quote": "'",
-                      "delimiter": ",",
-                      "query": "resources\r\n| distinct resourceGroup",
-                      "crossComponentResources": [
-                        "{Subscriptions}"
-                      ],
-                      "value": [
-                        "value::all"
-                      ],
-                      "typeSettings": {
-                        "additionalResourceOptions": [
-                          "value::all"
-                        ]
-                      },
-                      "defaultValue": "value::all",
-                      "queryType": 1,
-                      "resourceType": "microsoft.resourcegraph/resources"
-                    },
-                    {
-                      "id": "972eba34-11d9-42e3-8005-b0334b3a301b",
-                      "version": "KqlParameterItem/1.0",
-                      "name": "Criticality",
-                      "type": 2,
-                      "multiSelect": true,
-                      "quote": "'",
-                      "delimiter": ",",
-                      "query": "resources\r\n| extend Criticality = case(tags.Criticality <> \"\", tags.Criticality,\r\n\t\t    \"Undefined\")\r\n| distinct Criticality",
-                      "crossComponentResources": [
-                        "{Subscriptions}"
-                      ],
-                      "typeSettings": {
-                        "additionalResourceOptions": [
-                          "value::all"
-                        ]
-                      },
-                      "defaultValue": "value::all",
-                      "queryType": 1,
-                      "resourceType": "microsoft.resourcegraph/resources",
-                      "value": [
-                        "value::all"
-                      ]
-                    },
-                    {
-                      "id": "5c4674db-3151-4a5f-bb5a-e5e886cc2c17",
-                      "version": "KqlParameterItem/1.0",
-                      "name": "Environment",
-                      "type": 2,
-                      "multiSelect": true,
-                      "quote": "'",
-                      "delimiter": ",",
-                      "query": "resources\r\n| extend Environment = case(\r\ntags.Environment <> \"\", tags.Environment,\r\ntags.environment <> \"\", tags.environment,\r\ntags.Env <> \"\", tags.Env,\r\ntags.env <> \"\", tags.env,\r\ntolower(name) contains \"prod\", \"Production\",\r\ntolower(name) contains \"dev\", \"Development\",\r\ntolower(name) contains \"qa\", \"QA\",\r\ntolower(name) contains \"uat\", \"UAT\",\r\ntolower(name) contains \"sit\", \"SIT\",\r\ntolower(name) contains \"test\", \"Test\",\r\n\"Undefined\")\r\n| distinct Environment",
-                      "crossComponentResources": [
-                        "{Subscriptions}"
-                      ],
-                      "typeSettings": {
-                        "additionalResourceOptions": [
-                          "value::all"
-                        ]
-                      },
-                      "defaultValue": "value::all",
-                      "queryType": 1,
-                      "resourceType": "microsoft.resourcegraph/resources",
-                      "value": [
-                        "value::all"
-                      ]
-                    },
                     {
                       "id": "945162bf-cf6d-4956-952c-606acfd2c5e5",
                       "version": "KqlParameterItem/1.0",
@@ -1855,98 +1706,6 @@
                     "{Subscriptions}"
                   ],
                   "parameters": [
-                    {
-                      "id": "c7be4626-a5bf-49c2-83d4-e78f4d5c52a8",
-                      "version": "KqlParameterItem/1.0",
-                      "name": "Subscriptions",
-                      "type": 6,
-                      "isRequired": true,
-                      "multiSelect": true,
-                      "quote": "'",
-                      "delimiter": ",",
-                      "value": [
-                        "value::all"
-                      ],
-                      "typeSettings": {
-                        "additionalResourceOptions": [
-                          "value::all"
-                        ],
-                        "includeAll": true,
-                        "showDefault": false
-                      },
-                      "timeContext": {
-                        "durationMs": 86400000
-                      },
-                      "defaultValue": "value::all"
-                    },
-                    {
-                      "id": "9017d91b-7134-4b67-808d-0e96c1664fb0",
-                      "version": "KqlParameterItem/1.0",
-                      "name": "Criticality",
-                      "type": 2,
-                      "multiSelect": true,
-                      "quote": "'",
-                      "delimiter": ",",
-                      "query": "resources\r\n| extend Criticality = case(tags.Criticality <> \"\", tags.Criticality,\r\n\t\t    \"Undefined\")\r\n| distinct Criticality",
-                      "crossComponentResources": [
-                        "{Subscriptions}"
-                      ],
-                      "value": [
-                        "value::all"
-                      ],
-                      "typeSettings": {
-                        "additionalResourceOptions": [
-                          "value::all"
-                        ],
-                        "showDefault": false
-                      },
-                      "defaultValue": "value::all",
-                      "queryType": 1,
-                      "resourceType": "microsoft.resourcegraph/resources"
-                    },
-                    {
-                      "id": "0fb220d8-a871-43b1-b907-c5bd60c7ce92",
-                      "version": "KqlParameterItem/1.0",
-                      "name": "Environment",
-                      "type": 2,
-                      "multiSelect": true,
-                      "quote": "'",
-                      "delimiter": ",",
-                      "query": "resources\r\n| extend Environment = case(\r\ntags.Environment <> \"\", tags.Environment,\r\ntags.environment <> \"\", tags.environment,\r\ntags.Env <> \"\", tags.Env,\r\ntags.env <> \"\", tags.env,\r\ntolower(name) contains \"prod\", \"Production\",\r\ntolower(name) contains \"dev\", \"Development\",\r\ntolower(name) contains \"qa\", \"QA\",\r\ntolower(name) contains \"uat\", \"UAT\",\r\ntolower(name) contains \"sit\", \"SIT\",\r\ntolower(name) contains \"test\", \"Test\",\r\n\"Undefined\")\r\n| distinct Environment",
-                      "crossComponentResources": [
-                        "{Subscriptions}"
-                      ],
-                      "typeSettings": {
-                        "additionalResourceOptions": [
-                          "value::all"
-                        ]
-                      },
-                      "defaultValue": "value::all",
-                      "queryType": 1,
-                      "resourceType": "microsoft.resourcegraph/resources"
-                    },
-                    {
-                      "id": "f92c10d3-c07c-4063-87a1-40c822237576",
-                      "version": "KqlParameterItem/1.0",
-                      "name": "ResourceGroup",
-                      "label": "Resource Group",
-                      "type": 2,
-                      "multiSelect": true,
-                      "quote": "'",
-                      "delimiter": ",",
-                      "query": "resources\r\n| distinct resourceGroup",
-                      "crossComponentResources": [
-                        "{Subscriptions}"
-                      ],
-                      "typeSettings": {
-                        "additionalResourceOptions": [
-                          "value::all"
-                        ]
-                      },
-                      "defaultValue": "value::all",
-                      "queryType": 1,
-                      "resourceType": "microsoft.resourcegraph/resources"
-                    },
                     {
                       "id": "fc2a73d7-6fba-4dd6-890a-568f15e3d1d5",
                       "version": "KqlParameterItem/1.0",
@@ -3168,103 +2927,6 @@
                     "{Subscriptions}"
                   ],
                   "parameters": [
-                    {
-                      "id": "100d329a-08a8-4027-85e7-635f580ad68f",
-                      "version": "KqlParameterItem/1.0",
-                      "name": "Subscriptions",
-                      "type": 6,
-                      "isRequired": true,
-                      "multiSelect": true,
-                      "quote": "'",
-                      "delimiter": ",",
-                      "value": [
-                        "value::all"
-                      ],
-                      "typeSettings": {
-                        "additionalResourceOptions": [
-                          "value::all"
-                        ],
-                        "includeAll": true,
-                        "showDefault": false
-                      },
-                      "timeContext": {
-                        "durationMs": 86400000
-                      },
-                      "defaultValue": "value::all"
-                    },
-                    {
-                      "id": "8d4d4f28-115e-4d89-b6a0-229ed44487b1",
-                      "version": "KqlParameterItem/1.0",
-                      "name": "Criticality",
-                      "type": 2,
-                      "multiSelect": true,
-                      "quote": "'",
-                      "delimiter": ",",
-                      "query": "resources\r\n| extend Criticality = case(tags.Criticality <> \"\", tags.Criticality,\r\n\t\t    \"Undefined\")\r\n| distinct Criticality",
-                      "crossComponentResources": [
-                        "{Subscriptions}"
-                      ],
-                      "value": [
-                        "value::all"
-                      ],
-                      "typeSettings": {
-                        "additionalResourceOptions": [
-                          "value::all"
-                        ],
-                        "showDefault": false
-                      },
-                      "defaultValue": "value::all",
-                      "queryType": 1,
-                      "resourceType": "microsoft.resourcegraph/resources"
-                    },
-                    {
-                      "id": "8795144d-3202-4c47-9f6f-d7b13e1fe357",
-                      "version": "KqlParameterItem/1.0",
-                      "name": "Environment",
-                      "type": 2,
-                      "multiSelect": true,
-                      "quote": "'",
-                      "delimiter": ",",
-                      "query": "resources\r\n| extend Environment = case(\r\ntags.Environment <> \"\", tags.Environment,\r\ntags.environment <> \"\", tags.environment,\r\ntags.Env <> \"\", tags.Env,\r\ntags.env <> \"\", tags.env,\r\ntolower(name) contains \"prod\", \"Production\",\r\ntolower(name) contains \"dev\", \"Development\",\r\ntolower(name) contains \"qa\", \"QA\",\r\ntolower(name) contains \"uat\", \"UAT\",\r\ntolower(name) contains \"sit\", \"SIT\",\r\ntolower(name) contains \"test\", \"Test\",\r\n\"Undefined\")\r\n| distinct Environment",
-                      "crossComponentResources": [
-                        "{Subscriptions}"
-                      ],
-                      "typeSettings": {
-                        "additionalResourceOptions": [
-                          "value::all"
-                        ],
-                        "showDefault": false
-                      },
-                      "defaultValue": "value::all",
-                      "queryType": 1,
-                      "resourceType": "microsoft.resourcegraph/resources"
-                    },
-                    {
-                      "id": "2ae46e08-6068-4e1d-b8b0-65e7d377d873",
-                      "version": "KqlParameterItem/1.0",
-                      "name": "ResourceGroup",
-                      "label": "Resource Group",
-                      "type": 2,
-                      "isRequired": true,
-                      "multiSelect": true,
-                      "quote": "'",
-                      "delimiter": ",",
-                      "query": "resources\r\n| distinct resourceGroup",
-                      "crossComponentResources": [
-                        "{Subscriptions}"
-                      ],
-                      "typeSettings": {
-                        "additionalResourceOptions": [
-                          "value::all"
-                        ]
-                      },
-                      "defaultValue": "value::all",
-                      "queryType": 1,
-                      "resourceType": "microsoft.resourcegraph/resources",
-                      "value": [
-                        "value::all"
-                      ]
-                    },
                     {
                       "id": "0414f091-7725-4687-99f1-00e83440db18",
                       "version": "KqlParameterItem/1.0",
@@ -4624,107 +4286,6 @@
                     "{Subscriptions}"
                   ],
                   "parameters": [
-                    {
-                      "id": "b63203d3-451f-45a0-9d22-ff01dabcf4e5",
-                      "version": "KqlParameterItem/1.0",
-                      "name": "Subscriptions",
-                      "type": 6,
-                      "isRequired": true,
-                      "multiSelect": true,
-                      "quote": "'",
-                      "delimiter": ",",
-                      "value": [
-                        "value::all"
-                      ],
-                      "typeSettings": {
-                        "additionalResourceOptions": [
-                          "value::all"
-                        ],
-                        "includeAll": true,
-                        "showDefault": false
-                      },
-                      "timeContext": {
-                        "durationMs": 86400000
-                      },
-                      "defaultValue": "value::all"
-                    },
-                    {
-                      "id": "1f01a11d-36a7-4416-a0b3-69ea034ee5db",
-                      "version": "KqlParameterItem/1.0",
-                      "name": "Criticality",
-                      "type": 2,
-                      "multiSelect": true,
-                      "quote": "'",
-                      "delimiter": ",",
-                      "query": "resources\r\n| extend Criticality = case(tags.Criticality <> \"\", tags.Criticality,\r\n\t\t    \"Undefined\")\r\n| distinct Criticality",
-                      "crossComponentResources": [
-                        "{Subscriptions}"
-                      ],
-                      "value": [
-                        "value::all"
-                      ],
-                      "typeSettings": {
-                        "additionalResourceOptions": [
-                          "value::all"
-                        ],
-                        "showDefault": false
-                      },
-                      "defaultValue": "value::all",
-                      "queryType": 1,
-                      "resourceType": "microsoft.resourcegraph/resources"
-                    },
-                    {
-                      "id": "707f63c2-d1b1-41dd-afb7-93f0fced8161",
-                      "version": "KqlParameterItem/1.0",
-                      "name": "Environment",
-                      "type": 2,
-                      "multiSelect": true,
-                      "quote": "'",
-                      "delimiter": ",",
-                      "query": "resources\r\n| extend Environment = case(\r\ntags.Environment <> \"\", tags.Environment,\r\ntags.environment <> \"\", tags.environment,\r\ntags.Env <> \"\", tags.Env,\r\ntags.env <> \"\", tags.env,\r\ntolower(name) contains \"prod\", \"Production\",\r\ntolower(name) contains \"dev\", \"Development\",\r\ntolower(name) contains \"qa\", \"QA\",\r\ntolower(name) contains \"uat\", \"UAT\",\r\ntolower(name) contains \"sit\", \"SIT\",\r\ntolower(name) contains \"test\", \"Test\",\r\n\"Undefined\")\r\n| distinct Environment\r\n\r\n",
-                      "crossComponentResources": [
-                        "{Subscriptions}"
-                      ],
-                      "typeSettings": {
-                        "additionalResourceOptions": [
-                          "value::all"
-                        ],
-                        "showDefault": false
-                      },
-                      "defaultValue": "value::all",
-                      "queryType": 1,
-                      "resourceType": "microsoft.resourcegraph/resources"
-                    },
-                    {
-                      "id": "c86b103b-a7d2-4d35-8598-a65902a7514f",
-                      "version": "KqlParameterItem/1.0",
-                      "name": "ResourceGroup",
-                      "label": "Resource Group",
-                      "type": 2,
-                      "isRequired": true,
-                      "multiSelect": true,
-                      "quote": "'",
-                      "delimiter": ",",
-                      "query": "resources\r\n| distinct resourceGroup",
-                      "crossComponentResources": [
-                        "{Subscriptions}"
-                      ],
-                      "value": [
-                        "value::all"
-                      ],
-                      "typeSettings": {
-                        "additionalResourceOptions": [
-                          "value::all"
-                        ],
-                        "showDefault": false
-                      },
-                      "timeContext": {
-                        "durationMs": 86400000
-                      },
-                      "defaultValue": "value::all",
-                      "queryType": 1,
-                      "resourceType": "microsoft.resourcegraph/resources"
-                    },
                     {
                       "id": "d9dc8d17-6b0b-4b4e-8ad9-db9953f2df9f",
                       "version": "KqlParameterItem/1.0",
@@ -7291,91 +6852,6 @@
                   "version": "KqlParameterItem/1.0",
                   "parameters": [
                     {
-                      "id": "60168909-7ce4-46d4-86eb-df56b6f7a949",
-                      "version": "KqlParameterItem/1.0",
-                      "name": "Subscription",
-                      "type": 6,
-                      "isRequired": true,
-                      "multiSelect": true,
-                      "quote": "'",
-                      "delimiter": ",",
-                      "typeSettings": {
-                        "additionalResourceOptions": [
-                          "value::all"
-                        ],
-                        "includeAll": true,
-                        "showDefault": false
-                      },
-                      "timeContext": {
-                        "durationMs": 86400000
-                      },
-                      "defaultValue": "value::all"
-                    },
-                    {
-                      "id": "6add51aa-df9a-450e-8e9d-95b2d25867ae",
-                      "version": "KqlParameterItem/1.0",
-                      "name": "Criticality",
-                      "type": 2,
-                      "multiSelect": true,
-                      "quote": "'",
-                      "delimiter": ",",
-                      "query": "resources\r\n| extend Criticality = case(tags.Criticality <> \"\", tags.Criticality,\r\n\t\t    \"Undefined\")\r\n| distinct Criticality",
-                      "crossComponentResources": [
-                        "{Subscription}"
-                      ],
-                      "typeSettings": {
-                        "additionalResourceOptions": [
-                          "value::all"
-                        ]
-                      },
-                      "defaultValue": "value::all",
-                      "queryType": 1,
-                      "resourceType": "microsoft.resourcegraph/resources"
-                    },
-                    {
-                      "id": "b56dea6c-4ede-4e15-9a11-aa4e9246470c",
-                      "version": "KqlParameterItem/1.0",
-                      "name": "Environment",
-                      "type": 2,
-                      "multiSelect": true,
-                      "quote": "'",
-                      "delimiter": ",",
-                      "query": "resources\r\n| extend Environment = case(\r\ntags.Environment <> \"\", tags.Environment,\r\ntags.environment <> \"\", tags.environment,\r\ntags.Env <> \"\", tags.Env,\r\ntags.env <> \"\", tags.env,\r\ntolower(name) contains \"prod\", \"Production\",\r\ntolower(name) contains \"dev\", \"Development\",\r\ntolower(name) contains \"qa\", \"QA\",\r\ntolower(name) contains \"uat\", \"UAT\",\r\ntolower(name) contains \"sit\", \"SIT\",\r\ntolower(name) contains \"test\", \"Test\",\r\n\"Undefined\")\r\n| distinct Environment",
-                      "crossComponentResources": [
-                        "{Subscription}"
-                      ],
-                      "typeSettings": {
-                        "additionalResourceOptions": [
-                          "value::all"
-                        ]
-                      },
-                      "defaultValue": "value::all",
-                      "queryType": 1,
-                      "resourceType": "microsoft.resourcegraph/resources"
-                    },
-                    {
-                      "id": "8601378c-0c53-4452-a26e-5936cf27d2d9",
-                      "version": "KqlParameterItem/1.0",
-                      "name": "ResourceGroup",
-                      "label": "Resource Group",
-                      "type": 2,
-                      "multiSelect": true,
-                      "quote": "'",
-                      "delimiter": ",",
-                      "query": "resources\r\n| distinct resourceGroup",
-                      "crossComponentResources": [
-                        "{Subscription}"
-                      ],
-                      "typeSettings": {
-                        "additionalResourceOptions": [
-                          "value::all"
-                        ]
-                      },
-                      "defaultValue": "value::all",
-                      "queryType": 1,
-                      "resourceType": "microsoft.resourcegraph/resources"
-                    },
-                    {
                       "id": "e63069af-5126-43a5-8ec4-b07935d3cded",
                       "version": "KqlParameterItem/1.0",
                       "name": "SLA",
@@ -7454,7 +6930,7 @@
                   "queryType": 1,
                   "resourceType": "microsoft.resourcegraph/resources",
                   "crossComponentResources": [
-                    "{Subscription}"
+                    "{Subscriptions}"
                   ],
                   "gridSettings": {
                     "formatters": [
@@ -7974,99 +7450,6 @@
                   ],
                   "parameters": [
                     {
-                      "id": "d2db1bc8-6a24-4222-8553-a5651dd88e27",
-                      "version": "KqlParameterItem/1.0",
-                      "name": "Subscriptions",
-                      "type": 6,
-                      "isRequired": true,
-                      "multiSelect": true,
-                      "quote": "'",
-                      "delimiter": ",",
-                      "value": [
-                        "value::all"
-                      ],
-                      "typeSettings": {
-                        "additionalResourceOptions": [
-                          "value::all"
-                        ],
-                        "includeAll": true,
-                        "showDefault": false
-                      },
-                      "timeContext": {
-                        "durationMs": 86400000
-                      },
-                      "defaultValue": "value::all"
-                    },
-                    {
-                      "id": "d55bef3f-b2f7-4b63-803e-5d169cb1d2a2",
-                      "version": "KqlParameterItem/1.0",
-                      "name": "Criticality",
-                      "type": 2,
-                      "multiSelect": true,
-                      "quote": "'",
-                      "delimiter": ",",
-                      "query": "resources\r\n| extend Criticality = case(tags.Criticality <> \"\", tags.Criticality,\r\n\t\t    \"Undefined\")\r\n| distinct Criticality",
-                      "crossComponentResources": [
-                        "{Subscriptions}"
-                      ],
-                      "value": [
-                        "value::all"
-                      ],
-                      "typeSettings": {
-                        "additionalResourceOptions": [
-                          "value::all"
-                        ],
-                        "showDefault": false
-                      },
-                      "defaultValue": "value::all",
-                      "queryType": 1,
-                      "resourceType": "microsoft.resourcegraph/resources"
-                    },
-                    {
-                      "id": "837b9076-1743-4490-aa84-ee8026be1e1a",
-                      "version": "KqlParameterItem/1.0",
-                      "name": "Environment",
-                      "type": 2,
-                      "multiSelect": true,
-                      "quote": "'",
-                      "delimiter": ",",
-                      "query": "resources\r\n| extend Environment = case(\r\ntags.Environment <> \"\", tags.Environment,\r\ntags.environment <> \"\", tags.environment,\r\ntags.Env <> \"\", tags.Env,\r\ntags.env <> \"\", tags.env,\r\ntolower(name) contains \"prod\", \"Production\",\r\ntolower(name) contains \"dev\", \"Development\",\r\ntolower(name) contains \"qa\", \"QA\",\r\ntolower(name) contains \"uat\", \"UAT\",\r\ntolower(name) contains \"sit\", \"SIT\",\r\ntolower(name) contains \"test\", \"Test\",\r\n\"Undefined\")\r\n| distinct Environment",
-                      "crossComponentResources": [
-                        "{Subscriptions}"
-                      ],
-                      "typeSettings": {
-                        "additionalResourceOptions": [
-                          "value::all"
-                        ]
-                      },
-                      "defaultValue": "value::all",
-                      "queryType": 1,
-                      "resourceType": "microsoft.resourcegraph/resources"
-                    },
-                    {
-                      "id": "e2e92ba1-e3be-4887-9b4a-3919643fbea0",
-                      "version": "KqlParameterItem/1.0",
-                      "name": "ResourceGroup",
-                      "label": "Resource Group",
-                      "type": 2,
-                      "multiSelect": true,
-                      "quote": "'",
-                      "delimiter": ",",
-                      "query": "resources\r\n| distinct resourceGroup",
-                      "crossComponentResources": [
-                        "{Subscriptions}"
-                      ],
-                      "typeSettings": {
-                        "additionalResourceOptions": [
-                          "value::all"
-                        ],
-                        "showDefault": false
-                      },
-                      "defaultValue": "value::all",
-                      "queryType": 1,
-                      "resourceType": "microsoft.resourcegraph/resources"
-                    },
-                    {
                       "id": "e396ce5d-22f2-4e08-9079-d3732ff0ff62",
                       "version": "KqlParameterItem/1.0",
                       "name": "SLA",
@@ -8461,98 +7844,6 @@
                   ],
                   "parameters": [
                     {
-                      "id": "53c4869e-fe5f-4d92-99ec-fb784580a576",
-                      "version": "KqlParameterItem/1.0",
-                      "name": "Subscriptions",
-                      "type": 6,
-                      "isRequired": true,
-                      "multiSelect": true,
-                      "quote": "'",
-                      "delimiter": ",",
-                      "value": [
-                        "value::all"
-                      ],
-                      "typeSettings": {
-                        "additionalResourceOptions": [
-                          "value::all"
-                        ],
-                        "includeAll": true,
-                        "showDefault": false
-                      },
-                      "timeContext": {
-                        "durationMs": 86400000
-                      },
-                      "defaultValue": "value::all"
-                    },
-                    {
-                      "id": "24e0a66f-1672-46c0-9ee0-efda089b3272",
-                      "version": "KqlParameterItem/1.0",
-                      "name": "Criticality",
-                      "type": 2,
-                      "multiSelect": true,
-                      "quote": "'",
-                      "delimiter": ",",
-                      "query": "resources\r\n| extend Criticality = case(tags.Criticality <> \"\", tags.Criticality,\r\n\t\t    \"Undefined\")\r\n| distinct Criticality",
-                      "crossComponentResources": [
-                        "{Subscriptions}"
-                      ],
-                      "value": [
-                        "value::all"
-                      ],
-                      "typeSettings": {
-                        "additionalResourceOptions": [
-                          "value::all"
-                        ],
-                        "showDefault": false
-                      },
-                      "defaultValue": "value::all",
-                      "queryType": 1,
-                      "resourceType": "microsoft.resourcegraph/resources"
-                    },
-                    {
-                      "id": "7a1ef434-0364-4d13-b251-8285cc0b52d9",
-                      "version": "KqlParameterItem/1.0",
-                      "name": "Environment",
-                      "type": 2,
-                      "multiSelect": true,
-                      "quote": "'",
-                      "delimiter": ",",
-                      "query": "resources\r\n| extend Environment = case(\r\ntags.Environment <> \"\", tags.Environment,\r\ntags.environment <> \"\", tags.environment,\r\ntags.Env <> \"\", tags.Env,\r\ntags.env <> \"\", tags.env,\r\ntolower(name) contains \"prod\", \"Production\",\r\ntolower(name) contains \"dev\", \"Development\",\r\ntolower(name) contains \"qa\", \"QA\",\r\ntolower(name) contains \"uat\", \"UAT\",\r\ntolower(name) contains \"sit\", \"SIT\",\r\ntolower(name) contains \"test\", \"Test\",\r\n\"Undefined\")\r\n| distinct Environment",
-                      "crossComponentResources": [
-                        "{Subscriptions}"
-                      ],
-                      "typeSettings": {
-                        "additionalResourceOptions": [
-                          "value::all"
-                        ]
-                      },
-                      "defaultValue": "value::all",
-                      "queryType": 1,
-                      "resourceType": "microsoft.resourcegraph/resources"
-                    },
-                    {
-                      "id": "830e9027-ea9a-4b21-964b-8ce5561331cb",
-                      "version": "KqlParameterItem/1.0",
-                      "name": "ResourceGroup",
-                      "label": "Resource Group",
-                      "type": 2,
-                      "multiSelect": true,
-                      "quote": "'",
-                      "delimiter": ",",
-                      "query": "resources\r\n| distinct resourceGroup",
-                      "crossComponentResources": [
-                        "{Subscriptions}"
-                      ],
-                      "typeSettings": {
-                        "additionalResourceOptions": [
-                          "value::all"
-                        ]
-                      },
-                      "defaultValue": "value::all",
-                      "queryType": 1,
-                      "resourceType": "microsoft.resourcegraph/resources"
-                    },
-                    {
                       "id": "253ea690-4b1f-476d-972f-f3db5588e4e3",
                       "version": "KqlParameterItem/1.0",
                       "name": "SLA",
@@ -8934,95 +8225,6 @@
                   ],
                   "parameters": [
                     {
-                      "id": "e674bfa2-0e16-4ee3-9f6f-0d01d8347241",
-                      "version": "KqlParameterItem/1.0",
-                      "name": "Subscriptions",
-                      "type": 6,
-                      "isRequired": true,
-                      "multiSelect": true,
-                      "quote": "'",
-                      "delimiter": ",",
-                      "value": [
-                        "value::all"
-                      ],
-                      "typeSettings": {
-                        "additionalResourceOptions": [
-                          "value::all"
-                        ],
-                        "includeAll": true,
-                        "showDefault": false
-                      },
-                      "timeContext": {
-                        "durationMs": 86400000
-                      },
-                      "defaultValue": "value::all"
-                    },
-                    {
-                      "id": "ae637451-d4ac-43e6-bcc7-9a0705878bc8",
-                      "version": "KqlParameterItem/1.0",
-                      "name": "Criticality",
-                      "type": 2,
-                      "multiSelect": true,
-                      "quote": "'",
-                      "delimiter": ",",
-                      "query": "resources\r\n| extend Criticality = case(tags.Criticality <> \"\", tags.Criticality,\r\n\t\t    \"Undefined\")\r\n| distinct Criticality",
-                      "crossComponentResources": [
-                        "{Subscriptions}"
-                      ],
-                      "typeSettings": {
-                        "additionalResourceOptions": [
-                          "value::all"
-                        ],
-                        "showDefault": false
-                      },
-                      "defaultValue": "value::all",
-                      "queryType": 1,
-                      "resourceType": "microsoft.resourcegraph/resources"
-                    },
-                    {
-                      "id": "e3fbd475-e4a5-45f5-a4bf-ef8ec409d527",
-                      "version": "KqlParameterItem/1.0",
-                      "name": "Environment",
-                      "type": 2,
-                      "multiSelect": true,
-                      "quote": "'",
-                      "delimiter": ",",
-                      "query": "resources\r\n| extend Environment = case(\r\ntags.Environment <> \"\", tags.Environment,\r\ntags.environment <> \"\", tags.environment,\r\ntags.Env <> \"\", tags.Env,\r\ntags.env <> \"\", tags.env,\r\ntolower(name) contains \"prod\", \"Production\",\r\ntolower(name) contains \"dev\", \"Development\",\r\ntolower(name) contains \"qa\", \"QA\",\r\ntolower(name) contains \"uat\", \"UAT\",\r\ntolower(name) contains \"sit\", \"SIT\",\r\ntolower(name) contains \"test\", \"Test\",\r\n\"Undefined\")\r\n| distinct Environment",
-                      "crossComponentResources": [
-                        "{Subscriptions}"
-                      ],
-                      "typeSettings": {
-                        "additionalResourceOptions": [
-                          "value::all"
-                        ]
-                      },
-                      "defaultValue": "value::all",
-                      "queryType": 1,
-                      "resourceType": "microsoft.resourcegraph/resources"
-                    },
-                    {
-                      "id": "414cacfe-2d64-40eb-8788-16d82859ef94",
-                      "version": "KqlParameterItem/1.0",
-                      "name": "ResourceGroup",
-                      "label": "Resource Group",
-                      "type": 2,
-                      "multiSelect": true,
-                      "quote": "'",
-                      "delimiter": ",",
-                      "query": "resources\r\n| distinct resourceGroup",
-                      "crossComponentResources": [
-                        "{Subscriptions}"
-                      ],
-                      "typeSettings": {
-                        "additionalResourceOptions": [
-                          "value::all"
-                        ]
-                      },
-                      "defaultValue": "value::all",
-                      "queryType": 1,
-                      "resourceType": "microsoft.resourcegraph/resources"
-                    },
-                    {
                       "id": "b3f445bb-65c7-45da-ae8a-dcfd2a90ee83",
                       "version": "KqlParameterItem/1.0",
                       "name": "SLA",
@@ -9396,103 +8598,6 @@
                   ],
                   "parameters": [
                     {
-                      "id": "371c6c5b-70bb-48a8-9500-6abbc879ae04",
-                      "version": "KqlParameterItem/1.0",
-                      "name": "Subscription",
-                      "type": 6,
-                      "description": "Lists all subscriptions.",
-                      "isRequired": true,
-                      "multiSelect": true,
-                      "quote": "'",
-                      "delimiter": ",",
-                      "typeSettings": {
-                        "additionalResourceOptions": [
-                          "value::all"
-                        ],
-                        "includeAll": true,
-                        "showDefault": false
-                      },
-                      "timeContext": {
-                        "durationMs": 86400000
-                      },
-                      "defaultValue": "value::all"
-                    },
-                    {
-                      "id": "d3dc45eb-6e80-49e0-a802-aec6fadee432",
-                      "version": "KqlParameterItem/1.0",
-                      "name": "Criticality",
-                      "type": 2,
-                      "multiSelect": true,
-                      "quote": "'",
-                      "delimiter": ",",
-                      "query": "resources\r\n| extend Criticality = case(tags.Criticality <> \"\", tags.Criticality,\r\n\t\t    \"Undefined\")\r\n| distinct Criticality",
-                      "crossComponentResources": [
-                        "{Subscription}"
-                      ],
-                      "typeSettings": {
-                        "additionalResourceOptions": [
-                          "value::all"
-                        ]
-                      },
-                      "timeContext": {
-                        "durationMs": 86400000
-                      },
-                      "defaultValue": "value::all",
-                      "queryType": 1,
-                      "resourceType": "microsoft.resourcegraph/resources"
-                    },
-                    {
-                      "id": "4d0ebd59-46ef-41c9-8aff-5ee95450ede4",
-                      "version": "KqlParameterItem/1.0",
-                      "name": "Environment",
-                      "type": 2,
-                      "multiSelect": true,
-                      "quote": "'",
-                      "delimiter": ",",
-                      "query": "resources\r\n| extend Environment = case(\r\ntags.Environment <> \"\", tags.Environment,\r\ntags.environment <> \"\", tags.environment,\r\ntags.Env <> \"\", tags.Env,\r\ntags.env <> \"\", tags.env,\r\ntolower(name) contains \"prod\", \"Production\",\r\ntolower(name) contains \"dev\", \"Development\",\r\ntolower(name) contains \"qa\", \"QA\",\r\ntolower(name) contains \"uat\", \"UAT\",\r\ntolower(name) contains \"sit\", \"SIT\",\r\ntolower(name) contains \"test\", \"Test\",\r\n\"Undefined\")\r\n| distinct Environment",
-                      "crossComponentResources": [
-                        "{Subscription}"
-                      ],
-                      "typeSettings": {
-                        "additionalResourceOptions": [
-                          "value::all"
-                        ]
-                      },
-                      "timeContext": {
-                        "durationMs": 86400000
-                      },
-                      "defaultValue": "value::all",
-                      "queryType": 1,
-                      "resourceType": "microsoft.resourcegraph/resources"
-                    },
-                    {
-                      "id": "824f087f-59b2-49cb-93a2-ae89397f125f",
-                      "version": "KqlParameterItem/1.0",
-                      "name": "ResourceGroup",
-                      "label": "Resource Group",
-                      "type": 2,
-                      "isRequired": true,
-                      "multiSelect": true,
-                      "quote": "'",
-                      "delimiter": ",",
-                      "query": "resources\r\n| distinct resourceGroup",
-                      "crossComponentResources": [
-                        "{Subscription}"
-                      ],
-                      "typeSettings": {
-                        "additionalResourceOptions": [
-                          "value::all"
-                        ],
-                        "showDefault": false
-                      },
-                      "timeContext": {
-                        "durationMs": 86400000
-                      },
-                      "defaultValue": "value::all",
-                      "queryType": 1,
-                      "resourceType": "microsoft.resourcegraph/resources"
-                    },
-                    {
                       "id": "f46c904e-7777-498a-bcc3-f3340204ee71",
                       "version": "KqlParameterItem/1.0",
                       "name": "SLA",
@@ -9530,7 +8635,7 @@
                     }
                   ],
                   "style": "pills",
-                  "queryType": 1,
+                  "queryType": 0,
                   "resourceType": "microsoft.resourcegraph/resources"
                 },
                 "name": "parameters - 0 - Copy - Copy"
@@ -9570,7 +8675,7 @@
                   "queryType": 1,
                   "resourceType": "microsoft.resourcegraph/resources",
                   "crossComponentResources": [
-                    "{Subscription}"
+                    "{Subscriptions}"
                   ],
                   "gridSettings": {
                     "formatters": [
@@ -9706,7 +8811,7 @@
         }
       ],
       "fallbackResourceIds": [
-        "azure monitor"
+        "Azure Monitor"
       ],
       "$schema": "https://github.com/Microsoft/Application-Insights-Workbooks/blob/master/schema/workbook.json"
     },
