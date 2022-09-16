@@ -1,0 +1,32 @@
+extend ReliabilityScore = case(
+    // VM - 4 checks // score = ("AZ + AS + Disk + Backup") * 100 / (3 * ResourceTotal) // AZ or AS is mutually exclusive, so VM should have either one
+    Type == 'microsoft.compute/virtualmachines', (AvZoneCount + AvSetCount + PremorUltOSDiskCount + HealthyBackupCount) * 100 / (3 * ResourceTotal), 
+    // VMSS - 3 checks  // score = (Capacity + Fault Domains + managed disk type) * 100 / (3 * ResourceTotal) //********* Future - Overprovision, Fault Domain State
+    Type == 'microsoft.compute/virtualmachinescalesets', (Gt1CapacityCount + Gt0FaultDomainCount + PremorUltOSDiskCount) * 100 / (3 * ResourceTotal),
+    // AppService & Function App - 2 checks // score = ("non dev/shared/free/ basic sku" + AppServiceRunningState) * 100 / (2 * ResourceTotal)
+    Type == 'microsoft.web/sites', (OtherSku + RunningState) * 100 / (2 * ResourceTotal),
+    // AKS - 4 checks // score = ("AZ" + "AS" + "Capacity" + "Disk") * 100 / (4 * ResourceTotal)  //********* Future - LB SKU
+    Type == 'microsoft.containerservice/managedclusters', (AvZoneCount + AvSetCount + Gt1CapacityCount + PremorUltOSDiskCount) * 100 / (4 * ResourceTotal),
+    // SQLDB - 4 checks  // score = ("status" + "tier" + "storage acct. type"  + "AZ")* 100 / (5 * ResourceTotal)  //********* Future - "read replica count"
+    Type == 'microsoft.sql/servers/databases', (DBOnlineStateCount + SqlPremiumOrBusinessCriticalOrDwh + DBGeoStorage + AvZoneCount + NAAvZoneCount) * 100 / (4 * ResourceTotal),
+    // CosmosDB - 4 checks // score = ( "readreplicacount" + "AZ" + "multiWrite" + "AutoFailover") * 100 / (4 * ResourceTotal) // included NA items to show compliance
+    Type == 'microsoft.documentdb/databaseaccounts', (Gt0DbReplica + AvZoneCount + NAAvZoneCount + EnabledDbMultiWrite + NADbMultiWrite + ConfiguredAutomaticFailover + NAAutomaticFailover) * 100 / (4 * ResourceTotal),
+    // MySQL - 5 checks // score = ("status" + "sku" + "grsbackup" + "storageautogrow" + "replication") * 100 / (5 * ResourceTotal) //********* Future - "Sku family Gen5", read replica
+    Type == 'microsoft.dbformysql/servers', (DBOnlineStateCount + OtherSku + HealthyBackupCount + EnabledStorageAutogrow + ReplicationEnabled) * 100 / (5 * ResourceTotal),
+    // MySQL Flexible - 4 checks  // score = ("status" + "sku"  + "replication" + "HaEnabled") * 100 / (4 * ResourceTotal)    // included NA items to show compliance  //********* Future - "read replica", "automatic failover", "backup"
+    Type == 'microsoft.dbformysql/flexibleservers', (DBOnlineStateCount + OtherSku + ReplicationEnabled + NAReplicationEnabled + AvZoneCount + NAAvZoneCount) * 100 / (4 * ResourceTotal),
+    // APIM - 2 checks // score = ("Tier" + "capacity") * 100 / (2 * ResourceTotal) 
+    Type == 'microsoft.apimanagement/service', (OtherSku + Gt1CapacityCount) * 100 / (2 * ResourceTotal),
+    // Storage - 2 checks // score = ( "kind" + "replication type") * 100 / (2 * ResourceTotal)    //********* Future - "access tier hot"
+    Type == 'microsoft.storage/storageaccounts' or Type == 'microsoft.classicstorage/storageaccounts', (V2StorageEnabled + RAStorageEnabled) * 100 / (2 * ResourceTotal),
+    // AzureFirewall - 1 check // score = (AZ) * 100 / (1 * ResourceTotal)
+    Type == 'microsoft.network/azurefirewalls', (AvZoneCount + NAAvZoneCount)* 100 / ResourceTotal,
+    // AFD - 1 check // score = state  * 100 / (1 * ResourceTotal)
+    Type == 'microsoft.network/frontdoors', AFDEnabledStateCount * 100 / ResourceTotal,
+    // AppGW - 5 checks    // score = (state + AZ + Tier + autoscaling + capacity) * 100 / (5 * ResourceTotal)
+    Type == 'microsoft.network/applicationgateways', (RunningState + AvZoneCount + NAAvZoneCount + OtherAppGwSkuCount + AutoScaleAppGwCount + Gt1CapacityCount) * 100 / (5 * ResourceTotal),
+    // LB - 2 checks  // score = (SKU + AZ) * 100 / (2 * ResourceTotal)
+    Type == 'microsoft.network/loadbalancers', (OtherSku + AvZoneCount + NAAvZoneCount) * 100 / (2 * ResourceTotal),
+    // ASR - 1 check  // score = status * 100 / (1 * ResourceTotal)
+    Type == 'microsoft.recoveryservices/vaults', (AsrSucceededState) * 100 / (1 * ResourceTotal),
+    0)
