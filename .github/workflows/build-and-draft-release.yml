@@ -5,10 +5,12 @@ on:
     branches: [main]
     paths:
       - 'workbooks/**'
+      - '!workbooks/azuredeploy.json'
   pull_request:
     branches: [main]
     paths:
       - 'workbooks/**'
+      - '!workbooks/azuredeploy.json'
 
 # on:
 #   push:
@@ -81,12 +83,12 @@ jobs:
             workbooks/Reliability Workbook.json
             workbooks/azuredeploy.bicep
           overwrite: true
-      - name: Move asset
-        run: |
-          mv -f azuredeploy.json workbooks/azuredeploy.json
-      - uses: EndBug/add-and-commit@v9.0.1
-        with:
-          author_name: github-actions
-          author_email: '41898282+github-actions[bot]@users.noreply.github.com'
-          message: Update Bicep-ARM template
-          add: workbooks/azuredeploy.json
+#      - name: Move asset
+#        run: |
+#          mv -f azuredeploy.json workbooks/azuredeploy.json
+#      - uses: EndBug/add-and-commit@v9.0.1
+#        with:
+#          author_name: github-actions
+#          author_email: '41898282+github-actions[bot]@users.noreply.github.com'
+#          message: Update Bicep-ARM template
+#          add: workbooks/azuredeploy.json
