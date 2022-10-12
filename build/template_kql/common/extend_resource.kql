@@ -96,7 +96,7 @@ resources
     (type == "microsoft.network/azurefirewalls"), iif(isnotnull(zones), "Configured", "Not Configured"),
     (type == "microsoft.network/frontdoors"), "Not Applicable",
     (type == "microsoft.network/applicationgateways"), iif(isnotnull(zones), "Configured", "Not Configured"),
-    (type == "microsoft.network/loadbalancers"), case(
+    (type == "microsoft.network/loadbalancers"), case( 
         skuName =~ "Basic", "Not Applicable",
         skuName =~ "Standard" and isnotnull(zones), "Configured",
         "Not Configured"
@@ -148,7 +148,7 @@ resources
     )
 | extend FaultDomain = case(
     type == 'microsoft.compute/virtualmachines', "Not Applicable",
-    type == 'microsoft.compute/virtualmachinescalesets', iif(isnotempty(properties.platformFaultDomainCount), properties.platformFaultDomainCount, "0"),    // 1 - AZ, 5 - Regional VMSS
+    type == 'microsoft.compute/virtualmachinescalesets', iif(isnotempty(properties.platformFaultDomainCount), properties.platformFaultDomainCount, "0"),  // 1 - AZ, 5 - Regional VMSS
     type == 'microsoft.web/sites', "Not Applicable",
     type == 'microsoft.containerservice/managedclusters', iif(isnotempty(properties1.platformFaultDomainCount), properties1.platformFaultDomainCount, "0"),
     type == 'microsoft.sql/servers/databases', "Not Applicable",
@@ -310,67 +310,3 @@ resources
     AvailabilitySet == '-', 'None',
     isnotempty(AvailabilitySet), AvailabilitySet,
     "Unknown")
-| project Type, SkuName, Kind, SubscriptionId, Name, State, Location, ResourceGroup, Zones, AvailabilityZone, AvailabilitySet, Capacity, FaultDomain, OSDisk, ReadReplica, AutomaticFailover, MultipleWriteLocations, StorageAutogrow, ReplicationRole, Backup = tolower(Backup), Criticality, Environment, ResourceId
-| summarize 
-    ResourceTotal=count(ResourceId),
-    OtherSku=dcountif(ResourceId, ((SkuName !contains "shared") and (SkuName !contains "free") and (SkuName !contains "basic") and (SkuName !contains "develop"))),
-    DevelopmentSkuCount=dcountif(ResourceId, SkuName contains "develop"), 
-    SharedSkuCount=dcountif(ResourceId, SkuName contains "shared"),
-    FreeSkuCount=dcountif(ResourceId, SkuName contains "free"),
-    BasicSkuCount=dcountif(ResourceId, SkuName contains "basic"), 
-    SqlPremiumOrBusinessCriticalOrDwh=dcountif(ResourceId, Type == 'microsoft.sql/servers/databases' and (SkuName contains "premium" or SkuName contains "businesscritical" or SkuName contains "datawarehouse")), 
-    VMDeallocatedStateCount=dcountif(ResourceId, State contains "vm deallocated"),
-    NoAvZoneCount=dcountif(ResourceId, (AvailabilityZone contains "not configured")),
-    NAAvZoneCount=dcountif(ResourceId, (AvailabilityZone contains "not applicable")),
-    AvZoneCount=dcountif(ResourceId, (AvailabilityZone in ('1', '2', '3', 'configured'))),
-    NoAvSetCount=dcountif(ResourceId, (AvailabilitySet contains "none") or (AvailabilitySet contains "not configured")),
-    NAAvSetCount=dcountif(ResourceId, AvailabilitySet contains "not applicable"),
-    AvSetCount=dcountif(ResourceId, (AvailabilitySet !contains "none") and (AvailabilitySet !contains "not applicable") and (AvailabilitySet !contains "not configured")),
-    NACapacityCount=dcountif(ResourceId, (Capacity contains "not applicable")),
-    ZeroCapacityCount=dcountif(ResourceId, (Capacity contains "0")),
-    Gt1CapacityCount=dcountif(ResourceId, (Capacity !contains "not applicable") and (Capacity !contains "0") and (Capacity !contains "1") and (Capacity !contains "undefined")),
-    NAFaultDomainCount=dcountif(ResourceId, (FaultDomain contains "not applicable")),
-    ZeroFaultDomainCount=dcountif(ResourceId, (FaultDomain contains "0")),
-    Gt0FaultDomainCount=dcountif(ResourceId, (FaultDomain !contains "not applicable") and (FaultDomain !contains "0") and (FaultDomain !contains "undefined")),
-    NAOSDiskCount=dcountif(ResourceId, (OSDisk contains "not applicable")),
-    UnknownOSDiskCount=dcountif(ResourceId, (OSDisk contains "Unknown")),
-    OtherOSDiskCount=dcountif(ResourceId, (OSDisk !contains "premium") and (OSDisk !contains "ultra") and (OSDisk !contains "ephemeral") and (OSDisk !contains "not applicable")),
-    PremorUltOSDiskCount=dcountif(ResourceId, (OSDisk contains "premium") or (OSDisk contains "ultra") or (OSDisk contains "ephemeral")),
-    NABackupCount=dcountif(ResourceId, (Backup contains "not applicable")),
-    UnknownBackupCount=dcountif(ResourceId, (Backup contains "Unknown")),
-    HealthyBackupCount=dcountif(ResourceId, (Backup == "healthy")),
-    UnhealthyBackupCount=dcountif(ResourceId, (Backup == "unhealthy")),
-    RunningState=dcountif(ResourceId, State contains "running"),
-    DBOnlineStateCount=dcountif(ResourceId, State contains "online" or State contains "ready"),
-    DBPausedStateCount=dcountif(ResourceId, State contains "paused"),
-    DBGeoStorage=dcountif(ResourceId, OSDisk == "grs"),
-    DBLrsStorage=dcountif(ResourceId, OSDisk == "lrs"),
-    Gt0DbReplica=dcountif(ResourceId, (ReadReplica !contains "not applicable") and (ReadReplica !contains "0") and (ReadReplica !contains "undefined")),
-    Lt1DbReplica=dcountif(ResourceId, ReadReplica contains "0"),
-    NotEnabledDbMultiWrite=dcountif(ResourceId, MultipleWriteLocations contains "not enabled"),
-    NADbMultiWrite=dcountif(ResourceId, MultipleWriteLocations contains "not applicable"),
-    EnabledDbMultiWrite=dcountif(ResourceId, MultipleWriteLocations == "enabled"),
-    NotConfiguredAutomaticFailover=dcountif(ResourceId, AutomaticFailover == "not configured"),
-    ConfiguredAutomaticFailover=dcountif(ResourceId, AutomaticFailover == "configured"),
-    NAAutomaticFailover=dcountif(ResourceId, AutomaticFailover == "not applicable"),
-    EnabledStorageAutogrow=dcountif(ResourceId, StorageAutogrow == "enabled"),
-    NotEnabledStorageAutogrow=dcountif(ResourceId, StorageAutogrow != "enabled" and Type != "microsoft.dbformysql/flexibleservers"),
-    ReplicationEnabled=dcountif(ResourceId, ReplicationRole == "master" or ReplicationRole == "replica"),
-    NAReplicationEnabled=dcountif(ResourceId, ReplicationRole == "none" and AvailabilityZone != "enabled" and Type == "microsoft.dbformysql/flexibleservers"),
-    NoReplicationEnabled=dcountif(ResourceId, ReplicationRole == "none" and AvailabilityZone != "enabled"),
-    RAStorageEnabled=dcountif(ResourceId, ReplicationRole startswith "ra" and Type contains 'storageaccounts'),
-    NoRAStorageEnabled=dcountif(ResourceId, ReplicationRole !startswith "ra" and Type contains 'storageaccounts'),
-    V2StorageEnabled=dcountif(ResourceId, Kind == "StorageV2" and Type contains 'storageaccounts'),
-    NoV2StorageEnabled=dcountif(ResourceId, Kind != "StorageV2" and Type contains 'storageaccounts'),
-    AFDEnabledStateCount=dcountif(ResourceId, State == "enabled" and Type == 'microsoft.network/frontdoors'),
-    NoAFDEnabledStateCount=dcountif(ResourceId, State != "enabled" and Type == 'microsoft.network/frontdoors'),
-    SmallAppGwSkuCount=dcountif(ResourceId, SkuName contains "small" and Type == 'microsoft.network/applicationgateways'), 
-    OtherAppGwSkuCount=dcountif(ResourceId, SkuName !contains "small" and Type == 'microsoft.network/applicationgateways'),
-    AutoScaleAppGwCount=dcountif(ResourceId, AutomaticFailover == "configured" and Type == 'microsoft.network/applicationgateways'),
-    NoAutoScaleAppGwCount=dcountif(ResourceId, AutomaticFailover == "not configured" and Type == 'microsoft.network/applicationgateways'),
-    AsrSucceededState=dcountif(ResourceId, State == "succeeded" and Type == 'microsoft.recoveryservices/vaults'),
-    NoAsrSucceededState=dcountif(ResourceId, State != "succeeded" and Type == 'microsoft.recoveryservices/vaults')
-    by Type, Environment, Criticality
-| ${score}
-    | project Type, Environment, Criticality, ResourceTotal, score=toint(ReliabilityScore)
-    | summarize WorkbookScore=round(avg(score),1) | project WorkbookScore

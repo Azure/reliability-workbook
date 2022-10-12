@@ -17,40 +17,209 @@ locals {
     "kql_summary_workbook_reliability_score"                                    = jsonencode(local.kql_summary_workbook_reliability_score)
     "kql_summary_reliability_score_by_resource_environment_and_criticality"     = jsonencode(local.kql_summary_reliability_score_by_resource_environment_and_criticality)
     "kql_summary_reliability_score_by_resourceType_environment_and_criticality" = jsonencode(local.kql_summary_reliability_score_by_resourceType_environment_and_criticality)
-    "kql_export_summary_by_resourceType_environment_criticality"                = jsonencode(local.kql_export_summary_by_resourceType_environment_criticality)
-    "kql_export_summary_by_resource_environment_criticality"                    = jsonencode(local.kql_export_summary_by_resource_environment_criticality)
-    "kql_export_resources_details"                                              = jsonencode(local.kql_export_resources_details)
+
+    "kql_azuresiterecovery_resources_details" = jsonencode(local.kql_azuresiterecovery_resources_details)
+
+    "kql_compute_vm_resources_details"                 = jsonencode(local.kql_compute_vm_resources_details)
+    "kql_compute_vmss_resources_details"               = jsonencode(local.kql_compute_vmss_resources_details)
+    "kql_compute_appservice_funcapp_resources_details" = jsonencode(local.kql_compute_appservice_funcapp_resources_details)
+
+    "kql_container_aks_resources_details" = jsonencode(local.kql_container_aks_resources_details)
+
+    "kql_database_sqldb_resources_details"         = jsonencode(local.kql_database_sqldb_resources_details)
+    "kql_database_synapse_resources_details"       = jsonencode(local.kql_database_synapse_resources_details)
+    "kql_database_cosmosdb_resources_details"      = jsonencode(local.kql_database_cosmosdb_resources_details)
+    "kql_database_mysqlsingle_resources_details"   = jsonencode(local.kql_database_mysqlsingle_resources_details)
+    "kql_database_mysqlflexible_resources_details" = jsonencode(local.kql_database_mysqlflexible_resources_details)
+
+    "kql_integration_apim_resources_details" = jsonencode(local.kql_integration_apim_resources_details)
+
+    "kql_networking_azfw_resources_details"  = jsonencode(local.kql_networking_azfw_resources_details)
+    "kql_networking_afd_resources_details"   = jsonencode(local.kql_networking_afd_resources_details)
+    "kql_networking_appgw_resources_details" = jsonencode(local.kql_networking_appgw_resources_details)
+    "kql_networking_lb_resources_details"    = jsonencode(local.kql_networking_lb_resources_details)
+
+    "kql_storage_account_resources_details" = jsonencode(local.kql_storage_account_resources_details)
+
+    "kql_webapp_appsvc_resources_details" = jsonencode(local.kql_webapp_appsvc_resources_details)
+
+    "kql_export_summary_by_resourceType_environment_criticality" = jsonencode(local.kql_export_summary_by_resourceType_environment_criticality)
+    "kql_export_summary_by_resource_environment_criticality"     = jsonencode(local.kql_export_summary_by_resource_environment_criticality)
+    "kql_export_resources_details"                               = jsonencode(local.kql_export_resources_details)
+
   })
 
   //-------------------------------------------
   // Common KQL queries
   //-------------------------------------------
-  kql_score = file("${path.module}/template_kql/score.kql")
+  kql_calculate_score = file("${path.module}/template_kql/common/calculate_score.kql")
+  kql_extend_resource = file("${path.module}/template_kql/common/extend_resource.kql")
+  kql_summarize_score = file("${path.module}/template_kql/common/summarize_score.kql")
 
   //-------------------------------------------
   // Summary tab
   //-------------------------------------------
   // Workbook Reliability Score
   kql_summary_workbook_reliability_score = templatefile(
-    "${path.module}/template_kql/summary_workbook_reliability_score.kql",
+    "${path.module}/template_kql/summary/summary_workbook_reliability_score.kql",
     {
-      "score" = local.kql_score
+      "calculate_score" = local.kql_calculate_score
+      "extend_resource" = local.kql_extend_resource
+      "summarize_score" = local.kql_summarize_score
     }
   )
 
   //Reliability Score by Resource, Environment and Criticality
   kql_summary_reliability_score_by_resource_environment_and_criticality = templatefile(
-    "${path.module}/template_kql/summary_reliability_score_by_resource_environment_and_criticality.kql",
+    "${path.module}/template_kql/summary/summary_reliability_score_by_resource_environment_and_criticality.kql",
     {
-      "score" = local.kql_score
+      "calculate_score" = local.kql_calculate_score
+      "extend_resource" = local.kql_extend_resource
+      "summarize_score" = local.kql_summarize_score
     }
   )
 
   // Reliability Score by Resource Type, Environment and Criticality
   kql_summary_reliability_score_by_resourceType_environment_and_criticality = templatefile(
-    "${path.module}/template_kql/summary_reliability_score_by_resourceType_environment_and_criticality.kql",
+    "${path.module}/template_kql/summary/summary_reliability_score_by_resourceType_environment_and_criticality.kql",
     {
-      "score" = local.kql_score
+      "calculate_score" = local.kql_calculate_score
+      "extend_resource" = local.kql_extend_resource
+      "summarize_score" = local.kql_summarize_score
+    }
+  )
+
+  //-------------------------------------------
+  // Azure Site Recovery tab
+  //-------------------------------------------
+  kql_azuresiterecovery_resources_details = templatefile(
+    "${path.module}/template_kql/azuresiterecovery/azuresiterecovery_resources_details.kql",
+    {
+      "extend_resource" = local.kql_extend_resource
+    }
+  )
+
+  //-------------------------------------------
+  // Compute tab
+  //-------------------------------------------
+  kql_compute_appservice_funcapp_resources_details = templatefile(
+    "${path.module}/template_kql/compute/compute_appservice_funcapp_resources_details.kql",
+    {
+      "extend_resource" = local.kql_extend_resource
+    }
+  )
+  kql_compute_vm_resources_details = templatefile(
+    "${path.module}/template_kql/compute/compute_vm_resources_details.kql",
+    {
+      "extend_resource" = local.kql_extend_resource
+    }
+  )
+  kql_compute_vmss_resources_details = templatefile(
+    "${path.module}/template_kql/compute/compute_vmss_resources_details.kql",
+    {
+      "extend_resource" = local.kql_extend_resource
+    }
+  )
+
+  //-------------------------------------------
+  // Container tab
+  //-------------------------------------------
+  kql_container_aks_resources_details = templatefile(
+    "${path.module}/template_kql/container/container_aks_resources_details.kql",
+    {
+      "extend_resource" = local.kql_extend_resource
+    }
+  )
+
+  //-------------------------------------------
+  // Database tab
+  //-------------------------------------------
+  kql_database_sqldb_resources_details = templatefile(
+    "${path.module}/template_kql/database/database_sqldb_resources_details.kql",
+    {
+      "extend_resource" = local.kql_extend_resource
+    }
+  )
+  kql_database_synapse_resources_details = templatefile(
+    "${path.module}/template_kql/database/database_synapse_resources_details.kql",
+    {
+      "extend_resource" = local.kql_extend_resource
+    }
+  )
+  kql_database_cosmosdb_resources_details = templatefile(
+    "${path.module}/template_kql/database/database_cosmosdb_resources_details.kql",
+    {
+      "extend_resource" = local.kql_extend_resource
+    }
+  )
+  kql_database_mysqlsingle_resources_details = templatefile(
+    "${path.module}/template_kql/database/database_mysqlsingle_resources_details.kql",
+    {
+      "extend_resource" = local.kql_extend_resource
+    }
+  )
+  kql_database_mysqlflexible_resources_details = templatefile(
+    "${path.module}/template_kql/database/database_mysqlflexible_resources_details.kql",
+    {
+      "extend_resource" = local.kql_extend_resource
+    }
+  )
+
+  //-------------------------------------------
+  // Integration tab
+  //-------------------------------------------
+  kql_integration_apim_resources_details = templatefile(
+    "${path.module}/template_kql/integration/integration_apim_resources_details.kql",
+    {
+      "extend_resource" = local.kql_extend_resource
+    }
+  )
+
+  //-------------------------------------------
+  // Networking tab
+  //-------------------------------------------
+  kql_networking_azfw_resources_details = templatefile(
+    "${path.module}/template_kql/networking/networking_azfw_resources_details.kql",
+    {
+      "extend_resource" = local.kql_extend_resource
+    }
+  )
+  kql_networking_afd_resources_details = templatefile(
+    "${path.module}/template_kql/networking/networking_afd_resources_details.kql",
+    {
+      "extend_resource" = local.kql_extend_resource
+    }
+  )
+  kql_networking_appgw_resources_details = templatefile(
+    "${path.module}/template_kql/networking/networking_appgw_resources_details.kql",
+    {
+      "extend_resource" = local.kql_extend_resource
+    }
+  )
+  kql_networking_lb_resources_details = templatefile(
+    "${path.module}/template_kql/networking/networking_lb_resources_details.kql",
+    {
+      "extend_resource" = local.kql_extend_resource
+    }
+  )
+
+  //-------------------------------------------
+  // Storage tab
+  //-------------------------------------------
+  kql_storage_account_resources_details = templatefile(
+    "${path.module}/template_kql/storage/storage_account_resources_details.kql",
+    {
+      "extend_resource" = local.kql_extend_resource
+    }
+  )
+
+  //-------------------------------------------
+  // Web App tab
+  //-------------------------------------------
+  kql_webapp_appsvc_resources_details = templatefile(
+    "${path.module}/template_kql/webapp/webapp_appsvc_resources_details.kql",
+    {
+      "extend_resource" = local.kql_extend_resource
     }
   )
 
@@ -59,20 +228,29 @@ locals {
   //-------------------------------------------
   // Summary by Resource Type, Environment, Criticality
   kql_export_summary_by_resourceType_environment_criticality = templatefile(
-    "${path.module}/template_kql/export_summary_by_resourceType_environment_criticality.kql",
+    "${path.module}/template_kql/export/export_summary_by_resourceType_environment_criticality.kql",
     {
-      "score" = local.kql_score
+      "calculate_score" = local.kql_calculate_score
+      "extend_resource" = local.kql_extend_resource
+      "summarize_score" = local.kql_summarize_score
     }
   )
   // Summary by Resource, Environment, Criticality
   kql_export_summary_by_resource_environment_criticality = templatefile(
-    "${path.module}/template_kql/export_summary_by_resource_environment_criticality.kql",
+    "${path.module}/template_kql/export/export_summary_by_resource_environment_criticality.kql",
     {
-      "score" = local.kql_score
+      "calculate_score" = local.kql_calculate_score
+      "extend_resource" = local.kql_extend_resource
+      "summarize_score" = local.kql_summarize_score
     }
   )
   // Resources Details
-  kql_export_resources_details = file("${path.module}/template_kql/export_resources_details.kql")
+  kql_export_resources_details = templatefile(
+    "${path.module}/template_kql/export/export_resources_details.kql",
+    {
+      "extend_resource" = local.kql_extend_resource
+    }
+  )
 }
 
 resource "random_uuid" "workbook_name" {

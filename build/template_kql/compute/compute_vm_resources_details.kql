@@ -1,0 +1,3 @@
+${extend_resource}
+| project Type, SkuName, Kind, SubscriptionId, Name, State, Location, ResourceGroup, Zones, AvailabilityZone, AvailabilitySet, Capacity, FaultDomain, OSDisk, ReadReplica, AutomaticFailover, MultipleWriteLocations, StorageAutogrow, ReplicationRole, Backup = tolower(Backup), Criticality, Environment, ResourceId
+| where Type == 'microsoft.compute/virtualmachines'

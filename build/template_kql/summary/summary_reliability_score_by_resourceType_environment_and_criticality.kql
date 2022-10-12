@@ -1,0 +1,7 @@
+${extend_resource}
+| project Type, SkuName, Kind, SubscriptionId, Name, State, Location, ResourceGroup, Zones, AvailabilityZone, AvailabilitySet, Capacity, FaultDomain, OSDisk, ReadReplica, AutomaticFailover, MultipleWriteLocations, StorageAutogrow, ReplicationRole, Backup = tolower(Backup), Criticality, Environment, ResourceId
+| ${summarize_score}
+    by Type, Environment, Criticality
+| ${calculate_score}
+    | project Type, Environment, Criticality, ResourceTotal, tostring(ReliabilityScore)
+    | sort by Type
