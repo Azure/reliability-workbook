@@ -1,0 +1,52 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "metadata": {
+      "_generator": {
+        "name": "bicep",
+        "version": "0.10.61.36676",
+        "templateHash": "4786631524923538364"
+      }
+    },
+    "parameters": {
+      "workbookDisplayName": {
+        "type": "string",
+        "defaultValue": "FTA - Reliability Workbook",
+        "metadata": {
+          "description": "Name of Workbook"
+        }
+      },
+      "workbookId": {
+        "type": "string",
+        "defaultValue": "[newGuid()]",
+        "metadata": {
+          "description": "GUID of Workbook"
+        }
+      }
+    },
+    "variables": {
+      "workbookContent": ${workbook_json}
+    },
+    "resources": [
+      {
+        "type": "Microsoft.Insights/workbooks",
+        "apiVersion": "2021-03-08",
+        "name": "[parameters('workbookId')]",
+        "location": "[resourceGroup().location]",
+        "kind": "shared",
+        "properties": {
+          "displayName": "[parameters('workbookDisplayName')]",
+          "serializedData": "[string(variables('workbookContent'))]",
+          "version": "1.0",
+          "sourceId": "Azure Monitor",
+          "category": "workbook"
+        }
+      }
+    ],
+    "outputs": {
+      "workbookId": {
+        "type": "string",
+        "value": "[resourceId('Microsoft.Insights/workbooks', parameters('workbookId'))]"
+      }
+    }
+  }
