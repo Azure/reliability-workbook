@@ -49,6 +49,10 @@ locals {
 
   })
 
+  armtemplate_json = templatefile("${path.module}/azuredeploy.tpl.json", {
+    "workbook_json" = jsonencode(local.workbook_data_json)
+  })
+
   //-------------------------------------------
   // Common KQL queries
   //-------------------------------------------
@@ -252,13 +256,16 @@ locals {
     }
   )
 }
-
+//-------------------------------------------
+// Create template file
+//-------------------------------------------
 resource "random_uuid" "workbook_name" {
   keepers = {
     name = "${var.rg.name}${var.workbook_name}"
   }
 }
 
+// Deploy Workbook to Azure
 resource "azurerm_application_insights_workbook" "example" {
   count = var.deploy_to_azure ? 1 : 0
 
@@ -269,7 +276,14 @@ resource "azurerm_application_insights_workbook" "example" {
   data_json           = local.workbook_data_json
 }
 
+// Generate workbook JSON
 resource "local_file" "workbook" {
-  filename = "${path.module}/Reliability Workbook.json"
+  filename = "${path.module}/ReliabilityWorkbook.json"
   content  = local.workbook_data_json
+}
+
+// Generate armtemplate JSON
+resource "local_file" "armtemplate" {
+  filename = "${path.module}/azuredeploy.json"
+  content  = local.armtemplate_json
 }
