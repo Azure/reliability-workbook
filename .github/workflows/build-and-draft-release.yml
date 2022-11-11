@@ -4,13 +4,11 @@ on:
   push:
     branches: [main]
     paths:
-      - 'workbooks/**'
-      - '!workbooks/azuredeploy.json'
+      - 'build/**'
   pull_request:
     branches: [main]
     paths:
-      - 'workbooks/**'
-      - '!workbooks/azuredeploy.json'
+      - 'build/**'
 
 # on:
 #   push:
@@ -31,21 +29,42 @@ permissions:
 jobs:
   build-and-attach:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+        working-directory: build
     steps:
-      # Checkout code
       - uses: actions/checkout@main
-      - name: Remove old ARM template
-        run: rm -f workbooks/azuredeploy.json
-      # Runs the bicep CLI action - individual files
-      - name: Run Bicep build
-        uses: aliencube/bicep-build-actions@v0.3
-        with:
-          files: workbooks/azuredeploy.bicep
-      - name: Upload asset
+      - uses: hashicorp/setup-terraform@v2
+
+      - name: Terraform fmt
+        id: fmt
+        run: terraform fmt -check
+        continue-on-error: true
+
+      - name: Terraform Init
+        id: init
+        run: terraform init
+
+      - name: Terraform Validate
+        id: validate
+        run: terraform validate -no-color
+
+      - name: Terraform Plan
+        id: plan
+        run: terraform plan -input=false -no-color -out tfplan -target local_file.armtemplate -target local_file.workbook
+
+      - name: Terraform Apply
+        run: terraform apply -no-color tfplan
+
+      - name: Upload asset - azuredeploy.json
         uses: actions/upload-artifact@v3
         with:
-          name: azuredeploy.json
-          path: workbooks/azuredeploy.json
+          name: asset
+          path: |
+            build/azuredeploy.json
+            build/ReliabilityWorkbook.json
+          if-no-files-found: error
 
   update_release_draft:
     permissions:
@@ -55,11 +74,6 @@ jobs:
     if: github.event_name	== 'push'
     needs: build-and-attach
     steps:
-      # (Optional) GitHub Enterprise requires GHE_HOST variable set
-      #- name: Set GHE_HOST
-      #  run: |
-      #    echo "GHE_HOST=${GITHUB_SERVER_URL##https:\/\/}" >> $GITHUB_ENV
-
       # Drafts your next Release notes as Pull Requests are merged into "master"
       - uses: release-drafter/release-drafter@v5
         id: release_drafter
@@ -71,24 +85,27 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       # Checkout code
       - uses: actions/checkout@main
+        with:
+          token: ${{secrets.FOR_COMMIT_BOT}}
       - name: Download asset
         uses: actions/download-artifact@v3
-        with:
-          name: azuredeploy.json
+      - name: Display structure of downloaded files
+        run: ls -lR
       - uses: shogo82148/actions-upload-release-asset@v1
         with:
           upload_url: ${{ steps.release_drafter.outputs.upload_url }}
           asset_path: |
-            azuredeploy.json
-            workbooks/Reliability Workbook.json
-            workbooks/azuredeploy.bicep
+            asset/azuredeploy.json
+            asset/ReliabilityWorkbook.json
           overwrite: true
-#      - name: Move asset
-#        run: |
-#          mv -f azuredeploy.json workbooks/azuredeploy.json
-#      - uses: EndBug/add-and-commit@v9.0.1
-#        with:
-#          author_name: github-actions
-#          author_email: '41898282+github-actions[bot]@users.noreply.github.com'
-#          message: Update Bicep-ARM template
-#          add: workbooks/azuredeploy.json
+      - name: Move asset
+        run: |
+          mv -f asset/azuredeploy.json asset/ReliabilityWorkbook.json workbooks/
+      - uses: EndBug/add-and-commit@v9.0.1
+        with:
+          author_name: github-actions
+          author_email: '41898282+github-actions[bot]@users.noreply.github.com'
+          message: Update ARM template and Workbook
+          add: |
+            workbooks/azuredeploy.json
+            workbooks/ReliabilityWorkbook.json
