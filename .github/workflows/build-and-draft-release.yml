@@ -85,8 +85,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       # Checkout code
       - uses: actions/checkout@main
-        with:
-          token: ${{secrets.FOR_COMMIT_BOT}}
+#        with:
+#          token: ${{secrets.FOR_COMMIT_BOT}}
       - name: Download asset
         uses: actions/download-artifact@v3
       - name: Display structure of downloaded files
@@ -101,11 +101,11 @@ jobs:
       - name: Move asset
         run: |
           mv -f asset/azuredeploy.json asset/ReliabilityWorkbook.json workbooks/
-      - uses: EndBug/add-and-commit@v9.0.1
-        with:
-          author_name: github-actions
-          author_email: '41898282+github-actions[bot]@users.noreply.github.com'
-          message: Update ARM template and Workbook
-          add: |
-            workbooks/azuredeploy.json
-            workbooks/ReliabilityWorkbook.json
+#      - uses: EndBug/add-and-commit@v9.0.1
+#        with:
+#          author_name: github-actions
+#          author_email: '41898282+github-actions[bot]@users.noreply.github.com'
+#          message: Update ARM template and Workbook
+#          add: |
+#            workbooks/azuredeploy.json
+#            workbooks/ReliabilityWorkbook.json
