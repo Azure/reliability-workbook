@@ -28,6 +28,7 @@ override.tf.json
 .terraformrc
 terraform.rc
 
+# Ignore built files
 ReliabilityWorkbook.json
 azuredeploy.json
 terraform.tfvars
