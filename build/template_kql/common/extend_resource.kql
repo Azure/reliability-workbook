@@ -14,8 +14,11 @@ resources
     tolower(name) contains "sit", "SIT",
     tolower(name) contains "test", "Test",
     "Undefined")
+| extend tagName = tostring(bag_keys(tags)[0])
+| extend tagValue = tostring(tags[tagName])
 | where criticality in ({Criticality})
 | where environment in ({Environment})
+| where tagName has '{TagName}' and tagValue has '{TagValue}'
 | where 
     (type == 'microsoft.compute/virtualmachines') or 
     (type == "microsoft.compute/virtualmachinescalesets" and tags.aksEngineVersion !contains "aks-gomod") or
