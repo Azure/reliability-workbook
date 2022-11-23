@@ -157,6 +157,152 @@
       "name": "parameters - 0 - Copy - Copy - Copy - Copy"
     },
     {
+      "type": 9,
+        "content": {
+          "version": "KqlParameterItem/1.0",
+          "crossComponentResources": [
+            "{Subscriptions}"
+          ],
+          "parameters": [
+            {
+              "id": "df2a5339-2dd6-478a-a2b1-2dce7651ed0a",
+              "version": "KqlParameterItem/1.0",
+              "name": "TagName",
+              "label": "Tag Name",
+              "type": 2,
+              "query": "Resources\r\n| where tags != '' and tags != '[]'\r\n| mvexpand tags\r\n| extend tagName = tostring(bag_keys(tags)[0])\r\n| distinct tagName\r\n| sort by tagName asc",
+              "crossComponentResources": [
+                "{Subscriptions}"
+              ],
+              "typeSettings": {
+                "additionalResourceOptions": [],
+                "showDefault": false
+              },
+              "timeContext": {
+                "durationMs": 86400000
+              },
+              "queryType": 1,
+              "resourceType": "microsoft.resourcegraph/resources",
+              "value": null
+            }
+          ],
+          "style": "pills",
+          "queryType": 1,
+          "resourceType": "microsoft.resourcegraph/resources"
+        },
+        "customWidth": "20",
+        "name": "parameters - 3"
+      },
+      {
+        "type": 9,
+        "content": {
+          "version": "KqlParameterItem/1.0",
+          "crossComponentResources": [
+            "{Subscriptions}"
+          ],
+          "parameters": [
+            {
+              "id": "d28a3428-b806-4716-a4c5-9f9816224aef",
+              "version": "KqlParameterItem/1.0",
+              "name": "TagValue",
+              "type": 2,
+              "query": "Resources\r\n| mvexpand tags\r\n| extend tagName = tostring(bag_keys(tags)[0])\r\n| extend tagValue = tostring(tags[tagName])\r\n| where tags != '' and tags != '[]' and tostring(bag_keys(tags)[0]) == '{TagName}'\r\n| distinct tagValue\r\n| sort by tagValue asc",
+              "crossComponentResources": [
+                "{Subscriptions}"
+              ],
+              "typeSettings": {
+                "additionalResourceOptions": [],
+                "showDefault": false
+              },
+              "timeContext": {
+                "durationMs": 86400000
+              },
+              "queryType": 1,
+              "resourceType": "microsoft.resourcegraph/resources",
+              "value": null
+            }
+          ],
+          "style": "pills",
+          "queryType": 1,
+          "resourceType": "microsoft.resourcegraph/resources"
+        },
+        "customWidth": "20",
+        "name": "parameters - 13"
+      },
+      {
+      "type": 9,
+      "content": {
+        "version": "KqlParameterItem/1.0",
+        "crossComponentResources": [
+          "{Subscriptions}"
+        ],
+        "parameters": [
+          {
+            "id": "df2a5339-2dd6-478a-a2b1-2dce7651ed0a",
+            "version": "KqlParameterItem/1.0",
+            "name": "TagName",
+            "label": "Tag Name",
+            "type": 2,
+            "query": "Resources\r\n| where tags != '' and tags != '[]'\r\n| mvexpand tags\r\n| extend tagName = tostring(bag_keys(tags)[0])\r\n| distinct tagName\r\n| sort by tagName asc",
+            "crossComponentResources": [
+              "{Subscriptions}"
+            ],
+            "typeSettings": {
+              "additionalResourceOptions": [],
+              "showDefault": false
+            },
+            "timeContext": {
+              "durationMs": 86400000
+            },
+            "queryType": 1,
+            "resourceType": "microsoft.resourcegraph/resources",
+            "value": null
+          }
+        ],
+        "style": "pills",
+        "queryType": 1,
+        "resourceType": "microsoft.resourcegraph/resources"
+      },
+      "customWidth": "20",
+      "name": "parameters - 3"
+    },
+    {
+      "type": 9,
+      "content": {
+        "version": "KqlParameterItem/1.0",
+        "crossComponentResources": [
+          "{Subscriptions}"
+        ],
+        "parameters": [
+          {
+            "id": "d28a3428-b806-4716-a4c5-9f9816224aef",
+            "version": "KqlParameterItem/1.0",
+            "name": "TagValue",
+            "type": 2,
+            "query": "Resources\r\n| mvexpand tags\r\n| extend tagName = tostring(bag_keys(tags)[0])\r\n| extend tagValue = tostring(tags[tagName])\r\n| where tags != '' and tags != '[]' and tostring(bag_keys(tags)[0]) == '{TagName}'\r\n| distinct tagValue\r\n| sort by tagValue asc",
+            "crossComponentResources": [
+              "{Subscriptions}"
+            ],
+            "typeSettings": {
+              "additionalResourceOptions": [],
+              "showDefault": false
+            },
+            "timeContext": {
+              "durationMs": 86400000
+            },
+            "queryType": 1,
+            "resourceType": "microsoft.resourcegraph/resources",
+            "value": null
+          }
+        ],
+        "style": "pills",
+        "queryType": 1,
+        "resourceType": "microsoft.resourcegraph/resources"
+      },
+      "customWidth": "20",
+      "name": "parameters - 13"
+    },
+    {
       "type": 11,
       "content": {
         "version": "LinkItem/1.0",
