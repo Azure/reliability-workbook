@@ -158,79 +158,6 @@
     },
     {
       "type": 9,
-        "content": {
-          "version": "KqlParameterItem/1.0",
-          "crossComponentResources": [
-            "{Subscriptions}"
-          ],
-          "parameters": [
-            {
-              "id": "df2a5339-2dd6-478a-a2b1-2dce7651ed0a",
-              "version": "KqlParameterItem/1.0",
-              "name": "TagName",
-              "label": "Tag Name",
-              "type": 2,
-              "query": "Resources\r\n| where tags != '' and tags != '[]'\r\n| mvexpand tags\r\n| extend tagName = tostring(bag_keys(tags)[0])\r\n| distinct tagName\r\n| sort by tagName asc",
-              "crossComponentResources": [
-                "{Subscriptions}"
-              ],
-              "typeSettings": {
-                "additionalResourceOptions": [],
-                "showDefault": false
-              },
-              "timeContext": {
-                "durationMs": 86400000
-              },
-              "queryType": 1,
-              "resourceType": "microsoft.resourcegraph/resources",
-              "value": null
-            }
-          ],
-          "style": "pills",
-          "queryType": 1,
-          "resourceType": "microsoft.resourcegraph/resources"
-        },
-        "customWidth": "20",
-        "name": "parameters - 3"
-      },
-      {
-        "type": 9,
-        "content": {
-          "version": "KqlParameterItem/1.0",
-          "crossComponentResources": [
-            "{Subscriptions}"
-          ],
-          "parameters": [
-            {
-              "id": "d28a3428-b806-4716-a4c5-9f9816224aef",
-              "version": "KqlParameterItem/1.0",
-              "name": "TagValue",
-              "type": 2,
-              "query": "Resources\r\n| mvexpand tags\r\n| extend tagName = tostring(bag_keys(tags)[0])\r\n| extend tagValue = tostring(tags[tagName])\r\n| where tags != '' and tags != '[]' and tostring(bag_keys(tags)[0]) == '{TagName}'\r\n| distinct tagValue\r\n| sort by tagValue asc",
-              "crossComponentResources": [
-                "{Subscriptions}"
-              ],
-              "typeSettings": {
-                "additionalResourceOptions": [],
-                "showDefault": false
-              },
-              "timeContext": {
-                "durationMs": 86400000
-              },
-              "queryType": 1,
-              "resourceType": "microsoft.resourcegraph/resources",
-              "value": null
-            }
-          ],
-          "style": "pills",
-          "queryType": 1,
-          "resourceType": "microsoft.resourcegraph/resources"
-        },
-        "customWidth": "20",
-        "name": "parameters - 13"
-      },
-      {
-      "type": 9,
       "content": {
         "version": "KqlParameterItem/1.0",
         "crossComponentResources": [
@@ -767,7 +694,8 @@
             "type": 3,
             "content": {
               "version": "KqlItem/1.0",
-              "query": ${kql_summary_workbook_reliability_score},
+              "query": ${kql_summary_workbook_reliability_score
+              },
               "size": 3,
               "title": "Workbook Reliability Score",
               "exportToExcelOptions": "all",
@@ -819,7 +747,8 @@
             "type": 3,
             "content": {
               "version": "KqlItem/1.0",
-              "query": ${kql_summary_reliability_score_by_resource_environment_and_criticality},
+              "query": ${kql_summary_reliability_score_by_resource_environment_and_criticality
+              },
               "size": 3,
               "title": "Reliability Score by Resource, Environment and Criticality",
               "showExportToExcel": true,
@@ -952,7 +881,8 @@
             "type": 3,
             "content": {
               "version": "KqlItem/1.0",
-              "query": ${kql_summary_reliability_score_by_resourceType_environment_and_criticality},
+              "query": ${kql_summary_reliability_score_by_resourceType_environment_and_criticality
+              },
               "size": 3,
               "title": "Reliability Score by Resource Type, Environment and Criticality",
               "showExportToExcel": true,
@@ -1139,7 +1069,8 @@
                   "type": 3,
                   "content": {
                     "version": "KqlItem/1.0",
-                    "query": ${kql_export_summary_by_resourceType_environment_criticality},
+                    "query": ${kql_export_summary_by_resourceType_environment_criticality
+                    },
                     "size": 3,
                     "title": "Summary by Resource Type, Environment, Criticality",
                     "showExportToExcel": true,
@@ -1367,7 +1298,8 @@
                   "type": 3,
                   "content": {
                     "version": "KqlItem/1.0",
-                    "query": ${kql_export_summary_by_resource_environment_criticality},
+                    "query": ${kql_export_summary_by_resource_environment_criticality
+                    },
                     "size": 3,
                     "title": "Summary by Resource, Environment, Criticality",
                     "showExportToExcel": true,
@@ -1491,7 +1423,8 @@
                   "type": 3,
                   "content": {
                     "version": "KqlItem/1.0",
-                    "query": ${kql_export_resources_details},
+                    "query": ${kql_export_resources_details
+                    },
                     "size": 0,
                     "title": "Resources Details",
                     "showExportToExcel": true,
@@ -1954,7 +1887,8 @@
                   "type": 3,
                   "content": {
                     "version": "KqlItem/1.0",
-                    "query": ${kql_networking_lb_resources_details},
+                    "query": ${kql_networking_lb_resources_details
+                    },
                     "size": 3,
                     "queryType": 1,
                     "resourceType": "microsoft.resourcegraph/resources",
@@ -2297,7 +2231,8 @@
                   "type": 3,
                   "content": {
                     "version": "KqlItem/1.0",
-                    "query": ${kql_networking_appgw_resources_details},
+                    "query": ${kql_networking_appgw_resources_details
+                    },
                     "size": 3,
                     "queryType": 1,
                     "resourceType": "microsoft.resourcegraph/resources",
@@ -2633,7 +2568,8 @@
                   "type": 3,
                   "content": {
                     "version": "KqlItem/1.0",
-                    "query": ${kql_networking_azfw_resources_details},
+                    "query": ${kql_networking_azfw_resources_details
+                    },
                     "size": 0,
                     "queryType": 1,
                     "resourceType": "microsoft.resourcegraph/resources",
@@ -2859,7 +2795,8 @@
                   "type": 3,
                   "content": {
                     "version": "KqlItem/1.0",
-                    "query": ${kql_networking_afd_resources_details},
+                    "query": ${kql_networking_afd_resources_details
+                    },
                     "size": 3,
                     "queryType": 1,
                     "resourceType": "microsoft.resourcegraph/resources",
@@ -3159,7 +3096,8 @@
                   "type": 3,
                   "content": {
                     "version": "KqlItem/1.0",
-                    "query": ${kql_compute_vm_resources_details},
+                    "query": ${kql_compute_vm_resources_details
+                    },
                     "size": 3,
                     "title": "Virtual Machines",
                     "queryType": 1,
@@ -3523,7 +3461,8 @@
                   "type": 3,
                   "content": {
                     "version": "KqlItem/1.0",
-                    "query": ${kql_compute_vmss_resources_details},
+                    "query": ${kql_compute_vmss_resources_details
+                    },
                     "size": 3,
                     "title": "Virtual Machine Scale Sets",
                     "queryType": 1,
@@ -4066,7 +4005,8 @@
                   "type": 3,
                   "content": {
                     "version": "KqlItem/1.0",
-                    "query": ${kql_compute_appservice_funcapp_resources_details},
+                    "query": ${kql_compute_appservice_funcapp_resources_details
+                    },
                     "size": 3,
                     "title": "App Service - Function App",
                     "queryType": 1,
@@ -4526,7 +4466,8 @@
                   "type": 3,
                   "content": {
                     "version": "KqlItem/1.0",
-                    "query": ${kql_database_sqldb_resources_details},
+                    "query": ${kql_database_sqldb_resources_details
+                    },
                     "size": 3,
                     "title": "Azure SQL Database",
                     "queryType": 1,
@@ -5042,7 +4983,8 @@
                   "type": 3,
                   "content": {
                     "version": "KqlItem/1.0",
-                    "query": ${kql_database_synapse_resources_details},
+                    "query": ${kql_database_synapse_resources_details
+                    },
                     "size": 3,
                     "title": "Azure Synapse Analytics",
                     "queryType": 1,
@@ -5441,7 +5383,8 @@
                   "type": 3,
                   "content": {
                     "version": "KqlItem/1.0",
-                    "query": ${kql_database_cosmosdb_resources_details},
+                    "query": ${kql_database_cosmosdb_resources_details
+                    },
                     "size": 3,
                     "title": "Cosmos DB",
                     "queryType": 1,
@@ -5888,7 +5831,8 @@
                   "type": 3,
                   "content": {
                     "version": "KqlItem/1.0",
-                    "query": ${kql_database_mysqlsingle_resources_details},
+                    "query": ${kql_database_mysqlsingle_resources_details
+                    },
                     "size": 3,
                     "title": "MySQL - Single",
                     "queryType": 1,
@@ -6351,7 +6295,8 @@
                   "type": 3,
                   "content": {
                     "version": "KqlItem/1.0",
-                    "query": ${kql_database_mysqlflexible_resources_details},
+                    "query": ${kql_database_mysqlflexible_resources_details
+                    },
                     "size": 3,
                     "title": "MySQL - Flexible",
                     "queryType": 1,
@@ -7043,7 +6988,8 @@
             "type": 3,
             "content": {
               "version": "KqlItem/1.0",
-              "query": ${kql_container_aks_resources_details},
+              "query": ${kql_container_aks_resources_details
+              },
               "size": 0,
               "title": "Azure Kubernetes Service (AKS)",
               "queryType": 1,
@@ -7641,7 +7587,8 @@
             "type": 3,
             "content": {
               "version": "KqlItem/1.0",
-              "query": ${kql_storage_account_resources_details},
+              "query": ${kql_storage_account_resources_details
+              },
               "size": 3,
               "queryType": 1,
               "resourceType": "microsoft.resourcegraph/resources",
@@ -8035,7 +7982,8 @@
             "type": 3,
             "content": {
               "version": "KqlItem/1.0",
-              "query": ${kql_webapp_appsvc_resources_details},
+              "query": ${kql_webapp_appsvc_resources_details
+              },
               "size": 3,
               "title": "App Service - Web App",
               "queryType": 1,
@@ -8416,7 +8364,8 @@
             "type": 3,
             "content": {
               "version": "KqlItem/1.0",
-              "query": ${kql_integration_apim_resources_details},
+              "query": ${kql_integration_apim_resources_details
+              },
               "size": 0,
               "title": "API Management",
               "queryType": 1,
@@ -8789,7 +8738,8 @@
             "type": 3,
             "content": {
               "version": "KqlItem/1.0",
-              "query": ${kql_azuresiterecovery_resources_details},
+              "query": ${kql_azuresiterecovery_resources_details
+              },
               "size": 0,
               "queryType": 1,
               "resourceType": "microsoft.resourcegraph/resources",
