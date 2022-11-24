@@ -1,7 +1,5 @@
 resources
 | where resourceGroup in ({ResourceGroup})
-| extend criticality = case(tags.Criticality <> "", tags.Criticality,
-    "Undefined")
 | extend environment = case(
     tags.Environment <> "", tags.Environment,
     tags.environment <> "", tags.environment,
@@ -14,9 +12,9 @@ resources
     tolower(name) contains "sit", "SIT",
     tolower(name) contains "test", "Test",
     "Undefined")
+| mvexpand tags
 | extend tagName = tostring(bag_keys(tags)[0])
-| extend tagValue = tostring(tags[tagName])
-| where criticality in ({Criticality})
+| extend tagValue = tostring(tags['{TagName}'])
 | where environment in ({Environment})
 | where tagName has '{TagName}' and tagValue has '{TagValue}'
 | where 
@@ -283,7 +281,6 @@ resources
     MultipleWriteLocations = tolower(MultipleWriteLocations),
     StorageAutogrow = tolower(StorageAutogrow),
     ReplicationRole = tolower(ReplicationRole),
-    Criticality = criticality,
     Environment = environment,
     ResourceId = tolower(tostring(id)),
     properties
