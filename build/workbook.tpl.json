@@ -128,8 +128,8 @@
             "queryType": 1,
             "resourceType": "microsoft.resourcegraph/resources",
             "value": null
-    },
-    {
+          },
+          {
             "id": "bbe7b048-af1d-4d68-ad07-b023d3450e27",
             "version": "KqlParameterItem/1.0",
             "name": "TagValue",
@@ -674,10 +674,10 @@
             "type": 3,
             "content": {
               "version": "KqlItem/1.0",
-              "query": ${kql_summary_reliability_score_by_resource_environment_and_criticality
+              "query": ${kql_summary_reliability_score_by_resource_environment
               },
               "size": 3,
-              "title": "Reliability Score by Resource, Environment and Criticality",
+              "title": "Reliability Score by Resource and Environment",
               "showExportToExcel": true,
               "exportToExcelOptions": "all",
               "queryType": 1,
@@ -799,7 +799,7 @@
               },
               "sortBy": []
             },
-            "name": "kql_summary_reliability_score_by_resource_environment_and_criticality",
+            "name": "kql_summary_reliability_score_by_resource_environment",
             "styleSettings": {
               "showBorder": true
             }
@@ -808,10 +808,10 @@
             "type": 3,
             "content": {
               "version": "KqlItem/1.0",
-              "query": ${kql_summary_reliability_score_by_resourceType_environment_and_criticality
+              "query": ${kql_summary_reliability_score_by_resourceType_environment
               },
               "size": 3,
-              "title": "Reliability Score by Resource Type, Environment and Criticality",
+              "title": "Reliability Score by Resource Type and Environment",
               "showExportToExcel": true,
               "exportToExcelOptions": "all",
               "queryType": 1,
@@ -933,7 +933,7 @@
               },
               "sortBy": []
             },
-            "name": "kql_summary_reliability_score_by_resourceType_environment_and_criticality",
+            "name": "kql_summary_reliability_score_by_resourceType_environment",
             "styleSettings": {
               "showBorder": true
             }
@@ -996,10 +996,10 @@
                   "type": 3,
                   "content": {
                     "version": "KqlItem/1.0",
-                    "query": ${kql_export_summary_by_resourceType_environment_criticality
+                    "query": ${kql_export_summary_by_resourceType_environment
                     },
                     "size": 3,
-                    "title": "Summary by Resource Type, Environment, Criticality",
+                    "title": "Summary by Resource Type and Environment",
                     "showExportToExcel": true,
                     "exportToExcelOptions": "all",
                     "queryType": 1,
@@ -1216,7 +1216,7 @@
                       }
                     ]
                   },
-                  "name": "kql_export_summary_by_resourceType_environment_criticality",
+                  "name": "kql_export_summary_by_resourceType_environment",
                   "styleSettings": {
                     "showBorder": true
                   }
@@ -1225,10 +1225,10 @@
                   "type": 3,
                   "content": {
                     "version": "KqlItem/1.0",
-                    "query": ${kql_export_summary_by_resource_environment_criticality
+                    "query": ${kql_export_summary_by_resource_environment
                     },
                     "size": 3,
-                    "title": "Summary by Resource, Environment, Criticality",
+                    "title": "Summary by Resource, Environment",
                     "showExportToExcel": true,
                     "exportToExcelOptions": "all",
                     "queryType": 1,
@@ -1341,7 +1341,7 @@
                       }
                     ]
                   },
-                  "name": "kql_export_summary_by_resource_environment_criticality",
+                  "name": "kql_export_summary_by_resource_environment",
                   "styleSettings": {
                     "showBorder": true
                   }
@@ -1466,217 +1466,6 @@
         "version": "NotebookGroup/1.0",
         "groupType": "editable",
         "items": [
-          {
-            "type": 12,
-            "content": {
-              "version": "NotebookGroup/1.0",
-              "groupType": "editable",
-              "items": [
-                {
-                  "type": 9,
-                  "content": {
-                    "version": "KqlParameterItem/1.0",
-                    "crossComponentResources": [
-                      "{Subscriptions}"
-                    ],
-                    "parameters": [
-                      {
-                        "id": "7633231b-140c-44a4-93c5-d59c36b37838",
-                        "version": "KqlParameterItem/1.0",
-                        "name": "Subscriptions",
-                        "type": 6,
-                        "isRequired": true,
-                        "multiSelect": true,
-                        "quote": "'",
-                        "delimiter": ",",
-                        "value": [
-                          "value::all"
-                        ],
-                        "typeSettings": {
-                          "additionalResourceOptions": [
-                            "value::all"
-                          ],
-                          "includeAll": true,
-                          "showDefault": false
-                        },
-                        "timeContext": {
-                          "durationMs": 86400000
-                        },
-                        "defaultValue": "value::all"
-                      },
-                      {
-                        "id": "099d86cc-9ccb-4234-84c1-943e15f77ff7",
-                        "version": "KqlParameterItem/1.0",
-                        "name": "Criticality",
-                        "type": 2,
-                        "multiSelect": true,
-                        "quote": "'",
-                        "delimiter": ",",
-                        "query": "resources\r\n| extend Criticality = case(tags.Criticality <> \"\", tags.Criticality,\r\n\t\t    \"Undefined\")\r\n| distinct Criticality",
-                        "crossComponentResources": [
-                          "{Subscriptions}"
-                        ],
-                        "value": [
-                          "value::all"
-                        ],
-                        "typeSettings": {
-                          "additionalResourceOptions": [
-                            "value::all"
-                          ],
-                          "showDefault": false
-                        },
-                        "defaultValue": "value::all",
-                        "queryType": 1,
-                        "resourceType": "microsoft.resourcegraph/resources"
-                      },
-                      {
-                        "id": "1153a137-08bc-4832-9783-009b628f0a9d",
-                        "version": "KqlParameterItem/1.0",
-                        "name": "SLA",
-                        "label": "Show SLA",
-                        "type": 10,
-                        "description": "This will show the SLA information for the focus area.",
-                        "isRequired": true,
-                        "typeSettings": {
-                          "additionalResourceOptions": [],
-                          "showDefault": false
-                        },
-                        "jsonData": "[{ \"value\": \"Yes\", \"label\": \"Yes\"},\r\n {\"value\": \"No\", \"label\": \"No\", \"selected\":true }]",
-                        "timeContext": {
-                          "durationMs": 86400000
-                        }
-                      },
-                      {
-                        "id": "f9d90ba0-dae5-45b5-9e9a-68dbed7f0ad1",
-                        "version": "KqlParameterItem/1.0",
-                        "name": "Help",
-                        "label": "Show Help",
-                        "type": 10,
-                        "description": "This will show additional information, and any prerequisites that may apply to the workbook.",
-                        "isRequired": true,
-                        "typeSettings": {
-                          "additionalResourceOptions": [],
-                          "showDefault": false
-                        },
-                        "jsonData": "[{ \"value\": \"Yes\", \"label\": \"Yes\"},\r\n {\"value\": \"No\", \"label\": \"No\", \"selected\":true }]",
-                        "timeContext": {
-                          "durationMs": 86400000
-                        }
-                      }
-                    ],
-                    "style": "pills",
-                    "queryType": 1,
-                    "resourceType": "microsoft.resourcegraph/resources"
-                  },
-                  "name": "parameters - 0 - Copy"
-                },
-                {
-                  "type": 9,
-                  "content": {
-                    "version": "KqlParameterItem/1.0",
-                    "crossComponentResources": [
-                      "{Subscriptions}"
-                    ],
-                    "parameters": [
-                      {
-                        "id": "bd278e9e-21fd-460d-a0e3-b13e077a2309",
-                        "version": "KqlParameterItem/1.0",
-                        "name": "Subscriptions",
-                        "type": 6,
-                        "isRequired": true,
-                        "multiSelect": true,
-                        "quote": "'",
-                        "delimiter": ",",
-                        "value": [
-                          "value::all"
-                        ],
-                        "typeSettings": {
-                          "additionalResourceOptions": [
-                            "value::all"
-                          ],
-                          "includeAll": true,
-                          "showDefault": false
-                        },
-                        "timeContext": {
-                          "durationMs": 86400000
-                        },
-                        "defaultValue": "value::all"
-                      },
-                      {
-                        "id": "3496ab42-96bf-46c5-ab68-e409c4ea091c",
-                        "version": "KqlParameterItem/1.0",
-                        "name": "Criticality",
-                        "type": 2,
-                        "multiSelect": true,
-                        "quote": "'",
-                        "delimiter": ",",
-                        "query": "resources\r\n| extend Criticality = case(tags.Criticality <> \"\", tags.Criticality,\r\n\t\t    \"Undefined\")\r\n| distinct Criticality",
-                        "crossComponentResources": [
-                          "{Subscriptions}"
-                        ],
-                        "value": [
-                          "value::all"
-                        ],
-                        "typeSettings": {
-                          "additionalResourceOptions": [
-                            "value::all"
-                          ],
-                          "showDefault": false
-                        },
-                        "defaultValue": "value::all",
-                        "queryType": 1,
-                        "resourceType": "microsoft.resourcegraph/resources"
-                      },
-                      {
-                        "id": "d55f4971-fd8a-417e-9405-a27d1d856ee4",
-                        "version": "KqlParameterItem/1.0",
-                        "name": "SLA",
-                        "label": "Show SLA",
-                        "type": 10,
-                        "description": "This will show the SLA information for the focus area.",
-                        "isRequired": true,
-                        "typeSettings": {
-                          "additionalResourceOptions": [],
-                          "showDefault": false
-                        },
-                        "jsonData": "[{ \"value\": \"Yes\", \"label\": \"Yes\"},\r\n {\"value\": \"No\", \"label\": \"No\", \"selected\":true }]",
-                        "timeContext": {
-                          "durationMs": 86400000
-                        }
-                      },
-                      {
-                        "id": "382d0692-c167-45f9-bc53-173cfe46540d",
-                        "version": "KqlParameterItem/1.0",
-                        "name": "Help",
-                        "label": "Show Help",
-                        "type": 10,
-                        "description": "This will show additional information, and any prerequisites that may apply to the workbook.",
-                        "isRequired": true,
-                        "typeSettings": {
-                          "additionalResourceOptions": [],
-                          "showDefault": false
-                        },
-                        "jsonData": "[{ \"value\": \"Yes\", \"label\": \"Yes\"},\r\n {\"value\": \"No\", \"label\": \"No\", \"selected\":true }]",
-                        "timeContext": {
-                          "durationMs": 86400000
-                        }
-                      }
-                    ],
-                    "style": "pills",
-                    "queryType": 1,
-                    "resourceType": "microsoft.resourcegraph/resources"
-                  },
-                  "name": "parameters - 0"
-                }
-              ]
-            },
-            "conditionalVisibility": {
-              "parameterName": "selectedTab",
-              "comparison": "isEqualTo",
-              "value": "Backup"
-            },
-            "name": "Backup"
-          },
           {
             "type": 9,
             "content": {

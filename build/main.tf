@@ -15,8 +15,8 @@ provider "azurerm" {
 locals {
   workbook_data_json = templatefile("${path.module}/workbook.tpl.json", {
     "kql_summary_workbook_reliability_score"                                    = jsonencode(local.kql_summary_workbook_reliability_score)
-    "kql_summary_reliability_score_by_resource_environment_and_criticality"     = jsonencode(local.kql_summary_reliability_score_by_resource_environment_and_criticality)
-    "kql_summary_reliability_score_by_resourceType_environment_and_criticality" = jsonencode(local.kql_summary_reliability_score_by_resourceType_environment_and_criticality)
+    "kql_summary_reliability_score_by_resource_environment"     = jsonencode(local.kql_summary_reliability_score_by_resource_environment)
+    "kql_summary_reliability_score_by_resourceType_environment" = jsonencode(local.kql_summary_reliability_score_by_resourceType_environment)
 
     "kql_azuresiterecovery_resources_details" = jsonencode(local.kql_azuresiterecovery_resources_details)
 
@@ -43,8 +43,8 @@ locals {
 
     "kql_webapp_appsvc_resources_details" = jsonencode(local.kql_webapp_appsvc_resources_details)
 
-    "kql_export_summary_by_resourceType_environment_criticality" = jsonencode(local.kql_export_summary_by_resourceType_environment_criticality)
-    "kql_export_summary_by_resource_environment_criticality"     = jsonencode(local.kql_export_summary_by_resource_environment_criticality)
+    "kql_export_summary_by_resourceType_environment" = jsonencode(local.kql_export_summary_by_resourceType_environment)
+    "kql_export_summary_by_resource_environment"     = jsonencode(local.kql_export_summary_by_resource_environment)
     "kql_export_resources_details"                               = jsonencode(local.kql_export_resources_details)
 
   })
@@ -73,9 +73,9 @@ locals {
     }
   )
 
-  //Reliability Score by Resource, Environment and Criticality
-  kql_summary_reliability_score_by_resource_environment_and_criticality = templatefile(
-    "${path.module}/template_kql/summary/summary_reliability_score_by_resource_environment_and_criticality.kql",
+  //Reliability Score by Resource, Environment
+  kql_summary_reliability_score_by_resource_environment = templatefile(
+    "${path.module}/template_kql/summary/summary_reliability_score_by_resource_environment.kql",
     {
       "calculate_score" = local.kql_calculate_score
       "extend_resource" = local.kql_extend_resource
@@ -83,9 +83,9 @@ locals {
     }
   )
 
-  // Reliability Score by Resource Type, Environment and Criticality
-  kql_summary_reliability_score_by_resourceType_environment_and_criticality = templatefile(
-    "${path.module}/template_kql/summary/summary_reliability_score_by_resourceType_environment_and_criticality.kql",
+  // Reliability Score by Resource Type, Environment
+  kql_summary_reliability_score_by_resourceType_environment = templatefile(
+    "${path.module}/template_kql/summary/summary_reliability_score_by_resourceType_environment.kql",
     {
       "calculate_score" = local.kql_calculate_score
       "extend_resource" = local.kql_extend_resource
@@ -230,18 +230,18 @@ locals {
   //-------------------------------------------
   // Export tab
   //-------------------------------------------
-  // Summary by Resource Type, Environment, Criticality
-  kql_export_summary_by_resourceType_environment_criticality = templatefile(
-    "${path.module}/template_kql/export/export_summary_by_resourceType_environment_criticality.kql",
+  // Summary by Resource Type, Environment
+  kql_export_summary_by_resourceType_environment = templatefile(
+    "${path.module}/template_kql/export/export_summary_by_resourceType_environment.kql",
     {
       "calculate_score" = local.kql_calculate_score
       "extend_resource" = local.kql_extend_resource
       "summarize_score" = local.kql_summarize_score
     }
   )
-  // Summary by Resource, Environment, Criticality
-  kql_export_summary_by_resource_environment_criticality = templatefile(
-    "${path.module}/template_kql/export/export_summary_by_resource_environment_criticality.kql",
+  // Summary by Resource, Environment
+  kql_export_summary_by_resource_environment = templatefile(
+    "${path.module}/template_kql/export/export_summary_by_resource_environment.kql",
     {
       "calculate_score" = local.kql_calculate_score
       "extend_resource" = local.kql_extend_resource
