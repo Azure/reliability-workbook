@@ -85,28 +85,6 @@
             ]
           },
           {
-            "id": "972eba34-11d9-42e3-8005-b0334b3a301b",
-            "version": "KqlParameterItem/1.0",
-            "name": "Criticality",
-            "type": 2,
-            "multiSelect": true,
-            "quote": "'",
-            "delimiter": ",",
-            "query": "resources\r\n| extend Criticality = case(tags.Criticality <> \"\", tags.Criticality,\r\n\t\t    \"Undefined\")\r\n| distinct Criticality",
-            "crossComponentResources": [
-              "{Subscriptions}"
-            ],
-            "typeSettings": {
-              "additionalResourceOptions": [
-                "value::all"
-              ],
-              "showDefault": false
-            },
-            "defaultValue": "value::all",
-            "queryType": 1,
-            "resourceType": "microsoft.resourcegraph/resources"
-          },
-          {
             "id": "5c4674db-3151-4a5f-bb5a-e5e886cc2c17",
             "version": "KqlParameterItem/1.0",
             "name": "Environment",
@@ -132,40 +110,7 @@
             ]
           },
           {
-            "id": "945162bf-cf6d-4956-952c-606acfd2c5e5",
-            "version": "KqlParameterItem/1.0",
-            "name": "Help",
-            "label": "Show Help",
-            "type": 10,
-            "description": "This will show additional information, and any prerequisites that may apply to the workbook.",
-            "isRequired": true,
-            "isHiddenWhenLocked": true,
-            "typeSettings": {
-              "additionalResourceOptions": [],
-              "showDefault": false
-            },
-            "jsonData": "[{ \"value\": \"Yes\", \"label\": \"Yes\"},\r\n {\"value\": \"No\", \"label\": \"No\", \"selected\":true }]",
-            "timeContext": {
-              "durationMs": 86400000
-            }
-          }
-        ],
-        "style": "pills",
-        "queryType": 1,
-        "resourceType": "microsoft.resourcegraph/resources"
-      },
-      "name": "parameters - 0 - Copy - Copy - Copy - Copy"
-    },
-    {
-      "type": 9,
-      "content": {
-        "version": "KqlParameterItem/1.0",
-        "crossComponentResources": [
-          "{Subscriptions}"
-        ],
-        "parameters": [
-          {
-            "id": "df2a5339-2dd6-478a-a2b1-2dce7651ed0a",
+            "id": "e15393b4-4c1f-44b7-8081-784dc5b64473",
             "version": "KqlParameterItem/1.0",
             "name": "TagName",
             "label": "Tag Name",
@@ -175,8 +120,7 @@
               "{Subscriptions}"
             ],
             "typeSettings": {
-              "additionalResourceOptions": [],
-              "showDefault": false
+              "additionalResourceOptions": []
             },
             "timeContext": {
               "durationMs": 86400000
@@ -184,25 +128,9 @@
             "queryType": 1,
             "resourceType": "microsoft.resourcegraph/resources",
             "value": null
-          }
-        ],
-        "style": "pills",
-        "queryType": 1,
-        "resourceType": "microsoft.resourcegraph/resources"
-      },
-      "customWidth": "20",
-      "name": "parameters - 3"
     },
     {
-      "type": 9,
-      "content": {
-        "version": "KqlParameterItem/1.0",
-        "crossComponentResources": [
-          "{Subscriptions}"
-        ],
-        "parameters": [
-          {
-            "id": "d28a3428-b806-4716-a4c5-9f9816224aef",
+            "id": "bbe7b048-af1d-4d68-ad07-b023d3450e27",
             "version": "KqlParameterItem/1.0",
             "name": "TagValue",
             "type": 2,
@@ -211,23 +139,22 @@
               "{Subscriptions}"
             ],
             "typeSettings": {
-              "additionalResourceOptions": [],
-              "showDefault": false
+              "additionalResourceOptions": []
             },
             "timeContext": {
               "durationMs": 86400000
             },
             "queryType": 1,
             "resourceType": "microsoft.resourcegraph/resources",
-            "value": null
+            "value": null,
+            "label": "Tag Value"
           }
         ],
         "style": "pills",
         "queryType": 1,
         "resourceType": "microsoft.resourcegraph/resources"
       },
-      "customWidth": "20",
-      "name": "parameters - 13"
+      "name": "parameters - 0 - Copy - Copy - Copy - Copy"
     },
     {
       "type": 11,

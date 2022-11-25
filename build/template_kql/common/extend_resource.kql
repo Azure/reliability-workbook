@@ -12,9 +12,11 @@ resources
     tolower(name) contains "sit", "SIT",
     tolower(name) contains "test", "Test",
     "Undefined")
-| mvexpand tags
-| extend tagName = tostring(bag_keys(tags)[0])
-| extend tagValue = tostring(tags['{TagName}'])
+| extend replaced_tags = replace('{}', 'null', tostring(tags))
+| extend replaced_tags = parse_json(replaced_tags)
+| mv-expand replaced_tags
+| extend tagName = tostring(bag_keys(replaced_tags)[0])
+| extend tagValue = tostring(replaced_tags['{TagName}'])
 | where environment in ({Environment})
 | where tagName has '{TagName}' and tagValue has '{TagValue}'
 | where 
