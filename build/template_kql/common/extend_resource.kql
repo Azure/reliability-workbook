@@ -99,7 +99,7 @@ resources
     (type == 'microsoft.documentdb/databaseaccounts'), iif(properties.locations[0].isZoneRedundant == "false", 'Not Configured', 'Configured'), 
     (type == 'microsoft.dbformysql/servers'), "Not Applicable",
     (type == 'microsoft.dbformysql/flexibleservers'), iif(properties.haEnabled == "Enabled", 'Configured', 'Not Configured'),
-    (type == "microsoft.apimanagement/service"), "Not Applicable",
+    (type == "microsoft.apimanagement/service"), coalesce(tostring(array_length(parse_json(zones))), 'Not Configured'),
     (type contains 'storageaccounts'), case(split(skuName, '_', 1)[0] =~ "zrs", "Configured", "Not Configured"),
     (type == "microsoft.network/azurefirewalls"), iif(isnotnull(zones), "Configured", "Not Configured"),
     (type == "microsoft.network/frontdoors"), "Not Applicable",
