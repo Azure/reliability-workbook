@@ -621,8 +621,7 @@
             "type": 3,
             "content": {
               "version": "KqlItem/1.0",
-              "query": ${kql_summary_workbook_reliability_score
-              },
+              "query": ${kql_summary_workbook_reliability_score},
               "size": 3,
               "title": "Workbook Reliability Score",
               "exportToExcelOptions": "all",
@@ -674,8 +673,7 @@
             "type": 3,
             "content": {
               "version": "KqlItem/1.0",
-              "query": ${kql_summary_reliability_score_by_resource_environment
-              },
+              "query": ${kql_summary_reliability_score_by_resource_environment},
               "size": 3,
               "title": "Reliability Score by Resource and Environment",
               "showExportToExcel": true,
@@ -713,32 +711,6 @@
                         {
                           "operator": "contains",
                           "thresholdValue": "Prod",
-                          "representation": "redBright",
-                          "text": "{0}{1}"
-                        },
-                        {
-                          "operator": "Default",
-                          "thresholdValue": null,
-                          "text": "{0}{1}"
-                        }
-                      ]
-                    }
-                  },
-                  {
-                    "columnMatch": "Criticality",
-                    "formatter": 18,
-                    "formatOptions": {
-                      "thresholdsOptions": "colors",
-                      "thresholdsGrid": [
-                        {
-                          "operator": "contains",
-                          "thresholdValue": "Mission Critical",
-                          "representation": "redBright",
-                          "text": "{0}{1}"
-                        },
-                        {
-                          "operator": "contains",
-                          "thresholdValue": "mission critical",
                           "representation": "redBright",
                           "text": "{0}{1}"
                         },
@@ -808,8 +780,7 @@
             "type": 3,
             "content": {
               "version": "KqlItem/1.0",
-              "query": ${kql_summary_reliability_score_by_resourceType_environment
-              },
+              "query": ${kql_summary_reliability_score_by_resourceType_environment},
               "size": 3,
               "title": "Reliability Score by Resource Type and Environment",
               "showExportToExcel": true,
@@ -847,32 +818,6 @@
                         {
                           "operator": "contains",
                           "thresholdValue": "Prod",
-                          "representation": "redBright",
-                          "text": "{0}{1}"
-                        },
-                        {
-                          "operator": "Default",
-                          "thresholdValue": null,
-                          "text": "{0}{1}"
-                        }
-                      ]
-                    }
-                  },
-                  {
-                    "columnMatch": "Criticality",
-                    "formatter": 18,
-                    "formatOptions": {
-                      "thresholdsOptions": "colors",
-                      "thresholdsGrid": [
-                        {
-                          "operator": "contains",
-                          "thresholdValue": "Mission Critical",
-                          "representation": "redBright",
-                          "text": "{0}{1}"
-                        },
-                        {
-                          "operator": "contains",
-                          "thresholdValue": "mission critical",
                           "representation": "redBright",
                           "text": "{0}{1}"
                         },
@@ -996,8 +941,7 @@
                   "type": 3,
                   "content": {
                     "version": "KqlItem/1.0",
-                    "query": ${kql_export_summary_by_resourceType_environment
-                    },
+                    "query": ${kql_export_summary_by_resourceType_environment},
                     "size": 3,
                     "title": "Summary by Resource Type and Environment",
                     "showExportToExcel": true,
@@ -1040,32 +984,6 @@
                               {
                                 "operator": "contains",
                                 "thresholdValue": "Prod",
-                                "representation": "redBright",
-                                "text": "{0}{1}"
-                              },
-                              {
-                                "operator": "Default",
-                                "thresholdValue": null,
-                                "text": "{0}{1}"
-                              }
-                            ]
-                          }
-                        },
-                        {
-                          "columnMatch": "Criticality",
-                          "formatter": 18,
-                          "formatOptions": {
-                            "thresholdsOptions": "colors",
-                            "thresholdsGrid": [
-                              {
-                                "operator": "contains",
-                                "thresholdValue": "Mission Critical",
-                                "representation": "redBright",
-                                "text": "{0}{1}"
-                              },
-                              {
-                                "operator": "contains",
-                                "thresholdValue": "mission critical",
                                 "representation": "redBright",
                                 "text": "{0}{1}"
                               },
@@ -1225,8 +1143,7 @@
                   "type": 3,
                   "content": {
                     "version": "KqlItem/1.0",
-                    "query": ${kql_export_summary_by_resource_environment
-                    },
+                    "query": ${kql_export_summary_by_resource_environment},
                     "size": 3,
                     "title": "Summary by Resource, Environment",
                     "showExportToExcel": true,
@@ -1269,32 +1186,6 @@
                               {
                                 "operator": "contains",
                                 "thresholdValue": "Prod",
-                                "representation": "redBright",
-                                "text": "{0}{1}"
-                              },
-                              {
-                                "operator": "Default",
-                                "thresholdValue": null,
-                                "text": "{0}{1}"
-                              }
-                            ]
-                          }
-                        },
-                        {
-                          "columnMatch": "Criticality",
-                          "formatter": 18,
-                          "formatOptions": {
-                            "thresholdsOptions": "colors",
-                            "thresholdsGrid": [
-                              {
-                                "operator": "contains",
-                                "thresholdValue": "Mission Critical",
-                                "representation": "redBright",
-                                "text": "{0}{1}"
-                              },
-                              {
-                                "operator": "contains",
-                                "thresholdValue": "mission critical",
                                 "representation": "redBright",
                                 "text": "{0}{1}"
                               },
@@ -1350,8 +1241,7 @@
                   "type": 3,
                   "content": {
                     "version": "KqlItem/1.0",
-                    "query": ${kql_export_resources_details
-                    },
+                    "query": ${kql_export_resources_details},
                     "size": 0,
                     "title": "Resources Details",
                     "showExportToExcel": true,
@@ -1603,8 +1493,7 @@
                   "type": 3,
                   "content": {
                     "version": "KqlItem/1.0",
-                    "query": ${kql_networking_lb_resources_details
-                    },
+                    "query": ${kql_networking_lb_resources_details},
                     "size": 3,
                     "queryType": 1,
                     "resourceType": "microsoft.resourcegraph/resources",
@@ -1763,26 +1652,6 @@
                         {
                           "columnMatch": "Backup",
                           "formatter": 5
-                        },
-                        {
-                          "columnMatch": "Criticality",
-                          "formatter": 18,
-                          "formatOptions": {
-                            "thresholdsOptions": "colors",
-                            "thresholdsGrid": [
-                              {
-                                "operator": "==",
-                                "thresholdValue": "Mission Critical",
-                                "representation": "redBright",
-                                "text": "{0}{1}"
-                              },
-                              {
-                                "operator": "Default",
-                                "thresholdValue": null,
-                                "text": "{0}{1}"
-                              }
-                            ]
-                          }
                         },
                         {
                           "columnMatch": "Environment",
@@ -1947,8 +1816,7 @@
                   "type": 3,
                   "content": {
                     "version": "KqlItem/1.0",
-                    "query": ${kql_networking_appgw_resources_details
-                    },
+                    "query": ${kql_networking_appgw_resources_details},
                     "size": 3,
                     "queryType": 1,
                     "resourceType": "microsoft.resourcegraph/resources",
@@ -2159,26 +2027,6 @@
                           "formatter": 5
                         },
                         {
-                          "columnMatch": "Criticality",
-                          "formatter": 18,
-                          "formatOptions": {
-                            "thresholdsOptions": "colors",
-                            "thresholdsGrid": [
-                              {
-                                "operator": "==",
-                                "thresholdValue": "Mission Critical",
-                                "representation": "redBright",
-                                "text": "{0}{1}"
-                              },
-                              {
-                                "operator": "Default",
-                                "thresholdValue": null,
-                                "text": "{0}{1}"
-                              }
-                            ]
-                          }
-                        },
-                        {
                           "columnMatch": "Environment",
                           "formatter": 18,
                           "formatOptions": {
@@ -2284,8 +2132,7 @@
                   "type": 3,
                   "content": {
                     "version": "KqlItem/1.0",
-                    "query": ${kql_networking_azfw_resources_details
-                    },
+                    "query": ${kql_networking_azfw_resources_details},
                     "size": 0,
                     "queryType": 1,
                     "resourceType": "microsoft.resourcegraph/resources",
@@ -2511,8 +2358,7 @@
                   "type": 3,
                   "content": {
                     "version": "KqlItem/1.0",
-                    "query": ${kql_networking_afd_resources_details
-                    },
+                    "query": ${kql_networking_afd_resources_details},
                     "size": 3,
                     "queryType": 1,
                     "resourceType": "microsoft.resourcegraph/resources",
@@ -2812,8 +2658,7 @@
                   "type": 3,
                   "content": {
                     "version": "KqlItem/1.0",
-                    "query": ${kql_compute_vm_resources_details
-                    },
+                    "query": ${kql_compute_vm_resources_details},
                     "size": 3,
                     "title": "Virtual Machines",
                     "queryType": 1,
@@ -3060,26 +2905,6 @@
                           }
                         },
                         {
-                          "columnMatch": "Criticality",
-                          "formatter": 18,
-                          "formatOptions": {
-                            "thresholdsOptions": "colors",
-                            "thresholdsGrid": [
-                              {
-                                "operator": "==",
-                                "thresholdValue": "Mission Critical",
-                                "representation": "redBright",
-                                "text": "{0}{1}"
-                              },
-                              {
-                                "operator": "Default",
-                                "thresholdValue": null,
-                                "text": "{0}{1}"
-                              }
-                            ]
-                          }
-                        },
-                        {
                           "columnMatch": "Environment",
                           "formatter": 18,
                           "formatOptions": {
@@ -3177,8 +3002,7 @@
                   "type": 3,
                   "content": {
                     "version": "KqlItem/1.0",
-                    "query": ${kql_compute_vmss_resources_details
-                    },
+                    "query": ${kql_compute_vmss_resources_details},
                     "size": 3,
                     "title": "Virtual Machine Scale Sets",
                     "queryType": 1,
@@ -3447,26 +3271,6 @@
                           "formatter": 5
                         },
                         {
-                          "columnMatch": "Criticality",
-                          "formatter": 18,
-                          "formatOptions": {
-                            "thresholdsOptions": "colors",
-                            "thresholdsGrid": [
-                              {
-                                "operator": "==",
-                                "thresholdValue": "Mission Critical",
-                                "representation": "redBright",
-                                "text": "{0}{1}"
-                              },
-                              {
-                                "operator": "Default",
-                                "thresholdValue": null,
-                                "text": "{0}{1}"
-                              }
-                            ]
-                          }
-                        },
-                        {
                           "columnMatch": "Environment",
                           "formatter": 18,
                           "formatOptions": {
@@ -3721,8 +3525,7 @@
                   "type": 3,
                   "content": {
                     "version": "KqlItem/1.0",
-                    "query": ${kql_compute_appservice_funcapp_resources_details
-                    },
+                    "query": ${kql_compute_appservice_funcapp_resources_details},
                     "size": 3,
                     "title": "App Service - Function App",
                     "queryType": 1,
@@ -3893,26 +3696,6 @@
                                 "operator": "Default",
                                 "thresholdValue": null,
                                 "representation": null,
-                                "text": "{0}{1}"
-                              }
-                            ]
-                          }
-                        },
-                        {
-                          "columnMatch": "Criticality",
-                          "formatter": 18,
-                          "formatOptions": {
-                            "thresholdsOptions": "colors",
-                            "thresholdsGrid": [
-                              {
-                                "operator": "==",
-                                "thresholdValue": "Mission Critical",
-                                "representation": "redBright",
-                                "text": "{0}{1}"
-                              },
-                              {
-                                "operator": "Default",
-                                "thresholdValue": null,
                                 "text": "{0}{1}"
                               }
                             ]
@@ -4182,8 +3965,7 @@
                   "type": 3,
                   "content": {
                     "version": "KqlItem/1.0",
-                    "query": ${kql_database_sqldb_resources_details
-                    },
+                    "query": ${kql_database_sqldb_resources_details},
                     "size": 3,
                     "title": "Azure SQL Database",
                     "queryType": 1,
@@ -4428,26 +4210,6 @@
                         {
                           "columnMatch": "Backup",
                           "formatter": 5
-                        },
-                        {
-                          "columnMatch": "Criticality",
-                          "formatter": 18,
-                          "formatOptions": {
-                            "thresholdsOptions": "colors",
-                            "thresholdsGrid": [
-                              {
-                                "operator": "==",
-                                "thresholdValue": "Mission Critical",
-                                "representation": "redBright",
-                                "text": "{0}{1}"
-                              },
-                              {
-                                "operator": "Default",
-                                "thresholdValue": null,
-                                "text": "{0}{1}"
-                              }
-                            ]
-                          }
                         },
                         {
                           "columnMatch": "Environment",
@@ -4699,8 +4461,7 @@
                   "type": 3,
                   "content": {
                     "version": "KqlItem/1.0",
-                    "query": ${kql_database_synapse_resources_details
-                    },
+                    "query": ${kql_database_synapse_resources_details},
                     "size": 3,
                     "title": "Azure Synapse Analytics",
                     "queryType": 1,
@@ -4828,26 +4589,6 @@
                         {
                           "columnMatch": "Backup",
                           "formatter": 5
-                        },
-                        {
-                          "columnMatch": "Criticality",
-                          "formatter": 18,
-                          "formatOptions": {
-                            "thresholdsOptions": "colors",
-                            "thresholdsGrid": [
-                              {
-                                "operator": "==",
-                                "thresholdValue": "Mission Critical",
-                                "representation": "redBright",
-                                "text": "{0}{1}"
-                              },
-                              {
-                                "operator": "Default",
-                                "thresholdValue": null,
-                                "text": "{0}{1}"
-                              }
-                            ]
-                          }
                         },
                         {
                           "columnMatch": "Environment",
@@ -5099,8 +4840,7 @@
                   "type": 3,
                   "content": {
                     "version": "KqlItem/1.0",
-                    "query": ${kql_database_cosmosdb_resources_details
-                    },
+                    "query": ${kql_database_cosmosdb_resources_details},
                     "size": 3,
                     "title": "Cosmos DB",
                     "queryType": 1,
@@ -5337,26 +5077,6 @@
                           }
                         },
                         {
-                          "columnMatch": "Criticality",
-                          "formatter": 18,
-                          "formatOptions": {
-                            "thresholdsOptions": "colors",
-                            "thresholdsGrid": [
-                              {
-                                "operator": "==",
-                                "thresholdValue": "Mission Critical",
-                                "representation": "redBright",
-                                "text": "{0}{1}"
-                              },
-                              {
-                                "operator": "Default",
-                                "thresholdValue": null,
-                                "text": "{0}{1}"
-                              }
-                            ]
-                          }
-                        },
-                        {
                           "columnMatch": "Environment",
                           "formatter": 18,
                           "formatOptions": {
@@ -5547,8 +5267,7 @@
                   "type": 3,
                   "content": {
                     "version": "KqlItem/1.0",
-                    "query": ${kql_database_mysqlsingle_resources_details
-                    },
+                    "query": ${kql_database_mysqlsingle_resources_details},
                     "size": 3,
                     "title": "MySQL - Single",
                     "queryType": 1,
@@ -5794,26 +5513,6 @@
                           }
                         },
                         {
-                          "columnMatch": "Criticality",
-                          "formatter": 18,
-                          "formatOptions": {
-                            "thresholdsOptions": "colors",
-                            "thresholdsGrid": [
-                              {
-                                "operator": "==",
-                                "thresholdValue": "Mission Critical",
-                                "representation": "redBright",
-                                "text": "{0}{1}"
-                              },
-                              {
-                                "operator": "Default",
-                                "thresholdValue": null,
-                                "text": "{0}{1}"
-                              }
-                            ]
-                          }
-                        },
-                        {
                           "columnMatch": "Environment",
                           "formatter": 18,
                           "formatOptions": {
@@ -6011,8 +5710,7 @@
                   "type": 3,
                   "content": {
                     "version": "KqlItem/1.0",
-                    "query": ${kql_database_mysqlflexible_resources_details
-                    },
+                    "query": ${kql_database_mysqlflexible_resources_details},
                     "size": 3,
                     "title": "MySQL - Flexible",
                     "queryType": 1,
@@ -6229,26 +5927,6 @@
                         {
                           "columnMatch": "Backup",
                           "formatter": 5
-                        },
-                        {
-                          "columnMatch": "Criticality",
-                          "formatter": 18,
-                          "formatOptions": {
-                            "thresholdsOptions": "colors",
-                            "thresholdsGrid": [
-                              {
-                                "operator": "==",
-                                "thresholdValue": "Mission Critical",
-                                "representation": "redBright",
-                                "text": "{0}{1}"
-                              },
-                              {
-                                "operator": "Default",
-                                "thresholdValue": null,
-                                "text": "{0}{1}"
-                              }
-                            ]
-                          }
                         },
                         {
                           "columnMatch": "Environment",
@@ -6704,8 +6382,7 @@
             "type": 3,
             "content": {
               "version": "KqlItem/1.0",
-              "query": ${kql_container_aks_resources_details
-              },
+              "query": ${kql_container_aks_resources_details},
               "size": 0,
               "title": "Azure Kubernetes Service (AKS)",
               "queryType": 1,
@@ -6971,26 +6648,6 @@
                   {
                     "columnMatch": "Backup",
                     "formatter": 5
-                  },
-                  {
-                    "columnMatch": "Criticality",
-                    "formatter": 18,
-                    "formatOptions": {
-                      "thresholdsOptions": "colors",
-                      "thresholdsGrid": [
-                        {
-                          "operator": "==",
-                          "thresholdValue": "Mission Critical",
-                          "representation": "redBright",
-                          "text": "{0}{1}"
-                        },
-                        {
-                          "operator": "Default",
-                          "thresholdValue": null,
-                          "text": "{0}{1}"
-                        }
-                      ]
-                    }
                   },
                   {
                     "columnMatch": "Environment",
@@ -7303,8 +6960,7 @@
             "type": 3,
             "content": {
               "version": "KqlItem/1.0",
-              "query": ${kql_storage_account_resources_details
-              },
+              "query": ${kql_storage_account_resources_details},
               "size": 3,
               "queryType": 1,
               "resourceType": "microsoft.resourcegraph/resources",
@@ -7418,26 +7074,6 @@
                   {
                     "columnMatch": "Backup",
                     "formatter": 5
-                  },
-                  {
-                    "columnMatch": "Criticality",
-                    "formatter": 18,
-                    "formatOptions": {
-                      "thresholdsOptions": "colors",
-                      "thresholdsGrid": [
-                        {
-                          "operator": "==",
-                          "thresholdValue": "Mission Critical",
-                          "representation": "redBright",
-                          "text": "{0}{1}"
-                        },
-                        {
-                          "operator": "Default",
-                          "thresholdValue": null,
-                          "text": "{0}{1}"
-                        }
-                      ]
-                    }
                   },
                   {
                     "columnMatch": "Environment",
@@ -7698,8 +7334,7 @@
             "type": 3,
             "content": {
               "version": "KqlItem/1.0",
-              "query": ${kql_webapp_appsvc_resources_details
-              },
+              "query": ${kql_webapp_appsvc_resources_details},
               "size": 3,
               "title": "App Service - Web App",
               "queryType": 1,
@@ -7853,26 +7488,6 @@
                   {
                     "columnMatch": "Backup",
                     "formatter": 5
-                  },
-                  {
-                    "columnMatch": "Criticality",
-                    "formatter": 18,
-                    "formatOptions": {
-                      "thresholdsOptions": "colors",
-                      "thresholdsGrid": [
-                        {
-                          "operator": "==",
-                          "thresholdValue": "Mission Critical",
-                          "representation": "redBright",
-                          "text": "{0}{1}"
-                        },
-                        {
-                          "operator": "Default",
-                          "thresholdValue": null,
-                          "text": "{0}{1}"
-                        }
-                      ]
-                    }
                   },
                   {
                     "columnMatch": "Environment",
@@ -8080,8 +7695,7 @@
             "type": 3,
             "content": {
               "version": "KqlItem/1.0",
-              "query": ${kql_integration_apim_resources_details
-              },
+              "query": ${kql_integration_apim_resources_details},
               "size": 0,
               "title": "API Management",
               "queryType": 1,
@@ -8311,26 +7925,6 @@
                     "formatter": 5
                   },
                   {
-                    "columnMatch": "Criticality",
-                    "formatter": 18,
-                    "formatOptions": {
-                      "thresholdsOptions": "colors",
-                      "thresholdsGrid": [
-                        {
-                          "operator": "==",
-                          "thresholdValue": "Mission Critical",
-                          "representation": "redBright",
-                          "text": "{0}{1}"
-                        },
-                        {
-                          "operator": "Default",
-                          "thresholdValue": null,
-                          "text": "{0}{1}"
-                        }
-                      ]
-                    }
-                  },
-                  {
                     "columnMatch": "Environment",
                     "formatter": 18,
                     "formatOptions": {
@@ -8501,8 +8095,7 @@
             "type": 3,
             "content": {
               "version": "KqlItem/1.0",
-              "query": ${kql_azuresiterecovery_resources_details
-              },
+              "query": ${kql_azuresiterecovery_resources_details},
               "size": 0,
               "queryType": 1,
               "resourceType": "microsoft.resourcegraph/resources",
