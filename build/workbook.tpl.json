@@ -85,28 +85,6 @@
             ]
           },
           {
-            "id": "972eba34-11d9-42e3-8005-b0334b3a301b",
-            "version": "KqlParameterItem/1.0",
-            "name": "Criticality",
-            "type": 2,
-            "multiSelect": true,
-            "quote": "'",
-            "delimiter": ",",
-            "query": "resources\r\n| extend Criticality = case(tags.Criticality <> \"\", tags.Criticality,\r\n\t\t    \"Undefined\")\r\n| distinct Criticality",
-            "crossComponentResources": [
-              "{Subscriptions}"
-            ],
-            "typeSettings": {
-              "additionalResourceOptions": [
-                "value::all"
-              ],
-              "showDefault": false
-            },
-            "defaultValue": "value::all",
-            "queryType": 1,
-            "resourceType": "microsoft.resourcegraph/resources"
-          },
-          {
             "id": "5c4674db-3151-4a5f-bb5a-e5e886cc2c17",
             "version": "KqlParameterItem/1.0",
             "name": "Environment",
@@ -132,22 +110,44 @@
             ]
           },
           {
-            "id": "945162bf-cf6d-4956-952c-606acfd2c5e5",
+            "id": "e15393b4-4c1f-44b7-8081-784dc5b64473",
             "version": "KqlParameterItem/1.0",
-            "name": "Help",
-            "label": "Show Help",
-            "type": 10,
-            "description": "This will show additional information, and any prerequisites that may apply to the workbook.",
-            "isRequired": true,
-            "isHiddenWhenLocked": true,
+            "name": "TagName",
+            "label": "Tag Name",
+            "type": 2,
+            "query": "Resources\r\n| where tags != '' and tags != '[]'\r\n| mvexpand tags\r\n| extend tagName = tostring(bag_keys(tags)[0])\r\n| distinct tagName\r\n| sort by tagName asc",
+            "crossComponentResources": [
+              "{Subscriptions}"
+            ],
             "typeSettings": {
-              "additionalResourceOptions": [],
-              "showDefault": false
+              "additionalResourceOptions": []
             },
-            "jsonData": "[{ \"value\": \"Yes\", \"label\": \"Yes\"},\r\n {\"value\": \"No\", \"label\": \"No\", \"selected\":true }]",
             "timeContext": {
               "durationMs": 86400000
-            }
+            },
+            "queryType": 1,
+            "resourceType": "microsoft.resourcegraph/resources",
+            "value": null
+          },
+          {
+            "id": "bbe7b048-af1d-4d68-ad07-b023d3450e27",
+            "version": "KqlParameterItem/1.0",
+            "name": "TagValue",
+            "type": 2,
+            "query": "Resources\r\n| mvexpand tags\r\n| extend tagName = tostring(bag_keys(tags)[0])\r\n| extend tagValue = tostring(tags[tagName])\r\n| where tags != '' and tags != '[]' and tostring(bag_keys(tags)[0]) == '{TagName}'\r\n| distinct tagValue\r\n| sort by tagValue asc",
+            "crossComponentResources": [
+              "{Subscriptions}"
+            ],
+            "typeSettings": {
+              "additionalResourceOptions": []
+            },
+            "timeContext": {
+              "durationMs": 86400000
+            },
+            "queryType": 1,
+            "resourceType": "microsoft.resourcegraph/resources",
+            "value": null,
+            "label": "Tag Value"
           }
         ],
         "style": "pills",
@@ -673,9 +673,9 @@
             "type": 3,
             "content": {
               "version": "KqlItem/1.0",
-              "query": ${kql_summary_reliability_score_by_resource_environment_and_criticality},
+              "query": ${kql_summary_reliability_score_by_resource_environment},
               "size": 3,
-              "title": "Reliability Score by Resource, Environment and Criticality",
+              "title": "Reliability Score by Resource and Environment",
               "showExportToExcel": true,
               "exportToExcelOptions": "all",
               "queryType": 1,
@@ -711,32 +711,6 @@
                         {
                           "operator": "contains",
                           "thresholdValue": "Prod",
-                          "representation": "redBright",
-                          "text": "{0}{1}"
-                        },
-                        {
-                          "operator": "Default",
-                          "thresholdValue": null,
-                          "text": "{0}{1}"
-                        }
-                      ]
-                    }
-                  },
-                  {
-                    "columnMatch": "Criticality",
-                    "formatter": 18,
-                    "formatOptions": {
-                      "thresholdsOptions": "colors",
-                      "thresholdsGrid": [
-                        {
-                          "operator": "contains",
-                          "thresholdValue": "Mission Critical",
-                          "representation": "redBright",
-                          "text": "{0}{1}"
-                        },
-                        {
-                          "operator": "contains",
-                          "thresholdValue": "mission critical",
                           "representation": "redBright",
                           "text": "{0}{1}"
                         },
@@ -797,7 +771,7 @@
               },
               "sortBy": []
             },
-            "name": "kql_summary_reliability_score_by_resource_environment_and_criticality",
+            "name": "kql_summary_reliability_score_by_resource_environment",
             "styleSettings": {
               "showBorder": true
             }
@@ -806,9 +780,9 @@
             "type": 3,
             "content": {
               "version": "KqlItem/1.0",
-              "query": ${kql_summary_reliability_score_by_resourceType_environment_and_criticality},
+              "query": ${kql_summary_reliability_score_by_resourceType_environment},
               "size": 3,
-              "title": "Reliability Score by Resource Type, Environment and Criticality",
+              "title": "Reliability Score by Resource Type and Environment",
               "showExportToExcel": true,
               "exportToExcelOptions": "all",
               "queryType": 1,
@@ -844,32 +818,6 @@
                         {
                           "operator": "contains",
                           "thresholdValue": "Prod",
-                          "representation": "redBright",
-                          "text": "{0}{1}"
-                        },
-                        {
-                          "operator": "Default",
-                          "thresholdValue": null,
-                          "text": "{0}{1}"
-                        }
-                      ]
-                    }
-                  },
-                  {
-                    "columnMatch": "Criticality",
-                    "formatter": 18,
-                    "formatOptions": {
-                      "thresholdsOptions": "colors",
-                      "thresholdsGrid": [
-                        {
-                          "operator": "contains",
-                          "thresholdValue": "Mission Critical",
-                          "representation": "redBright",
-                          "text": "{0}{1}"
-                        },
-                        {
-                          "operator": "contains",
-                          "thresholdValue": "mission critical",
                           "representation": "redBright",
                           "text": "{0}{1}"
                         },
@@ -930,7 +878,7 @@
               },
               "sortBy": []
             },
-            "name": "kql_summary_reliability_score_by_resourceType_environment_and_criticality",
+            "name": "kql_summary_reliability_score_by_resourceType_environment",
             "styleSettings": {
               "showBorder": true
             }
@@ -993,9 +941,9 @@
                   "type": 3,
                   "content": {
                     "version": "KqlItem/1.0",
-                    "query": ${kql_export_summary_by_resourceType_environment_criticality},
+                    "query": ${kql_export_summary_by_resourceType_environment},
                     "size": 3,
-                    "title": "Summary by Resource Type, Environment, Criticality",
+                    "title": "Summary by Resource Type and Environment",
                     "showExportToExcel": true,
                     "exportToExcelOptions": "all",
                     "queryType": 1,
@@ -1036,32 +984,6 @@
                               {
                                 "operator": "contains",
                                 "thresholdValue": "Prod",
-                                "representation": "redBright",
-                                "text": "{0}{1}"
-                              },
-                              {
-                                "operator": "Default",
-                                "thresholdValue": null,
-                                "text": "{0}{1}"
-                              }
-                            ]
-                          }
-                        },
-                        {
-                          "columnMatch": "Criticality",
-                          "formatter": 18,
-                          "formatOptions": {
-                            "thresholdsOptions": "colors",
-                            "thresholdsGrid": [
-                              {
-                                "operator": "contains",
-                                "thresholdValue": "Mission Critical",
-                                "representation": "redBright",
-                                "text": "{0}{1}"
-                              },
-                              {
-                                "operator": "contains",
-                                "thresholdValue": "mission critical",
                                 "representation": "redBright",
                                 "text": "{0}{1}"
                               },
@@ -1212,7 +1134,7 @@
                       }
                     ]
                   },
-                  "name": "kql_export_summary_by_resourceType_environment_criticality",
+                  "name": "kql_export_summary_by_resourceType_environment",
                   "styleSettings": {
                     "showBorder": true
                   }
@@ -1221,9 +1143,9 @@
                   "type": 3,
                   "content": {
                     "version": "KqlItem/1.0",
-                    "query": ${kql_export_summary_by_resource_environment_criticality},
+                    "query": ${kql_export_summary_by_resource_environment},
                     "size": 3,
-                    "title": "Summary by Resource, Environment, Criticality",
+                    "title": "Summary by Resource, Environment",
                     "showExportToExcel": true,
                     "exportToExcelOptions": "all",
                     "queryType": 1,
@@ -1274,32 +1196,6 @@
                               }
                             ]
                           }
-                        },
-                        {
-                          "columnMatch": "Criticality",
-                          "formatter": 18,
-                          "formatOptions": {
-                            "thresholdsOptions": "colors",
-                            "thresholdsGrid": [
-                              {
-                                "operator": "contains",
-                                "thresholdValue": "Mission Critical",
-                                "representation": "redBright",
-                                "text": "{0}{1}"
-                              },
-                              {
-                                "operator": "contains",
-                                "thresholdValue": "mission critical",
-                                "representation": "redBright",
-                                "text": "{0}{1}"
-                              },
-                              {
-                                "operator": "Default",
-                                "thresholdValue": null,
-                                "text": "{0}{1}"
-                              }
-                            ]
-                          }
                         }
                       ],
                       "rowLimit": 10000,
@@ -1336,7 +1232,7 @@
                       }
                     ]
                   },
-                  "name": "kql_export_summary_by_resource_environment_criticality",
+                  "name": "kql_export_summary_by_resource_environment",
                   "styleSettings": {
                     "showBorder": true
                   }
@@ -1460,217 +1356,6 @@
         "version": "NotebookGroup/1.0",
         "groupType": "editable",
         "items": [
-          {
-            "type": 12,
-            "content": {
-              "version": "NotebookGroup/1.0",
-              "groupType": "editable",
-              "items": [
-                {
-                  "type": 9,
-                  "content": {
-                    "version": "KqlParameterItem/1.0",
-                    "crossComponentResources": [
-                      "{Subscriptions}"
-                    ],
-                    "parameters": [
-                      {
-                        "id": "7633231b-140c-44a4-93c5-d59c36b37838",
-                        "version": "KqlParameterItem/1.0",
-                        "name": "Subscriptions",
-                        "type": 6,
-                        "isRequired": true,
-                        "multiSelect": true,
-                        "quote": "'",
-                        "delimiter": ",",
-                        "value": [
-                          "value::all"
-                        ],
-                        "typeSettings": {
-                          "additionalResourceOptions": [
-                            "value::all"
-                          ],
-                          "includeAll": true,
-                          "showDefault": false
-                        },
-                        "timeContext": {
-                          "durationMs": 86400000
-                        },
-                        "defaultValue": "value::all"
-                      },
-                      {
-                        "id": "099d86cc-9ccb-4234-84c1-943e15f77ff7",
-                        "version": "KqlParameterItem/1.0",
-                        "name": "Criticality",
-                        "type": 2,
-                        "multiSelect": true,
-                        "quote": "'",
-                        "delimiter": ",",
-                        "query": "resources\r\n| extend Criticality = case(tags.Criticality <> \"\", tags.Criticality,\r\n\t\t    \"Undefined\")\r\n| distinct Criticality",
-                        "crossComponentResources": [
-                          "{Subscriptions}"
-                        ],
-                        "value": [
-                          "value::all"
-                        ],
-                        "typeSettings": {
-                          "additionalResourceOptions": [
-                            "value::all"
-                          ],
-                          "showDefault": false
-                        },
-                        "defaultValue": "value::all",
-                        "queryType": 1,
-                        "resourceType": "microsoft.resourcegraph/resources"
-                      },
-                      {
-                        "id": "1153a137-08bc-4832-9783-009b628f0a9d",
-                        "version": "KqlParameterItem/1.0",
-                        "name": "SLA",
-                        "label": "Show SLA",
-                        "type": 10,
-                        "description": "This will show the SLA information for the focus area.",
-                        "isRequired": true,
-                        "typeSettings": {
-                          "additionalResourceOptions": [],
-                          "showDefault": false
-                        },
-                        "jsonData": "[{ \"value\": \"Yes\", \"label\": \"Yes\"},\r\n {\"value\": \"No\", \"label\": \"No\", \"selected\":true }]",
-                        "timeContext": {
-                          "durationMs": 86400000
-                        }
-                      },
-                      {
-                        "id": "f9d90ba0-dae5-45b5-9e9a-68dbed7f0ad1",
-                        "version": "KqlParameterItem/1.0",
-                        "name": "Help",
-                        "label": "Show Help",
-                        "type": 10,
-                        "description": "This will show additional information, and any prerequisites that may apply to the workbook.",
-                        "isRequired": true,
-                        "typeSettings": {
-                          "additionalResourceOptions": [],
-                          "showDefault": false
-                        },
-                        "jsonData": "[{ \"value\": \"Yes\", \"label\": \"Yes\"},\r\n {\"value\": \"No\", \"label\": \"No\", \"selected\":true }]",
-                        "timeContext": {
-                          "durationMs": 86400000
-                        }
-                      }
-                    ],
-                    "style": "pills",
-                    "queryType": 1,
-                    "resourceType": "microsoft.resourcegraph/resources"
-                  },
-                  "name": "parameters - 0 - Copy"
-                },
-                {
-                  "type": 9,
-                  "content": {
-                    "version": "KqlParameterItem/1.0",
-                    "crossComponentResources": [
-                      "{Subscriptions}"
-                    ],
-                    "parameters": [
-                      {
-                        "id": "bd278e9e-21fd-460d-a0e3-b13e077a2309",
-                        "version": "KqlParameterItem/1.0",
-                        "name": "Subscriptions",
-                        "type": 6,
-                        "isRequired": true,
-                        "multiSelect": true,
-                        "quote": "'",
-                        "delimiter": ",",
-                        "value": [
-                          "value::all"
-                        ],
-                        "typeSettings": {
-                          "additionalResourceOptions": [
-                            "value::all"
-                          ],
-                          "includeAll": true,
-                          "showDefault": false
-                        },
-                        "timeContext": {
-                          "durationMs": 86400000
-                        },
-                        "defaultValue": "value::all"
-                      },
-                      {
-                        "id": "3496ab42-96bf-46c5-ab68-e409c4ea091c",
-                        "version": "KqlParameterItem/1.0",
-                        "name": "Criticality",
-                        "type": 2,
-                        "multiSelect": true,
-                        "quote": "'",
-                        "delimiter": ",",
-                        "query": "resources\r\n| extend Criticality = case(tags.Criticality <> \"\", tags.Criticality,\r\n\t\t    \"Undefined\")\r\n| distinct Criticality",
-                        "crossComponentResources": [
-                          "{Subscriptions}"
-                        ],
-                        "value": [
-                          "value::all"
-                        ],
-                        "typeSettings": {
-                          "additionalResourceOptions": [
-                            "value::all"
-                          ],
-                          "showDefault": false
-                        },
-                        "defaultValue": "value::all",
-                        "queryType": 1,
-                        "resourceType": "microsoft.resourcegraph/resources"
-                      },
-                      {
-                        "id": "d55f4971-fd8a-417e-9405-a27d1d856ee4",
-                        "version": "KqlParameterItem/1.0",
-                        "name": "SLA",
-                        "label": "Show SLA",
-                        "type": 10,
-                        "description": "This will show the SLA information for the focus area.",
-                        "isRequired": true,
-                        "typeSettings": {
-                          "additionalResourceOptions": [],
-                          "showDefault": false
-                        },
-                        "jsonData": "[{ \"value\": \"Yes\", \"label\": \"Yes\"},\r\n {\"value\": \"No\", \"label\": \"No\", \"selected\":true }]",
-                        "timeContext": {
-                          "durationMs": 86400000
-                        }
-                      },
-                      {
-                        "id": "382d0692-c167-45f9-bc53-173cfe46540d",
-                        "version": "KqlParameterItem/1.0",
-                        "name": "Help",
-                        "label": "Show Help",
-                        "type": 10,
-                        "description": "This will show additional information, and any prerequisites that may apply to the workbook.",
-                        "isRequired": true,
-                        "typeSettings": {
-                          "additionalResourceOptions": [],
-                          "showDefault": false
-                        },
-                        "jsonData": "[{ \"value\": \"Yes\", \"label\": \"Yes\"},\r\n {\"value\": \"No\", \"label\": \"No\", \"selected\":true }]",
-                        "timeContext": {
-                          "durationMs": 86400000
-                        }
-                      }
-                    ],
-                    "style": "pills",
-                    "queryType": 1,
-                    "resourceType": "microsoft.resourcegraph/resources"
-                  },
-                  "name": "parameters - 0"
-                }
-              ]
-            },
-            "conditionalVisibility": {
-              "parameterName": "selectedTab",
-              "comparison": "isEqualTo",
-              "value": "Backup"
-            },
-            "name": "Backup"
-          },
           {
             "type": 9,
             "content": {
@@ -1967,26 +1652,6 @@
                         {
                           "columnMatch": "Backup",
                           "formatter": 5
-                        },
-                        {
-                          "columnMatch": "Criticality",
-                          "formatter": 18,
-                          "formatOptions": {
-                            "thresholdsOptions": "colors",
-                            "thresholdsGrid": [
-                              {
-                                "operator": "==",
-                                "thresholdValue": "Mission Critical",
-                                "representation": "redBright",
-                                "text": "{0}{1}"
-                              },
-                              {
-                                "operator": "Default",
-                                "thresholdValue": null,
-                                "text": "{0}{1}"
-                              }
-                            ]
-                          }
                         },
                         {
                           "columnMatch": "Environment",
@@ -2360,26 +2025,6 @@
                         {
                           "columnMatch": "Backup",
                           "formatter": 5
-                        },
-                        {
-                          "columnMatch": "Criticality",
-                          "formatter": 18,
-                          "formatOptions": {
-                            "thresholdsOptions": "colors",
-                            "thresholdsGrid": [
-                              {
-                                "operator": "==",
-                                "thresholdValue": "Mission Critical",
-                                "representation": "redBright",
-                                "text": "{0}{1}"
-                              },
-                              {
-                                "operator": "Default",
-                                "thresholdValue": null,
-                                "text": "{0}{1}"
-                              }
-                            ]
-                          }
                         },
                         {
                           "columnMatch": "Environment",
@@ -3260,26 +2905,6 @@
                           }
                         },
                         {
-                          "columnMatch": "Criticality",
-                          "formatter": 18,
-                          "formatOptions": {
-                            "thresholdsOptions": "colors",
-                            "thresholdsGrid": [
-                              {
-                                "operator": "==",
-                                "thresholdValue": "Mission Critical",
-                                "representation": "redBright",
-                                "text": "{0}{1}"
-                              },
-                              {
-                                "operator": "Default",
-                                "thresholdValue": null,
-                                "text": "{0}{1}"
-                              }
-                            ]
-                          }
-                        },
-                        {
                           "columnMatch": "Environment",
                           "formatter": 18,
                           "formatOptions": {
@@ -3644,26 +3269,6 @@
                         {
                           "columnMatch": "Backup",
                           "formatter": 5
-                        },
-                        {
-                          "columnMatch": "Criticality",
-                          "formatter": 18,
-                          "formatOptions": {
-                            "thresholdsOptions": "colors",
-                            "thresholdsGrid": [
-                              {
-                                "operator": "==",
-                                "thresholdValue": "Mission Critical",
-                                "representation": "redBright",
-                                "text": "{0}{1}"
-                              },
-                              {
-                                "operator": "Default",
-                                "thresholdValue": null,
-                                "text": "{0}{1}"
-                              }
-                            ]
-                          }
                         },
                         {
                           "columnMatch": "Environment",
@@ -4091,26 +3696,6 @@
                                 "operator": "Default",
                                 "thresholdValue": null,
                                 "representation": null,
-                                "text": "{0}{1}"
-                              }
-                            ]
-                          }
-                        },
-                        {
-                          "columnMatch": "Criticality",
-                          "formatter": 18,
-                          "formatOptions": {
-                            "thresholdsOptions": "colors",
-                            "thresholdsGrid": [
-                              {
-                                "operator": "==",
-                                "thresholdValue": "Mission Critical",
-                                "representation": "redBright",
-                                "text": "{0}{1}"
-                              },
-                              {
-                                "operator": "Default",
-                                "thresholdValue": null,
                                 "text": "{0}{1}"
                               }
                             ]
@@ -4627,26 +4212,6 @@
                           "formatter": 5
                         },
                         {
-                          "columnMatch": "Criticality",
-                          "formatter": 18,
-                          "formatOptions": {
-                            "thresholdsOptions": "colors",
-                            "thresholdsGrid": [
-                              {
-                                "operator": "==",
-                                "thresholdValue": "Mission Critical",
-                                "representation": "redBright",
-                                "text": "{0}{1}"
-                              },
-                              {
-                                "operator": "Default",
-                                "thresholdValue": null,
-                                "text": "{0}{1}"
-                              }
-                            ]
-                          }
-                        },
-                        {
                           "columnMatch": "Environment",
                           "formatter": 18,
                           "formatOptions": {
@@ -5024,26 +4589,6 @@
                         {
                           "columnMatch": "Backup",
                           "formatter": 5
-                        },
-                        {
-                          "columnMatch": "Criticality",
-                          "formatter": 18,
-                          "formatOptions": {
-                            "thresholdsOptions": "colors",
-                            "thresholdsGrid": [
-                              {
-                                "operator": "==",
-                                "thresholdValue": "Mission Critical",
-                                "representation": "redBright",
-                                "text": "{0}{1}"
-                              },
-                              {
-                                "operator": "Default",
-                                "thresholdValue": null,
-                                "text": "{0}{1}"
-                              }
-                            ]
-                          }
                         },
                         {
                           "columnMatch": "Environment",
@@ -5532,26 +5077,6 @@
                           }
                         },
                         {
-                          "columnMatch": "Criticality",
-                          "formatter": 18,
-                          "formatOptions": {
-                            "thresholdsOptions": "colors",
-                            "thresholdsGrid": [
-                              {
-                                "operator": "==",
-                                "thresholdValue": "Mission Critical",
-                                "representation": "redBright",
-                                "text": "{0}{1}"
-                              },
-                              {
-                                "operator": "Default",
-                                "thresholdValue": null,
-                                "text": "{0}{1}"
-                              }
-                            ]
-                          }
-                        },
-                        {
                           "columnMatch": "Environment",
                           "formatter": 18,
                           "formatOptions": {
@@ -5988,26 +5513,6 @@
                           }
                         },
                         {
-                          "columnMatch": "Criticality",
-                          "formatter": 18,
-                          "formatOptions": {
-                            "thresholdsOptions": "colors",
-                            "thresholdsGrid": [
-                              {
-                                "operator": "==",
-                                "thresholdValue": "Mission Critical",
-                                "representation": "redBright",
-                                "text": "{0}{1}"
-                              },
-                              {
-                                "operator": "Default",
-                                "thresholdValue": null,
-                                "text": "{0}{1}"
-                              }
-                            ]
-                          }
-                        },
-                        {
                           "columnMatch": "Environment",
                           "formatter": 18,
                           "formatOptions": {
@@ -6422,26 +5927,6 @@
                         {
                           "columnMatch": "Backup",
                           "formatter": 5
-                        },
-                        {
-                          "columnMatch": "Criticality",
-                          "formatter": 18,
-                          "formatOptions": {
-                            "thresholdsOptions": "colors",
-                            "thresholdsGrid": [
-                              {
-                                "operator": "==",
-                                "thresholdValue": "Mission Critical",
-                                "representation": "redBright",
-                                "text": "{0}{1}"
-                              },
-                              {
-                                "operator": "Default",
-                                "thresholdValue": null,
-                                "text": "{0}{1}"
-                              }
-                            ]
-                          }
                         },
                         {
                           "columnMatch": "Environment",
@@ -7165,26 +6650,6 @@
                     "formatter": 5
                   },
                   {
-                    "columnMatch": "Criticality",
-                    "formatter": 18,
-                    "formatOptions": {
-                      "thresholdsOptions": "colors",
-                      "thresholdsGrid": [
-                        {
-                          "operator": "==",
-                          "thresholdValue": "Mission Critical",
-                          "representation": "redBright",
-                          "text": "{0}{1}"
-                        },
-                        {
-                          "operator": "Default",
-                          "thresholdValue": null,
-                          "text": "{0}{1}"
-                        }
-                      ]
-                    }
-                  },
-                  {
                     "columnMatch": "Environment",
                     "formatter": 18,
                     "formatOptions": {
@@ -7611,26 +7076,6 @@
                     "formatter": 5
                   },
                   {
-                    "columnMatch": "Criticality",
-                    "formatter": 18,
-                    "formatOptions": {
-                      "thresholdsOptions": "colors",
-                      "thresholdsGrid": [
-                        {
-                          "operator": "==",
-                          "thresholdValue": "Mission Critical",
-                          "representation": "redBright",
-                          "text": "{0}{1}"
-                        },
-                        {
-                          "operator": "Default",
-                          "thresholdValue": null,
-                          "text": "{0}{1}"
-                        }
-                      ]
-                    }
-                  },
-                  {
                     "columnMatch": "Environment",
                     "formatter": 18,
                     "formatOptions": {
@@ -8045,26 +7490,6 @@
                     "formatter": 5
                   },
                   {
-                    "columnMatch": "Criticality",
-                    "formatter": 18,
-                    "formatOptions": {
-                      "thresholdsOptions": "colors",
-                      "thresholdsGrid": [
-                        {
-                          "operator": "==",
-                          "thresholdValue": "Mission Critical",
-                          "representation": "redBright",
-                          "text": "{0}{1}"
-                        },
-                        {
-                          "operator": "Default",
-                          "thresholdValue": null,
-                          "text": "{0}{1}"
-                        }
-                      ]
-                    }
-                  },
-                  {
                     "columnMatch": "Environment",
                     "formatter": 18,
                     "formatOptions": {
@@ -8381,7 +7806,54 @@
                   },
                   {
                     "columnMatch": "AvailabilityZone",
-                    "formatter": 5
+                    "formatter": 18,
+                    "formatOptions": {
+                      "thresholdsOptions": "icons",
+                      "thresholdsGrid": [
+                        {
+                          "operator": "==",
+                          "thresholdValue": "not applicable",
+                          "representation": "more",
+                          "text": "{0}{1}"
+                        },
+                        {
+                          "operator": "==",
+                          "thresholdValue": "not configured",
+                          "representation": "2",
+                          "text": "{0}{1}"
+                        },
+                        {
+                          "operator": "==",
+                          "thresholdValue": "1",
+                          "representation": "2",
+                          "text": "{0}{1}"
+                        },
+                        {
+                          "operator": "==",
+                          "thresholdValue": "2",
+                          "representation": "success",
+                          "text": "{0}{1}"
+                        },
+                        {
+                          "operator": "==",
+                          "thresholdValue": "3",
+                          "representation": "success",
+                          "text": "{0}{1}"
+                        },
+                        {
+                          "operator": "==",
+                          "thresholdValue": "configured",
+                          "representation": "success",
+                          "text": "{0}{1}"
+                        },
+                        {
+                          "operator": "Default",
+                          "thresholdValue": null,
+                          "representation": "Unknown",
+                          "text": "{0}{1}"
+                        }
+                      ]
+                    }
                   },
                   {
                     "columnMatch": "AvailabilitySet",
@@ -8451,26 +7923,6 @@
                   {
                     "columnMatch": "Backup",
                     "formatter": 5
-                  },
-                  {
-                    "columnMatch": "Criticality",
-                    "formatter": 18,
-                    "formatOptions": {
-                      "thresholdsOptions": "colors",
-                      "thresholdsGrid": [
-                        {
-                          "operator": "==",
-                          "thresholdValue": "Mission Critical",
-                          "representation": "redBright",
-                          "text": "{0}{1}"
-                        },
-                        {
-                          "operator": "Default",
-                          "thresholdValue": null,
-                          "text": "{0}{1}"
-                        }
-                      ]
-                    }
                   },
                   {
                     "columnMatch": "Environment",

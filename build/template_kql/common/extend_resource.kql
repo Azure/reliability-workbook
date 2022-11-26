@@ -1,7 +1,5 @@
 resources
 | where resourceGroup in ({ResourceGroup})
-| extend criticality = case(tags.Criticality <> "", tags.Criticality,
-    "Undefined")
 | extend environment = case(
     tags.Environment <> "", tags.Environment,
     tags.environment <> "", tags.environment,
@@ -14,8 +12,18 @@ resources
     tolower(name) contains "sit", "SIT",
     tolower(name) contains "test", "Test",
     "Undefined")
-| where criticality in ({Criticality})
 | where environment in ({Environment})
+| join kind = innerunique(
+    resources
+    | extend replaced_tags = replace('{}', 'null', tostring(tags))
+    | extend replaced_tags = parse_json(replaced_tags)
+    | mv-expand replaced_tags
+    | extend tagName = tostring(bag_keys(replaced_tags)[0])
+    | extend tagValue = tostring(replaced_tags['{TagName}'])
+    | where tagName has '{TagName}' and tagValue has '{TagValue}'
+    | distinct id
+    )
+    on id
 | where 
     (type == 'microsoft.compute/virtualmachines') or 
     (type == "microsoft.compute/virtualmachinescalesets" and tags.aksEngineVersion !contains "aks-gomod") or
@@ -80,7 +88,7 @@ resources
     "Undefined"
     )
 | extend avZones = case(
-    location !in~ ('brazilsouth', 'canadacentral', 'centralus', 'eastus', 'eastus2', 'southcentralus', 'usgovvirginia', 'westus2', 'westus3', 'francecentral', 'germanywestcentral', 'northeurope', 'norwayeast', 'uksouth', 'westeurope', 'swedencentral', 'southafricanorth', 'australiaeast', 'centralindia', 'japaneast', 'koreacentral', 'southeastasia', 'eastasia'), 'Not Applicable',
+    location !in~ ('brazilsouth', 'canadacentral', 'centralus', 'eastus', 'eastus2', 'southcentralus', 'usgovvirginia', 'westus2', 'westus3', 'francecentral', 'germanywestcentral', 'northeurope', 'norwayeast', 'uksouth', 'westeurope', 'swedencentral', 'switzerlandnorth', 'qatarcentral', 'uaenorth', 'southafricanorth', 'australiaeast', 'centralindia', 'japaneast', 'koreacentral', 'southeastasia', 'eastasia', 'chinanorth3'), 'Not Applicable',
     (type == 'microsoft.compute/virtualmachines'), coalesce(tostring(zones[0]), 'Not Configured'),
     (type == 'microsoft.compute/virtualmachinescalesets'), coalesce(tostring(array_length(parse_json(zones))), 'Not Configured'),
     (type == 'microsoft.containerservice/managedclusters' and AvZones <> ""), AvZones,
@@ -91,15 +99,15 @@ resources
     (type == 'microsoft.documentdb/databaseaccounts'), iif(properties.locations[0].isZoneRedundant == "false", 'Not Configured', 'Configured'), 
     (type == 'microsoft.dbformysql/servers'), "Not Applicable",
     (type == 'microsoft.dbformysql/flexibleservers'), iif(properties.haEnabled == "Enabled", 'Configured', 'Not Configured'),
-    (type == "microsoft.apimanagement/service"), "Not Applicable",
+    (type == "microsoft.apimanagement/service"), coalesce(tostring(array_length(parse_json(zones))), 'Not Configured'),
     (type contains 'storageaccounts'), case(split(skuName, '_', 1)[0] =~ "zrs", "Configured", "Not Configured"),
     (type == "microsoft.network/azurefirewalls"), iif(isnotnull(zones), "Configured", "Not Configured"),
     (type == "microsoft.network/frontdoors"), "Not Applicable",
     (type == "microsoft.network/applicationgateways"), iif(isnotnull(zones), "Configured", "Not Configured"),
     (type == "microsoft.network/loadbalancers"), case( 
-        skuName =~ "Basic", "Not Applicable",
-        skuName =~ "Standard" and isnotnull(zones), "Configured",
-        "Not Configured"
+    skuName =~ "Basic", "Not Applicable",
+    skuName =~ "Standard" and isnotnull(zones), "Configured",
+    "Not Configured"
     ),
     (type == "microsoft.recoveryservices/vaults"), "Not Applicable",
     "Undefined"
@@ -111,9 +119,9 @@ resources
     type == 'microsoft.compute/virtualmachinescalesets', 'A regional (non-zonal) scale set uses placement groups, which act as an implicit availability set with five fault domains and five update domains.',
     type == 'microsoft.web/sites', 'Not Applicable',
     type == 'microsoft.containerservice/managedclusters', case(
-        AvSets == 'Scale Sets' and avZones in ('1', '2', '3'), "Not Applicable",
-        AvSets == 'Scale Sets', "A regional (non-zonal) scale set uses placement groups, which act as an implicit availability set with five fault domains and five update domains.",
-        "Scale Sets Not Configured"
+    AvSets == 'Scale Sets' and avZones in ('1', '2', '3'), "Not Applicable",
+    AvSets == 'Scale Sets', "A regional (non-zonal) scale set uses placement groups, which act as an implicit availability set with five fault domains and five update domains.",
+    "Scale Sets Not Configured"
     ),
     type == 'microsoft.sql/servers/databases', 'Not Applicable',
     type == 'microsoft.documentdb/databaseaccounts', 'Not Applicable',
@@ -165,8 +173,8 @@ resources
     "Undefined"
     )
 | extend osDisk = case(
-    type == 'microsoft.compute/virtualmachines', iif(properties.storageProfile.osDisk.diffDiskSettings.option == "Local", "Ephemeral",  properties.storageProfile.osDisk.managedDisk.storageAccountType),
-    type == 'microsoft.compute/virtualmachinescalesets', iif(properties.virtualMachineProfile.storageProfile.osDisk.diffDiskSettings.option == "Local", "Ephemeral",  properties.virtualMachineProfile.storageProfile.osDisk.managedDisk.storageAccountType),
+    type == 'microsoft.compute/virtualmachines', iif(properties.storageProfile.osDisk.diffDiskSettings.option == "Local", "Ephemeral", properties.storageProfile.osDisk.managedDisk.storageAccountType),
+    type == 'microsoft.compute/virtualmachinescalesets', iif(properties.virtualMachineProfile.storageProfile.osDisk.diffDiskSettings.option == "Local", "Ephemeral", properties.virtualMachineProfile.storageProfile.osDisk.managedDisk.storageAccountType),
     type == 'microsoft.web/sites', 'Not Applicable',
     type == 'microsoft.containerservice/managedclusters', iff(properties.agentPoolProfiles[0].osDiskType == 'Ephemeral', 'Ephemeral', properties1.virtualMachineProfile.storageProfile.osDisk.managedDisk.storageAccountType),
     type == 'microsoft.sql/servers/databases', properties.storageAccountType,
@@ -247,8 +255,8 @@ resources
     )
 | extend ReplicationRole = case(
     type in ('microsoft.compute/virtualmachines', 'microsoft.compute/virtualmachinescalesets', 'microsoft.web/sites', 'microsoft.containerservice/managedclusters', 'microsoft.documentdb/databaseaccounts'), "Not Applicable",
-	(type == 'microsoft.sql/servers/databases' and sku.tier <> 'DataWarehouse'), iif(isnotempty(properties.secondaryType), "replica", "master"),
-	(type == 'microsoft.sql/servers/databases' and sku.tier == 'DataWarehouse'), "Not Applicable",
+    (type == 'microsoft.sql/servers/databases' and sku.tier <> 'DataWarehouse'), iif(isnotempty(properties.secondaryType), "replica", "master"),
+    (type == 'microsoft.sql/servers/databases' and sku.tier == 'DataWarehouse'), "Not Applicable",
     (type == 'microsoft.dbformysql/servers'), tostring(properties.replicationRole),
     (type == 'microsoft.dbformysql/flexibleservers'), iif(properties.haEnabled == "Enabled", 'Not Applicable', tostring(properties.replicationRole)),
     (type == "microsoft.apimanagement/service"), "Not Applicable",
@@ -280,7 +288,6 @@ resources
     MultipleWriteLocations = tolower(MultipleWriteLocations),
     StorageAutogrow = tolower(StorageAutogrow),
     ReplicationRole = tolower(ReplicationRole),
-    Criticality = criticality,
     Environment = environment,
     ResourceId = tolower(tostring(id)),
     properties
@@ -310,3 +317,4 @@ resources
     AvailabilitySet == '-', 'None',
     isnotempty(AvailabilitySet), AvailabilitySet,
     "Unknown")
+

@@ -3,5 +3,5 @@ ${extend_resource}
 | ${summarize_score}
     by Type, Environment
 | ${calculate_score}
-    | project Type, Environment, ResourceTotal, score=toint(ReliabilityScore)
-    | summarize WorkbookScore=round(avg(score),1) | project WorkbookScore
+    | project Type, Environment, ResourceTotal, tostring(ReliabilityScore)
+    | sort by Type

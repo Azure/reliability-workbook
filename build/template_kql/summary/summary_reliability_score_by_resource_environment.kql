@@ -1,7 +1,7 @@
 ${extend_resource}
 | project Type, SkuName, Kind, SubscriptionId, Name, State, Location, ResourceGroup, Zones, AvailabilityZone, AvailabilitySet, Capacity, FaultDomain, OSDisk, ReadReplica, AutomaticFailover, MultipleWriteLocations, StorageAutogrow, ReplicationRole, Backup = tolower(Backup), Environment, ResourceId
 | ${summarize_score}
-    by Type, Environment
+    by ResourceId, Type, Environment
 | ${calculate_score}
-    | project Type, Environment, ResourceTotal, score=toint(ReliabilityScore)
-    | summarize WorkbookScore=round(avg(score),1) | project WorkbookScore
+| project ResourceId, Type, Environment, tostring(ReliabilityScore)
+| sort by Type

@@ -1,7 +1,9 @@
 ${extend_resource}
 | project Type, SkuName, Kind, SubscriptionId, Name, State, Location, ResourceGroup, Zones, AvailabilityZone, AvailabilitySet, Capacity, FaultDomain, OSDisk, ReadReplica, AutomaticFailover, MultipleWriteLocations, StorageAutogrow, ReplicationRole, Backup = tolower(Backup), Environment, ResourceId
+| sort by Type
 | ${summarize_score}
-    by Type, Environment
+    by SubscriptionId, Type, Environment   // SubscriptionId for Export
+//  ReliabilityScore: 5 checks across 5 machines = 25 total (i.e. 100%), thus 24 scored is 24/25 * 100 = 96 %
 | ${calculate_score}
-    | project Type, Environment, ResourceTotal, score=toint(ReliabilityScore)
-    | summarize WorkbookScore=round(avg(score),1) | project WorkbookScore
+    | extend ReliabilityScore = tostring(ReliabilityScore)
+    | sort by SubscriptionId, Type  // SubscriptionId for export
