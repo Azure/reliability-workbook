@@ -57,4 +57,5 @@ summarize
     NoAutoScaleAppGwCount=dcountif(ResourceId, AutomaticFailover == "not configured" and Type == 'microsoft.network/applicationgateways'),
     AsrSucceededState=dcountif(ResourceId, State == "succeeded" and Type == 'microsoft.recoveryservices/vaults'),
     NoAsrSucceededState=dcountif(ResourceId, State != "succeeded" and Type == 'microsoft.recoveryservices/vaults'),
-    AzFWSucceededStateCount=dcountif(ResourceId, State == "succeeded" and Type == 'microsoft.network/azurefirewalls')
+    AzFWSucceededStateCount=dcountif(ResourceId, State == "succeeded" and Type == 'microsoft.network/azurefirewalls'),
+    NoAzFWSucceededStateCount=dcountif(ResourceId, State != "succeeded" and Type == 'microsoft.network/azurefirewalls')
