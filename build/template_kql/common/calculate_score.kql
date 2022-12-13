@@ -20,7 +20,7 @@ extend ReliabilityScore = case(
     // Storage - 2 checks // score = ( "kind" + "replication type") * 100 / (2 * ResourceTotal)    //********* Future - "access tier hot"
     Type == 'microsoft.storage/storageaccounts' or Type == 'microsoft.classicstorage/storageaccounts', (V2StorageEnabled + RAStorageEnabled) * 100 / (2 * ResourceTotal),
     // AzureFirewall - 1 check // score = (AZ) * 100 / (1 * ResourceTotal)
-    Type == 'microsoft.network/azurefirewalls', (AvZoneCount + NAAvZoneCount)* 100 / ResourceTotal,
+    Type == 'microsoft.network/azurefirewalls', (AzFWSucceededStateCount + AvZoneCount + NAAvZoneCount)* 100 / (2 * ResourceTotal),
     // AFD - 1 check // score = state  * 100 / (1 * ResourceTotal)
     Type == 'microsoft.network/frontdoors', AFDEnabledStateCount * 100 / ResourceTotal,
     // AppGW - 5 checks    // score = (state + AZ + Tier + autoscaling + capacity) * 100 / (5 * ResourceTotal)

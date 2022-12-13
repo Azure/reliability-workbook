@@ -317,4 +317,3 @@ resources
     AvailabilitySet == '-', 'None',
     isnotempty(AvailabilitySet), AvailabilitySet,
     "Unknown")
-
