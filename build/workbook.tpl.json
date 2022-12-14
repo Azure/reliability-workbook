@@ -2402,14 +2402,14 @@
                             "thresholdsOptions": "colors",
                             "thresholdsGrid": [
                               {
-                                "operator": "==",
-                                "thresholdValue": "enabled",
+                                "operator": "regex",
+                                "thresholdValue": "(enabled|active)",
                                 "representation": "green",
                                 "text": "{0}{1}"
                               },
                               {
-                                "operator": "!=",
-                                "thresholdValue": "enabled",
+                                "operator": "regex",
+                                "thresholdValue": "(?!(enabled|active))",
                                 "representation": "orange",
                                 "text": "{0}{1}"
                               },

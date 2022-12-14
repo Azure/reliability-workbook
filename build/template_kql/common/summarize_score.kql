@@ -51,6 +51,8 @@ summarize
     NoV2StorageEnabled=dcountif(ResourceId, Kind != "StorageV2" and Type contains 'storageaccounts'),
     AFDEnabledStateCount=dcountif(ResourceId, State == "enabled" and Type == 'microsoft.network/frontdoors'),
     NoAFDEnabledStateCount=dcountif(ResourceId, State != "enabled" and Type == 'microsoft.network/frontdoors'),
+    CDNEnabledStateCount=dcountif(ResourceId, State == "active" and Type == 'microsoft.cdn/profiles'),
+    NoCDNEnabledStateCount=dcountif(ResourceId, State != "active" and Type == 'microsoft.cdn/profiles'),
     SmallAppGwSkuCount=dcountif(ResourceId, SkuName contains "small" and Type == 'microsoft.network/applicationgateways'), 
     OtherAppGwSkuCount=dcountif(ResourceId, SkuName !contains "small" and Type == 'microsoft.network/applicationgateways'),
     AutoScaleAppGwCount=dcountif(ResourceId, AutomaticFailover == "configured" and Type == 'microsoft.network/applicationgateways'),

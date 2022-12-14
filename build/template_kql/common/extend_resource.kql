@@ -36,7 +36,8 @@ resources
     (type == "microsoft.apimanagement/service") or 
     (type == "microsoft.storage/storageaccounts" or type == "microsoft.classicstorage/storageaccounts") or 
     (type == "microsoft.network/azurefirewalls") or 
-    (type == "microsoft.network/frontdoors") or 
+    (type == "microsoft.network/frontdoors") or
+    (type == "microsoft.cdn/profiles") or
     (type == "microsoft.network/applicationgateways") or 
     (type == "microsoft.network/loadbalancers") or 
     (type == "microsoft.recoveryservices/vaults")
@@ -64,6 +65,7 @@ resources
     type contains "storageaccounts", tostring(properties.provisioningState),
     type == "microsoft.network/azurefirewalls", tostring(properties.provisioningState),
     type == "microsoft.network/frontdoors", tostring(properties.resourceState),
+    type == "microsoft.cdn/profiles", tostring(properties.resourceState),
     type == "microsoft.network/applicationgateways", tostring(properties.operationalState),
     type == "microsoft.network/loadbalancers", tostring(properties.provisioningState),
     type == "microsoft.recoveryservices/vaults", tostring(properties.provisioningState),
@@ -82,6 +84,7 @@ resources
     type contains 'storageaccounts', tostring(replace('-', '_', tostring(iff(type =~ "microsoft.storage/storageaccounts", sku.name, properties.accountType)))),
     type == "microsoft.network/azurefirewalls", tostring(properties.sku.name),
     type == "microsoft.network/frontdoors", "Not Applicable",
+    type == "microsoft.cdn/profiles", "Not Applicable",
     type == "microsoft.network/applicationgateways", tostring(properties.sku.name),
     type == "microsoft.network/loadbalancers", tostring(sku.name),
     type == "microsoft.recoveryservices/vaults", tostring(iif(isnotnull(sku.tier), sku.tier, sku.name)),
@@ -103,6 +106,7 @@ resources
     (type contains 'storageaccounts'), case(split(skuName, '_', 1)[0] =~ "zrs", "Configured", "Not Configured"),
     (type == "microsoft.network/azurefirewalls"), iif(isnotnull(zones), "Configured", "Not Configured"),
     (type == "microsoft.network/frontdoors"), "Not Applicable",
+    (type == "microsoft.cdn/profiles"), "Not Applicable",
     (type == "microsoft.network/applicationgateways"), iif(isnotnull(zones), "Configured", "Not Configured"),
     (type == "microsoft.network/loadbalancers"), case( 
     skuName =~ "Basic", "Not Applicable",
@@ -131,6 +135,7 @@ resources
     type contains "storageaccounts", "Not Applicable",
     type == "microsoft.network/azurefirewalls", "Not Applicable",
     type == "microsoft.network/frontdoors", "Not Applicable",
+    type == "microsoft.cdn/profiles", "Not Applicable",
     type == "microsoft.network/applicationgateways", "Not Applicable",
     type == "microsoft.network/loadbalancers", "Not Applicable",
     type == "microsoft.recoveryservices/vaults", "Not Applicable",
@@ -149,6 +154,7 @@ resources
     type contains "storageaccounts", "Not Applicable", 
     type == "microsoft.network/azurefirewalls", "Not Applicable",
     type == "microsoft.network/frontdoors", "Not Applicable",
+    type == "microsoft.cdn/profiles", "Not Applicable",
     type == "microsoft.network/applicationgateways", tostring(iif(isnotempty(properties.autoscaleConfiguration), properties.autoscaleConfiguration.minCapacity, properties.sku.capacity)),
     type == "microsoft.network/loadbalancers", "Not Applicable",
     type == "microsoft.recoveryservices/vaults", "Not Applicable",
@@ -167,6 +173,7 @@ resources
     type contains "storageaccounts", "Not Applicable",
     type == "microsoft.network/azurefirewalls", "Not Applicable",
     type == "microsoft.network/frontdoors", "Not Applicable",
+    type == "microsoft.cdn/profiles", "Not Applicable",
     type == "microsoft.network/applicationgateways", "Not Applicable",
     type == "microsoft.network/loadbalancers", "Not Applicable",
     type == "microsoft.recoveryservices/vaults", "Not Applicable",
@@ -185,6 +192,7 @@ resources
     type contains "storageaccounts", tostring(split(skuName, '_', 0)[0]),
     type == "microsoft.network/azurefirewalls", "Not Applicable",
     type == "microsoft.network/frontdoors", "Not Applicable",
+    type == "microsoft.cdn/profiles", "Not Applicable",
     type == "microsoft.network/applicationgateways", "Not Applicable",
     type == "microsoft.network/loadbalancers", "Not Applicable",
     type == "microsoft.recoveryservices/vaults", "Not Applicable",
@@ -206,6 +214,7 @@ resources
     type contains "storageaccounts", case(split(skuName, '_', 1)[0] =~ "ragrs", "Configured", "Not Configured"),
     type == "microsoft.network/azurefirewalls", "Not Applicable",
     type == "microsoft.network/frontdoors", "Not Applicable",
+    type == "microsoft.cdn/profiles", "Not Applicable",
     type == "microsoft.network/applicationgateways", "Not Applicable",
     type == "microsoft.network/loadbalancers", "Not Applicable",
     type == "microsoft.recoveryservices/vaults", "Not Applicable",
@@ -222,6 +231,7 @@ resources
     type contains "storageaccounts", "Not Applicable",
     type == "microsoft.network/azurefirewalls", "Not Applicable",
     type == "microsoft.network/frontdoors", "Not Applicable",
+    type == "microsoft.cdn/profiles", "Not Applicable",
     type == "microsoft.network/applicationgateways", iif(isnotempty(properties.autoscaleConfiguration), "Configured", "Not Configured"),
     type == "microsoft.network/loadbalancers", "Not Applicable",
     type == "microsoft.recoveryservices/vaults", "Not Applicable",
@@ -235,6 +245,7 @@ resources
     (type contains "storageaccounts"), "Not Applicable",
     (type == "microsoft.network/azurefirewalls"), "Not Applicable",
     (type == "microsoft.network/frontdoors"), "Not Applicable",
+    (type == "microsoft.cdn/profiles"), "Not Applicable",
     (type == "microsoft.network/applicationgateways"), "Not Applicable",
     (type == "microsoft.network/loadbalancers"), "Not Applicable",
     type == "microsoft.recoveryservices/vaults", "Not Applicable",
@@ -248,6 +259,7 @@ resources
     (type contains "storageaccounts"), "Not Applicable",
     (type == "microsoft.network/azurefirewalls"), "Not Applicable",
     (type == "microsoft.network/frontdoors"), "Not Applicable",
+    (type == "microsoft.cdn/profiles"), "Not Applicable",
     (type == "microsoft.network/applicationgateways"), "Not Applicable",
     (type == "microsoft.network/loadbalancers"), "Not Applicable",
     type == "microsoft.recoveryservices/vaults", "Not Applicable",
@@ -263,6 +275,7 @@ resources
     (type contains "storageaccounts"), tostring(split(skuName, '_', 1)[0]),
     (type == "microsoft.network/azurefirewalls"), "Not Applicable",
     (type == "microsoft.network/frontdoors"), "Not Applicable",
+    (type == "microsoft.cdn/profiles"), "Not Applicable",
     (type == "microsoft.network/applicationgateways"), "Not Applicable",
     (type == "microsoft.network/loadbalancers"), "Not Applicable",
     (type == "microsoft.recoveryservices/vaults"), "Not Applicable",
