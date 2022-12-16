@@ -5,8 +5,8 @@ extend ReliabilityScore = case(
     Type == 'microsoft.compute/virtualmachinescalesets', (Gt1CapacityCount + Gt0FaultDomainCount + PremorUltOSDiskCount) * 100 / (3 * ResourceTotal),
     // AppService & Function App - 2 checks // score = ("non dev/shared/free/ basic sku" + AppServiceRunningState) * 100 / (2 * ResourceTotal)
     Type == 'microsoft.web/sites', (OtherSku + RunningState) * 100 / (2 * ResourceTotal),
-    // AKS - 4 checks // score = ("AZ" + "AS" + "Capacity" + "Disk") * 100 / (4 * ResourceTotal)  //********* Future - LB SKU
-    Type == 'microsoft.containerservice/managedclusters', (AvZoneCount + AvSetCount + Gt1CapacityCount + PremorUltOSDiskCount) * 100 / (4 * ResourceTotal),
+    // AKS - 4 checks // score = ("AZ" + "AS" + "Capacity" + "Disk") * 100 / (4 * ResourceTotal)  //********* Future - LB SKU // AZ or AS is mutually exclusive, so VM should have either one
+    Type == 'microsoft.containerservice/managedclusters', (AvZoneCount + AvSetCount + Gt1CapacityCount + PremorUltOSDiskCount) * 100 / (3 * ResourceTotal),
     // SQLDB - 4 checks  // score = ("status" + "tier" + "storage acct. type"  + "AZ")* 100 / (5 * ResourceTotal)  //********* Future - "read replica count"
     Type == 'microsoft.sql/servers/databases', (DBOnlineStateCount + SqlPremiumOrBusinessCriticalOrDwh + DBGeoStorage + AvZoneCount + NAAvZoneCount) * 100 / (4 * ResourceTotal),
     // CosmosDB - 4 checks // score = ( "readreplicacount" + "AZ" + "multiWrite" + "AutoFailover") * 100 / (4 * ResourceTotal) // included NA items to show compliance

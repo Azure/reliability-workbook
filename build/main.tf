@@ -14,7 +14,7 @@ provider "azurerm" {
 
 locals {
   workbook_data_json = templatefile("${path.module}/workbook.tpl.json", {
-    "kql_summary_workbook_reliability_score"                                    = jsonencode(local.kql_summary_workbook_reliability_score)
+    "kql_summary_workbook_reliability_score"                    = jsonencode(local.kql_summary_workbook_reliability_score)
     "kql_summary_reliability_score_by_resource_environment"     = jsonencode(local.kql_summary_reliability_score_by_resource_environment)
     "kql_summary_reliability_score_by_resourceType_environment" = jsonencode(local.kql_summary_reliability_score_by_resourceType_environment)
 
@@ -45,7 +45,7 @@ locals {
 
     "kql_export_summary_by_resourceType_environment" = jsonencode(local.kql_export_summary_by_resourceType_environment)
     "kql_export_summary_by_resource_environment"     = jsonencode(local.kql_export_summary_by_resource_environment)
-    "kql_export_resources_details"                               = jsonencode(local.kql_export_resources_details)
+    "kql_export_resources_details"                   = jsonencode(local.kql_export_resources_details)
 
   })
 
