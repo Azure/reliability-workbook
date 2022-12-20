@@ -43,6 +43,11 @@ locals {
 
     "kql_webapp_appsvc_resources_details" = jsonencode(local.kql_webapp_appsvc_resources_details)
 
+    "service_alert_overall_summary" = jsonencode(local.service_alert_overall_summary)
+    "service_alert_overall_percentage_summary" = jsonencode(local.service_alert_overall_percentage_summary)
+    "service_alert_summary_by_subscription" = jsonencode(local.service_alert_summary_by_subscription)
+    "service_alert_details" = jsonencode(local.service_alert_details)
+
     "kql_export_summary_by_resourceType_environment" = jsonencode(local.kql_export_summary_by_resourceType_environment)
     "kql_export_summary_by_resource_environment"     = jsonencode(local.kql_export_summary_by_resource_environment)
     "kql_export_resources_details"                               = jsonencode(local.kql_export_resources_details)
@@ -226,6 +231,14 @@ locals {
       "extend_resource" = local.kql_extend_resource
     }
   )
+
+  //-------------------------------------------
+  // Service Alerts
+  //-------------------------------------------
+  service_alert_overall_summary = file("${path.module}/template_kql/servicealerts/service_alert_overall_summary.kql")
+  service_alert_overall_percentage_summary = file("${path.module}/template_kql/servicealerts/service_alert_overall_percentage_summary.kql")
+  service_alert_summary_by_subscription = file("${path.module}/template_kql/servicealerts/service_alert_summary_by_subscription.kql")
+  service_alert_details = file("${path.module}/template_kql/servicealerts/service_alert_details.kql")
 
   //-------------------------------------------
   // Export tab

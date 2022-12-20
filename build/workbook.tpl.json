@@ -251,6 +251,14 @@
             "style": "link"
           },
           {
+            "id": "2bd48c17-2f62-4179-8a07-74a2e2a1deb8",
+            "cellValue": "selectedTab",
+            "linkTarget": "parameter",
+            "linkLabel": "Service Alerts",
+            "subTarget": "serviceAlerts",
+            "style": "link"
+          },
+          {
             "id": "0f548bfa-f959-4a25-a9ac-7c986be6d33b",
             "cellValue": "selectedTab",
             "linkTarget": "parameter",
@@ -8233,6 +8241,607 @@
         "value": "Backup"
       },
       "name": "Backup"
+    },
+    {
+      "type": 12,
+      "content": {
+        "version": "NotebookGroup/1.0",
+        "groupType": "editable",
+        "items": [
+          {
+            "type": 1,
+            "content": {
+              "json": "Service Health alerts    allow customers to receive an alert when Azure sends service health    notifications to their Azure Subscription. \r\n\r\nAlerts can be configured based    on the class of notifications, the subscriptions affected, services    affected, and the region affected.    \r\n\r\nThe classes of    notification are:\r\n\r\n- **Service Issues** - Problems in the    Azure Services that affect you right now. \r\n- **Planned Maintenance** - Upcoming    Maintenance that can affect the availability of your services in the    future. \r\n- **Health Advisories** - Changes in    Azure Services that require your attention. Examples include deprecation    of Azure Feature or upgrade requirements (e.g., upgrade to a supported    PHP framework)·\r\n- **Security Advisories    -** Security related notifications or violations that may affect    the availability of your Azure Services.\r\n\r\nLearn More: [Documentation](https://docs.microsoft.com/en-us/azure/service-health/alerts-activity-log-service-notifications-portal)           ",
+              "style": "info"
+            },
+            "name": "text - 0"
+          },
+          {
+            "type": 3,
+            "content": {
+              "version": "KqlItem/1.0",
+              "query": ${service_alert_overall_summary},
+              "size": 4,
+              "title": "Service Health Alert Configuration - Overall Summary",
+              "queryType": 1,
+              "resourceType": "microsoft.resourcegraph/resources",
+              "crossComponentResources": [
+                "{Subscriptions}"
+              ],
+              "gridSettings": {
+                "labelSettings": [
+                  {
+                    "columnId": "Sub_Count",
+                    "label": "Total Subscription"
+                  },
+                  {
+                    "columnId": "Sub_alertEnabled_count",
+                    "label": "Sub. with Alert Enabled"
+                  },
+                  {
+                    "columnId": "Sub_Incident_Count",
+                    "label": "Incident alert Configured Sub"
+                  },
+                  {
+                    "columnId": "Sub_Maintenance_Count",
+                    "label": "Maintenance Alert Configured Sub"
+                  },
+                  {
+                    "columnId": "Sub_Informational_Count",
+                    "label": "Informational Alert Configured Sub"
+                  },
+                  {
+                    "columnId": "Sub_Security_Count",
+                    "label": "Security Alert Configured Sub"
+                  }
+                ]
+              }
+            },
+            "name": "Aggregate Summary"
+          },
+          {
+            "type": 3,
+            "content": {
+              "version": "KqlItem/1.0",
+              "query": ${service_alert_overall_percentage_summary},
+              "size": 4,
+              "title": "Service Health Alert Configuration - Overall percentage summary ",
+              "queryType": 1,
+              "resourceType": "microsoft.resourcegraph/resources",
+              "crossComponentResources": [
+                "{Subscriptions}"
+              ],
+              "gridSettings": {
+                "formatters": [
+                  {
+                    "columnMatch": "Sub_alertEnabled_count",
+                    "formatter": 1,
+                    "numberFormat": {
+                      "unit": 1,
+                      "options": {
+                        "style": "decimal",
+                        "maximumFractionDigits": 2
+                      }
+                    }
+                  },
+                  {
+                    "columnMatch": "Sub_Incident_Count",
+                    "formatter": 1,
+                    "numberFormat": {
+                      "unit": 1,
+                      "options": {
+                        "style": "decimal",
+                        "maximumFractionDigits": 2
+                      }
+                    }
+                  },
+                  {
+                    "columnMatch": "Sub_Maintenance_Count",
+                    "formatter": 1,
+                    "numberFormat": {
+                      "unit": 1,
+                      "options": {
+                        "style": "decimal",
+                        "maximumFractionDigits": 2
+                      }
+                    }
+                  },
+                  {
+                    "columnMatch": "Sub_Informational_Count",
+                    "formatter": 1,
+                    "numberFormat": {
+                      "unit": 1,
+                      "options": {
+                        "style": "decimal",
+                        "maximumFractionDigits": 2
+                      }
+                    }
+                  },
+                  {
+                    "columnMatch": "Sub_Security_Count",
+                    "formatter": 1,
+                    "numberFormat": {
+                      "unit": 1,
+                      "options": {
+                        "style": "decimal",
+                        "maximumFractionDigits": 2
+                      }
+                    }
+                  }
+                ],
+                "labelSettings": [
+                  {
+                    "columnId": "Sub_Count",
+                    "label": "Total Subscription"
+                  },
+                  {
+                    "columnId": "Sub_alertEnabled_count",
+                    "label": "Sub. with Alert Enabled"
+                  },
+                  {
+                    "columnId": "Sub_Incident_Count",
+                    "label": "Incident alert Configured Sub"
+                  },
+                  {
+                    "columnId": "Sub_Maintenance_Count",
+                    "label": "Maintenance Alert Configured Sub"
+                  },
+                  {
+                    "columnId": "Sub_Informational_Count",
+                    "label": "Informational Alert Configured Sub"
+                  },
+                  {
+                    "columnId": "Sub_Security_Count",
+                    "label": "Security Alert Configured Sub"
+                  }
+                ]
+              }
+            },
+            "name": "Aggregate Summary Percentage"
+          },
+          {
+            "type": 3,
+            "content": {
+              "version": "KqlItem/1.0",
+              "query": ${service_alert_summary_by_subscription},
+              "size": 0,
+              "title": "Service Health Alert Configuration Summary by Subscription",
+              "queryType": 1,
+              "resourceType": "microsoft.resourcegraph/resources",
+              "crossComponentResources": [
+                "{Subscriptions}"
+              ],
+              "gridSettings": {
+                "formatters": [
+                  {
+                    "columnMatch": "$gen_group",
+                    "formatter": 15,
+                    "formatOptions": {
+                      "linkTarget": null,
+                      "showIcon": true
+                    }
+                  },
+                  {
+                    "columnMatch": "subscriptionId",
+                    "formatter": 5
+                  },
+                  {
+                    "columnMatch": "alertEnabled",
+                    "formatter": 18,
+                    "formatOptions": {
+                      "thresholdsOptions": "icons",
+                      "thresholdsGrid": [
+                        {
+                          "operator": "==",
+                          "thresholdValue": "0",
+                          "representation": "2",
+                          "text": "{0}{1}"
+                        },
+                        {
+                          "operator": ">=",
+                          "thresholdValue": "1",
+                          "representation": "success",
+                          "text": "{0}{1}"
+                        },
+                        {
+                          "operator": "Default",
+                          "thresholdValue": null,
+                          "representation": "unknown",
+                          "text": "{0}{1}"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "columnMatch": "incident",
+                    "formatter": 18,
+                    "formatOptions": {
+                      "thresholdsOptions": "icons",
+                      "thresholdsGrid": [
+                        {
+                          "operator": "==",
+                          "thresholdValue": "0",
+                          "representation": "2",
+                          "text": "{0}{1}"
+                        },
+                        {
+                          "operator": ">=",
+                          "thresholdValue": "1",
+                          "representation": "success",
+                          "text": "{0}{1}"
+                        },
+                        {
+                          "operator": "Default",
+                          "thresholdValue": null,
+                          "representation": "unknown",
+                          "text": "{0}{1}"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "columnMatch": "maintenance",
+                    "formatter": 18,
+                    "formatOptions": {
+                      "thresholdsOptions": "icons",
+                      "thresholdsGrid": [
+                        {
+                          "operator": "==",
+                          "thresholdValue": "0",
+                          "representation": "2",
+                          "text": "{0}{1}"
+                        },
+                        {
+                          "operator": ">=",
+                          "thresholdValue": "1",
+                          "representation": "success",
+                          "text": "{0}{1}"
+                        },
+                        {
+                          "operator": "Default",
+                          "thresholdValue": null,
+                          "representation": "unknown",
+                          "text": "{0}{1}"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "columnMatch": "informational",
+                    "formatter": 18,
+                    "formatOptions": {
+                      "thresholdsOptions": "icons",
+                      "thresholdsGrid": [
+                        {
+                          "operator": "==",
+                          "thresholdValue": "0",
+                          "representation": "2",
+                          "text": "{0}{1}"
+                        },
+                        {
+                          "operator": ">=",
+                          "thresholdValue": "1",
+                          "representation": "success",
+                          "text": "{0}{1}"
+                        },
+                        {
+                          "operator": "Default",
+                          "thresholdValue": null,
+                          "representation": "unknown",
+                          "text": "{0}{1}"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "columnMatch": "security",
+                    "formatter": 18,
+                    "formatOptions": {
+                      "thresholdsOptions": "icons",
+                      "thresholdsGrid": [
+                        {
+                          "operator": "==",
+                          "thresholdValue": "0",
+                          "representation": "2",
+                          "text": "{0}{1}"
+                        },
+                        {
+                          "operator": ">=",
+                          "thresholdValue": "1",
+                          "representation": "success",
+                          "text": "{0}{1}"
+                        },
+                        {
+                          "operator": "Default",
+                          "thresholdValue": null,
+                          "representation": "unknown",
+                          "text": "{0}{1}"
+                        }
+                      ]
+                    }
+                  }
+                ],
+                "hierarchySettings": {
+                  "treeType": 1,
+                  "groupBy": [
+                    "subscriptionId"
+                  ]
+                },
+                "labelSettings": [
+                  {
+                    "columnId": "subscriptionId",
+                    "label": "Subscription"
+                  },
+                  {
+                    "columnId": "alertEnabled",
+                    "label": "Alert Enabled"
+                  },
+                  {
+                    "columnId": "incident",
+                    "label": "Incident"
+                  },
+                  {
+                    "columnId": "maintenance",
+                    "label": "Maintenance"
+                  },
+                  {
+                    "columnId": "informational",
+                    "label": "Informational"
+                  },
+                  {
+                    "columnId": "security",
+                    "label": "Security"
+                  }
+                ]
+              }
+            },
+            "name": "Aggregate Summary by Subscription"
+          },
+          {
+            "type": 1,
+            "content": {
+              "json": "The below list includes only subscriptions for which alerts are configured. Subscription details won't be listed if no alerts has been configured. \r\n\r\nPlease refer above section in this page (**Service Health Alert Configuration Summary by Subscription**) to get summary of alerts for all subscriptons you have access to.",
+              "style": "info"
+            },
+            "name": "text - 4"
+          },
+          {
+            "type": 3,
+            "content": {
+              "version": "KqlItem/1.0",
+              "query": ${service_alert_details},
+              "size": 1,
+              "title": "Service Health Alert Configuration Details for Configured Subscriptions",
+              "noDataMessage": "No service alerts have been configured for any of the subscriptions",
+              "noDataMessageStyle": 4,
+              "queryType": 1,
+              "resourceType": "microsoft.resourcegraph/resources",
+              "crossComponentResources": [
+                "{Subscriptions}"
+              ],
+              "gridSettings": {
+                "formatters": [
+                  {
+                    "columnMatch": "$gen_group",
+                    "formatter": 15,
+                    "formatOptions": {
+                      "linkTarget": null,
+                      "showIcon": true
+                    }
+                  },
+                  {
+                    "columnMatch": "name",
+                    "formatter": 5
+                  },
+                  {
+                    "columnMatch": "subscriptionId",
+                    "formatter": 5
+                  },
+                  {
+                    "columnMatch": "alertEnabled",
+                    "formatter": 18,
+                    "formatOptions": {
+                      "thresholdsOptions": "icons",
+                      "thresholdsGrid": [
+                        {
+                          "operator": "==",
+                          "thresholdValue": "true",
+                          "representation": "success",
+                          "text": "Enabled"
+                        },
+                        {
+                          "operator": "==",
+                          "thresholdValue": "false",
+                          "representation": "2",
+                          "text": "Not enabled"
+                        },
+                        {
+                          "operator": "Default",
+                          "thresholdValue": null,
+                          "representation": "Unknown",
+                          "text": "Unknown"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "columnMatch": "incidentType",
+                    "formatter": 5
+                  },
+                  {
+                    "columnMatch": "incident",
+                    "formatter": 18,
+                    "formatOptions": {
+                      "thresholdsOptions": "icons",
+                      "thresholdsGrid": [
+                        {
+                          "operator": "==",
+                          "thresholdValue": "true",
+                          "representation": "success",
+                          "text": "{0}{1}"
+                        },
+                        {
+                          "operator": "==",
+                          "thresholdValue": "false",
+                          "representation": "2",
+                          "text": "{0}{1}"
+                        },
+                        {
+                          "operator": "Default",
+                          "thresholdValue": null,
+                          "representation": "unknown",
+                          "text": "{0}{1}"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "columnMatch": "maintenance",
+                    "formatter": 18,
+                    "formatOptions": {
+                      "thresholdsOptions": "icons",
+                      "thresholdsGrid": [
+                        {
+                          "operator": "==",
+                          "thresholdValue": "true",
+                          "representation": "success",
+                          "text": "{0}{1}"
+                        },
+                        {
+                          "operator": "==",
+                          "thresholdValue": "false",
+                          "representation": "2",
+                          "text": "{0}{1}"
+                        },
+                        {
+                          "operator": "Default",
+                          "thresholdValue": null,
+                          "representation": "unknown",
+                          "text": "{0}{1}"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "columnMatch": "informational",
+                    "formatter": 18,
+                    "formatOptions": {
+                      "thresholdsOptions": "icons",
+                      "thresholdsGrid": [
+                        {
+                          "operator": "==",
+                          "thresholdValue": "true",
+                          "representation": "success",
+                          "text": "{0}{1}"
+                        },
+                        {
+                          "operator": "==",
+                          "thresholdValue": "false",
+                          "representation": "2",
+                          "text": "{0}{1}"
+                        },
+                        {
+                          "operator": "Default",
+                          "thresholdValue": null,
+                          "representation": "unknown",
+                          "text": "{0}{1}"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "columnMatch": "security",
+                    "formatter": 18,
+                    "formatOptions": {
+                      "thresholdsOptions": "icons",
+                      "thresholdsGrid": [
+                        {
+                          "operator": "==",
+                          "thresholdValue": "true",
+                          "representation": "success",
+                          "text": "{0}{1}"
+                        },
+                        {
+                          "operator": "==",
+                          "thresholdValue": "false",
+                          "representation": "2",
+                          "text": "{0}{1}"
+                        },
+                        {
+                          "operator": "Default",
+                          "thresholdValue": null,
+                          "representation": "unknown",
+                          "text": "{0}{1}"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "columnMatch": "--Group By--",
+                    "formatter": 15,
+                    "formatOptions": {
+                      "linkTarget": null,
+                      "showIcon": true
+                    }
+                  }
+                ],
+                "hierarchySettings": {
+                  "treeType": 1,
+                  "groupBy": [
+                    "subscriptionId"
+                  ]
+                },
+                "labelSettings": [
+                  {
+                    "columnId": "id",
+                    "label": "Alert Id"
+                  },
+                  {
+                    "columnId": "name",
+                    "label": "Alert Name"
+                  },
+                  {
+                    "columnId": "subscriptionId",
+                    "label": "Subscription"
+                  },
+                  {
+                    "columnId": "category",
+                    "label": "Category"
+                  },
+                  {
+                    "columnId": "alertEnabled",
+                    "label": "Alert Enabled"
+                  },
+                  {
+                    "columnId": "incident",
+                    "label": "Incident"
+                  },
+                  {
+                    "columnId": "maintenance",
+                    "label": "Maintenance"
+                  },
+                  {
+                    "columnId": "informational",
+                    "label": "Informational"
+                  },
+                  {
+                    "columnId": "security",
+                    "label": "Security"
+                  }
+                ]
+              }
+            },
+            "showPin": false,
+            "name": "query - 1"
+          }
+        ]
+      },
+      "conditionalVisibility": {
+        "parameterName": "selectedTab",
+        "comparison": "isEqualTo",
+        "value": "serviceAlerts"
+      },
+      "name": "Service Alerts Item Group"
     }
   ],
   "fallbackResourceIds": [
