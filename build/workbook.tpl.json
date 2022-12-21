@@ -1425,7 +1425,7 @@
                   "id": "c7031524-3e4c-417b-8675-f49985b0e4a9",
                   "cellValue": "selectedTab",
                   "linkTarget": "parameter",
-                  "linkLabel": "Azure Front Door",
+                  "linkLabel": "Azure Front Door and CDN",
                   "subTarget": "AFD",
                   "style": "link"
                 },
@@ -2344,7 +2344,7 @@
                 {
                   "type": 1,
                   "content": {
-                    "json": "[SLA for Azure Front Door](https://azure.microsoft.com/en-us/support/legal/sla/frontdoor/v1_0/)\r\n* We guarantee that at least 99.99% of the time Front Door Service will respond to client requests and deliver the requested content without error. We will review and accept data from any commercially reasonable independent measurement system that you choose to monitor your content. You must select a set of agents from the measurement system’s list of standard agents that are generally available and represent at least five geographically diverse locations in major worldwide metropolitan areas (excluding PR of China).\r\n\r\n> SLA accurate at time of release. Latest information is available [here](https://azure.microsoft.com/en-us/support/legal/sla/frontdoor/)",
+                    "json": "[SLA for Azure Front Door and Azure Front Door (classic)](https://azure.microsoft.com/en-us/support/legal/sla/frontdoor/v1_1/)\r\n* We guarantee that at least 99.99% of the time Azure Front Door and Azure Front Door (classic) will respond to client requests and deliver the requested content without error. We will review and accept data from any commercially reasonable independent measurement system that you choose to monitor your content. You must select a set of agents from the measurement system's list of standard agents that are generally available and represent at least five geographically diverse locations in major worldwide metropolitan areas (excluding PR of China).\r\n\r\n> SLA accurate at time of release. Latest information is available [here](https://azure.microsoft.com/en-us/support/legal/sla/frontdoor/)\r\n\r\n[SLA for Content Delivery Network](https://azure.microsoft.com/en-us/support/legal/sla/cdn/v1_0/)\r\n* We guarantee that at least 99.9% of the time CDN will respond to client requests and deliver the requested content without error. We will review and accept data from any commercially reasonable independent measurement system that you choose to monitor your content. You must select a set of agents from the measurement system’s list of standard agents that are generally available and represent at least five geographically diverse locations in major worldwide metropolitan areas (excluding PR of China).\r\n\r\n> SLA accurate at time of release. Latest information is available [here](https://azure.microsoft.com/en-us/support/legal/sla/cdn/)",
                     "style": "upsell"
                   },
                   "conditionalVisibility": {
@@ -2381,7 +2381,24 @@
                         },
                         {
                           "columnMatch": "SkuName",
-                          "formatter": 5
+                          "formatter": 18,
+                          "formatOptions": {
+                            "thresholdsOptions": "colors",
+                            "thresholdsGrid": [
+                              {
+                                "operator": "regex",
+                                "thresholdValue": "(classic|standard_microsoft)",
+                                "representation": "orange",
+                                "text": "{0}{1}"
+                              },
+                              {
+                                "operator": "Default",
+                                "thresholdValue": null,
+                                "representation": "green",
+                                "text": "{0}{1}"
+                              }
+                            ]
+                          }
                         },
                         {
                           "columnMatch": "Kind",
