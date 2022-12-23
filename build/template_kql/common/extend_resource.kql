@@ -36,21 +36,39 @@ resources
     (type == "microsoft.apimanagement/service") or 
     (type == "microsoft.storage/storageaccounts" or type == "microsoft.classicstorage/storageaccounts") or 
     (type == "microsoft.network/azurefirewalls") or 
-    (type == "microsoft.network/frontdoors") or 
+    (type == "microsoft.network/frontdoors") or
+    (type == "microsoft.cdn/profiles") or
     (type == "microsoft.network/applicationgateways") or 
     (type == "microsoft.network/loadbalancers") or 
     (type == "microsoft.recoveryservices/vaults")
-| extend aksname = case(
-    type == "microsoft.containerservice/managedclusters", tolower(tostring(name)),
-    "Undefined"
-    )
-| join kind = leftouter (
+| join kind=leftouter (
     resources 
-    | where type == "microsoft.compute/virtualmachinescalesets"
-    | extend aksname = tolower(tostring(split(resourceGroup, "_")[2]))
-    | extend AvZones = coalesce(tostring(array_length(parse_json(zones))), 'Not Configured'), AvSets = "Scale Sets"
+    | where type == "microsoft.containerservice/managedclusters"
+    // Expand per node pool to get using zone for all node pool
+    | mv-expand agentPoolProfiles = properties.agentPoolProfiles
+    | extend AvZones = agentPoolProfiles.availabilityZones
+    | extend AksNodeResourceGroup = tolower(tostring(properties.nodeResourceGroup))
+    // Get number of using zone per node pool VMSS. If it doesn't use any zone, return 0
+    | extend useAvZone = case(
+        array_length( AvZones ) > 0, array_length( AvZones ), 0
     )
-    on aksname
+    | join kind=leftouter(
+        resources
+            | where type == 'microsoft.compute/virtualmachinescalesets'
+            | extend resourceGroup = tolower(tostring(resourceGroup))
+            | extend VmssCapacity = sku.capacity
+            | extend vmssStorageAccountType = iff(
+                properties.virtualMachineProfile.storageProfile.osDisk.diffDiskSettings.option == "Local", "Ephemeral", properties.virtualMachineProfile.storageProfile.osDisk.managedDisk.storageAccountType
+            )
+    ) on $left.AksNodeResourceGroup == $right.resourceGroup // Match AKS and VMSS with nodeResourceGroup
+    | summarize AvZones=arg_min(useAvZone, *), AksMinimumNodePoolCount=arg_min(toint(VmssCapacity), *), AksNodePoolStorageAccountType=make_set(vmssStorageAccountType) by id
+    | extend AksNodePoolStorageAccountType = iff(
+        tolower(tostring(AksNodePoolStorageAccountType)) contains "standard_lrs", "standard_lrs", tolower(tostring(strcat_array(AksNodePoolStorageAccountType, ",")))
+    )
+    // If there are some node pools within AKS cluster, it returns minimum number of zones. 
+    // If even one node pool is not using a zone, it will be "Not Configured".
+    | extend AvZones = iff(tostring(AvZones) == "0", "Not Configured", tostring(AvZones)), AvSets = "Scale Sets"
+) on id
 | extend state = case(
     type == 'microsoft.compute/virtualmachines', tostring(properties.extended.instanceView.powerState.displayStatus),
     type == 'microsoft.compute/virtualmachinescalesets', tostring(properties.provisioningState),
@@ -64,6 +82,7 @@ resources
     type contains "storageaccounts", tostring(properties.provisioningState),
     type == "microsoft.network/azurefirewalls", tostring(properties.provisioningState),
     type == "microsoft.network/frontdoors", tostring(properties.resourceState),
+    type == "microsoft.cdn/profiles", tostring(properties.resourceState),
     type == "microsoft.network/applicationgateways", tostring(properties.operationalState),
     type == "microsoft.network/loadbalancers", tostring(properties.provisioningState),
     type == "microsoft.recoveryservices/vaults", tostring(properties.provisioningState),
@@ -81,7 +100,8 @@ resources
     type == "microsoft.apimanagement/service", tostring(sku.name),
     type contains 'storageaccounts', tostring(replace('-', '_', tostring(iff(type =~ "microsoft.storage/storageaccounts", sku.name, properties.accountType)))),
     type == "microsoft.network/azurefirewalls", tostring(properties.sku.name),
-    type == "microsoft.network/frontdoors", "Not Applicable",
+    type == "microsoft.network/frontdoors", "classic_frontdoor",
+    type == "microsoft.cdn/profiles", tostring(sku.name),
     type == "microsoft.network/applicationgateways", tostring(properties.sku.name),
     type == "microsoft.network/loadbalancers", tostring(sku.name),
     type == "microsoft.recoveryservices/vaults", tostring(iif(isnotnull(sku.tier), sku.tier, sku.name)),
@@ -103,6 +123,7 @@ resources
     (type contains 'storageaccounts'), case(split(skuName, '_', 1)[0] =~ "zrs", "Configured", "Not Configured"),
     (type == "microsoft.network/azurefirewalls"), iif(isnotnull(zones), "Configured", "Not Configured"),
     (type == "microsoft.network/frontdoors"), "Not Applicable",
+    (type == "microsoft.cdn/profiles"), "Not Applicable",
     (type == "microsoft.network/applicationgateways"), iif(isnotnull(zones), "Configured", "Not Configured"),
     (type == "microsoft.network/loadbalancers"), case( 
     skuName =~ "Basic", "Not Applicable",
@@ -131,6 +152,7 @@ resources
     type contains "storageaccounts", "Not Applicable",
     type == "microsoft.network/azurefirewalls", "Not Applicable",
     type == "microsoft.network/frontdoors", "Not Applicable",
+    type == "microsoft.cdn/profiles", "Not Applicable",
     type == "microsoft.network/applicationgateways", "Not Applicable",
     type == "microsoft.network/loadbalancers", "Not Applicable",
     type == "microsoft.recoveryservices/vaults", "Not Applicable",
@@ -140,7 +162,7 @@ resources
     type == 'microsoft.compute/virtualmachines', "Not Applicable",
     type == 'microsoft.compute/virtualmachinescalesets', tostring(sku.capacity),
     type == 'microsoft.web/sites', "Not Applicable",
-    type == 'microsoft.containerservice/managedclusters', iif(isnotempty(sku1.capacity), tostring(sku1.capacity), "0"), // AKS with or without VMSS
+    type == 'microsoft.containerservice/managedclusters', iif(isnotempty(AksMinimumNodePoolCount), tostring(AksMinimumNodePoolCount), "0"), // AKS with or without VMSS
     type == 'microsoft.sql/servers/databases', tostring(sku.capacity),
     type == 'microsoft.documentdb/databaseaccounts', 'Not Applicable',
     type == 'microsoft.dbformysql/servers', tostring(sku.capacity),
@@ -149,6 +171,7 @@ resources
     type contains "storageaccounts", "Not Applicable", 
     type == "microsoft.network/azurefirewalls", "Not Applicable",
     type == "microsoft.network/frontdoors", "Not Applicable",
+    type == "microsoft.cdn/profiles", "Not Applicable",
     type == "microsoft.network/applicationgateways", tostring(iif(isnotempty(properties.autoscaleConfiguration), properties.autoscaleConfiguration.minCapacity, properties.sku.capacity)),
     type == "microsoft.network/loadbalancers", "Not Applicable",
     type == "microsoft.recoveryservices/vaults", "Not Applicable",
@@ -167,6 +190,7 @@ resources
     type contains "storageaccounts", "Not Applicable",
     type == "microsoft.network/azurefirewalls", "Not Applicable",
     type == "microsoft.network/frontdoors", "Not Applicable",
+    type == "microsoft.cdn/profiles", "Not Applicable",
     type == "microsoft.network/applicationgateways", "Not Applicable",
     type == "microsoft.network/loadbalancers", "Not Applicable",
     type == "microsoft.recoveryservices/vaults", "Not Applicable",
@@ -176,7 +200,7 @@ resources
     type == 'microsoft.compute/virtualmachines', iif(properties.storageProfile.osDisk.diffDiskSettings.option == "Local", "Ephemeral", properties.storageProfile.osDisk.managedDisk.storageAccountType),
     type == 'microsoft.compute/virtualmachinescalesets', iif(properties.virtualMachineProfile.storageProfile.osDisk.diffDiskSettings.option == "Local", "Ephemeral", properties.virtualMachineProfile.storageProfile.osDisk.managedDisk.storageAccountType),
     type == 'microsoft.web/sites', 'Not Applicable',
-    type == 'microsoft.containerservice/managedclusters', iff(properties.agentPoolProfiles[0].osDiskType == 'Ephemeral', 'Ephemeral', properties1.virtualMachineProfile.storageProfile.osDisk.managedDisk.storageAccountType),
+    type == 'microsoft.containerservice/managedclusters', AksNodePoolStorageAccountType,
     type == 'microsoft.sql/servers/databases', properties.storageAccountType,
     type == 'microsoft.documentdb/databaseaccounts', 'Not Applicable',
     type == 'microsoft.dbformysql/servers', 'Not Applicable',
@@ -185,6 +209,7 @@ resources
     type contains "storageaccounts", tostring(split(skuName, '_', 0)[0]),
     type == "microsoft.network/azurefirewalls", "Not Applicable",
     type == "microsoft.network/frontdoors", "Not Applicable",
+    type == "microsoft.cdn/profiles", "Not Applicable",
     type == "microsoft.network/applicationgateways", "Not Applicable",
     type == "microsoft.network/loadbalancers", "Not Applicable",
     type == "microsoft.recoveryservices/vaults", "Not Applicable",
@@ -206,6 +231,7 @@ resources
     type contains "storageaccounts", case(split(skuName, '_', 1)[0] =~ "ragrs", "Configured", "Not Configured"),
     type == "microsoft.network/azurefirewalls", "Not Applicable",
     type == "microsoft.network/frontdoors", "Not Applicable",
+    type == "microsoft.cdn/profiles", "Not Applicable",
     type == "microsoft.network/applicationgateways", "Not Applicable",
     type == "microsoft.network/loadbalancers", "Not Applicable",
     type == "microsoft.recoveryservices/vaults", "Not Applicable",
@@ -222,6 +248,7 @@ resources
     type contains "storageaccounts", "Not Applicable",
     type == "microsoft.network/azurefirewalls", "Not Applicable",
     type == "microsoft.network/frontdoors", "Not Applicable",
+    type == "microsoft.cdn/profiles", "Not Applicable",
     type == "microsoft.network/applicationgateways", iif(isnotempty(properties.autoscaleConfiguration), "Configured", "Not Configured"),
     type == "microsoft.network/loadbalancers", "Not Applicable",
     type == "microsoft.recoveryservices/vaults", "Not Applicable",
@@ -235,6 +262,7 @@ resources
     (type contains "storageaccounts"), "Not Applicable",
     (type == "microsoft.network/azurefirewalls"), "Not Applicable",
     (type == "microsoft.network/frontdoors"), "Not Applicable",
+    (type == "microsoft.cdn/profiles"), "Not Applicable",
     (type == "microsoft.network/applicationgateways"), "Not Applicable",
     (type == "microsoft.network/loadbalancers"), "Not Applicable",
     type == "microsoft.recoveryservices/vaults", "Not Applicable",
@@ -248,6 +276,7 @@ resources
     (type contains "storageaccounts"), "Not Applicable",
     (type == "microsoft.network/azurefirewalls"), "Not Applicable",
     (type == "microsoft.network/frontdoors"), "Not Applicable",
+    (type == "microsoft.cdn/profiles"), "Not Applicable",
     (type == "microsoft.network/applicationgateways"), "Not Applicable",
     (type == "microsoft.network/loadbalancers"), "Not Applicable",
     type == "microsoft.recoveryservices/vaults", "Not Applicable",
@@ -263,6 +292,7 @@ resources
     (type contains "storageaccounts"), tostring(split(skuName, '_', 1)[0]),
     (type == "microsoft.network/azurefirewalls"), "Not Applicable",
     (type == "microsoft.network/frontdoors"), "Not Applicable",
+    (type == "microsoft.cdn/profiles"), "Not Applicable",
     (type == "microsoft.network/applicationgateways"), "Not Applicable",
     (type == "microsoft.network/loadbalancers"), "Not Applicable",
     (type == "microsoft.recoveryservices/vaults"), "Not Applicable",
@@ -317,4 +347,3 @@ resources
     AvailabilitySet == '-', 'None',
     isnotempty(AvailabilitySet), AvailabilitySet,
     "Unknown")
-
