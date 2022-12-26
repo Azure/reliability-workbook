@@ -61,7 +61,7 @@ resources
                 properties.virtualMachineProfile.storageProfile.osDisk.diffDiskSettings.option == "Local", "Ephemeral", properties.virtualMachineProfile.storageProfile.osDisk.managedDisk.storageAccountType
             )
     ) on $left.AksNodeResourceGroup == $right.resourceGroup // Match AKS and VMSS with nodeResourceGroup
-    | summarize AvZones=arg_min(useAvZone, *), AksMinimumNodePoolCount=arg_min(toint(VmssCapacity), *), AksNodePoolStorageAccountType=make_set(vmssStorageAccountType) by id
+    | summarize AvZones=min(useAvZone), AksMinimumNodePoolCount=min(toint(VmssCapacity)), AksNodePoolStorageAccountType=make_set(vmssStorageAccountType), FaultDomainCount=min(toint(properties1.platformFaultDomainCount)) by id, name, type, tenantId, kind, location, resourceGroup, subscriptionId, tostring(sku), tostring(plan), tostring(properties), AksNodeResourceGroup
     | extend AksNodePoolStorageAccountType = iff(
         tolower(tostring(AksNodePoolStorageAccountType)) contains "standard_lrs", "standard_lrs", tolower(tostring(strcat_array(AksNodePoolStorageAccountType, ",")))
     )
@@ -181,7 +181,7 @@ resources
     type == 'microsoft.compute/virtualmachines', "Not Applicable",
     type == 'microsoft.compute/virtualmachinescalesets', iif(isnotempty(properties.platformFaultDomainCount), properties.platformFaultDomainCount, "0"),  // 1 - AZ, 5 - Regional VMSS
     type == 'microsoft.web/sites', "Not Applicable",
-    type == 'microsoft.containerservice/managedclusters', iif(isnotempty(properties1.platformFaultDomainCount), properties1.platformFaultDomainCount, "0"),
+    type == 'microsoft.containerservice/managedclusters', iif(isnotempty(tostring(FaultDomainCount)), tostring(FaultDomainCount), "0"),
     type == 'microsoft.sql/servers/databases', "Not Applicable",
     type == 'microsoft.documentdb/databaseaccounts', 'Not Applicable',
     type == 'microsoft.dbformysql/servers', 'Not Applicable',
