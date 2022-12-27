@@ -40,6 +40,7 @@ resources
     (type == "microsoft.cdn/profiles") or
     (type == "microsoft.network/applicationgateways") or 
     (type == "microsoft.network/loadbalancers") or 
+    (type == "microsoft.network/publicipaddresses" or type == "microsoft.network/publicipprefixes") or 
     (type == "microsoft.recoveryservices/vaults")
 | join kind=leftouter (
     resources 
@@ -93,6 +94,7 @@ resources
     type == "microsoft.cdn/profiles", tostring(properties.resourceState),
     type == "microsoft.network/applicationgateways", tostring(properties.operationalState),
     type == "microsoft.network/loadbalancers", tostring(properties.provisioningState),
+    type contains "publicip", tostring(properties.provisioningState),
     type == "microsoft.recoveryservices/vaults", tostring(properties.provisioningState),
     "Undefined"
     )
@@ -112,6 +114,7 @@ resources
     type == "microsoft.cdn/profiles", tostring(sku.name),
     type == "microsoft.network/applicationgateways", tostring(properties.sku.name),
     type == "microsoft.network/loadbalancers", iff(sku.tier == 'Global', 'Global', tostring(sku.name)),
+    type contains "publicip", iff(sku.tier == 'Global', 'Global', tostring(sku.name)),
     type == "microsoft.recoveryservices/vaults", tostring(iif(isnotnull(sku.tier), sku.tier, sku.name)),
     "Undefined"
     )
@@ -139,6 +142,10 @@ resources
     tostring(LbAvZones) =~ "0", "Not Configured",
     tostring(LbAvZones)
     ),
+    (type contains "publicip"), case( 
+    skuName =~ "Basic" or skuName =~ "Global", "Not Applicable",
+    coalesce(tostring(array_length(parse_json(zones))), 'Not Configured')
+    ),
     (type == "microsoft.recoveryservices/vaults"), "Not Applicable",
     "Undefined"
     )
@@ -164,6 +171,7 @@ resources
     type == "microsoft.cdn/profiles", "Not Applicable",
     type == "microsoft.network/applicationgateways", "Not Applicable",
     type == "microsoft.network/loadbalancers", "Not Applicable",
+    type contains "publicip", tostring(properties.publicIPAddressVersion), //Field Override
     type == "microsoft.recoveryservices/vaults", "Not Applicable",
     "Undefined"
     )
@@ -183,6 +191,7 @@ resources
     type == "microsoft.cdn/profiles", "Not Applicable",
     type == "microsoft.network/applicationgateways", tostring(iif(isnotempty(properties.autoscaleConfiguration), properties.autoscaleConfiguration.minCapacity, properties.sku.capacity)),
     type == "microsoft.network/loadbalancers", "Not Applicable",
+    type contains "publicip", iif(type == "microsoft.network/publicipprefixes", "PIP-prefix", "Single"), //Field Override
     type == "microsoft.recoveryservices/vaults", "Not Applicable",
     "Undefined"
     )
@@ -202,6 +211,7 @@ resources
     type == "microsoft.cdn/profiles", "Not Applicable",
     type == "microsoft.network/applicationgateways", "Not Applicable",
     type == "microsoft.network/loadbalancers", "Not Applicable",
+    type contains "publicip", "Not Applicable",
     type == "microsoft.recoveryservices/vaults", "Not Applicable",
     "Undefined"
     )
@@ -221,6 +231,7 @@ resources
     type == "microsoft.cdn/profiles", "Not Applicable",
     type == "microsoft.network/applicationgateways", "Not Applicable",
     type == "microsoft.network/loadbalancers", tostring(LbIpType),  //Field Override
+    type contains "publicip", tostring(properties.publicIPAllocationMethod), //Field Override
     type == "microsoft.recoveryservices/vaults", "Not Applicable",
     'Not Applicable'
     )
@@ -243,6 +254,7 @@ resources
     type == "microsoft.cdn/profiles", "Not Applicable",
     type == "microsoft.network/applicationgateways", "Not Applicable",
     type == "microsoft.network/loadbalancers", "Not Applicable",
+    type contains "publicip", "Not Applicable",
     type == "microsoft.recoveryservices/vaults", "Not Applicable",
     "Undefined"
     )
@@ -260,6 +272,7 @@ resources
     type == "microsoft.cdn/profiles", "Not Applicable",
     type == "microsoft.network/applicationgateways", iif(isnotempty(properties.autoscaleConfiguration), "Configured", "Not Configured"),
     type == "microsoft.network/loadbalancers", "Not Applicable",
+    type contains "publicip", "Not Applicable",
     type == "microsoft.recoveryservices/vaults", "Not Applicable",
     "Undefined"
     )
@@ -274,6 +287,7 @@ resources
     (type == "microsoft.cdn/profiles"), "Not Applicable",
     (type == "microsoft.network/applicationgateways"), "Not Applicable",
     (type == "microsoft.network/loadbalancers"), "Not Applicable",
+    (type contains "publicip"), "Not Applicable",
     type == "microsoft.recoveryservices/vaults", "Not Applicable",
     "Undefined"
     )
@@ -288,6 +302,7 @@ resources
     (type == "microsoft.cdn/profiles"), "Not Applicable",
     (type == "microsoft.network/applicationgateways"), "Not Applicable",
     (type == "microsoft.network/loadbalancers"), "Not Applicable",
+    (type contains "publicip"), "Not Applicable",
     type == "microsoft.recoveryservices/vaults", "Not Applicable",
     "Undefined"
     )
@@ -304,6 +319,7 @@ resources
     (type == "microsoft.cdn/profiles"), "Not Applicable",
     (type == "microsoft.network/applicationgateways"), "Not Applicable",
     (type == "microsoft.network/loadbalancers"), "Not Applicable",
+    (type contains "publicip"), "Not Applicable",
     (type == "microsoft.recoveryservices/vaults"), "Not Applicable",
     "Undefined"
     )

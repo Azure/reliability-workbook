@@ -1449,8 +1449,8 @@
                   "id": "9b2af52f-ffd5-43d7-9055-9a76f56ca89a",
                   "cellValue": "selectedTab",
                   "linkTarget": "parameter",
-                  "linkLabel": "Web Application Firewall",
-                  "subTarget": "WAF",
+                  "linkLabel": "Public IP",
+                  "subTarget": "PIP",
                   "style": "link"
                 }
               ]
@@ -1796,24 +1796,221 @@
                 {
                   "type": 1,
                   "content": {
-                    "json": "[SLA for Web Application Firewall](https://azure.microsoft.com/en-us/support/legal/sla/web-application-firewall/v1_0/)\r\n* Web Application Firewall availability guarantees are included in the SLA of the deployment option chosen, Application Gateway or Azure Front Door. Please see the [Application Gateway SLA](https://azure.microsoft.com/support/legal/sla/application-gateway/), and [Azure Front Door SLA](https://azure.microsoft.com/support/legal/sla/frontdoor/) for more details.\r\n\r\n> SLA accurate at time of release. Latest information is available [here](https://azure.microsoft.com/en-us/support/legal/sla/web-application-firewall/)",
-                    "style": "upsell"
+                    "json": "* Public IP addresses allow Internet resources to communicate inbound to Azure resources. More details in [Public IP address docs](https://learn.microsoft.com/azure/virtual-network/ip-services/public-ip-addresses)\r\n* A public IP address prefix is a reserved range of public IP addresses in Azure. More details in [Public IP address prefix docs](https://learn.microsoft.com/azure/virtual-network/ip-services/public-ip-address-prefix)\r\n\r\n> Azure generally recommends to leverage [Availability Zone](https://docs.microsoft.com/en-us/azure/availability-zones/az-overview) for better High Availability within the region by leveraging multiple zones inside region. By architecting your solutions to use replicated services in zones, you can protect your apps and data from the loss of a datacenter. \r\n\r\n> At this point, not all Azure regions and services support Availability Zones, the support matrix can be found [here](https://docs.microsoft.com/en-us/azure/availability-zones/az-region). Whenerver there is a Zonal recommendation for a particular service from this workbook, please note that that is applicable only for the regions supporting Availability Zones from the earlier list.",
+                    "style": "info"
                   },
                   "conditionalVisibility": {
-                    "parameterName": "SLA",
+                    "parameterName": "Help",
                     "comparison": "isEqualTo",
                     "value": "Yes"
                   },
-                  "name": "WAFSLA"
+                  "name": "text - 1"
+                },
+                {
+                  "type": 3,
+                  "content": {
+                    "version": "KqlItem/1.0",
+                    "query": ${kql_networking_pip_resources_details},
+                    "size": 0,
+                    "title": "Public IP addresses & IP Prefixes",
+                    "queryType": 1,
+                    "resourceType": "microsoft.resourcegraph/resources",
+                    "crossComponentResources": [
+                      "{Subscriptions}"
+                    ],
+                    "gridSettings": {
+                        "formatters": [
+                          {
+                            "columnMatch": "$gen_group",
+                            "formatter": 15,
+                            "formatOptions": {
+                              "linkTarget": null,
+                              "showIcon": true
+                            }
+                          },
+                          {
+                            "columnMatch": "Type",
+                            "formatter": 5
+                          },
+                          {
+                            "columnMatch": "SkuName",
+                            "formatter": 18,
+                            "formatOptions": {
+                              "thresholdsOptions": "icons",
+                              "thresholdsGrid": [
+                                {
+                                  "operator": "==",
+                                  "thresholdValue": "basic",
+                                  "representation": "2",
+                                  "text": "{0}{1}"
+                                },
+                                {
+                                  "operator": "==",
+                                  "thresholdValue": "standard",
+                                  "representation": "success",
+                                  "text": "{0}{1}"
+                                },
+                                {
+                                  "operator": "==",
+                                  "thresholdValue": "global",
+                                  "representation": "success",
+                                  "text": "{0}{1}"
+                                },
+                                {
+                                  "operator": "Default",
+                                  "thresholdValue": null,
+                                  "representation": "unknown",
+                                  "text": "{0}{1}"
+                                }
+                              ]
+                            }
+                          },
+                          {
+                            "columnMatch": "Kind",
+                            "formatter": 5
+                          },
+                          {
+                            "columnMatch": "SubscriptionId",
+                            "formatter": 5
+                          },
+                          {
+                            "columnMatch": "State",
+                            "formatter": 18,
+                            "formatOptions": {
+                              "thresholdsOptions": "icons",
+                              "thresholdsGrid": [
+                                {
+                                  "operator": "==",
+                                  "thresholdValue": "succeeded",
+                                  "representation": "success",
+                                  "text": "{0}{1}"
+                                },
+                                {
+                                  "operator": "Default",
+                                  "thresholdValue": null,
+                                  "representation": "unknown",
+                                  "text": "{0}{1}"
+                                }
+                              ]
+                            }
+                          },
+                          {
+                            "columnMatch": "Zones",
+                            "formatter": 5
+                          },
+                          {
+                            "columnMatch": "AvailabilityZone",
+                            "formatter": 18,
+                            "formatOptions": {
+                              "thresholdsOptions": "icons",
+                              "thresholdsGrid": [
+                                {
+                                  "operator": "==",
+                                  "thresholdValue": "not applicable",
+                                  "representation": "more",
+                                  "text": "{0}{1}"
+                                },
+                                {
+                                  "operator": "==",
+                                  "thresholdValue": "not configured",
+                                  "representation": "2",
+                                  "text": "{0}{1}"
+                                },
+                                {
+                                  "operator": "==",
+                                  "thresholdValue": "3",
+                                  "representation": "success",
+                                  "text": "{0}{1}"
+                                },
+                                {
+                                  "operator": "==",
+                                  "thresholdValue": "1",
+                                  "representation": "2",
+                                  "text": "{0}{1}"
+                                },
+                                {
+                                  "operator": "Default",
+                                  "thresholdValue": null,
+                                  "representation": "unknown",
+                                  "text": "{0}{1}"
+                                }
+                              ]
+                            }
+                          },
+                          {
+                            "columnMatch": "FaultDomain",
+                            "formatter": 5
+                          },
+                          {
+                            "columnMatch": "ReadReplica",
+                            "formatter": 5
+                          },
+                          {
+                            "columnMatch": "AutomaticFailover",
+                            "formatter": 5
+                          },
+                          {
+                            "columnMatch": "MultipleWriteLocations",
+                            "formatter": 5
+                          },
+                          {
+                            "columnMatch": "StorageAutogrow",
+                            "formatter": 5
+                          },
+                          {
+                            "columnMatch": "ReplicationRole",
+                            "formatter": 5
+                          },
+                          {
+                            "columnMatch": "Backup",
+                            "formatter": 5
+                          }
+                        ],
+                        "rowLimit": 9999,
+                        "hierarchySettings": {
+                          "treeType": 1,
+                          "groupBy": [
+                            "SubscriptionId"
+                          ]
+                        },
+                        "labelSettings": [
+                          {
+                            "columnId": "SkuName",
+                            "label": "SKU"
+                          },
+                          {
+                            "columnId": "SubscriptionId",
+                            "label": "Subscription"
+                          },
+                          {
+                            "columnId": "ResourceGroup",
+                            "label": "Resource Group"
+                          },
+                          {
+                            "columnId": "AvailabilitySet",
+                            "label": "IP Version"
+                          },
+                          {
+                            "columnId": "Capacity",
+                            "label": "IP Type"
+                          },
+                          {
+                            "columnId": "OSDisk",
+                            "label": "IP Allocation"
+                          }
+                        ]
+                    }
+                  },
+                  "name": "Public IP addresses & IP Prefixes"
                 }
               ]
             },
             "conditionalVisibility": {
               "parameterName": "selectedTab",
               "comparison": "isEqualTo",
-              "value": "WAF"
+              "value": "PIP"
             },
-            "name": "WAF"
+            "name": "PIP"
           },
           {
             "type": 12,
@@ -1833,6 +2030,19 @@
                     "value": "Yes"
                   },
                   "name": "text - 2 - Copy - Copy"
+                },
+                {
+                  "type": 1,
+                  "content": {
+                    "json": "[SLA for Web Application Firewall](https://azure.microsoft.com/en-us/support/legal/sla/web-application-firewall/v1_0/)\r\n* Web Application Firewall availability guarantees are included in the SLA of the deployment option chosen, Application Gateway or Azure Front Door. Please see the [Application Gateway SLA](https://azure.microsoft.com/support/legal/sla/application-gateway/), and [Azure Front Door SLA](https://azure.microsoft.com/support/legal/sla/frontdoor/) for more details.\r\n\r\n> SLA accurate at time of release. Latest information is available [here](https://azure.microsoft.com/en-us/support/legal/sla/web-application-firewall/)",
+                    "style": "upsell"
+                  },
+                  "conditionalVisibility": {
+                    "parameterName": "SLA",
+                    "comparison": "isEqualTo",
+                    "value": "Yes"
+                  },
+                  "name": "WAF SLA"
                 },
                 {
                   "type": 1,
