@@ -1533,6 +1533,18 @@
                                 "text": "{0}{1}"
                               },
                               {
+                                "operator": "==",
+                                "thresholdValue": "gateway",
+                                "representation": "success",
+                                "text": "{0}{1}"
+                              },
+                              {
+                                "operator": "==",
+                                "thresholdValue": "global",
+                                "representation": "success",
+                                "text": "{0}{1}"
+                              },
+                              {
                                 "operator": "Default",
                                 "thresholdValue": null,
                                 "representation": "unknown",
@@ -1540,6 +1552,10 @@
                               }
                             ]
                           }
+                        },
+                        {
+                          "columnMatch": "Kind",
+                          "formatter": 5
                         },
                         {
                           "columnMatch": "SubscriptionId",
@@ -1605,6 +1621,24 @@
                                 "text": "{0}{1}"
                               },
                               {
+                                "operator": "==",
+                                "thresholdValue": "public ip az config",
+                                "representation": "Normal",
+                                "text": "{0}{1}"
+                              },
+                              {
+                                "operator": "==",
+                                "thresholdValue": "3",
+                                "representation": "success",
+                                "text": "{0}{1}"
+                              },
+                              {
+                                "operator": "==",
+                                "thresholdValue": "1",
+                                "representation": "2",
+                                "text": "{0}{1}"
+                              },
+                              {
                                 "operator": "Default",
                                 "thresholdValue": null,
                                 "representation": "unknown",
@@ -1623,10 +1657,6 @@
                         },
                         {
                           "columnMatch": "FaultDomain",
-                          "formatter": 5
-                        },
-                        {
-                          "columnMatch": "OSDisk",
                           "formatter": 5
                         },
                         {
@@ -1717,6 +1747,7 @@
                           }
                         }
                       ],
+                      "rowLimit": 1000,
                       "hierarchySettings": {
                         "treeType": 1,
                         "groupBy": [
@@ -1737,6 +1768,10 @@
                         {
                           "columnId": "ResourceGroup",
                           "label": "Resource Group"
+                        },
+                        {
+                          "columnId": "OSDisk",
+                          "label": "IP Type"
                         }
                       ]
                     }

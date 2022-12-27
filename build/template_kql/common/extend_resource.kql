@@ -69,6 +69,14 @@ resources
     // If even one node pool is not using a zone, it will be "Not Configured".
     | extend AvZones = iff(tostring(AvZones) == "0", "Not Configured", tostring(AvZones)), AvSets = "Scale Sets"
 ) on id
+// Start - Azure Load Balancer additional logic
+| mv-expand LbFeIpConfig = properties.frontendIPConfigurations
+| extend LbUseAvZone = iff(array_length(LbFeIpConfig.zones ) > 0, array_length(LbFeIpConfig.zones ), 0)
+| extend LbIpType = iff(isnotnull(LbFeIpConfig.properties.publicIPAddress), "Public", "Private")
+//| summarize LbAvZones = min(LbUseAvZone) by id, name, type, tenantId, kind, location, resourceGroup, subscriptionId, tostring(sku), plan, tostring(properties)
+//| extend properties = todynamic(properties), sku = todynamic(sku), 
+| summarize LbAvZones = arg_min(LbUseAvZone, *) by id
+// End - Azure Load Balancer additional logic
 | extend state = case(
     type == 'microsoft.compute/virtualmachines', tostring(properties.extended.instanceView.powerState.displayStatus),
     type == 'microsoft.compute/virtualmachinescalesets', tostring(properties.provisioningState),
@@ -103,7 +111,7 @@ resources
     type == "microsoft.network/frontdoors", "classic_frontdoor",
     type == "microsoft.cdn/profiles", tostring(sku.name),
     type == "microsoft.network/applicationgateways", tostring(properties.sku.name),
-    type == "microsoft.network/loadbalancers", tostring(sku.name),
+    type == "microsoft.network/loadbalancers", iff(sku.tier == 'Global', 'Global', tostring(sku.name)),
     type == "microsoft.recoveryservices/vaults", tostring(iif(isnotnull(sku.tier), sku.tier, sku.name)),
     "Undefined"
     )
@@ -126,9 +134,10 @@ resources
     (type == "microsoft.cdn/profiles"), "Not Applicable",
     (type == "microsoft.network/applicationgateways"), iif(isnotnull(zones), "Configured", "Not Configured"),
     (type == "microsoft.network/loadbalancers"), case( 
-    skuName =~ "Basic", "Not Applicable",
-    skuName =~ "Standard" and isnotnull(zones), "Configured",
-    "Not Configured"
+    skuName =~ "Basic" or skuName =~ "Global", "Not Applicable",
+    LbIpType =~ "Public", "Public IP AZ Config",
+    tostring(LbAvZones) =~ "0", "Not Configured",
+    tostring(LbAvZones)
     ),
     (type == "microsoft.recoveryservices/vaults"), "Not Applicable",
     "Undefined"
@@ -211,7 +220,7 @@ resources
     type == "microsoft.network/frontdoors", "Not Applicable",
     type == "microsoft.cdn/profiles", "Not Applicable",
     type == "microsoft.network/applicationgateways", "Not Applicable",
-    type == "microsoft.network/loadbalancers", "Not Applicable",
+    type == "microsoft.network/loadbalancers", tostring(LbIpType),  //Field Override
     type == "microsoft.recoveryservices/vaults", "Not Applicable",
     'Not Applicable'
     )
