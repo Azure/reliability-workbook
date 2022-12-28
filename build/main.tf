@@ -39,6 +39,7 @@ locals {
     "kql_networking_appgw_resources_details" = jsonencode(local.kql_networking_appgw_resources_details)
     "kql_networking_lb_resources_details"    = jsonencode(local.kql_networking_lb_resources_details)
     "kql_networking_pip_resources_details"    = jsonencode(local.kql_networking_pip_resources_details)
+    "kql_networking_vnetgw_resources_details"    = jsonencode(local.kql_networking_vnetgw_resources_details)
 
     "kql_storage_account_resources_details" = jsonencode(local.kql_storage_account_resources_details)
 
@@ -209,6 +210,12 @@ locals {
   )
   kql_networking_pip_resources_details = templatefile(
     "${path.module}/template_kql/networking/networking_pip_resources_details.kql",
+    {
+      "extend_resource" = local.kql_extend_resource
+    }
+  )
+  kql_networking_vnetgw_resources_details = templatefile(
+    "${path.module}/template_kql/networking/networking_vnetgw_resources_details.kql",
     {
       "extend_resource" = local.kql_extend_resource
     }

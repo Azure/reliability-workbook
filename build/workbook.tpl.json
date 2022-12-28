@@ -1452,6 +1452,14 @@
                   "linkLabel": "Public IP",
                   "subTarget": "PIP",
                   "style": "link"
+                },
+                {
+                  "id": "947f178c-58f8-43ac-ac0a-7eddf884c712",
+                  "cellValue": "selectedTab",
+                  "linkTarget": "parameter",
+                  "linkLabel": "VPN & ExpressRoute Gateway",
+                  "subTarget": "VNETGW",
+                  "style": "link"
                 }
               ]
             },
@@ -1964,6 +1972,32 @@
                           {
                             "columnMatch": "Backup",
                             "formatter": 5
+                        },
+                        {
+                          "columnMatch": "Environment",
+                          "formatter": 18,
+                          "formatOptions": {
+                            "thresholdsOptions": "colors",
+                            "thresholdsGrid": [
+                              {
+                                "operator": "contains",
+                                "thresholdValue": "Prod",
+                                "representation": "redBright",
+                                "text": "{0}{1}"
+                              },
+                              {
+                                "operator": "contains",
+                                "thresholdValue": "prod",
+                                "representation": "redBright",
+                                "text": "{0}{1}"
+                              },
+                              {
+                                "operator": "Default",
+                                "thresholdValue": null,
+                                "text": "{0}{1}"
+                              }
+                            ]
+                          }
                           }
                         ],
                         "rowLimit": 9999,
@@ -2783,6 +2817,376 @@
               "value": "AFD"
             },
             "name": "AFD"
+          },
+          {
+            "type": 12,
+            "content": {
+              "version": "NotebookGroup/1.0",
+              "groupType": "editable",
+              "items": [
+                {
+                  "type": 1,
+                  "content": {
+                    "json": "[SLA for VNET Gateway](https://azure.microsoft.com/support/legal/sla/vpn-gateway/)\r\n* We guarantee 99.9% availability for each Basic Gateway for VPN or Basic Gateway for ExpressRoute.\r\n* We guarantee 99.95% availability for all Gateway for VPN SKUs excluding Basic.\r\n* We guarantee 99.95% availability for all Gateway for ExpressRoute SKUs excluding Basic.\r\n\r\n> SLA accurate at time of release. Latest information is available [here](https://azure.microsoft.com/support/legal/sla/vpn-gateway/)",
+                    "style": "upsell"
+                  },
+                  "conditionalVisibility": {
+                    "parameterName": "SLA",
+                    "comparison": "isEqualTo",
+                    "value": "Yes"
+                  },
+                  "name": "text - 0"
+                },
+                {
+                  "type": 1,
+                  "content": {
+                    "json": "* Azure recommends to use latest generation VPN gateways which supports zones. Active-Active connection guidance in [VPN HA docs](https://learn.microsoft.com/azure/vpn-gateway/vpn-gateway-highlyavailable)\r\n* [Zone Redundant Gateways](https://learn.microsoft.com/azure/vpn-gateway/about-zone-redundant-vnet-gateways) are recommended to ensure gateway redundancy\r\n* Design Express Route with [HA Design](https://learn.microsoft.com/azure/expressroute/designing-for-high-availability-with-expressroute)\r\n* Increase availability by distributing resources within and across zones.\r\n\r\n> Azure generally recommends to leverage [Availability Zone](https://docs.microsoft.com/en-us/azure/availability-zones/az-overview) for better High Availability within the region by leveraging multiple zones inside region. By architecting your solutions to use replicated services in zones, you can protect your apps and data from the loss of a datacenter. \r\n\r\n> At this point, not all Azure regions and services support Availability Zones, the support matrix can be found [here](https://docs.microsoft.com/en-us/azure/availability-zones/az-region). Whenerver there is a Zonal recommendation for a particular service from this workbook, please note that that is applicable only for the regions supporting Availability Zones from the earlier list.",
+                    "style": "info"
+                  },
+                  "conditionalVisibility": {
+                    "parameterName": "Help",
+                    "comparison": "isEqualTo",
+                    "value": "Yes"
+                  },
+                  "name": "text - 1"
+                },
+                {
+                  "type": 3,
+                  "content": {
+                    "version": "KqlItem/1.0",
+                    "query": ${kql_networking_vnetgw_resources_details},
+                    "size": 0,
+                    "title": "VPN & ExpressRoute Gateway",
+                    "queryType": 1,
+                    "resourceType": "microsoft.resourcegraph/resources",
+                    "crossComponentResources": [
+                      "{Subscriptions}"
+                    ],
+                    "gridSettings": {
+                      "formatters": [
+                        {
+                          "columnMatch": "$gen_group",
+                          "formatter": 15,
+                          "formatOptions": {
+                            "linkTarget": null,
+                            "showIcon": true
+                          }
+                        },
+                        {
+                          "columnMatch": "Type",
+                          "formatter": 5
+                        },
+                        {
+                          "columnMatch": "SkuName",
+                          "formatter": 18,
+                          "formatOptions": {
+                            "thresholdsOptions": "icons",
+                            "thresholdsGrid": [
+                              {
+                                "operator": "==",
+                                "thresholdValue": "basic",
+                                "representation": "2",
+                                "text": "{0}{1}"
+                              },
+                              {
+                                "operator": "==",
+                                "thresholdValue": "standard",
+                                "representation": "2",
+                                "text": "{0}{1}"
+                              },
+                              {
+                                "operator": "==",
+                                "thresholdValue": "high performance",
+                                "representation": "2",
+                                "text": "{0}{1}"
+                              },
+                              {
+                                "operator": "==",
+                                "thresholdValue": "ultra performance",
+                                "representation": "2",
+                                "text": "{0}{1}"
+                              },
+                              {
+                                "operator": "regex",
+                                "thresholdValue": "(vpn|er)gw([1-3])az",
+                                "representation": "success",
+                                "text": "{0}{1}"
+                              },
+                              {
+                                "operator": "regex",
+                                "thresholdValue": "(vpn|er)gw([1-3])",
+                                "representation": "2",
+                                "text": "{0}{1}"
+                              },
+                              {
+                                "operator": "Default",
+                                "thresholdValue": null,
+                                "representation": "unknown",
+                                "text": "{0}{1}"
+                              }
+                            ]
+                          }
+                        },
+                        {
+                          "columnMatch": "Kind",
+                          "formatter": 5
+                        },
+                        {
+                          "columnMatch": "SubscriptionId",
+                          "formatter": 5
+                        },
+                        {
+                          "columnMatch": "State",
+                          "formatter": 18,
+                          "formatOptions": {
+                            "thresholdsOptions": "icons",
+                            "thresholdsGrid": [
+                              {
+                                "operator": "==",
+                                "thresholdValue": "succeeded",
+                                "representation": "success",
+                                "text": "{0}{1}"
+                              },
+                              {
+                                "operator": "Default",
+                                "thresholdValue": null,
+                                "representation": "warning",
+                                "text": "{0}{1}"
+                              }
+                            ]
+                          }
+                        },
+                        {
+                          "columnMatch": "Zones",
+                          "formatter": 5
+                        },
+                        {
+                          "columnMatch": "AvailabilitySet",
+                          "formatter": 5
+                        },
+                        {
+                          "columnMatch": "Capacity",
+                          "formatter": 18,
+                          "formatOptions": {
+                            "thresholdsOptions": "icons",
+                            "thresholdsGrid": [
+                              {
+                                "operator": "==",
+                                "thresholdValue": "2",
+                                "representation": "success",
+                                "text": "{0}{1}"
+                              },
+                              {
+                                "operator": "==",
+                                "thresholdValue": "1",
+                                "representation": "2",
+                                "text": "{0}{1}"
+                              },
+                              {
+                                "operator": "Default",
+                                "thresholdValue": null,
+                                "representation": "unknown",
+                                "text": "{0}{1}"
+                              }
+                            ]
+                          }
+                        },
+                        {
+                          "columnMatch": "FaultDomain",
+                          "formatter": 18,
+                          "formatOptions": {
+                            "thresholdsOptions": "icons",
+                            "thresholdsGrid": [
+                              {
+                                "operator": "==",
+                                "thresholdValue": "routebased",
+                                "representation": "success",
+                                "text": "{0}{1}"
+                              },
+                              {
+                                "operator": "==",
+                                "thresholdValue": "erpolicybased",
+                                "representation": "success",
+                                "text": "{0}{1}"
+                              },
+                              {
+                                "operator": "==",
+                                "thresholdValue": "policybased",
+                                "representation": "2",
+                                "text": "{0}{1}"
+                              },
+                              {
+                                "operator": "Default",
+                                "thresholdValue": null,
+                                "representation": "unknown",
+                                "text": "{0}{1}"
+                              }
+                            ]
+                          }
+                        },
+                        {
+                          "columnMatch": "OSDisk",
+                          "formatter": 18,
+                          "formatOptions": {
+                            "thresholdsOptions": "icons",
+                            "thresholdsGrid": [
+                              {
+                                "operator": "==",
+                                "thresholdValue": "generation1",
+                                "representation": "2",
+                                "text": "{0}{1}"
+                              },
+                              {
+                                "operator": "==",
+                                "thresholdValue": "generation2",
+                                "representation": "success",
+                                "text": "{0}{1}"
+                              },
+                              {
+                                "operator": "==",
+                                "thresholdValue": "none",
+                                "representation": "more",
+                                "text": "{0}{1}"
+                              },
+                              {
+                                "operator": "Default",
+                                "thresholdValue": null,
+                                "representation": "unknown",
+                                "text": "{0}{1}"
+                              }
+                            ]
+                          }
+                        },
+                        {
+                          "columnMatch": "ReadReplica",
+                          "formatter": 18,
+                          "formatOptions": {
+                            "thresholdsOptions": "icons",
+                            "thresholdsGrid": [
+                              {
+                                "operator": "==",
+                                "thresholdValue": "true",
+                                "representation": "success",
+                                "text": "{0}{1}"
+                              },
+                              {
+                                "operator": "==",
+                                "thresholdValue": "false",
+                                "representation": "2",
+                                "text": "{0}{1}"
+                              },
+                              {
+                                "operator": "==",
+                                "thresholdValue": "not applicable",
+                                "representation": "more",
+                                "text": "{0}{1}"
+                              },
+                              {
+                                "operator": "Default",
+                                "thresholdValue": null,
+                                "representation": "unknown",
+                                "text": "{0}{1}"
+                              }
+                            ]
+                          }
+                        },
+                        {
+                          "columnMatch": "AutomaticFailover",
+                          "formatter": 5
+                        },
+                        {
+                          "columnMatch": "MultipleWriteLocations",
+                          "formatter": 5
+                        },
+                        {
+                          "columnMatch": "StorageAutogrow",
+                          "formatter": 5
+                        },
+                        {
+                          "columnMatch": "ReplicationRole",
+                          "formatter": 5
+                        },
+                        {
+                          "columnMatch": "Backup",
+                          "formatter": 5
+                        },
+                        {
+                          "columnMatch": "Environment",
+                          "formatter": 18,
+                          "formatOptions": {
+                            "thresholdsOptions": "colors",
+                            "thresholdsGrid": [
+                              {
+                                "operator": "contains",
+                                "thresholdValue": "Prod",
+                                "representation": "redBright",
+                                "text": "{0}{1}"
+                              },
+                              {
+                                "operator": "contains",
+                                "thresholdValue": "prod",
+                                "representation": "redBright",
+                                "text": "{0}{1}"
+                              },
+                              {
+                                "operator": "Default",
+                                "thresholdValue": null,
+                                "text": "{0}{1}"
+                              }
+                            ]
+                          }
+                        }
+                      ],
+                      "rowLimit": 9999,
+                      "hierarchySettings": {
+                        "treeType": 1,
+                        "groupBy": [
+                          "SubscriptionId",
+                          "AvailabilitySet"
+                        ]
+                      },
+                      "labelSettings": [
+                        {
+                          "columnId": "SkuName",
+                          "label": "SKU"
+                        },
+                        {
+                          "columnId": "SubscriptionId",
+                          "label": "Subscription"
+                        },
+                        {
+                          "columnId": "ResourceGroup",
+                          "label": "Resource Group"
+                        },
+                        {
+                          "columnId": "AvailabilitySet",
+                          "label": "Gateway Type"
+                        },
+                        {
+                          "columnId": "FaultDomain",
+                          "label": "VPN Type"
+                        },
+                        {
+                          "columnId": "OSDisk",
+                          "label": "Gateway Generation"
+                        },
+                        {
+                          "columnId": "ReadReplica",
+                          "label": "Active-Active"
+                        }
+                      ]
+                    }
+                  },
+                  "name": "query - 2"
+                }
+              ]
+            },
+            "conditionalVisibility": {
+              "parameterName": "selectedTab",
+              "comparison": "isEqualTo",
+              "value": "VNETGW"
+            },
+            "name": "VPN & ER GW"
           }
         ]
       },
