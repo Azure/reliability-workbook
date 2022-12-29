@@ -8,7 +8,7 @@ summarize
     SqlPremiumOrBusinessCriticalOrDwh=dcountif(ResourceId, Type == 'microsoft.sql/servers/databases' and (SkuName contains "premium" or SkuName contains "businesscritical" or SkuName contains "datawarehouse")), 
     VMDeallocatedStateCount=dcountif(ResourceId, State contains "vm deallocated"),
     NoAvZoneCount=dcountif(ResourceId, (AvailabilityZone contains "not configured")),
-    NAAvZoneCount=dcountif(ResourceId, (AvailabilityZone contains "not applicable")),
+    NAAvZoneCount=dcountif(ResourceId, (AvailabilityZone contains "not applicable") or (AvailabilityZone contains "public ip az config")),
     AvZoneCount=dcountif(ResourceId, (AvailabilityZone in ('1', '2', '3', 'configured'))),
     NoAvSetCount=dcountif(ResourceId, (AvailabilitySet contains "none") or (AvailabilitySet contains "not configured")),
     NAAvSetCount=dcountif(ResourceId, AvailabilitySet contains "not applicable"),
@@ -60,4 +60,13 @@ summarize
     AsrSucceededState=dcountif(ResourceId, State == "succeeded" and Type == 'microsoft.recoveryservices/vaults'),
     NoAsrSucceededState=dcountif(ResourceId, State != "succeeded" and Type == 'microsoft.recoveryservices/vaults'),
     AzFWSucceededStateCount=dcountif(ResourceId, State == "succeeded" and Type == 'microsoft.network/azurefirewalls'),
-    NoAzFWSucceededStateCount=dcountif(ResourceId, State != "succeeded" and Type == 'microsoft.network/azurefirewalls')
+    NoAzFWSucceededStateCount=dcountif(ResourceId, State != "succeeded" and Type == 'microsoft.network/azurefirewalls'),
+    SucceededStateCount=dcountif(ResourceId, State == "succeeded"),
+    NoSucceededStateCount=dcountif(ResourceId, State != "succeeded"),
+    AzVnetGwSkuCount=dcountif(ResourceId, SkuName contains "az" and Type == 'microsoft.network/virtualnetworkgateways'), 
+    NoAzVnetGwSkuCount=dcountif(ResourceId, SkuName !contains "az" and Type == 'microsoft.network/virtualnetworkgateways'),
+    RouteVnetGwVpnTypeCount=dcountif(ResourceId, (FaultDomain == "routebased" or FaultDomain == "erpolicybased") and Type == 'microsoft.network/virtualnetworkgateways'),
+    Gen2VnetGwCount=dcountif(ResourceId, OSDisk == "generation2" and Type == 'microsoft.network/virtualnetworkgateways'),
+    NAGen2VnetGwCount=dcountif(ResourceId, OSDisk == "none" and Type == 'microsoft.network/virtualnetworkgateways'),
+    ActiveActiveVnetGwCount=dcountif(ResourceId, ReadReplica == "true" and Type == 'microsoft.network/virtualnetworkgateways'),
+    NAActiveActiveVnetGwCount=dcountif(ResourceId, ReadReplica == "not applicable" and Type == 'microsoft.network/virtualnetworkgateways')

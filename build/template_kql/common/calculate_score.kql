@@ -25,8 +25,14 @@ extend ReliabilityScore = case(
     Type == 'microsoft.cdn/profiles' or Type == 'microsoft.network/frontdoors', (CDNEnabledStateCount + AFDEnabledStateCount) * 100 / ResourceTotal,
     // AppGW - 5 checks    // score = (state + AZ + Tier + autoscaling + capacity) * 100 / (5 * ResourceTotal)
     Type == 'microsoft.network/applicationgateways', (RunningState + AvZoneCount + NAAvZoneCount + OtherAppGwSkuCount + AutoScaleAppGwCount + Gt1CapacityCount) * 100 / (5 * ResourceTotal),
-    // LB - 2 checks  // score = (SKU + AZ) * 100 / (2 * ResourceTotal)
-    Type == 'microsoft.network/loadbalancers', (OtherSku + AvZoneCount + NAAvZoneCount) * 100 / (2 * ResourceTotal),
+    // LB - 3 checks  // score = (SKU + state + AZ) * 100 / (3 * ResourceTotal)
+    Type == 'microsoft.network/loadbalancers', (OtherSku + SucceededStateCount + AvZoneCount + NAAvZoneCount) * 100 / (3 * ResourceTotal),
+    // Public IP - 3 checks // score = (SKU + state + AZ) * 100 / (3 * ResourceTotal)
+    Type == 'microsoft.network/publicipaddresses', (OtherSku + SucceededStateCount + AvZoneCount + NAAvZoneCount) * 100 / (3 * ResourceTotal),
+    // Public IP Prefix - 3 checks // score = (SKU + state + AZ) * 100 / (3 * ResourceTotal)
+    Type == 'microsoft.network/publicipprefixes', (OtherSku + SucceededStateCount + AvZoneCount + NAAvZoneCount) * 100 / (3 * ResourceTotal),
+    // VNET Gateway - 6 checks // score = (SKU + state + capacity + vpntype + generation + active-active) * 100 / (6 * ResourceTotal)
+    Type == 'microsoft.network/virtualnetworkgateways', (AzVnetGwSkuCount + SucceededStateCount + Gt1CapacityCount + NACapacityCount + RouteVnetGwVpnTypeCount + Gen2VnetGwCount + NAGen2VnetGwCount + ActiveActiveVnetGwCount + NAActiveActiveVnetGwCount) * 100 / (6 * ResourceTotal),
     // ASR - 1 check  // score = status * 100 / (1 * ResourceTotal)
     Type == 'microsoft.recoveryservices/vaults', (AsrSucceededState) * 100 / (1 * ResourceTotal),
     0)
