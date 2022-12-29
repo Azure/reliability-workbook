@@ -15,8 +15,8 @@ extend ReliabilityScore = case(
     Type == 'microsoft.dbformysql/servers', (DBOnlineStateCount + OtherSku + HealthyBackupCount + EnabledStorageAutogrow + ReplicationEnabled) * 100 / (5 * ResourceTotal),
     // MySQL Flexible - 4 checks  // score = ("status" + "sku"  + "replication" + "HaEnabled") * 100 / (4 * ResourceTotal)    // included NA items to show compliance  //********* Future - "read replica", "automatic failover", "backup"
     Type == 'microsoft.dbformysql/flexibleservers', (DBOnlineStateCount + OtherSku + ReplicationEnabled + NAReplicationEnabled + AvZoneCount + NAAvZoneCount) * 100 / (4 * ResourceTotal),
-    // APIM - 2 checks // score = ("Tier" + "capacity") * 100 / (2 * ResourceTotal) 
-    Type == 'microsoft.apimanagement/service', (OtherSku + Gt1CapacityCount) * 100 / (2 * ResourceTotal),
+    // APIM - 5 checks // score = ("Tier" + state + "capacity" + AZ + stv2platform) * 100 / (5 * ResourceTotal) 
+    Type == 'microsoft.apimanagement/service', (OtherSku + SucceededStateCount + Gt1CapacityCount + AvZoneCount + Stv2ApimCount) * 100 / (5 * ResourceTotal),
     // Storage - 2 checks // score = ( "kind" + "replication type") * 100 / (2 * ResourceTotal)    //********* Future - "access tier hot"
     Type == 'microsoft.storage/storageaccounts' or Type == 'microsoft.classicstorage/storageaccounts', (V2StorageEnabled + RAStorageEnabled) * 100 / (2 * ResourceTotal),
     // AzureFirewall - 1 check // score = (State + AZ) * 100 / (2 * ResourceTotal)

@@ -521,6 +521,14 @@
               "margin": "10px",
               "showBorder": true
             }
+          },
+          {
+            "type": 1,
+            "content": {
+              "json": "* This workbook source is maintained publicly as OpenSource in [GitHub Repository](https://github.com/Azure/reliability-workbook). There is no Service Level guarantees or warranties associated with the usage of this workbook. Refer [license](https://github.com/Azure/reliability-workbook/blob/main/LICENSE) for more details.\r\n\r\n> If there are any bugs or suggestions for improvements, feel free to raise an issue in the above GitHub repository. In case you want to reach out to maintainers, please email to [FTA Reliability vTeam](mailto:fta-reliability-team@microsoft.com)",
+              "style": "info"
+            },
+            "name": "text - 3"
           }
         ]
       },
@@ -1946,6 +1954,10 @@
                             }
                           },
                           {
+                          "columnMatch": "Capacity",
+                          "formatter": 5
+                        },
+                        {
                             "columnMatch": "FaultDomain",
                             "formatter": 5
                           },
@@ -2004,7 +2016,8 @@
                         "hierarchySettings": {
                           "treeType": 1,
                           "groupBy": [
-                            "SubscriptionId"
+                          "SubscriptionId",
+                          "Capacity"
                           ]
                         },
                         "labelSettings": [
@@ -8564,7 +8577,30 @@
                   },
                   {
                     "columnMatch": "OSDisk",
-                    "formatter": 5
+                    "formatter": 18,
+                    "formatOptions": {
+                      "thresholdsOptions": "icons",
+                      "thresholdsGrid": [
+                        {
+                          "operator": "==",
+                          "thresholdValue": "stv2",
+                          "representation": "success",
+                          "text": "{0}{1}"
+                        },
+                        {
+                          "operator": "==",
+                          "thresholdValue": "stv1",
+                          "representation": "2",
+                          "text": "{0}{1}"
+                        },
+                        {
+                          "operator": "Default",
+                          "thresholdValue": null,
+                          "representation": "unknown",
+                          "text": "{0}{1}"
+                        }
+                      ]
+                    }
                   },
                   {
                     "columnMatch": "ReadReplica",
@@ -8652,12 +8688,20 @@
                 },
                 "labelSettings": [
                   {
+                    "columnId": "SkuName",
+                    "label": "SKU"
+                  },
+                  {
                     "columnId": "SubscriptionId",
                     "label": "Subscription"
                   },
                   {
                     "columnId": "ResourceGroup",
                     "label": "Resource Group"
+                  },
+                  {
+                    "columnId": "OSDisk",
+                    "label": "Platform Version"
                   }
                 ]
               },

@@ -69,4 +69,5 @@ summarize
     Gen2VnetGwCount=dcountif(ResourceId, OSDisk == "generation2" and Type == 'microsoft.network/virtualnetworkgateways'),
     NAGen2VnetGwCount=dcountif(ResourceId, OSDisk == "none" and Type == 'microsoft.network/virtualnetworkgateways'),
     ActiveActiveVnetGwCount=dcountif(ResourceId, ReadReplica == "true" and Type == 'microsoft.network/virtualnetworkgateways'),
-    NAActiveActiveVnetGwCount=dcountif(ResourceId, ReadReplica == "not applicable" and Type == 'microsoft.network/virtualnetworkgateways')
+    NAActiveActiveVnetGwCount=dcountif(ResourceId, ReadReplica == "not applicable" and Type == 'microsoft.network/virtualnetworkgateways'),
+    Stv2ApimCount=dcountif(ResourceId, OSDisk == "stv2" and Type == 'microsoft.apimanagement/service')

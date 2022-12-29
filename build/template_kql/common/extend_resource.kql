@@ -231,7 +231,7 @@ resources
     type == 'microsoft.documentdb/databaseaccounts', 'Not Applicable',
     type == 'microsoft.dbformysql/servers', 'Not Applicable',
     type == 'microsoft.dbformysql/flexibleservers', 'Not Applicable',
-    type == "microsoft.apimanagement/service", "Not Applicable",
+    type == "microsoft.apimanagement/service", tostring(properties.platformVersion), //Field Override
     type contains "storageaccounts", tostring(split(skuName, '_', 0)[0]),
     type == "microsoft.network/azurefirewalls", "Not Applicable",
     type == "microsoft.network/frontdoors", "Not Applicable",
