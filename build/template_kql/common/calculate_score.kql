@@ -1,6 +1,8 @@
 extend ReliabilityScore = case(
     // VM - 4 checks // score = ("AZ + AS + Disk + Backup") * 100 / (3 * ResourceTotal) // AZ or AS is mutually exclusive, so VM should have either one
     Type == 'microsoft.compute/virtualmachines', (AvZoneCount + AvSetCount + PremorUltOSDiskCount + HealthyBackupCount) * 100 / (3 * ResourceTotal), 
+    // Classic VM // score = 0 / ResourceTotal
+    Type == 'microsoft.classiccompute/virtualmachines', 0,
     // VMSS - 3 checks  // score = (Capacity + Fault Domains + managed disk type) * 100 / (3 * ResourceTotal) //********* Future - Overprovision, Fault Domain State
     Type == 'microsoft.compute/virtualmachinescalesets', (Gt1CapacityCount + Gt0FaultDomainCount + PremorUltOSDiskCount) * 100 / (3 * ResourceTotal),
     // AppService & Function App - 2 checks // score = ("non dev/shared/free/ basic sku" + AppServiceRunningState) * 100 / (2 * ResourceTotal)

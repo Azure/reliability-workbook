@@ -21,6 +21,7 @@ locals {
     "kql_azuresiterecovery_resources_details" = jsonencode(local.kql_azuresiterecovery_resources_details)
 
     "kql_compute_vm_resources_details"                 = jsonencode(local.kql_compute_vm_resources_details)
+    "kql_compute_classicvm_resources_details"          = jsonencode(local.kql_compute_classicvm_resources_details)
     "kql_compute_vmss_resources_details"               = jsonencode(local.kql_compute_vmss_resources_details)
 
     "kql_container_aks_resources_details" = jsonencode(local.kql_container_aks_resources_details)
@@ -111,6 +112,12 @@ locals {
   //-------------------------------------------
   kql_compute_vm_resources_details = templatefile(
     "${path.module}/template_kql/compute/compute_vm_resources_details.kql",
+    {
+      "extend_resource" = local.kql_extend_resource
+    }
+  )
+  kql_compute_classicvm_resources_details = templatefile(
+    "${path.module}/template_kql/compute/compute_classicvm_resources_details.kql",
     {
       "extend_resource" = local.kql_extend_resource
     }
