@@ -44,6 +44,7 @@ locals {
     "kql_storage_account_resources_details" = jsonencode(local.kql_storage_account_resources_details)
 
     "kql_webapp_appsvc_resources_details" = jsonencode(local.kql_webapp_appsvc_resources_details)
+    "kql_webapp_appsvcplan_resources_details" = jsonencode(local.kql_webapp_appsvcplan_resources_details)
 
     "kql_export_summary_by_resourceType_environment" = jsonencode(local.kql_export_summary_by_resourceType_environment)
     "kql_export_summary_by_resource_environment"     = jsonencode(local.kql_export_summary_by_resource_environment)
@@ -236,6 +237,12 @@ locals {
   //-------------------------------------------
   kql_webapp_appsvc_resources_details = templatefile(
     "${path.module}/template_kql/webapp/webapp_appsvc_resources_details.kql",
+    {
+      "extend_resource" = local.kql_extend_resource
+    }
+  )
+  kql_webapp_appsvcplan_resources_details = templatefile(
+    "${path.module}/template_kql/webapp/webapp_appsvcplan_resources_details.kql",
     {
       "extend_resource" = local.kql_extend_resource
     }

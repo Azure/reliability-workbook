@@ -28,6 +28,7 @@ resources
     (type == 'microsoft.compute/virtualmachines') or 
     (type == "microsoft.compute/virtualmachinescalesets" and tags.aksEngineVersion !contains "aks-gomod") or
     (type == 'microsoft.web/sites') or 
+    (type == 'microsoft.web/serverfarms') or
     (type == "microsoft.containerservice/managedclusters") or 
     (type == 'microsoft.sql/servers/databases') or 
     (type == 'microsoft.documentdb/databaseaccounts') or 
@@ -83,6 +84,7 @@ resources
     type == 'microsoft.compute/virtualmachines', tostring(properties.extended.instanceView.powerState.displayStatus),
     type == 'microsoft.compute/virtualmachinescalesets', tostring(properties.provisioningState),
     type == 'microsoft.web/sites', tostring(properties.state),
+    type == 'microsoft.web/serverfarms', tostring(properties.status),
     type == 'microsoft.containerservice/managedclusters', tostring(properties.provisioningState),
     type == 'microsoft.sql/servers/databases', tostring(properties.status),
     type == 'microsoft.documentdb/databaseaccounts', tostring(properties.provisioningState),
@@ -104,6 +106,7 @@ resources
     type == 'microsoft.compute/virtualmachines', tostring(properties.hardwareProfile.vmSize),
     type == 'microsoft.compute/virtualmachinescalesets', tostring(sku.name),
     type == 'microsoft.web/sites', tostring(properties.sku),
+    type == 'microsoft.web/serverfarms', tostring(sku.tier),
     type == 'microsoft.containerservice/managedclusters', tostring(properties.agentPoolProfiles[0].vmSize),
     type == 'microsoft.sql/servers/databases', tostring(sku.tier),
     type == 'microsoft.documentdb/databaseaccounts', tostring(properties.databaseAccountOfferType),
@@ -127,7 +130,8 @@ resources
     (type == 'microsoft.compute/virtualmachinescalesets'), coalesce(tostring(array_length(parse_json(zones))), 'Not Configured'),
     (type == 'microsoft.containerservice/managedclusters' and AvZones <> ""), AvZones,
     (type == 'microsoft.containerservice/managedclusters' and isempty(AvZones)), "Not Configured",
-    (type == 'microsoft.web/sites'), "Not Applicable",
+    (type == 'microsoft.web/sites'), "ASP AZ config",
+    (type == 'microsoft.web/serverfarms'), iff(properties.zoneRedundant == 'true', 'Configured', 'Not Configured'),
     (type == 'microsoft.sql/servers/databases' and sku.tier <> 'DataWarehouse'), iif(isempty(properties.zoneRedundant) or properties.zoneRedundant == "false", 'Not Configured', 'Configured'),
     (type == 'microsoft.sql/servers/databases' and sku.tier == 'DataWarehouse'), "Not Applicable",
     (type == 'microsoft.documentdb/databaseaccounts'), iif(properties.locations[0].isZoneRedundant == "false", 'Not Configured', 'Configured'), 
@@ -159,6 +163,7 @@ resources
     type == 'microsoft.compute/virtualmachinescalesets' and avZones in ('1', '2', '3'), "Not Applicable",
     type == 'microsoft.compute/virtualmachinescalesets', 'A regional (non-zonal) scale set uses placement groups, which act as an implicit availability set with five fault domains and five update domains.',
     type == 'microsoft.web/sites', 'Not Applicable',
+    type == 'microsoft.web/serverfarms', 'Not Applicable',
     type == 'microsoft.containerservice/managedclusters', case(
     AvSets == 'Scale Sets' and avZones in ('1', '2', '3'), "Not Applicable",
     AvSets == 'Scale Sets', "A regional (non-zonal) scale set uses placement groups, which act as an implicit availability set with five fault domains and five update domains.",
@@ -183,7 +188,8 @@ resources
 | extend Capacity = case(
     type == 'microsoft.compute/virtualmachines', "Not Applicable",
     type == 'microsoft.compute/virtualmachinescalesets', tostring(sku.capacity),
-    type == 'microsoft.web/sites', "Not Applicable",
+    type == 'microsoft.web/sites', "ASP Config",
+    type == 'microsoft.web/serverfarms', tostring(sku.capacity),
     type == 'microsoft.containerservice/managedclusters', iif(isnotempty(AksMinimumNodePoolCount), tostring(AksMinimumNodePoolCount), "0"), // AKS with or without VMSS
     type == 'microsoft.sql/servers/databases', tostring(sku.capacity),
     type == 'microsoft.documentdb/databaseaccounts', 'Not Applicable',
@@ -205,6 +211,7 @@ resources
     type == 'microsoft.compute/virtualmachines', "Not Applicable",
     type == 'microsoft.compute/virtualmachinescalesets', iif(isnotempty(properties.platformFaultDomainCount), properties.platformFaultDomainCount, "0"),  // 1 - AZ, 5 - Regional VMSS
     type == 'microsoft.web/sites', "Not Applicable",
+    type == 'microsoft.web/serverfarms', 'Not Applicable',
     type == 'microsoft.containerservice/managedclusters', iif(isnotempty(tostring(FaultDomainCount)), tostring(FaultDomainCount), "0"),
     type == 'microsoft.sql/servers/databases', "Not Applicable",
     type == 'microsoft.documentdb/databaseaccounts', 'Not Applicable',
@@ -226,6 +233,7 @@ resources
     type == 'microsoft.compute/virtualmachines', iif(properties.storageProfile.osDisk.diffDiskSettings.option == "Local", "Ephemeral", properties.storageProfile.osDisk.managedDisk.storageAccountType),
     type == 'microsoft.compute/virtualmachinescalesets', iif(properties.virtualMachineProfile.storageProfile.osDisk.diffDiskSettings.option == "Local", "Ephemeral", properties.virtualMachineProfile.storageProfile.osDisk.managedDisk.storageAccountType),
     type == 'microsoft.web/sites', 'Not Applicable',
+    type == 'microsoft.web/serverfarms', 'Not Applicable',
     type == 'microsoft.containerservice/managedclusters', AksNodePoolStorageAccountType,
     type == 'microsoft.sql/servers/databases', properties.storageAccountType,
     type == 'microsoft.documentdb/databaseaccounts', 'Not Applicable',
@@ -249,7 +257,7 @@ resources
     isempty(osDisk) and (type == 'microsoft.compute/virtualmachines') and isnotempty(properties.storageProfile.osDisk.vhd.uri), 'Unmanaged',
     "Unknown")
 | extend ReadReplica = case (
-    type in ('microsoft.compute/virtualmachines', 'microsoft.compute/virtualmachinescalesets', 'microsoft.web/sites', 'microsoft.containerservice/managedclusters'), "Not Applicable",
+    type in ('microsoft.compute/virtualmachines', 'microsoft.compute/virtualmachinescalesets', 'microsoft.web/sites', 'microsoft.web/serverfarms', 'microsoft.containerservice/managedclusters'), "Not Applicable",
     (type == 'microsoft.sql/servers/databases' and sku.tier <> 'DataWarehouse'), tostring(properties.readReplicaCount), // SQL DB
     (type == 'microsoft.sql/servers/databases' and sku.tier == 'DataWarehouse'), "Not Applicable", // Synapse
     type == 'microsoft.documentdb/databaseaccounts', tostring(array_length(parse_json(properties.readLocations))),
@@ -268,7 +276,7 @@ resources
     "Undefined"
     )
 | extend AutomaticFailover = case(
-    type in ('microsoft.compute/virtualmachines', 'microsoft.compute/virtualmachinescalesets', 'microsoft.web/sites', 'microsoft.containerservice/managedclusters', 'microsoft.sql/servers/databases'), "Not Applicable",
+    type in ('microsoft.compute/virtualmachines', 'microsoft.compute/virtualmachinescalesets', 'microsoft.web/sites', 'microsoft.web/serverfarms', 'microsoft.containerservice/managedclusters', 'microsoft.sql/servers/databases'), "Not Applicable",
     (type == 'microsoft.documentdb/databaseaccounts' and properties.enableAutomaticFailover == "false" and properties.enableMultipleWriteLocations == "false" and toint(ReadReplica) > 1), "Not Configured",
     (type == 'microsoft.documentdb/databaseaccounts' and properties.enableAutomaticFailover == "true"), "Configured",
     (type == 'microsoft.documentdb/databaseaccounts'), "Not Applicable",
@@ -287,7 +295,7 @@ resources
     "Undefined"
     )
 | extend MultipleWriteLocations = case(
-    type in ('microsoft.compute/virtualmachines', 'microsoft.compute/virtualmachinescalesets', 'microsoft.web/sites', 'microsoft.containerservice/managedclusters', 'microsoft.sql/servers/databases', 'microsoft.dbformysql/servers', 'microsoft.dbformysql/flexibleservers'), "Not Applicable",
+    type in ('microsoft.compute/virtualmachines', 'microsoft.compute/virtualmachinescalesets', 'microsoft.web/sites', 'microsoft.web/serverfarms', 'microsoft.containerservice/managedclusters', 'microsoft.sql/servers/databases', 'microsoft.dbformysql/servers', 'microsoft.dbformysql/flexibleservers'), "Not Applicable",
     (type == 'microsoft.documentdb/databaseaccounts' and properties.enableMultipleWriteLocations == "false"), "Not Enabled",
     (type == 'microsoft.documentdb/databaseaccounts' and properties.enableMultipleWriteLocations == "true"), "Enabled",
     (type == "microsoft.apimanagement/service"), "Not Applicable",
@@ -299,11 +307,11 @@ resources
     (type == "microsoft.network/loadbalancers"), "Not Applicable",
     (type contains "publicip"), "Not Applicable",
     (type == "microsoft.network/virtualnetworkgateways"), "Not Applicable",
-    type == "microsoft.recoveryservices/vaults", "Not Applicable",
+    (type == "microsoft.recoveryservices/vaults"), "Not Applicable",
     "Undefined"
     )
 | extend StorageAutogrow = case(
-    type in ('microsoft.compute/virtualmachines', 'microsoft.compute/virtualmachinescalesets', 'microsoft.web/sites', 'microsoft.containerservice/managedclusters', 'microsoft.sql/servers/databases', 'microsoft.documentdb/databaseaccounts'), "Not Applicable",
+    type in ('microsoft.compute/virtualmachines', 'microsoft.compute/virtualmachinescalesets', 'microsoft.web/sites', 'microsoft.web/serverfarms', 'microsoft.containerservice/managedclusters', 'microsoft.sql/servers/databases', 'microsoft.documentdb/databaseaccounts'), "Not Applicable",
     (type == 'microsoft.dbformysql/servers'), tostring(properties.storageProfile.storageAutogrow),
     (type == 'microsoft.dbformysql/flexibleservers'), "Not Applicable",
     (type == "microsoft.apimanagement/service"), "Not Applicable",
@@ -315,11 +323,11 @@ resources
     (type == "microsoft.network/loadbalancers"), "Not Applicable",
     (type contains "publicip"), "Not Applicable",
     (type == "microsoft.network/virtualnetworkgateways"), "Not Applicable",
-    type == "microsoft.recoveryservices/vaults", "Not Applicable",
+    (type == "microsoft.recoveryservices/vaults"), "Not Applicable",
     "Undefined"
     )
 | extend ReplicationRole = case(
-    type in ('microsoft.compute/virtualmachines', 'microsoft.compute/virtualmachinescalesets', 'microsoft.web/sites', 'microsoft.containerservice/managedclusters', 'microsoft.documentdb/databaseaccounts'), "Not Applicable",
+    type in ('microsoft.compute/virtualmachines', 'microsoft.compute/virtualmachinescalesets', 'microsoft.web/sites', 'microsoft.web/serverfarms', 'microsoft.containerservice/managedclusters', 'microsoft.documentdb/databaseaccounts'), "Not Applicable",
     (type == 'microsoft.sql/servers/databases' and sku.tier <> 'DataWarehouse'), iif(isnotempty(properties.secondaryType), "replica", "master"),
     (type == 'microsoft.sql/servers/databases' and sku.tier == 'DataWarehouse'), "Not Applicable",
     (type == 'microsoft.dbformysql/servers'), tostring(properties.replicationRole),
