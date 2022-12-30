@@ -8610,7 +8610,7 @@
                         ]
                       }
                     },
-                    "name": "kql_compute_appservice_funcapp_resources_details"
+                    "name": "kql_webapp_appservice_funcapp_resources_details"
                   }
                 ]
               },

@@ -22,7 +22,6 @@ locals {
 
     "kql_compute_vm_resources_details"                 = jsonencode(local.kql_compute_vm_resources_details)
     "kql_compute_vmss_resources_details"               = jsonencode(local.kql_compute_vmss_resources_details)
-    "kql_compute_appservice_funcapp_resources_details" = jsonencode(local.kql_compute_appservice_funcapp_resources_details)
 
     "kql_container_aks_resources_details" = jsonencode(local.kql_container_aks_resources_details)
 
@@ -34,17 +33,18 @@ locals {
 
     "kql_integration_apim_resources_details" = jsonencode(local.kql_integration_apim_resources_details)
 
-    "kql_networking_azfw_resources_details"  = jsonencode(local.kql_networking_azfw_resources_details)
-    "kql_networking_afd_resources_details"   = jsonencode(local.kql_networking_afd_resources_details)
-    "kql_networking_appgw_resources_details" = jsonencode(local.kql_networking_appgw_resources_details)
-    "kql_networking_lb_resources_details"    = jsonencode(local.kql_networking_lb_resources_details)
+    "kql_networking_azfw_resources_details"   = jsonencode(local.kql_networking_azfw_resources_details)
+    "kql_networking_afd_resources_details"    = jsonencode(local.kql_networking_afd_resources_details)
+    "kql_networking_appgw_resources_details"  = jsonencode(local.kql_networking_appgw_resources_details)
+    "kql_networking_lb_resources_details"     = jsonencode(local.kql_networking_lb_resources_details)
     "kql_networking_pip_resources_details"    = jsonencode(local.kql_networking_pip_resources_details)
-    "kql_networking_vnetgw_resources_details"    = jsonencode(local.kql_networking_vnetgw_resources_details)
+    "kql_networking_vnetgw_resources_details" = jsonencode(local.kql_networking_vnetgw_resources_details)
 
     "kql_storage_account_resources_details" = jsonencode(local.kql_storage_account_resources_details)
 
-    "kql_webapp_appsvc_resources_details" = jsonencode(local.kql_webapp_appsvc_resources_details)
-    "kql_webapp_appsvcplan_resources_details" = jsonencode(local.kql_webapp_appsvcplan_resources_details)
+    "kql_webapp_appsvc_resources_details"             = jsonencode(local.kql_webapp_appsvc_resources_details)
+    "kql_webapp_appsvcplan_resources_details"         = jsonencode(local.kql_webapp_appsvcplan_resources_details)
+    "kql_webapp_appservice_funcapp_resources_details" = jsonencode(local.kql_webapp_appservice_funcapp_resources_details)
 
     "kql_export_summary_by_resourceType_environment" = jsonencode(local.kql_export_summary_by_resourceType_environment)
     "kql_export_summary_by_resource_environment"     = jsonencode(local.kql_export_summary_by_resource_environment)
@@ -109,12 +109,6 @@ locals {
   //-------------------------------------------
   // Compute tab
   //-------------------------------------------
-  kql_compute_appservice_funcapp_resources_details = templatefile(
-    "${path.module}/template_kql/compute/compute_appservice_funcapp_resources_details.kql",
-    {
-      "extend_resource" = local.kql_extend_resource
-    }
-  )
   kql_compute_vm_resources_details = templatefile(
     "${path.module}/template_kql/compute/compute_vm_resources_details.kql",
     {
@@ -243,6 +237,12 @@ locals {
   )
   kql_webapp_appsvcplan_resources_details = templatefile(
     "${path.module}/template_kql/webapp/webapp_appsvcplan_resources_details.kql",
+    {
+      "extend_resource" = local.kql_extend_resource
+    }
+  )
+  kql_webapp_appservice_funcapp_resources_details = templatefile(
+    "${path.module}/template_kql/webapp/webapp_appservice_funcapp_resources_details.kql",
     {
       "extend_resource" = local.kql_extend_resource
     }
