@@ -31,6 +31,7 @@ locals {
     "kql_database_cosmosdb_resources_details"      = jsonencode(local.kql_database_cosmosdb_resources_details)
     "kql_database_mysqlsingle_resources_details"   = jsonencode(local.kql_database_mysqlsingle_resources_details)
     "kql_database_mysqlflexible_resources_details" = jsonencode(local.kql_database_mysqlflexible_resources_details)
+    "kql_database_redis_resources_details"         = jsonencode(local.kql_database_redis_resources_details)
 
     "kql_integration_apim_resources_details" = jsonencode(local.kql_integration_apim_resources_details)
 
@@ -168,6 +169,12 @@ locals {
   )
   kql_database_mysqlflexible_resources_details = templatefile(
     "${path.module}/template_kql/database/database_mysqlflexible_resources_details.kql",
+    {
+      "extend_resource" = local.kql_extend_resource
+    }
+  )
+  kql_database_redis_resources_details = templatefile(
+    "${path.module}/template_kql/database/database_redis_resources_details.kql",
     {
       "extend_resource" = local.kql_extend_resource
     }

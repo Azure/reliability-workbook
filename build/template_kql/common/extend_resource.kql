@@ -35,6 +35,7 @@ resources
     (type == 'microsoft.documentdb/databaseaccounts') or 
     (type == 'microsoft.dbformysql/servers') or 
     (type == 'microsoft.dbformysql/flexibleservers') or 
+    (type == 'microsoft.cache/redis') or
     (type == "microsoft.apimanagement/service") or 
     (type == "microsoft.storage/storageaccounts" or type == "microsoft.classicstorage/storageaccounts") or 
     (type == "microsoft.network/azurefirewalls") or 
@@ -92,6 +93,7 @@ resources
     type == 'microsoft.documentdb/databaseaccounts', tostring(properties.provisioningState),
     type == 'microsoft.dbformysql/servers', tostring(properties.userVisibleState),
     type == 'microsoft.dbformysql/flexibleservers', tostring(properties.state),
+    type == 'microsoft.cache/redis', tostring(properties.provisioningState),
     type == "microsoft.apimanagement/service", tostring(properties.provisioningState),
     type contains "storageaccounts", tostring(properties.provisioningState),
     type == "microsoft.network/azurefirewalls", tostring(properties.provisioningState),
@@ -115,6 +117,7 @@ resources
     type == 'microsoft.documentdb/databaseaccounts', tostring(properties.databaseAccountOfferType),
     type == 'microsoft.dbformysql/servers', tostring(sku.tier),
     type == 'microsoft.dbformysql/flexibleservers', tostring(sku.tier),
+    type == 'microsoft.cache/redis', tostring(properties.sku.name),
     type == "microsoft.apimanagement/service", tostring(sku.name),
     type contains 'storageaccounts', tostring(replace('-', '_', tostring(iff(type =~ "microsoft.storage/storageaccounts", sku.name, properties.accountType)))),
     type == "microsoft.network/azurefirewalls", tostring(properties.sku.name),
@@ -141,6 +144,7 @@ resources
     (type == 'microsoft.documentdb/databaseaccounts'), iif(properties.locations[0].isZoneRedundant == "false", 'Not Configured', 'Configured'), 
     (type == 'microsoft.dbformysql/servers'), "Not Applicable",
     (type == 'microsoft.dbformysql/flexibleservers'), iif(properties.haEnabled == "Enabled", 'Configured', 'Not Configured'),
+    (type == 'microsoft.cache/redis'), coalesce(tostring(array_length(parse_json(zones))), 'Not Configured'),
     (type == "microsoft.apimanagement/service"), coalesce(tostring(array_length(parse_json(zones))), 'Not Configured'),
     (type contains 'storageaccounts'), case(split(skuName, '_', 1)[0] contains "zrs", "Configured", "Not Configured"),
     (type == "microsoft.network/azurefirewalls"), iif(isnotnull(zones), "Configured", "Not Configured"),
@@ -178,6 +182,7 @@ resources
     type == 'microsoft.documentdb/databaseaccounts', 'Not Applicable',
     type == 'microsoft.dbformysql/servers', "Not Applicable",
     type == 'microsoft.dbformysql/flexibleservers', "Not Applicable",
+    type == 'microsoft.cache/redis', "Not Applicable",
     type == "microsoft.apimanagement/service", "Not Applicable",
     type contains "storageaccounts", "Not Applicable",
     type == "microsoft.network/azurefirewalls", "Not Applicable",
@@ -201,6 +206,7 @@ resources
     type == 'microsoft.documentdb/databaseaccounts', 'Not Applicable',
     type == 'microsoft.dbformysql/servers', tostring(sku.capacity),
     type == 'microsoft.dbformysql/flexibleservers', tostring(sku.capacity),
+    type == 'microsoft.cache/redis', tostring(properties.sku.capacity),
     type == "microsoft.apimanagement/service", tostring(sku.capacity),
     type contains "storageaccounts", "Not Applicable", 
     type == "microsoft.network/azurefirewalls", "Not Applicable",
@@ -224,6 +230,7 @@ resources
     type == 'microsoft.documentdb/databaseaccounts', 'Not Applicable',
     type == 'microsoft.dbformysql/servers', 'Not Applicable',
     type == 'microsoft.dbformysql/flexibleservers', 'Not Applicable',
+    type == 'microsoft.cache/redis', 'Not Applicable',
     type == "microsoft.apimanagement/service", "Not Applicable",
     type contains "storageaccounts", "Not Applicable",
     type == "microsoft.network/azurefirewalls", "Not Applicable",
@@ -247,6 +254,7 @@ resources
     type == 'microsoft.documentdb/databaseaccounts', 'Not Applicable',
     type == 'microsoft.dbformysql/servers', 'Not Applicable',
     type == 'microsoft.dbformysql/flexibleservers', 'Not Applicable',
+    type == 'microsoft.cache/redis', 'Not Applicable',
     type == "microsoft.apimanagement/service", tostring(properties.platformVersion), //Field Override
     type contains "storageaccounts", tostring(split(skuName, '_', 0)[0]),
     type == "microsoft.network/azurefirewalls", "Not Applicable",
@@ -271,6 +279,7 @@ resources
     type == 'microsoft.documentdb/databaseaccounts', tostring(array_length(parse_json(properties.readLocations))),
     type == 'microsoft.dbformysql/servers', "Not Applicable",
     type == 'microsoft.dbformysql/flexibleservers', "Not Applicable",
+    type == 'microsoft.cache/redis', 'Not Applicable',
     type == "microsoft.apimanagement/service", tostring(properties.additionalLocations),
     type contains "storageaccounts", case(
         location in~ ('qatarcentral'), 'Not Applicable',
@@ -294,6 +303,7 @@ resources
     (type == 'microsoft.documentdb/databaseaccounts'), "Not Applicable",
     type == 'microsoft.dbformysql/servers', "Not Applicable",
     type == 'microsoft.dbformysql/flexibleservers', case(properties.haEnabled == "Enabled", "Configured", "Not Applicable"),
+    type == 'microsoft.cache/redis', 'Not Applicable',
     type == "microsoft.apimanagement/service", "Not Applicable",
     type contains "storageaccounts", "Not Applicable",
     type == "microsoft.network/azurefirewalls", "Not Applicable",
@@ -310,6 +320,7 @@ resources
     type in ('microsoft.compute/virtualmachines', 'microsoft.classiccompute/virtualmachines', 'microsoft.compute/virtualmachinescalesets', 'microsoft.web/sites', 'microsoft.web/serverfarms', 'microsoft.containerservice/managedclusters', 'microsoft.sql/servers/databases', 'microsoft.dbformysql/servers', 'microsoft.dbformysql/flexibleservers'), "Not Applicable",
     (type == 'microsoft.documentdb/databaseaccounts' and properties.enableMultipleWriteLocations == "false"), "Not Enabled",
     (type == 'microsoft.documentdb/databaseaccounts' and properties.enableMultipleWriteLocations == "true"), "Enabled",
+    (type == 'microsoft.cache/redis'), 'Not Applicable',
     (type == "microsoft.apimanagement/service"), "Not Applicable",
     (type contains "storageaccounts"), "Not Applicable",
     (type == "microsoft.network/azurefirewalls"), "Not Applicable",
@@ -326,6 +337,7 @@ resources
     type in ('microsoft.compute/virtualmachines', 'microsoft.classiccompute/virtualmachines', 'microsoft.compute/virtualmachinescalesets', 'microsoft.web/sites', 'microsoft.web/serverfarms', 'microsoft.containerservice/managedclusters', 'microsoft.sql/servers/databases', 'microsoft.documentdb/databaseaccounts'), "Not Applicable",
     (type == 'microsoft.dbformysql/servers'), tostring(properties.storageProfile.storageAutogrow),
     (type == 'microsoft.dbformysql/flexibleservers'), "Not Applicable",
+    (type == 'microsoft.cache/redis'), 'Not Applicable',
     (type == "microsoft.apimanagement/service"), "Not Applicable",
     (type contains "storageaccounts"), "Not Applicable",
     (type == "microsoft.network/azurefirewalls"), "Not Applicable",
@@ -344,6 +356,7 @@ resources
     (type == 'microsoft.sql/servers/databases' and sku.tier == 'DataWarehouse'), "Not Applicable",
     (type == 'microsoft.dbformysql/servers'), tostring(properties.replicationRole),
     (type == 'microsoft.dbformysql/flexibleservers'), iif(properties.haEnabled == "Enabled", 'Not Applicable', tostring(properties.replicationRole)),
+    (type == 'microsoft.cache/redis'), 'Not Applicable',
     (type == "microsoft.apimanagement/service"), "Not Applicable",
     (type contains "storageaccounts"), tostring(split(skuName, '_', 1)[0]),
     (type == "microsoft.network/azurefirewalls"), "Not Applicable",

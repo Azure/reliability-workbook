@@ -5,6 +5,8 @@ summarize
     SharedSkuCount=dcountif(ResourceId, SkuName contains "shared"),
     FreeSkuCount=dcountif(ResourceId, SkuName contains "free"),
     BasicSkuCount=dcountif(ResourceId, SkuName contains "basic"), 
+    PremiumSkuCount=dcountif(ResourceId, SkuName contains "premium"), 
+    EnterpriseSkuCount=dcountif(ResourceId, SkuName contains "enterprise"), 
     SqlPremiumOrBusinessCriticalOrDwh=dcountif(ResourceId, Type == 'microsoft.sql/servers/databases' and (SkuName contains "premium" or SkuName contains "businesscritical" or SkuName contains "datawarehouse")), 
     VMDeallocatedStateCount=dcountif(ResourceId, State contains "vm deallocated"),
     NoAvZoneCount=dcountif(ResourceId, (AvailabilityZone contains "not configured")),
