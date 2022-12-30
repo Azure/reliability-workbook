@@ -20,7 +20,7 @@ extend ReliabilityScore = case(
     // APIM - 5 checks // score = ("Tier" + state + "capacity" + AZ + stv2platform) * 100 / (5 * ResourceTotal) 
     Type == 'microsoft.apimanagement/service', (OtherSku + SucceededStateCount + Gt1CapacityCount + AvZoneCount + Stv2ApimCount) * 100 / (5 * ResourceTotal),
     // Storage - 2 checks // score = ( "kind" + "replication type") * 100 / (2 * ResourceTotal)    //********* Future - "access tier hot"
-    Type == 'microsoft.storage/storageaccounts' or Type == 'microsoft.classicstorage/storageaccounts', (V2StorageEnabled + RAStorageEnabled) * 100 / (2 * ResourceTotal),
+    Type == 'microsoft.storage/storageaccounts' or Type == 'microsoft.classicstorage/storageaccounts', (V2StorageEnabled + RAStorageEnabled + NARAStorageEnabled) * 100 / (2 * ResourceTotal),
     // AzureFirewall - 1 check // score = (State + AZ) * 100 / (2 * ResourceTotal)
     Type == 'microsoft.network/azurefirewalls', (AzFWSucceededStateCount + AvZoneCount + NAAvZoneCount)* 100 / (2 * ResourceTotal),
     // AFD and CDN - 1 check // score = state  * 100 / (1 * ResourceTotal)

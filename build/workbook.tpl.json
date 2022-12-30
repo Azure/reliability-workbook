@@ -7723,7 +7723,36 @@
                   },
                   {
                     "columnMatch": "ReadReplica",
-                    "formatter": 5
+                    "formatter": 18,
+                    "formatOptions": {
+                      "thresholdsOptions": "icons",
+                      "thresholdsGrid": [
+                        {
+                          "operator": "==",
+                          "thresholdValue": "configured",
+                          "representation": "success",
+                          "text": "{0}{1}"
+                        },
+                        {
+                          "operator": "==",
+                          "thresholdValue": "not configured",
+                          "representation": "2",
+                          "text": "{0}{1}"
+                        },
+                        {
+                          "operator": "==",
+                          "thresholdValue": "not applicable",
+                          "representation": "more",
+                          "text": "{0}{1}"
+                        },
+                        {
+                          "operator": "Default",
+                          "thresholdValue": null,
+                          "representation": "unknown",
+                          "text": "{0}{1}"
+                        }
+                      ]
+                    }
                   },
                   {
                     "columnMatch": "AutomaticFailover",
@@ -7736,27 +7765,6 @@
                   {
                     "columnMatch": "StorageAutogrow",
                     "formatter": 5
-                  },
-                  {
-                    "columnMatch": "ReplicationRole",
-                    "formatter": 18,
-                    "formatOptions": {
-                      "thresholdsOptions": "icons",
-                      "thresholdsGrid": [
-                        {
-                          "operator": "startsWith",
-                          "thresholdValue": "ra",
-                          "representation": "success",
-                          "text": "{0}{1}"
-                        },
-                        {
-                          "operator": "Default",
-                          "thresholdValue": null,
-                          "representation": "warning",
-                          "text": "{0}{1}"
-                        }
-                      ]
-                    }
                   },
                   {
                     "columnMatch": "Backup",
@@ -7914,6 +7922,14 @@
                   {
                     "columnId": "ResourceGroup",
                     "label": "Resource Group"
+                  },
+                  {
+                    "columnId": "ReadReplica",
+                    "label": "Read Replication"
+                  },
+                  {
+                    "columnId": "ReplicationRole",
+                    "label": "Replication Type"
                   }
                 ]
               }
