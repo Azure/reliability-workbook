@@ -1,10 +1,14 @@
 extend ReliabilityScore = case(
     // VM - 4 checks // score = ("AZ + AS + Disk + Backup") * 100 / (3 * ResourceTotal) // AZ or AS is mutually exclusive, so VM should have either one
     Type == 'microsoft.compute/virtualmachines', (AvZoneCount + AvSetCount + PremorUltOSDiskCount + HealthyBackupCount) * 100 / (3 * ResourceTotal), 
+    // Classic VM // score = 0 / ResourceTotal
+    Type == 'microsoft.classiccompute/virtualmachines', 0,
     // VMSS - 3 checks  // score = (Capacity + Fault Domains + managed disk type) * 100 / (3 * ResourceTotal) //********* Future - Overprovision, Fault Domain State
     Type == 'microsoft.compute/virtualmachinescalesets', (Gt1CapacityCount + Gt0FaultDomainCount + PremorUltOSDiskCount) * 100 / (3 * ResourceTotal),
     // AppService & Function App - 2 checks // score = ("non dev/shared/free/ basic sku" + AppServiceRunningState) * 100 / (2 * ResourceTotal)
     Type == 'microsoft.web/sites', (OtherSku + RunningState) * 100 / (2 * ResourceTotal),
+    // AppService Plan - 4 checks // score = ("non dev/shared/free/dynamic/basic sku" + AspReadyState + AZ + capacity) * 100 / (4 * ResourceTotal)
+    Type == 'microsoft.web/serverfarms', (OtherSku + RunningState + AvZoneCount + NAAvZoneCount + Gt1CapacityCount) * 100 / (4 * ResourceTotal),
     // AKS - 4 checks // score = ("AZ" + "AS" + "Capacity" + "Disk") * 100 / (4 * ResourceTotal)  //********* Future - LB SKU // AZ or AS is mutually exclusive, so VM should have either one
     Type == 'microsoft.containerservice/managedclusters', (AvZoneCount + AvSetCount + Gt1CapacityCount + PremorUltOSDiskCount) * 100 / (3 * ResourceTotal),
     // SQLDB - 4 checks  // score = ("status" + "tier" + "storage acct. type"  + "AZ")* 100 / (5 * ResourceTotal)  //********* Future - "read replica count"
@@ -15,18 +19,26 @@ extend ReliabilityScore = case(
     Type == 'microsoft.dbformysql/servers', (DBOnlineStateCount + OtherSku + HealthyBackupCount + EnabledStorageAutogrow + ReplicationEnabled) * 100 / (5 * ResourceTotal),
     // MySQL Flexible - 4 checks  // score = ("status" + "sku"  + "replication" + "HaEnabled") * 100 / (4 * ResourceTotal)    // included NA items to show compliance  //********* Future - "read replica", "automatic failover", "backup"
     Type == 'microsoft.dbformysql/flexibleservers', (DBOnlineStateCount + OtherSku + ReplicationEnabled + NAReplicationEnabled + AvZoneCount + NAAvZoneCount) * 100 / (4 * ResourceTotal),
-    // APIM - 2 checks // score = ("Tier" + "capacity") * 100 / (2 * ResourceTotal) 
-    Type == 'microsoft.apimanagement/service', (OtherSku + Gt1CapacityCount) * 100 / (2 * ResourceTotal),
+    // Redis - 4 checks // score = (state + sku + AZ + capacity) * 100 / (4 * ResourceTotal)
+    Type == 'microsoft.cache/redis', (SucceededStateCount + PremiumSkuCount + EnterpriseSkuCount + AvZoneCount + NAAvZoneCount + Gt1CapacityCount) * 100 / (4 * ResourceTotal),
+    // APIM - 5 checks // score = ("Tier" + state + "capacity" + AZ + stv2platform) * 100 / (5 * ResourceTotal) 
+    Type == 'microsoft.apimanagement/service', (OtherSku + SucceededStateCount + Gt1CapacityCount + AvZoneCount + Stv2ApimCount) * 100 / (5 * ResourceTotal),
     // Storage - 2 checks // score = ( "kind" + "replication type") * 100 / (2 * ResourceTotal)    //********* Future - "access tier hot"
-    Type == 'microsoft.storage/storageaccounts' or Type == 'microsoft.classicstorage/storageaccounts', (V2StorageEnabled + RAStorageEnabled) * 100 / (2 * ResourceTotal),
+    Type == 'microsoft.storage/storageaccounts' or Type == 'microsoft.classicstorage/storageaccounts', (V2StorageEnabled + RAStorageEnabled + NARAStorageEnabled) * 100 / (2 * ResourceTotal),
     // AzureFirewall - 1 check // score = (State + AZ) * 100 / (2 * ResourceTotal)
     Type == 'microsoft.network/azurefirewalls', (AzFWSucceededStateCount + AvZoneCount + NAAvZoneCount)* 100 / (2 * ResourceTotal),
     // AFD and CDN - 1 check // score = state  * 100 / (1 * ResourceTotal)
     Type == 'microsoft.cdn/profiles' or Type == 'microsoft.network/frontdoors', (CDNEnabledStateCount + AFDEnabledStateCount) * 100 / ResourceTotal,
     // AppGW - 5 checks    // score = (state + AZ + Tier + autoscaling + capacity) * 100 / (5 * ResourceTotal)
     Type == 'microsoft.network/applicationgateways', (RunningState + AvZoneCount + NAAvZoneCount + OtherAppGwSkuCount + AutoScaleAppGwCount + Gt1CapacityCount) * 100 / (5 * ResourceTotal),
-    // LB - 2 checks  // score = (SKU + AZ) * 100 / (2 * ResourceTotal)
-    Type == 'microsoft.network/loadbalancers', (OtherSku + AvZoneCount + NAAvZoneCount) * 100 / (2 * ResourceTotal),
+    // LB - 3 checks  // score = (SKU + state + AZ) * 100 / (3 * ResourceTotal)
+    Type == 'microsoft.network/loadbalancers', (OtherSku + SucceededStateCount + AvZoneCount + NAAvZoneCount) * 100 / (3 * ResourceTotal),
+    // Public IP - 3 checks // score = (SKU + state + AZ) * 100 / (3 * ResourceTotal)
+    Type == 'microsoft.network/publicipaddresses', (OtherSku + SucceededStateCount + AvZoneCount + NAAvZoneCount) * 100 / (3 * ResourceTotal),
+    // Public IP Prefix - 3 checks // score = (SKU + state + AZ) * 100 / (3 * ResourceTotal)
+    Type == 'microsoft.network/publicipprefixes', (OtherSku + SucceededStateCount + AvZoneCount + NAAvZoneCount) * 100 / (3 * ResourceTotal),
+    // VNET Gateway - 6 checks // score = (SKU + state + capacity + vpntype + generation + active-active) * 100 / (6 * ResourceTotal)
+    Type == 'microsoft.network/virtualnetworkgateways', (AzVnetGwSkuCount + SucceededStateCount + Gt1CapacityCount + NACapacityCount + RouteVnetGwVpnTypeCount + Gen2VnetGwCount + NAGen2VnetGwCount + ActiveActiveVnetGwCount + NAActiveActiveVnetGwCount) * 100 / (6 * ResourceTotal),
     // ASR - 1 check  // score = status * 100 / (1 * ResourceTotal)
     Type == 'microsoft.recoveryservices/vaults', (AsrSucceededState) * 100 / (1 * ResourceTotal),
     0)
