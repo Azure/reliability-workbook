@@ -374,7 +374,7 @@ resources
     SkuName = tolower(skuName),
     Kind = tolower(kind),
     SubscriptionId = subscriptionId,
-    Name = tolower(name),
+    Name = tolower(tostring(id)),
     State = tolower(state),
     Location = tolower(location),
     ResourceGroup = resourceGroup,
@@ -390,15 +390,14 @@ resources
     StorageAutogrow = tolower(StorageAutogrow),
     ReplicationRole = tolower(ReplicationRole),
     Environment = environment,
-    ResourceId = tolower(tostring(id)),
     properties
 | join kind = leftouter (
     securityresources
     | where properties.displayName contains "Azure Backup should"
     | extend Backup = tostring(properties.status.code)
-    | project ResourceId = tolower(tostring(properties.resourceDetails.Id)), Backup
+    | project Name = tolower(tostring(properties.resourceDetails.Id)), Backup
     )
-    on ResourceId
+    on Name
 | extend Backup = case(
     Backup == "Healthy" or Backup == "Unhealthy", Backup,
     "Unknown")
