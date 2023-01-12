@@ -303,7 +303,7 @@
             "type": 3,
             "content": {
               "version": "KqlItem/1.0",
-                "query": "advisorresources\r\n| extend Category = tostring(properties.category)\r\n| extend Description = tostring(properties.shortDescription.problem)\r\n| extend ImpactedField = tostring(properties.impactedField)\r\n| extend ImpactedValue = tostring(properties.resourceMetadata.resourceId)\r\n| extend Impact = tostring(properties.impact)\r\n| extend LastUpdated = tostring(properties.lastUpdated)\r\n| project Impact, ImpactedField, ImpactedValue, Description, resourceGroup, subscriptionId, Category, LastUpdated\r\n| where Category == \"HighAvailability\"\r\n| where resourceGroup in ({ResourceGroup})",
+              "query": ${kql_advisor_resource},
               "size": 3,
               "title": "Advisor - Reliability",
               "showExportToExcel": true,
@@ -518,7 +518,7 @@
                   "type": 3,
                   "content": {
                     "version": "KqlItem/1.0",
-                      "query": "advisorresources\r\n| extend Category = tostring(properties.category)\r\n| extend Description = tostring(properties.shortDescription.problem)\r\n| extend ImpactedField = tostring(properties.impactedField)\r\n| extend ImpactedValue = tostring(properties.resourceMetadata.resourceId)\r\n| extend Impact = tostring(properties.impact)\r\n| extend LastUpdated = tostring(properties.lastUpdated)\r\n| project ImpactedValue, resourceGroup, Category, Impact, ImpactedField, Description, LastUpdated\r\n| where Category == \"HighAvailability\" \r\n| where resourceGroup in ({ResourceGroup})\r\n| summarize count() by Description",
+                    "query": ${kql_summary_advisor_by_recommendation},
                     "size": 3,
                     "title": "By Recommendation",
                     "showExportToExcel": true,
@@ -539,7 +539,7 @@
                   "type": 3,
                   "content": {
                     "version": "KqlItem/1.0",
-                      "query": "advisorresources\r\n| extend Category = tostring(properties.category)\r\n| extend Description = tostring(properties.shortDescription.problem)\r\n| extend ImpactedField = tostring(properties.impactedField)\r\n| extend ImpactedValue = tostring(properties.resourceMetadata.resourceId)\r\n| extend Impact = tostring(properties.impact)\r\n| extend LastUpdated = tostring(properties.lastUpdated)\r\n| project ImpactedValue, resourceGroup, Category, Impact, ImpactedField, Description, LastUpdated\r\n| where Category == \"HighAvailability\" \r\n| where resourceGroup in ({ResourceGroup})\r\n| summarize count() by ImpactedField\r\n",
+                    "query": ${kql_summary_advisor_by_resourcetype},
                     "size": 3,
                     "title": "By Resource Type",
                     "showExportToExcel": true,
@@ -935,7 +935,7 @@
                   "type": 3,
                   "content": {
                     "version": "KqlItem/1.0",
-                      "query": "advisorresources\r\n| extend Category = tostring(properties.category)\r\n| extend Description = tostring(properties.shortDescription.problem)\r\n| extend ImpactedField = tostring(properties.impactedField)\r\n| extend ImpactedValue = tostring(properties.resourceMetadata.resourceId)\r\n| extend Impact = tostring(properties.impact)\r\n| extend LastUpdated = tostring(properties.lastUpdated)\r\n| project Impact, ImpactedField, ImpactedValue, Description, resourceGroup, subscriptionId, Category, LastUpdated\r\n| where Category == \"HighAvailability\"\r\n| where resourceGroup in ({ResourceGroup})",
+                    "query": ${kql_advisor_resource},
                     "size": 0,
                     "title": "Advisor Recommendations by Impact",
                     "showExportToExcel": true,

@@ -1,0 +1,10 @@
+advisorresources
+| extend Category = tostring(properties.category)
+| extend Description = tostring(properties.shortDescription.problem)
+| extend ImpactedField = tostring(properties.impactedField)
+| extend ImpactedValue = tostring(properties.resourceMetadata.resourceId)
+| extend Impact = tostring(properties.impact)
+| extend LastUpdated = tostring(properties.lastUpdated)
+| project Impact, ImpactedField, ImpactedValue, Description, resourceGroup, subscriptionId, Category, LastUpdated
+| where Category == "HighAvailability"
+| where resourceGroup in ({ResourceGroup})
