@@ -4483,7 +4483,7 @@
                     "version": "KqlItem/1.0",
                     "query": ${kql_database_synapse_resources_details},
                     "size": 3,
-                    "title": "Azure Synapse Analytics",
+                    "title": "Dedicated SQL pool (formerly SQL DW)",
                     "queryType": 1,
                     "resourceType": "microsoft.resourcegraph/resources",
                     "crossComponentResources": [
@@ -4493,9 +4493,9 @@
                       "formatters": [
                         {
                           "columnMatch": "$gen_group",
-                          "formatter": 15,
+                            "formatter": 13,
                           "formatOptions": {
-                            "linkTarget": null,
+                              "linkTarget": "Resource",
                             "showIcon": true
                           }
                         },
@@ -4538,6 +4538,10 @@
                           }
                         },
                         {
+                            "columnMatch": "Location",
+                            "formatter": 17
+                          },
+                          {
                           "columnMatch": "Zones",
                           "formatter": 5
                         },
