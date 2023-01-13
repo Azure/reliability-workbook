@@ -1063,7 +1063,7 @@
                   "id": "947f178c-58f8-43ac-ac0a-7eddf884c712",
                   "cellValue": "selectedTab",
                   "linkTarget": "parameter",
-                  "linkLabel": "VPN & ExpressRoute Gateway",
+                  "linkLabel": "VPN and ExpressRoute Gateway",
                   "subTarget": "VNETGW",
                   "style": "link"
                 }
@@ -1430,7 +1430,7 @@
                     "version": "KqlItem/1.0",
                     "query": ${kql_networking_pip_resources_details},
                     "size": 0,
-                    "title": "Public IP addresses & IP Prefixes",
+                    "title": "Public IP addresses and IP Prefixes",
                     "queryType": 1,
                     "resourceType": "microsoft.resourcegraph/resources",
                     "crossComponentResources": [
@@ -1659,7 +1659,7 @@
                         ]
                     }
                   },
-                  "name": "Public IP addresses & IP Prefixes"
+                  "name": "Public IP addresses and IP Prefixes"
                 }
               ]
             },
@@ -2492,7 +2492,7 @@
                     "version": "KqlItem/1.0",
                     "query": ${kql_networking_vnetgw_resources_details},
                     "size": 0,
-                    "title": "VPN & ExpressRoute Gateway",
+                    "title": "VPN and ExpressRoute Gateway",
                     "queryType": 1,
                     "resourceType": "microsoft.resourcegraph/resources",
                     "crossComponentResources": [
@@ -2831,7 +2831,7 @@
               "comparison": "isEqualTo",
               "value": "VNETGW"
             },
-            "name": "VPN & ER GW"
+            "name": "VPN and ER GW"
           }
         ]
       },
