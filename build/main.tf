@@ -14,9 +14,12 @@ provider "azurerm" {
 
 locals {
   workbook_data_json = templatefile("${path.module}/workbook.tpl.json", {
-    "kql_summary_workbook_reliability_score"                    = jsonencode(local.kql_summary_workbook_reliability_score)
-    "kql_summary_reliability_score_by_resource_environment"     = jsonencode(local.kql_summary_reliability_score_by_resource_environment)
-    "kql_summary_reliability_score_by_resourceType_environment" = jsonencode(local.kql_summary_reliability_score_by_resourceType_environment)
+    "kql_summary_workbook_reliability_score"                = jsonencode(local.kql_summary_workbook_reliability_score)
+    "kql_summary_reliability_score_by_resource_environment" = jsonencode(local.kql_summary_reliability_score_by_resource_environment)
+
+    "kql_advisor_resource"                  = jsonencode(local.kql_advisor_resource)
+    "kql_summary_advisor_by_recommendation" = jsonencode(local.kql_summary_advisor_by_recommendation)
+    "kql_summary_advisor_by_resourcetype"   = jsonencode(local.kql_summary_advisor_by_resourcetype)
 
     "kql_azuresiterecovery_resources_details" = jsonencode(local.kql_azuresiterecovery_resources_details)
 
@@ -48,9 +51,8 @@ locals {
     "kql_webapp_appsvcplan_resources_details"         = jsonencode(local.kql_webapp_appsvcplan_resources_details)
     "kql_webapp_appservice_funcapp_resources_details" = jsonencode(local.kql_webapp_appservice_funcapp_resources_details)
 
-    "kql_export_summary_by_resourceType_environment" = jsonencode(local.kql_export_summary_by_resourceType_environment)
-    "kql_export_summary_by_resource_environment"     = jsonencode(local.kql_export_summary_by_resource_environment)
-    "kql_export_resources_details"                   = jsonencode(local.kql_export_resources_details)
+    "kql_export_summary_by_resource_environment" = jsonencode(local.kql_export_summary_by_resource_environment)
+    "kql_export_resources_details"               = jsonencode(local.kql_export_resources_details)
 
   })
 
@@ -61,9 +63,10 @@ locals {
   //-------------------------------------------
   // Common KQL queries
   //-------------------------------------------
-  kql_calculate_score = file("${path.module}/template_kql/common/calculate_score.kql")
-  kql_extend_resource = file("${path.module}/template_kql/common/extend_resource.kql")
-  kql_summarize_score = file("${path.module}/template_kql/common/summarize_score.kql")
+  kql_calculate_score  = file("${path.module}/template_kql/common/calculate_score.kql")
+  kql_extend_resource  = file("${path.module}/template_kql/common/extend_resource.kql")
+  kql_summarize_score  = file("${path.module}/template_kql/common/summarize_score.kql")
+  kql_advisor_resource = file("${path.module}/template_kql/advisor/advisor_recommendation_details.kql")
 
   //-------------------------------------------
   // Summary tab
@@ -88,15 +91,22 @@ locals {
     }
   )
 
-  // Reliability Score by Resource Type, Environment
-  kql_summary_reliability_score_by_resourceType_environment = templatefile(
-    "${path.module}/template_kql/summary/summary_reliability_score_by_resourceType_environment.kql",
+  //Advisor by Recommendation
+  kql_summary_advisor_by_recommendation = templatefile(
+    "${path.module}/template_kql/summary/summary_advisor_by_recommendation.kql",
     {
-      "calculate_score" = local.kql_calculate_score
-      "extend_resource" = local.kql_extend_resource
-      "summarize_score" = local.kql_summarize_score
+      "advisor_recommendation" = local.kql_advisor_resource
     }
   )
+
+  //Advisor by ResourceType
+  kql_summary_advisor_by_resourcetype = templatefile(
+    "${path.module}/template_kql/summary/summary_advisor_by_resourcetype.kql",
+    {
+      "advisor_recommendation" = local.kql_advisor_resource
+    }
+  )
+
 
   //-------------------------------------------
   // Azure Site Recovery tab
@@ -265,15 +275,6 @@ locals {
   //-------------------------------------------
   // Export tab
   //-------------------------------------------
-  // Summary by Resource Type, Environment
-  kql_export_summary_by_resourceType_environment = templatefile(
-    "${path.module}/template_kql/export/export_summary_by_resourceType_environment.kql",
-    {
-      "calculate_score" = local.kql_calculate_score
-      "extend_resource" = local.kql_extend_resource
-      "summarize_score" = local.kql_summarize_score
-    }
-  )
   // Summary by Resource, Environment
   kql_export_summary_by_resource_environment = templatefile(
     "${path.module}/template_kql/export/export_summary_by_resource_environment.kql",

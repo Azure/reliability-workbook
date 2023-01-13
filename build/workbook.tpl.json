@@ -41,24 +41,9 @@
             "value": [
               "value::all"
             ]
-          }
-        ],
-        "style": "pills",
-        "queryType": 0,
-        "resourceType": "microsoft.operationalinsights/workspaces"
-      },
-      "name": "parameters - 13"
     },
     {
-      "type": 9,
-      "content": {
-        "version": "KqlParameterItem/1.0",
-        "crossComponentResources": [
-          "{Subscriptions}"
-        ],
-        "parameters": [
-          {
-            "id": "ac7e3b53-0894-4426-bc96-4e91af261f53",
+            "id": "91aa9ba3-ed60-4472-8dd9-1c2cb6255757",
             "version": "KqlParameterItem/1.0",
             "name": "ResourceGroup",
             "label": "Resource Group",
@@ -79,13 +64,10 @@
             },
             "defaultValue": "value::all",
             "queryType": 1,
-            "resourceType": "microsoft.resourcegraph/resources",
-            "value": [
-              "value::all"
-            ]
+            "resourceType": "microsoft.resourcegraph/resources"
           },
           {
-            "id": "5c4674db-3151-4a5f-bb5a-e5e886cc2c17",
+            "id": "5a4f6d34-9f89-4ef8-b4ee-fb0580ec016d",
             "version": "KqlParameterItem/1.0",
             "name": "Environment",
             "type": 2,
@@ -99,18 +81,14 @@
             "typeSettings": {
               "additionalResourceOptions": [
                 "value::all"
-              ],
-              "showDefault": false
+              ]
             },
             "defaultValue": "value::all",
             "queryType": 1,
-            "resourceType": "microsoft.resourcegraph/resources",
-            "value": [
-              "value::all"
-            ]
+            "resourceType": "microsoft.resourcegraph/resources"
           },
           {
-            "id": "e15393b4-4c1f-44b7-8081-784dc5b64473",
+            "id": "9d6afcdc-172c-4bef-8bab-dc372c5d3bb4",
             "version": "KqlParameterItem/1.0",
             "name": "TagName",
             "label": "Tag Name",
@@ -122,17 +100,15 @@
             "typeSettings": {
               "additionalResourceOptions": []
             },
-            "timeContext": {
-              "durationMs": 86400000
-            },
             "queryType": 1,
             "resourceType": "microsoft.resourcegraph/resources",
             "value": null
           },
           {
-            "id": "bbe7b048-af1d-4d68-ad07-b023d3450e27",
+            "id": "95781001-338b-4ed3-81dc-ce16f2a98bf0",
             "version": "KqlParameterItem/1.0",
             "name": "TagValue",
+            "label": "Tag Value",
             "type": 2,
             "query": "Resources\r\n| mvexpand tags\r\n| extend tagName = tostring(bag_keys(tags)[0])\r\n| extend tagValue = tostring(tags[tagName])\r\n| where tags != '' and tags != '[]' and tostring(bag_keys(tags)[0]) == '{TagName}'\r\n| distinct tagValue\r\n| sort by tagValue asc",
             "crossComponentResources": [
@@ -141,20 +117,42 @@
             "typeSettings": {
               "additionalResourceOptions": []
             },
-            "timeContext": {
-              "durationMs": 86400000
-            },
             "queryType": 1,
             "resourceType": "microsoft.resourcegraph/resources",
-            "value": null,
-            "label": "Tag Value"
+            "value": null
+          },
+          {
+            "id": "e929bc01-08ec-45fe-bc6a-4e0267460dfa",
+            "version": "KqlParameterItem/1.0",
+            "name": "SLA",
+            "label": "Show SLA",
+            "type": 10,
+            "description": "This will show the SLA information for the focus area",
+            "isRequired": true,
+            "typeSettings": {
+              "additionalResourceOptions": [],
+              "showDefault": false
+            },
+            "jsonData": "[{ \"value\": \"Yes\", \"label\": \"Yes\", \"selected\":true},\r\n {\"value\": \"No\", \"label\": \"No\"}]"
+          },
+          {
+            "id": "9581cbc6-0f0f-42be-8ae8-6fe94de00ab8",
+            "version": "KqlParameterItem/1.0",
+            "name": "Help",
+            "label": "Show Help",
+            "type": 10,
+            "isRequired": true,
+            "typeSettings": {
+              "additionalResourceOptions": []
+            },
+            "jsonData": "[{\"value\": \"Yes\", \"label\": \"Yes\", \"selected\":true },\r\n {\"value\": \"No\", \"label\": \"No\"}]"
           }
         ],
         "style": "pills",
-        "queryType": 1,
-        "resourceType": "microsoft.resourcegraph/resources"
+        "queryType": 0,
+        "resourceType": "microsoft.operationalinsights/workspaces"
       },
-      "name": "parameters - 0 - Copy - Copy - Copy - Copy"
+      "name": "parameters - 13"
     },
     {
       "type": 11,
@@ -269,39 +267,6 @@
         "groupType": "editable",
         "items": [
           {
-            "type": 9,
-            "content": {
-              "version": "KqlParameterItem/1.0",
-              "crossComponentResources": [
-                "{Subscriptions}"
-              ],
-              "parameters": [
-                {
-                  "id": "ec96194d-d118-47b7-aee5-da4ae8d314c5",
-                  "version": "KqlParameterItem/1.0",
-                  "name": "Help",
-                  "label": "Show Help",
-                  "type": 10,
-                  "description": "This will show additional information, and any prerequisites that may apply to the workbook.",
-                  "isRequired": true,
-                  "value": "Yes",
-                  "typeSettings": {
-                    "additionalResourceOptions": [],
-                    "showDefault": false
-                  },
-                  "jsonData": "[{ \"value\": \"Yes\", \"label\": \"Yes\"},\r\n {\"value\": \"No\", \"label\": \"No\", \"selected\":true }]",
-                  "timeContext": {
-                    "durationMs": 86400000
-                  }
-                }
-              ],
-              "style": "pills",
-              "queryType": 1,
-              "resourceType": "microsoft.resourcegraph/resources"
-            },
-            "name": "parameters - 0 - Copy - Copy - Copy"
-          },
-          {
             "type": 1,
             "content": {
               "json": "> Azure Advisor analyzes your configurations and usage telemetry and offers personalized, actionable recommendations to help you optimize your Azure resources for reliability, security, operational excellence, performance, and cost.\r\n\r\n* Azure Advisor is available automatically without any configuration.\r\n* The table in this workbook specifically relate to any reliability recommendations that may apply to the selected subscription(s).\r\n* Filter advisor recommendations using the subscriptions parameter as required.",
@@ -338,7 +303,7 @@
             "type": 3,
             "content": {
               "version": "KqlItem/1.0",
-              "query": "advisorresources\r\n| extend Category = tostring(properties.category)\r\n| extend Description = tostring(properties.shortDescription.problem)\r\n| extend ImpactedField = tostring(properties.impactedField)\r\n| extend ImpactedValue = tostring(properties.impactedValue)\r\n| extend Impact = tostring(properties.impact)\r\n| extend LastUpdated = tostring(properties.lastUpdated)\r\n| project Impact, ImpactedField, ImpactedValue, Description, resourceGroup, subscriptionId, Category, LastUpdated\r\n| where Category == \"HighAvailability\"\r\n| where resourceGroup in ({ResourceGroup})",
+              "query": ${kql_advisor_resource},
               "size": 3,
               "title": "Advisor - Reliability",
               "showExportToExcel": true,
@@ -351,9 +316,9 @@
                 "formatters": [
                   {
                     "columnMatch": "$gen_group",
-                    "formatter": 15,
+                      "formatter": 13,
                     "formatOptions": {
-                      "linkTarget": null,
+                        "linkTarget": "Resource",
                       "showIcon": true
                     }
                   },
@@ -399,11 +364,7 @@
                   },
                   {
                     "columnMatch": "ImpactedValue",
-                    "formatter": 13,
-                    "formatOptions": {
-                      "linkTarget": null,
-                      "showIcon": true
-                    }
+                      "formatter": 5
                   },
                   {
                     "columnMatch": "Description",
@@ -444,7 +405,8 @@
                     "subscriptionId",
                     "Impact",
                     "Description"
-                  ]
+                    ],
+                    "finalBy": "ImpactedValue"
                 },
                 "labelSettings": [
                   {
@@ -556,7 +518,7 @@
                   "type": 3,
                   "content": {
                     "version": "KqlItem/1.0",
-                    "query": "advisorresources\r\n| extend Category = tostring(properties.category)\r\n| extend Description = tostring(properties.shortDescription.problem)\r\n| extend ImpactedField = tostring(properties.impactedField)\r\n| extend ImpactedValue = tostring(properties.impactedValue)\r\n| extend Impact = tostring(properties.impact)\r\n| extend LastUpdated = tostring(properties.lastUpdated)\r\n| project ImpactedValue, resourceGroup, Category, Impact, ImpactedField, Description, LastUpdated\r\n| where Category == \"HighAvailability\" \r\n| where resourceGroup in ({ResourceGroup})\r\n| summarize count() by Description",
+                    "query": ${kql_summary_advisor_by_recommendation},
                     "size": 3,
                     "title": "By Recommendation",
                     "showExportToExcel": true,
@@ -577,7 +539,7 @@
                   "type": 3,
                   "content": {
                     "version": "KqlItem/1.0",
-                    "query": "advisorresources\r\n| extend Category = tostring(properties.category)\r\n| extend Description = tostring(properties.shortDescription.problem)\r\n| extend ImpactedField = tostring(properties.impactedField)\r\n| extend ImpactedValue = tostring(properties.impactedValue)\r\n| extend Impact = tostring(properties.impact)\r\n| extend LastUpdated = tostring(properties.lastUpdated)\r\n| project ImpactedValue, resourceGroup, Category, Impact, ImpactedField, Description, LastUpdated\r\n| where Category == \"HighAvailability\" \r\n| where resourceGroup in ({ResourceGroup})\r\n| summarize count() by ImpactedField\r\n",
+                    "query": ${kql_summary_advisor_by_resourcetype},
                     "size": 3,
                     "title": "By Resource Type",
                     "showExportToExcel": true,
@@ -683,7 +645,7 @@
               "version": "KqlItem/1.0",
               "query": ${kql_summary_reliability_score_by_resource_environment},
               "size": 3,
-              "title": "Reliability Score by Resource and Environment",
+                "title": "Reliability Score by Resource Type, Environment and Resource",
               "showExportToExcel": true,
               "exportToExcelOptions": "all",
               "queryType": 1,
@@ -736,7 +698,8 @@
                     "formatOptions": {
                       "min": 0,
                       "max": 100,
-                      "palette": "redGreen"
+                        "palette": "redGreen",
+                        "aggregation": "Average"
                     },
                     "numberFormat": {
                       "unit": 1,
@@ -766,7 +729,8 @@
                 "hierarchySettings": {
                   "treeType": 1,
                   "groupBy": [
-                    "Type"
+                      "Type",
+                      "Environment"
                   ],
                   "expandTopLevel": false
                 },
@@ -780,113 +744,6 @@
               "sortBy": []
             },
             "name": "kql_summary_reliability_score_by_resource_environment",
-            "styleSettings": {
-              "showBorder": true
-            }
-          },
-          {
-            "type": 3,
-            "content": {
-              "version": "KqlItem/1.0",
-              "query": ${kql_summary_reliability_score_by_resourceType_environment},
-              "size": 3,
-              "title": "Reliability Score by Resource Type and Environment",
-              "showExportToExcel": true,
-              "exportToExcelOptions": "all",
-              "queryType": 1,
-              "resourceType": "microsoft.resourcegraph/resources",
-              "crossComponentResources": [
-                "{Subscriptions}"
-              ],
-              "gridSettings": {
-                "formatters": [
-                  {
-                    "columnMatch": "$gen_group",
-                    "formatter": 16,
-                    "formatOptions": {
-                      "showIcon": true
-                    }
-                  },
-                  {
-                    "columnMatch": "Type",
-                    "formatter": 5
-                  },
-                  {
-                    "columnMatch": "Environment",
-                    "formatter": 18,
-                    "formatOptions": {
-                      "thresholdsOptions": "colors",
-                      "thresholdsGrid": [
-                        {
-                          "operator": "contains",
-                          "thresholdValue": "prod",
-                          "representation": "redBright",
-                          "text": "{0}{1}"
-                        },
-                        {
-                          "operator": "contains",
-                          "thresholdValue": "Prod",
-                          "representation": "redBright",
-                          "text": "{0}{1}"
-                        },
-                        {
-                          "operator": "Default",
-                          "thresholdValue": null,
-                          "text": "{0}{1}"
-                        }
-                      ]
-                    }
-                  },
-                  {
-                    "columnMatch": "ResourceTotal",
-                    "formatter": 18,
-                    "formatOptions": {
-                      "thresholdsOptions": "colors",
-                      "thresholdsGrid": [
-                        {
-                          "operator": "Default",
-                          "thresholdValue": null,
-                          "representation": "blue",
-                          "text": "{0}{1}"
-                        }
-                      ]
-                    }
-                  },
-                  {
-                    "columnMatch": "ReliabilityScore",
-                    "formatter": 3,
-                    "formatOptions": {
-                      "min": 0,
-                      "max": 100,
-                      "palette": "redGreen"
-                    },
-                    "numberFormat": {
-                      "unit": 1,
-                      "options": {
-                        "style": "decimal"
-                      }
-                    }
-                  }
-                ],
-                "rowLimit": 10000,
-                "filter": true,
-                "hierarchySettings": {
-                  "treeType": 1,
-                  "groupBy": [
-                    "Type"
-                  ],
-                  "expandTopLevel": false
-                },
-                "labelSettings": [
-                  {
-                    "columnId": "ReliabilityScore",
-                    "label": "Reliability Score"
-                  }
-                ]
-              },
-              "sortBy": []
-            },
-            "name": "kql_summary_reliability_score_by_resourceType_environment",
             "styleSettings": {
               "showBorder": true
             }
@@ -907,39 +764,6 @@
         "groupType": "editable",
         "items": [
           {
-            "type": 9,
-            "content": {
-              "version": "KqlParameterItem/1.0",
-              "crossComponentResources": [
-                "value::all"
-              ],
-              "parameters": [
-                {
-                  "id": "945162bf-cf6d-4956-952c-606acfd2c5e5",
-                  "version": "KqlParameterItem/1.0",
-                  "name": "Help",
-                  "label": "Show Help",
-                  "type": 10,
-                  "description": "This will show additional information, and any prerequisites that may apply to the workbook.",
-                  "isRequired": true,
-                  "isHiddenWhenLocked": true,
-                  "typeSettings": {
-                    "additionalResourceOptions": [],
-                    "showDefault": false
-                  },
-                  "jsonData": "[{ \"value\": \"Yes\", \"label\": \"Yes\"},\r\n {\"value\": \"No\", \"label\": \"No\", \"selected\":true }]",
-                  "timeContext": {
-                    "durationMs": 86400000
-                  }
-                }
-              ],
-              "style": "pills",
-              "queryType": 1,
-              "resourceType": "microsoft.resourcegraph/resources"
-            },
-            "name": "parameters - 0 - Copy - Copy - Copy - Copy"
-          },
-          {
             "type": 12,
             "content": {
               "version": "NotebookGroup/1.0",
@@ -949,211 +773,9 @@
                   "type": 3,
                   "content": {
                     "version": "KqlItem/1.0",
-                    "query": ${kql_export_summary_by_resourceType_environment},
-                    "size": 3,
-                    "title": "Summary by Resource Type and Environment",
-                    "showExportToExcel": true,
-                    "exportToExcelOptions": "all",
-                    "queryType": 1,
-                    "resourceType": "microsoft.resourcegraph/resources",
-                    "crossComponentResources": [
-                      "{Subscriptions}"
-                    ],
-                    "gridSettings": {
-                      "formatters": [
-                        {
-                          "columnMatch": "$gen_group",
-                          "formatter": 15,
-                          "formatOptions": {
-                            "linkTarget": null,
-                            "showIcon": true
-                          }
-                        },
-                        {
-                          "columnMatch": "SubscriptionId",
-                          "formatter": 5
-                        },
-                        {
-                          "columnMatch": "Type",
-                          "formatter": 5
-                        },
-                        {
-                          "columnMatch": "Environment",
-                          "formatter": 18,
-                          "formatOptions": {
-                            "thresholdsOptions": "colors",
-                            "thresholdsGrid": [
-                              {
-                                "operator": "contains",
-                                "thresholdValue": "prod",
-                                "representation": "redBright",
-                                "text": "{0}{1}"
-                              },
-                              {
-                                "operator": "contains",
-                                "thresholdValue": "Prod",
-                                "representation": "redBright",
-                                "text": "{0}{1}"
-                              },
-                              {
-                                "operator": "Default",
-                                "thresholdValue": null,
-                                "text": "{0}{1}"
-                              }
-                            ]
-                          }
-                        }
-                      ],
-                      "rowLimit": 10000,
-                      "filter": true,
-                      "hierarchySettings": {
-                        "treeType": 1,
-                        "groupBy": [
-                          "SubscriptionId",
-                          "Type"
-                        ],
-                        "expandTopLevel": false
-                      },
-                      "sortBy": [
-                        {
-                          "itemKey": "ResourceTotal",
-                          "sortOrder": 2
-                        }
-                      ],
-                      "labelSettings": [
-                        {
-                          "columnId": "SubscriptionId",
-                          "label": "Subscription"
-                        },
-                        {
-                          "columnId": "Type",
-                          "label": "Service"
-                        },
-                        {
-                          "columnId": "ResourceTotal",
-                          "label": "Resource Total"
-                        },
-                        {
-                          "columnId": "OtherSku",
-                          "label": "Regular SKU"
-                        },
-                        {
-                          "columnId": "DevelopmentSkuCount",
-                          "label": "Development SKU"
-                        },
-                        {
-                          "columnId": "SharedSkuCount",
-                          "label": "Shared SKU"
-                        },
-                        {
-                          "columnId": "FreeSkuCount",
-                          "label": "Free SKU"
-                        },
-                        {
-                          "columnId": "BasicSkuCount",
-                          "label": "Basic SKU"
-                        },
-                        {
-                          "columnId": "VMDeallocatedStateCount",
-                          "label": "VM Deallocated"
-                        },
-                        {
-                          "columnId": "NoAvZoneCount",
-                          "label": "Availability Zone - Not Configured"
-                        },
-                        {
-                          "columnId": "NAAvZoneCount",
-                          "label": "Availability Zone - Not Applicable"
-                        },
-                        {
-                          "columnId": "AvZoneCount",
-                          "label": "Availability Zone - Configured"
-                        },
-                        {
-                          "columnId": "NoAvSetCount",
-                          "label": "Availability Set - Not Configured"
-                        },
-                        {
-                          "columnId": "NAAvSetCount",
-                          "label": "Availability Set - Not Applicable"
-                        },
-                        {
-                          "columnId": "AvSetCount",
-                          "label": "Availability Set - Configured"
-                        },
-                        {
-                          "columnId": "NACapacityCount",
-                          "label": "Capacity - Not Applicable"
-                        },
-                        {
-                          "columnId": "ZeroCapacityCount",
-                          "label": "Capacity - Zero"
-                        },
-                        {
-                          "columnId": "Gt1CapacityCount",
-                          "label": "Capacity - Above 1"
-                        },
-                        {
-                          "columnId": "NAFaultDomainCount",
-                          "label": "Fault Domain - Not Applicable"
-                        },
-                        {
-                          "columnId": "ZeroFaultDomainCount",
-                          "label": "Fault Domain - Zero"
-                        },
-                        {
-                          "columnId": "NAOSDiskCount",
-                          "label": "OS Disk - Not Applicable"
-                        },
-                        {
-                          "columnId": "UnknownOSDiskCount",
-                          "label": "OS Disk - Unknown"
-                        },
-                        {
-                          "columnId": "OtherOSDiskCount",
-                          "label": "OS Disk - No Premium/Ultra"
-                        },
-                        {
-                          "columnId": "PremorUltOSDiskCount",
-                          "label": "OS Disk - Premium/Ultra"
-                        },
-                        {
-                          "columnId": "NABackupCount",
-                          "label": "Backup - Not Applicable"
-                        },
-                        {
-                          "columnId": "UnknownBackupCount",
-                          "label": "Backup - Unknown"
-                        },
-                        {
-                          "columnId": "HealthyBackupCount",
-                          "label": "Backup - Healthy"
-                        },
-                        {
-                          "columnId": "UnhealthyBackupCount",
-                          "label": "Backup - Unhealthy"
-                        }
-                      ]
-                    },
-                    "sortBy": [
-                      {
-                        "itemKey": "ResourceTotal",
-                        "sortOrder": 2
-                      }
-                    ]
-                  },
-                  "name": "kql_export_summary_by_resourceType_environment",
-                  "styleSettings": {
-                    "showBorder": true
-                  }
-                },
-                {
-                  "type": 3,
-                  "content": {
-                    "version": "KqlItem/1.0",
                     "query": ${kql_export_summary_by_resource_environment},
                     "size": 3,
-                    "title": "Summary by Resource, Environment",
+                      "title": "Reliability Score by Resource Type, Environment and Resource",
                     "showExportToExcel": true,
                     "exportToExcelOptions": "all",
                     "queryType": 1,
@@ -1165,9 +787,9 @@
                       "formatters": [
                         {
                           "columnMatch": "$gen_group",
-                          "formatter": 15,
+                            "formatter": 13,
                           "formatOptions": {
-                            "linkTarget": null,
+                              "linkTarget": "Resource",
                             "showIcon": true
                           }
                         },
@@ -1176,6 +798,10 @@
                           "formatter": 5
                         },
                         {
+                            "columnMatch": "Name",
+                            "formatter": 5
+                          },
+                          {
                           "columnMatch": "Type",
                           "formatter": 5
                         },
@@ -1204,6 +830,13 @@
                               }
                             ]
                           }
+                          },
+                          {
+                            "columnMatch": "ReliabilityScore",
+                            "formatter": 0,
+                            "formatOptions": {
+                              "aggregation": "Average"
+                            }
                         }
                       ],
                       "rowLimit": 10000,
@@ -1212,9 +845,11 @@
                         "treeType": 1,
                         "groupBy": [
                           "SubscriptionId",
-                          "Type"
+                            "Type",
+                            "Environment"
                         ],
-                        "expandTopLevel": false
+                          "expandTopLevel": false,
+                          "finalBy": "Name"
                       },
                       "sortBy": [
                         {
@@ -1262,15 +897,19 @@
                       "formatters": [
                         {
                           "columnMatch": "$gen_group",
-                          "formatter": 15,
+                            "formatter": 13,
                           "formatOptions": {
-                            "linkTarget": null,
+                              "linkTarget": "Resource",
                             "showIcon": true
                           }
                         },
                         {
                           "columnMatch": "SubscriptionId",
                           "formatter": 5
+                          },
+                          {
+                            "columnMatch": "Name",
+                            "formatter": 5
                         }
                       ],
                       "rowLimit": 10000,
@@ -1279,7 +918,8 @@
                         "treeType": 1,
                         "groupBy": [
                           "SubscriptionId"
-                        ]
+                          ],
+                          "finalBy": "Name"
                       },
                       "labelSettings": [
                         {
@@ -1295,7 +935,7 @@
                   "type": 3,
                   "content": {
                     "version": "KqlItem/1.0",
-                    "query": "advisorresources\r\n| extend Category = tostring(properties.category)\r\n| extend Description = tostring(properties.shortDescription.problem)\r\n| extend ImpactedField = tostring(properties.impactedField)\r\n| extend ImpactedValue = tostring(properties.impactedValue)\r\n| extend Impact = tostring(properties.impact)\r\n| extend LastUpdated = tostring(properties.lastUpdated)\r\n| project Impact, ImpactedField, ImpactedValue, Description, resourceGroup, subscriptionId, Category, LastUpdated\r\n| where Category == \"HighAvailability\"\r\n| where resourceGroup in ({ResourceGroup})",
+                    "query": ${kql_advisor_resource},
                     "size": 0,
                     "title": "Advisor Recommendations by Impact",
                     "showExportToExcel": true,
@@ -1309,13 +949,17 @@
                       "formatters": [
                         {
                           "columnMatch": "$gen_group",
-                          "formatter": 15,
+                            "formatter": 13,
                           "formatOptions": {
-                            "linkTarget": null,
+                              "linkTarget": "Resource",
                             "showIcon": true
                           }
                         },
                         {
+                            "columnMatch": "ImpactedValue",
+                            "formatter": 5
+                          },
+                          {
                           "columnMatch": "subscriptionId",
                           "formatter": 5
                         }
@@ -1328,10 +972,15 @@
                           "subscriptionId",
                           "Impact",
                           "Description"
-                        ]
+                          ],
+                          "finalBy": "ImpactedValue"
                       },
                       "labelSettings": [
                         {
+                            "columnId": "ImpactedValue",
+                            "label": "Name"
+                          },
+                          {
                           "columnId": "subscriptionId",
                           "label": "Subscription"
                         }
@@ -1364,57 +1013,6 @@
         "version": "NotebookGroup/1.0",
         "groupType": "editable",
         "items": [
-          {
-            "type": 9,
-            "content": {
-              "version": "KqlParameterItem/1.0",
-              "crossComponentResources": [
-                "{Subscriptions}"
-              ],
-              "parameters": [
-                {
-                  "id": "fc2a73d7-6fba-4dd6-890a-568f15e3d1d5",
-                  "version": "KqlParameterItem/1.0",
-                  "name": "SLA",
-                  "label": "Show SLA",
-                  "type": 10,
-                  "description": "This will show the SLA information for the focus area.",
-                  "isRequired": true,
-                  "typeSettings": {
-                    "additionalResourceOptions": [],
-                    "showDefault": false
-                  },
-                  "jsonData": "[{ \"value\": \"Yes\", \"label\": \"Yes\"},\r\n {\"value\": \"No\", \"label\": \"No\", \"selected\":true }]",
-                  "timeContext": {
-                    "durationMs": 86400000
-                  },
-                  "value": "Yes"
-                },
-                {
-                  "id": "4fd81c4f-7bca-4138-81e7-67c9f86517df",
-                  "version": "KqlParameterItem/1.0",
-                  "name": "Help",
-                  "label": "Show Help",
-                  "type": 10,
-                  "description": "This will show additional information, and any prerequisites that may apply to the workbook.",
-                  "isRequired": true,
-                  "typeSettings": {
-                    "additionalResourceOptions": [],
-                    "showDefault": false
-                  },
-                  "jsonData": "[{ \"value\": \"Yes\", \"label\": \"Yes\"},\r\n {\"value\": \"No\", \"label\": \"No\", \"selected\":true }]",
-                  "timeContext": {
-                    "durationMs": 86400000
-                  },
-                  "value": "Yes"
-                }
-              ],
-              "style": "pills",
-              "queryType": 1,
-              "resourceType": "microsoft.resourcegraph/resources"
-            },
-            "name": "parameters - 0 - Copy - Copy"
-          },
           {
             "type": 11,
             "content": {
@@ -1465,7 +1063,7 @@
                   "id": "947f178c-58f8-43ac-ac0a-7eddf884c712",
                   "cellValue": "selectedTab",
                   "linkTarget": "parameter",
-                  "linkLabel": "VPN & ExpressRoute Gateway",
+                  "linkLabel": "VPN and ExpressRoute Gateway",
                   "subTarget": "VNETGW",
                   "style": "link"
                 }
@@ -1520,9 +1118,9 @@
                       "formatters": [
                         {
                           "columnMatch": "$gen_group",
-                          "formatter": 15,
+                          "formatter": 13,
                           "formatOptions": {
-                            "linkTarget": null,
+                            "linkTarget": "Resource",
                             "showIcon": true
                           }
                         },
@@ -1607,6 +1205,10 @@
                               }
                             ]
                           }
+                        },
+                        {
+                          "columnMatch": "Location",
+                          "formatter": 17
                         },
                         {
                           "columnMatch": "Zones",
@@ -1828,7 +1430,7 @@
                     "version": "KqlItem/1.0",
                     "query": ${kql_networking_pip_resources_details},
                     "size": 0,
-                    "title": "Public IP addresses & IP Prefixes",
+                    "title": "Public IP addresses and IP Prefixes",
                     "queryType": 1,
                     "resourceType": "microsoft.resourcegraph/resources",
                     "crossComponentResources": [
@@ -1838,9 +1440,9 @@
                         "formatters": [
                           {
                             "columnMatch": "$gen_group",
-                            "formatter": 15,
+                            "formatter": 13,
                             "formatOptions": {
-                              "linkTarget": null,
+                              "linkTarget": "Resource",
                               "showIcon": true
                             }
                           },
@@ -1890,6 +1492,10 @@
                             "formatter": 5
                           },
                           {
+                            "columnMatch": "Name",
+                            "formatter": 5
+                          },
+                          {
                             "columnMatch": "State",
                             "formatter": 18,
                             "formatOptions": {
@@ -1911,6 +1517,10 @@
                             }
                           },
                           {
+                          "columnMatch": "Location",
+                          "formatter": 17
+                        },
+                        {
                             "columnMatch": "Zones",
                             "formatter": 5
                           },
@@ -2018,7 +1628,8 @@
                           "groupBy": [
                           "SubscriptionId",
                           "Capacity"
-                          ]
+                          ],
+                          "finalBy": "Name"
                         },
                         "labelSettings": [
                           {
@@ -2048,7 +1659,7 @@
                         ]
                     }
                   },
-                  "name": "Public IP addresses & IP Prefixes"
+                  "name": "Public IP addresses and IP Prefixes"
                 }
               ]
             },
@@ -2119,9 +1730,9 @@
                       "formatters": [
                         {
                           "columnMatch": "$gen_group",
-                          "formatter": 15,
+                          "formatter": 13,
                           "formatOptions": {
-                            "linkTarget": null,
+                            "linkTarget": "Resource",
                             "showIcon": true
                           }
                         },
@@ -2188,6 +1799,10 @@
                               }
                             ]
                           }
+                        },
+                        {
+                          "columnMatch": "Location",
+                          "formatter": 17
                         },
                         {
                           "columnMatch": "Zones",
@@ -2435,9 +2050,9 @@
                       "formatters": [
                         {
                           "columnMatch": "$gen_group",
-                          "formatter": 15,
+                          "formatter": 13,
                           "formatOptions": {
-                            "linkTarget": null,
+                            "linkTarget": "Resource",
                             "showIcon": true
                           }
                         },
@@ -2483,6 +2098,10 @@
                               }
                             ]
                           }
+                        },
+                        {
+                          "columnMatch": "Location",
+                          "formatter": 17
                         },
                         {
                           "columnMatch": "Zones",
@@ -2661,9 +2280,9 @@
                       "formatters": [
                         {
                           "columnMatch": "$gen_group",
-                          "formatter": 15,
+                          "formatter": 13,
                           "formatOptions": {
-                            "linkTarget": null,
+                            "linkTarget": "Resource",
                             "showIcon": true
                           }
                         },
@@ -2729,6 +2348,10 @@
                               }
                             ]
                           }
+                        },
+                        {
+                          "columnMatch": "Location",
+                          "formatter": 17
                         },
                         {
                           "columnMatch": "Zones",
@@ -2869,7 +2492,7 @@
                     "version": "KqlItem/1.0",
                     "query": ${kql_networking_vnetgw_resources_details},
                     "size": 0,
-                    "title": "VPN & ExpressRoute Gateway",
+                    "title": "VPN and ExpressRoute Gateway",
                     "queryType": 1,
                     "resourceType": "microsoft.resourcegraph/resources",
                     "crossComponentResources": [
@@ -2879,9 +2502,9 @@
                       "formatters": [
                         {
                           "columnMatch": "$gen_group",
-                          "formatter": 15,
+                            "formatter": 13,
                           "formatOptions": {
-                            "linkTarget": null,
+                              "linkTarget": "Resource",
                             "showIcon": true
                           }
                         },
@@ -2949,6 +2572,10 @@
                           "formatter": 5
                         },
                         {
+                            "columnMatch": "Name",
+                            "formatter": 5
+                          },
+                          {
                           "columnMatch": "State",
                           "formatter": 18,
                           "formatOptions": {
@@ -2968,6 +2595,10 @@
                               }
                             ]
                           }
+                        },
+                        {
+                          "columnMatch": "Location",
+                          "formatter": 17
                         },
                         {
                           "columnMatch": "Zones",
@@ -3156,7 +2787,8 @@
                         "groupBy": [
                           "SubscriptionId",
                           "AvailabilitySet"
-                        ]
+                          ],
+                          "finalBy": "Name"
                       },
                       "labelSettings": [
                         {
@@ -3199,7 +2831,7 @@
               "comparison": "isEqualTo",
               "value": "VNETGW"
             },
-            "name": "VPN & ER GW"
+            "name": "VPN and ER GW"
           }
         ]
       },
@@ -3216,57 +2848,6 @@
         "version": "NotebookGroup/1.0",
         "groupType": "editable",
         "items": [
-          {
-            "type": 9,
-            "content": {
-              "version": "KqlParameterItem/1.0",
-              "crossComponentResources": [
-                "{Subscriptions}"
-              ],
-              "parameters": [
-                {
-                  "id": "0414f091-7725-4687-99f1-00e83440db18",
-                  "version": "KqlParameterItem/1.0",
-                  "name": "SLA",
-                  "label": "Show SLA",
-                  "type": 10,
-                  "description": "This will show the SLA information for the focus area.",
-                  "isRequired": true,
-                  "typeSettings": {
-                    "additionalResourceOptions": [],
-                    "showDefault": false
-                  },
-                  "jsonData": "[{ \"value\": \"Yes\", \"label\": \"Yes\"},\r\n {\"value\": \"No\", \"label\": \"No\", \"selected\":true }]",
-                  "timeContext": {
-                    "durationMs": 86400000
-                  },
-                  "value": "Yes"
-                },
-                {
-                  "id": "aa45d66d-d51a-4cbe-bdcf-e2d69414beb7",
-                  "version": "KqlParameterItem/1.0",
-                  "name": "Help",
-                  "label": "Show Help",
-                  "type": 10,
-                  "description": "This will show additional information, and any prerequisites that may apply to the workbook.",
-                  "isRequired": true,
-                  "typeSettings": {
-                    "additionalResourceOptions": [],
-                    "showDefault": false
-                  },
-                  "jsonData": "[{ \"value\": \"Yes\", \"label\": \"Yes\"},\r\n {\"value\": \"No\", \"label\": \"No\", \"selected\":true }]",
-                  "timeContext": {
-                    "durationMs": 86400000
-                  },
-                  "value": "Yes"
-                }
-              ],
-              "style": "pills",
-              "queryType": 1,
-              "resourceType": "microsoft.resourcegraph/resources"
-            },
-            "name": "parameters - 0 - Copy"
-          },
           {
             "type": 11,
             "content": {
@@ -3341,9 +2922,9 @@
                       "formatters": [
                         {
                           "columnMatch": "$gen_group",
-                          "formatter": 15,
+                          "formatter": 13,
                           "formatOptions": {
-                            "linkTarget": null,
+                            "linkTarget": "Resource",
                             "showIcon": true
                           }
                         },
@@ -3380,6 +2961,10 @@
                               }
                             ]
                           }
+                        },
+                        {
+                          "columnMatch": "Location",
+                          "formatter": 17
                         },
                         {
                           "columnMatch": "Zones",
@@ -3653,9 +3238,9 @@
                       "formatters": [
                         {
                           "columnMatch": "$gen_group",
-                          "formatter": 15,
+                            "formatter": 13,
                           "formatOptions": {
-                            "linkTarget": null,
+                              "linkTarget": "Resource",
                             "showIcon": true
                           }
                         },
@@ -3672,6 +3257,14 @@
                             "formatter": 5
                           },
                           {
+                            "columnMatch": "Name",
+                            "formatter": 5
+                          },
+                          {
+                          "columnMatch": "Location",
+                          "formatter": 17
+                        },
+                        {
                             "columnMatch": "Zones",
                             "formatter": 5
                           },
@@ -3742,7 +3335,8 @@
                         "treeType": 1,
                         "groupBy": [
                             "SubscriptionId"
-                        ]
+                          ],
+                          "finalBy": "Name"
                         },
                         "labelSettings": [
                           {
@@ -3811,9 +3405,9 @@
                       "formatters": [
                         {
                           "columnMatch": "$gen_group",
-                          "formatter": 15,
+                          "formatter": 13,
                           "formatOptions": {
-                            "linkTarget": null,
+                            "linkTarget": "Resource",
                             "showIcon": true
                           }
                         },
@@ -4302,57 +3896,6 @@
         "groupType": "editable",
         "items": [
           {
-            "type": 9,
-            "content": {
-              "version": "KqlParameterItem/1.0",
-              "crossComponentResources": [
-                "{Subscriptions}"
-              ],
-              "parameters": [
-                {
-                  "id": "d9dc8d17-6b0b-4b4e-8ad9-db9953f2df9f",
-                  "version": "KqlParameterItem/1.0",
-                  "name": "SLA",
-                  "label": "Show SLA",
-                  "type": 10,
-                  "description": "This will show the SLA information for the focus area.",
-                  "isRequired": true,
-                  "typeSettings": {
-                    "additionalResourceOptions": [],
-                    "showDefault": false
-                  },
-                  "jsonData": "[{ \"value\": \"Yes\", \"label\": \"Yes\"},\r\n {\"value\": \"No\", \"label\": \"No\", \"selected\":true }]",
-                  "timeContext": {
-                    "durationMs": 86400000
-                  },
-                  "value": "Yes"
-                },
-                {
-                  "id": "91622323-6ce2-4c1b-a489-3a13c3adf001",
-                  "version": "KqlParameterItem/1.0",
-                  "name": "Help",
-                  "label": "Show Help",
-                  "type": 10,
-                  "description": "This will show additional information, and any prerequisites that may apply to the workbook.",
-                  "isRequired": true,
-                  "typeSettings": {
-                    "additionalResourceOptions": [],
-                    "showDefault": false
-                  },
-                  "jsonData": "[{ \"value\": \"Yes\", \"label\": \"Yes\"},\r\n {\"value\": \"No\", \"label\": \"No\", \"selected\":true }]",
-                  "timeContext": {
-                    "durationMs": 86400000
-                  },
-                  "value": "Yes"
-                }
-              ],
-              "style": "pills",
-              "queryType": 1,
-              "resourceType": "microsoft.resourcegraph/resources"
-            },
-            "name": "parameters - 0 - Copy"
-          },
-          {
             "type": 11,
             "content": {
               "version": "LinkItem/1.0",
@@ -4450,9 +3993,9 @@
                       "formatters": [
                         {
                           "columnMatch": "$gen_group",
-                          "formatter": 15,
+                          "formatter": 13,
                           "formatOptions": {
-                            "linkTarget": null,
+                            "linkTarget": "Resource",
                             "showIcon": true
                           }
                         },
@@ -4561,6 +4104,10 @@
                               }
                             ]
                           }
+                        },
+                        {
+                          "columnMatch": "Location",
+                          "formatter": 17
                         },
                         {
                           "columnMatch": "Zones",
@@ -4936,7 +4483,7 @@
                     "version": "KqlItem/1.0",
                     "query": ${kql_database_synapse_resources_details},
                     "size": 3,
-                    "title": "Azure Synapse Analytics",
+                    "title": "Dedicated SQL pool (formerly SQL DW)",
                     "queryType": 1,
                     "resourceType": "microsoft.resourcegraph/resources",
                     "crossComponentResources": [
@@ -4946,9 +4493,9 @@
                       "formatters": [
                         {
                           "columnMatch": "$gen_group",
-                          "formatter": 15,
+                            "formatter": 13,
                           "formatOptions": {
-                            "linkTarget": null,
+                              "linkTarget": "Resource",
                             "showIcon": true
                           }
                         },
@@ -4991,6 +4538,10 @@
                           }
                         },
                         {
+                            "columnMatch": "Location",
+                            "formatter": 17
+                          },
+                          {
                           "columnMatch": "Zones",
                           "formatter": 5
                         },
@@ -5325,9 +4876,9 @@
                       "formatters": [
                         {
                           "columnMatch": "$gen_group",
-                          "formatter": 15,
+                          "formatter": 13,
                           "formatOptions": {
-                            "linkTarget": null,
+                            "linkTarget": "Resource",
                             "showIcon": true
                           }
                         },
@@ -5368,6 +4919,10 @@
                               }
                             ]
                           }
+                        },
+                        {
+                          "columnMatch": "Location",
+                          "formatter": 17
                         },
                         {
                           "columnMatch": "Zones",
@@ -5760,9 +5315,9 @@
                       "formatters": [
                         {
                           "columnMatch": "$gen_group",
-                          "formatter": 15,
+                          "formatter": 13,
                           "formatOptions": {
-                            "linkTarget": null,
+                            "linkTarget": "Resource",
                             "showIcon": true
                           }
                         },
@@ -5840,6 +5395,10 @@
                               }
                             ]
                           }
+                        },
+                        {
+                          "columnMatch": "Location",
+                          "formatter": 17
                         },
                         {
                           "columnMatch": "Zones",
@@ -6203,9 +5762,9 @@
                       "formatters": [
                         {
                           "columnMatch": "$gen_group",
-                          "formatter": 15,
+                          "formatter": 13,
                           "formatOptions": {
-                            "linkTarget": null,
+                            "linkTarget": "Resource",
                             "showIcon": true
                           }
                         },
@@ -6283,6 +5842,10 @@
                               }
                             ]
                           }
+                        },
+                        {
+                          "columnMatch": "Location",
+                          "formatter": 17
                         },
                         {
                           "columnMatch": "Zones",
@@ -6808,9 +6371,9 @@
                         "formatters": [
                           {
                             "columnMatch": "$gen_group",
-                            "formatter": 15,
+                            "formatter": 13,
                             "formatOptions": {
-                              "linkTarget": null,
+                              "linkTarget": "Resource",
                               "showIcon": true
                             }
                           },
@@ -6866,6 +6429,10 @@
                             "formatter": 5
                           },
                           {
+                            "columnMatch": "Name",
+                            "formatter": 5
+                          },
+                          {
                             "columnMatch": "State",
                             "formatter": 18,
                             "formatOptions": {
@@ -6887,6 +6454,10 @@
                             }
                           },
                           {
+                          "columnMatch": "Location",
+                          "formatter": 17
+                        },
+                        {
                             "columnMatch": "Zones",
                             "formatter": 5
                           },
@@ -7011,7 +6582,8 @@
                           "treeType": 1,
                           "groupBy": [
                             "SubscriptionId"
-                    ]
+                          ],
+                          "finalBy": "Name"
                   },
                         "labelSettings": [
                           {
@@ -7056,54 +6628,6 @@
         "groupType": "editable",
         "items": [
           {
-            "type": 9,
-            "content": {
-              "version": "KqlParameterItem/1.0",
-              "parameters": [
-                {
-                  "id": "e63069af-5126-43a5-8ec4-b07935d3cded",
-                  "version": "KqlParameterItem/1.0",
-                  "name": "SLA",
-                  "label": "Show SLA",
-                  "type": 10,
-                  "description": "This will show the SLA information for the focus area.",
-                  "isRequired": true,
-                  "typeSettings": {
-                    "additionalResourceOptions": [],
-                    "showDefault": false
-                  },
-                  "jsonData": "[{ \"value\": \"Yes\", \"label\": \"Yes\"},\r\n {\"value\": \"No\", \"label\": \"No\", \"selected\":true }]",
-                  "timeContext": {
-                    "durationMs": 86400000
-                  },
-                  "value": "Yes"
-                },
-                {
-                  "id": "2154212d-f81c-4b8e-931a-bf7d82215046",
-                  "version": "KqlParameterItem/1.0",
-                  "name": "Help",
-                  "label": "Show Help",
-                  "type": 10,
-                  "description": "This will show additional information, and any prerequisites that may apply to the workbook.",
-                  "isRequired": true,
-                  "typeSettings": {
-                    "additionalResourceOptions": [],
-                    "showDefault": false
-                  },
-                  "jsonData": "[{ \"value\": \"Yes\", \"label\": \"Yes\"},\r\n {\"value\": \"No\", \"label\": \"No\", \"selected\":true }]",
-                  "timeContext": {
-                    "durationMs": 86400000
-                  },
-                  "value": "Yes"
-                }
-              ],
-              "style": "pills",
-              "queryType": 0,
-              "resourceType": "microsoft.resourcegraph/resources"
-            },
-            "name": "ContainersParam"
-          },
-          {
             "type": 1,
             "content": {
               "json": "[SLA for Azure Kubernetes Service (AKS)](https://azure.microsoft.com/support/legal/sla/kubernetes-service/)\r\n* For customers who have purchased an Azure Kubernetes Service (AKS) Uptime SLA, we guarantee uptime of 99.95% for the Kubernetes API Server for AKS Clusters that use Azure Availability Zone and 99.9% for AKS Clusters that do not use Azure Availability Zone.\r\n* The availability of the agent nodes in your AKS Cluster is covered by the Virtual Machines SLA. Please see the [Virtual Machines SLA](https://azure.microsoft.com/support/legal/sla/virtual-machines/) for more details.\r\n\r\n> SLA accurate at time of release. Latest information is available [here](https://azure.microsoft.com/support/legal/sla/kubernetes-service/)",
@@ -7145,9 +6669,9 @@
                 "formatters": [
                   {
                     "columnMatch": "$gen_group",
-                    "formatter": 15,
+                    "formatter": 13,
                     "formatOptions": {
-                      "linkTarget": null,
+                      "linkTarget": "Resource",
                       "showIcon": true
                     }
                   },
@@ -7193,6 +6717,10 @@
                         }
                       ]
                     }
+                  },
+                  {
+                    "columnMatch": "Location",
+                    "formatter": 17
                   },
                   {
                     "columnMatch": "Zones",
@@ -7631,57 +7159,6 @@
         "groupType": "editable",
         "items": [
           {
-            "type": 9,
-            "content": {
-              "version": "KqlParameterItem/1.0",
-              "crossComponentResources": [
-                "{Subscriptions}"
-              ],
-              "parameters": [
-                {
-                  "id": "e396ce5d-22f2-4e08-9079-d3732ff0ff62",
-                  "version": "KqlParameterItem/1.0",
-                  "name": "SLA",
-                  "label": "Show SLA",
-                  "type": 10,
-                  "description": "This will show the SLA information for the focus area.",
-                  "isRequired": true,
-                  "typeSettings": {
-                    "additionalResourceOptions": [],
-                    "showDefault": false
-                  },
-                  "jsonData": "[{ \"value\": \"Yes\", \"label\": \"Yes\"},\r\n {\"value\": \"No\", \"label\": \"No\", \"selected\":true }]",
-                  "timeContext": {
-                    "durationMs": 86400000
-                  },
-                  "value": "Yes"
-                },
-                {
-                  "id": "8b2b1f5e-f40b-4a13-b189-c02a4a8f55a6",
-                  "version": "KqlParameterItem/1.0",
-                  "name": "Help",
-                  "label": "Show Help",
-                  "type": 10,
-                  "description": "This will show additional information, and any prerequisites that may apply to the workbook.",
-                  "isRequired": true,
-                  "typeSettings": {
-                    "additionalResourceOptions": [],
-                    "showDefault": false
-                  },
-                  "jsonData": "[{ \"value\": \"Yes\", \"label\": \"Yes\"},\r\n {\"value\": \"No\", \"label\": \"No\", \"selected\":true }]",
-                  "timeContext": {
-                    "durationMs": 86400000
-                  },
-                  "value": "Yes"
-                }
-              ],
-              "style": "pills",
-              "queryType": 1,
-              "resourceType": "microsoft.resourcegraph/resources"
-            },
-            "name": "parameters - 0 - Copy"
-          },
-          {
             "type": 1,
             "content": {
               "json": "[SLA for Storage Accounts](https://azure.microsoft.com/support/legal/sla/storage/)\r\n* We guarantee that at least 99.99% (99.9% for Cool Access Tier) of the time, we will successfully process requests to read data from Read Access-Geo Redundant Storage (RA-GRS) Accounts, provided that failed attempts to read data from the primary region are retried on the secondary region.\r\n* We guarantee that at least 99.9% (99% for Cool Access Tier) of the time, we will successfully process requests to read data from Locally Redundant Storage (LRS), Zone Redundant Storage (ZRS), and Geo Redundant Storage (GRS) Accounts.\r\n* We guarantee that at least 99.9% (99% for Cool Access Tier) of the time, we will successfully process requests to write data to Locally Redundant Storage (LRS), Zone Redundant Storage (ZRS), and Geo Redundant Storage (GRS) Accounts and Read Access-Geo Redundant Storage (RA-GRS) Accounts.\r\n\r\n> SLA accurate at time of release. Latest information is available [here](https://azure.microsoft.com/support/legal/sla/storage/)",
@@ -7722,9 +7199,9 @@
                 "formatters": [
                   {
                     "columnMatch": "$gen_group",
-                    "formatter": 15,
+                    "formatter": 13,
                     "formatOptions": {
-                      "linkTarget": null,
+                      "linkTarget": "Resource",
                       "showIcon": true
                     }
                   },
@@ -7760,6 +7237,10 @@
                   {
                     "columnMatch": "SubscriptionId",
                     "formatter": 5
+                  },
+                  {
+                    "columnMatch": "Location",
+                    "formatter": 17
                   },
                   {
                     "columnMatch": "Zones",
@@ -8021,57 +7502,6 @@
         "groupType": "editable",
         "items": [
           {
-            "type": 9,
-            "content": {
-              "version": "KqlParameterItem/1.0",
-              "crossComponentResources": [
-                "{Subscriptions}"
-              ],
-              "parameters": [
-                {
-                  "id": "253ea690-4b1f-476d-972f-f3db5588e4e3",
-                  "version": "KqlParameterItem/1.0",
-                  "name": "SLA",
-                  "label": "Show SLA",
-                  "type": 10,
-                  "description": "This will show the SLA information for the focus area.",
-                  "isRequired": true,
-                  "typeSettings": {
-                    "additionalResourceOptions": [],
-                    "showDefault": false
-                  },
-                  "jsonData": "[{ \"value\": \"Yes\", \"label\": \"Yes\"},\r\n {\"value\": \"No\", \"label\": \"No\", \"selected\":true }]",
-                  "timeContext": {
-                    "durationMs": 86400000
-                  },
-                  "value": "Yes"
-                },
-                {
-                  "id": "e42b8b91-3a81-4285-9cb1-833bfad1bac7",
-                  "version": "KqlParameterItem/1.0",
-                  "name": "Help",
-                  "label": "Show Help",
-                  "type": 10,
-                  "description": "This will show additional information, and any prerequisites that may apply to the workbook.",
-                  "isRequired": true,
-                  "typeSettings": {
-                    "additionalResourceOptions": [],
-                    "showDefault": false
-                  },
-                  "jsonData": "[{ \"value\": \"Yes\", \"label\": \"Yes\"},\r\n {\"value\": \"No\", \"label\": \"No\", \"selected\":true }]",
-                  "timeContext": {
-                    "durationMs": 86400000
-                  },
-                  "value": "Yes"
-                }
-              ],
-              "style": "pills",
-              "queryType": 1,
-              "resourceType": "microsoft.resourcegraph/resources"
-            },
-            "name": "parameters - 0 - Copy"
-          },
-          {
             "type": 11,
             "content": {
               "version": "LinkItem/1.0",
@@ -8154,9 +7584,9 @@
                       "formatters": [
                         {
                           "columnMatch": "$gen_group",
-                          "formatter": 15,
+                            "formatter": 13,
                           "formatOptions": {
-                            "linkTarget": null,
+                              "linkTarget": "Resource",
                             "showIcon": true
                           }
                         },
@@ -8202,6 +7632,10 @@
                           "formatter": 5
                         },
                         {
+                            "columnMatch": "Name",
+                            "formatter": 5
+                          },
+                          {
                           "columnMatch": "State",
                           "formatter": 18,
                           "formatOptions": {
@@ -8227,6 +7661,10 @@
                               }
                             ]
                           }
+                        },
+                        {
+                          "columnMatch": "Location",
+                          "formatter": 17
                         },
                         {
                           "columnMatch": "Zones",
@@ -8354,7 +7792,8 @@
                         "treeType": 1,
                         "groupBy": [
                           "SubscriptionId"
-                        ]
+                          ],
+                          "finalBy": "Name"
                       },
                       "labelSettings": [
                         {
@@ -8435,9 +7874,9 @@
                 "formatters": [
                   {
                     "columnMatch": "$gen_group",
-                    "formatter": 15,
+                          "formatter": 13,
                     "formatOptions": {
-                      "linkTarget": null,
+                            "linkTarget": "Resource",
                       "showIcon": true
                     }
                   },
@@ -8531,6 +7970,10 @@
                     }
                   },
                   {
+                          "columnMatch": "Location",
+                          "formatter": 17
+                        },
+                        {
                     "columnMatch": "Zones",
                     "formatter": 5
                   },
@@ -8729,7 +8172,7 @@
                     "type": 3,
                     "content": {
                       "version": "KqlItem/1.0",
-                      "query": "resources\r\n| where resourceGroup in ({ResourceGroup})\r\n| extend environment = case(\r\n    tags.Environment <> \"\", tags.Environment,\r\n    tags.environment <> \"\", tags.environment,\r\n    tags.Env <> \"\", tags.Env,\r\n    tags.env <> \"\", tags.env,\r\n    tolower(name) contains \"prod\", \"Production\",\r\n    tolower(name) contains \"dev\", \"Development\",\r\n    tolower(name) contains \"qa\", \"QA\",\r\n    tolower(name) contains \"uat\", \"UAT\",\r\n    tolower(name) contains \"sit\", \"SIT\",\r\n    tolower(name) contains \"test\", \"Test\",\r\n    \"Undefined\")\r\n| where environment in ({Environment})\r\n| join kind = innerunique(\r\n    resources\r\n    | extend replaced_tags = replace('{}', 'null', tostring(tags))\r\n    | extend replaced_tags = parse_json(replaced_tags)\r\n    | mv-expand replaced_tags\r\n    | extend tagName = tostring(bag_keys(replaced_tags)[0])\r\n    | extend tagValue = tostring(replaced_tags['{TagName}'])\r\n    | where tagName has '{TagName}' and tagValue has '{TagValue}'\r\n    | distinct id\r\n    )\r\n    on id\r\n| where \r\n    (type == 'microsoft.compute/virtualmachines') or \r\n    (type == \"microsoft.compute/virtualmachinescalesets\" and tags.aksEngineVersion !contains \"aks-gomod\") or\r\n    (type == 'microsoft.web/sites') or \r\n    (type == 'microsoft.web/serverfarms') or\r\n    (type == \"microsoft.containerservice/managedclusters\") or \r\n    (type == 'microsoft.sql/servers/databases') or \r\n    (type == 'microsoft.documentdb/databaseaccounts') or \r\n    (type == 'microsoft.dbformysql/servers') or \r\n    (type == 'microsoft.dbformysql/flexibleservers') or \r\n    (type == \"microsoft.apimanagement/service\") or \r\n    (type == \"microsoft.storage/storageaccounts\" or type == \"microsoft.classicstorage/storageaccounts\") or \r\n    (type == \"microsoft.network/azurefirewalls\") or \r\n    (type == \"microsoft.network/frontdoors\") or\r\n    (type == \"microsoft.cdn/profiles\") or\r\n    (type == \"microsoft.network/applicationgateways\") or \r\n    (type == \"microsoft.network/loadbalancers\") or \r\n    (type == \"microsoft.network/publicipaddresses\" or type == \"microsoft.network/publicipprefixes\") or \r\n    (type == \"microsoft.network/virtualnetworkgateways\") or \r\n    (type == \"microsoft.recoveryservices/vaults\")\r\n| join kind=leftouter (\r\n    resources \r\n    | where type == \"microsoft.containerservice/managedclusters\"\r\n    // Expand per node pool to get using zone for all node pool\r\n    | mv-expand agentPoolProfiles = properties.agentPoolProfiles\r\n    | extend AvZones = agentPoolProfiles.availabilityZones\r\n    | extend AksNodeResourceGroup = tolower(tostring(properties.nodeResourceGroup))\r\n    // Get number of using zone per node pool VMSS. If it doesn't use any zone, return 0\r\n    | extend useAvZone = case(\r\n        array_length( AvZones ) > 0, array_length( AvZones ), 0\r\n    )\r\n    | join kind=leftouter(\r\n        resources\r\n            | where type == 'microsoft.compute/virtualmachinescalesets'\r\n            | extend resourceGroup = tolower(tostring(resourceGroup))\r\n            | extend VmssCapacity = sku.capacity\r\n            | extend vmssStorageAccountType = iff(\r\n                properties.virtualMachineProfile.storageProfile.osDisk.diffDiskSettings.option == \"Local\", \"Ephemeral\", properties.virtualMachineProfile.storageProfile.osDisk.managedDisk.storageAccountType\r\n            )\r\n    ) on $left.AksNodeResourceGroup == $right.resourceGroup // Match AKS and VMSS with nodeResourceGroup\r\n    | summarize AvZones=min(useAvZone), AksMinimumNodePoolCount=min(toint(VmssCapacity)), AksNodePoolStorageAccountType=make_set(vmssStorageAccountType), FaultDomainCount=min(toint(properties1.platformFaultDomainCount)) by id, name, type, tenantId, kind, location, resourceGroup, subscriptionId, tostring(sku), tostring(plan), tostring(properties), AksNodeResourceGroup\r\n    | extend AksNodePoolStorageAccountType = iff(\r\n        tolower(tostring(AksNodePoolStorageAccountType)) contains \"standard_lrs\", \"standard_lrs\", tolower(tostring(strcat_array(AksNodePoolStorageAccountType, \",\")))\r\n    )\r\n    // If there are some node pools within AKS cluster, it returns minimum number of zones. \r\n    // If even one node pool is not using a zone, it will be \"Not Configured\".\r\n    | extend AvZones = iff(tostring(AvZones) == \"0\", \"Not Configured\", tostring(AvZones)), AvSets = \"Scale Sets\"\r\n) on id\r\n// Start - Azure Load Balancer additional logic\r\n| mv-expand LbFeIpConfig = properties.frontendIPConfigurations\r\n| extend LbUseAvZone = iff(array_length(LbFeIpConfig.zones ) > 0, array_length(LbFeIpConfig.zones ), 0)\r\n| extend LbIpType = iff(isnotnull(LbFeIpConfig.properties.publicIPAddress), \"Public\", \"Private\")\r\n//| summarize LbAvZones = min(LbUseAvZone) by id, name, type, tenantId, kind, location, resourceGroup, subscriptionId, tostring(sku), plan, tostring(properties)\r\n//| extend properties = todynamic(properties), sku = todynamic(sku), \r\n| summarize LbAvZones = arg_min(LbUseAvZone, *) by id\r\n// End - Azure Load Balancer additional logic\r\n| extend state = case(\r\n    type == 'microsoft.compute/virtualmachines', tostring(properties.extended.instanceView.powerState.displayStatus),\r\n    type == 'microsoft.compute/virtualmachinescalesets', tostring(properties.provisioningState),\r\n    type == 'microsoft.web/sites', tostring(properties.state),\r\n    type == 'microsoft.web/serverfarms', tostring(properties.status),\r\n    type == 'microsoft.containerservice/managedclusters', tostring(properties.provisioningState),\r\n    type == 'microsoft.sql/servers/databases', tostring(properties.status),\r\n    type == 'microsoft.documentdb/databaseaccounts', tostring(properties.provisioningState),\r\n    type == 'microsoft.dbformysql/servers', tostring(properties.userVisibleState),\r\n    type == 'microsoft.dbformysql/flexibleservers', tostring(properties.state),\r\n    type == \"microsoft.apimanagement/service\", tostring(properties.provisioningState),\r\n    type contains \"storageaccounts\", tostring(properties.provisioningState),\r\n    type == \"microsoft.network/azurefirewalls\", tostring(properties.provisioningState),\r\n    type == \"microsoft.network/frontdoors\", tostring(properties.resourceState),\r\n    type == \"microsoft.cdn/profiles\", tostring(properties.resourceState),\r\n    type == \"microsoft.network/applicationgateways\", tostring(properties.operationalState),\r\n    type == \"microsoft.network/loadbalancers\", tostring(properties.provisioningState),\r\n    type contains \"publicip\", tostring(properties.provisioningState),\r\n    type == \"microsoft.network/virtualnetworkgateways\", tostring(properties.provisioningState),\r\n    type == \"microsoft.recoveryservices/vaults\", tostring(properties.provisioningState),\r\n    \"Undefined\"\r\n    )\r\n| extend skuName = case(\r\n    type == 'microsoft.compute/virtualmachines', tostring(properties.hardwareProfile.vmSize),\r\n    type == 'microsoft.compute/virtualmachinescalesets', tostring(sku.name),\r\n    type == 'microsoft.web/sites', tostring(properties.sku),\r\n    type == 'microsoft.web/serverfarms', tostring(sku.tier),\r\n    type == 'microsoft.containerservice/managedclusters', tostring(properties.agentPoolProfiles[0].vmSize),\r\n    type == 'microsoft.sql/servers/databases', tostring(sku.tier),\r\n    type == 'microsoft.documentdb/databaseaccounts', tostring(properties.databaseAccountOfferType),\r\n    type == 'microsoft.dbformysql/servers', tostring(sku.tier),\r\n    type == 'microsoft.dbformysql/flexibleservers', tostring(sku.tier),\r\n    type == \"microsoft.apimanagement/service\", tostring(sku.name),\r\n    type contains 'storageaccounts', tostring(replace('-', '_', tostring(iff(type =~ \"microsoft.storage/storageaccounts\", sku.name, properties.accountType)))),\r\n    type == \"microsoft.network/azurefirewalls\", tostring(properties.sku.name),\r\n    type == \"microsoft.network/frontdoors\", \"classic_frontdoor\",\r\n    type == \"microsoft.cdn/profiles\", tostring(sku.name),\r\n    type == \"microsoft.network/applicationgateways\", tostring(properties.sku.name),\r\n    type == \"microsoft.network/loadbalancers\", iff(sku.tier == 'Global', 'Global', tostring(sku.name)),\r\n    type contains \"publicip\", iff(sku.tier == 'Global', 'Global', tostring(sku.name)),\r\n    type == \"microsoft.network/virtualnetworkgateways\", tostring(properties.sku.name),\r\n    type == \"microsoft.recoveryservices/vaults\", tostring(iif(isnotnull(sku.tier), sku.tier, sku.name)),\r\n    \"Undefined\"\r\n    )\r\n| extend avZones = case(\r\n    location !in~ ('brazilsouth', 'canadacentral', 'centralus', 'eastus', 'eastus2', 'southcentralus', 'usgovvirginia', 'westus2', 'westus3', 'francecentral', 'germanywestcentral', 'northeurope', 'norwayeast', 'uksouth', 'westeurope', 'swedencentral', 'switzerlandnorth', 'qatarcentral', 'uaenorth', 'southafricanorth', 'australiaeast', 'centralindia', 'japaneast', 'koreacentral', 'southeastasia', 'eastasia', 'chinanorth3'), 'Not Applicable',\r\n    (type == 'microsoft.compute/virtualmachines'), coalesce(tostring(zones[0]), 'Not Configured'),\r\n    (type == 'microsoft.compute/virtualmachinescalesets'), coalesce(tostring(array_length(parse_json(zones))), 'Not Configured'),\r\n    (type == 'microsoft.containerservice/managedclusters' and AvZones <> \"\"), AvZones,\r\n    (type == 'microsoft.containerservice/managedclusters' and isempty(AvZones)), \"Not Configured\",\r\n    (type == 'microsoft.web/sites'), \"ASP AZ config\",\r\n    (type == 'microsoft.web/serverfarms'), iff(properties.zoneRedundant == 'true', 'Configured', 'Not Configured'),\r\n    (type == 'microsoft.sql/servers/databases' and sku.tier <> 'DataWarehouse'), iif(isempty(properties.zoneRedundant) or properties.zoneRedundant == \"false\", 'Not Configured', 'Configured'),\r\n    (type == 'microsoft.sql/servers/databases' and sku.tier == 'DataWarehouse'), \"Not Applicable\",\r\n    (type == 'microsoft.documentdb/databaseaccounts'), iif(properties.locations[0].isZoneRedundant == \"false\", 'Not Configured', 'Configured'), \r\n    (type == 'microsoft.dbformysql/servers'), \"Not Applicable\",\r\n    (type == 'microsoft.dbformysql/flexibleservers'), iif(properties.haEnabled == \"Enabled\", 'Configured', 'Not Configured'),\r\n    (type == \"microsoft.apimanagement/service\"), coalesce(tostring(array_length(parse_json(zones))), 'Not Configured'),\r\n    (type contains 'storageaccounts'), case(split(skuName, '_', 1)[0] contains \"zrs\", \"Configured\", \"Not Configured\"),\r\n    (type == \"microsoft.network/azurefirewalls\"), iif(isnotnull(zones), \"Configured\", \"Not Configured\"),\r\n    (type == \"microsoft.network/frontdoors\"), \"Not Applicable\",\r\n    (type == \"microsoft.cdn/profiles\"), \"Not Applicable\",\r\n    (type == \"microsoft.network/applicationgateways\"), iif(isnotnull(zones), \"Configured\", \"Not Configured\"),\r\n    (type == \"microsoft.network/loadbalancers\"), case( \r\n    skuName =~ \"Basic\" or skuName =~ \"Global\", \"Not Applicable\",\r\n    LbIpType =~ \"Public\", \"Public IP AZ Config\",\r\n    tostring(LbAvZones) =~ \"0\", \"Not Configured\",\r\n    tostring(LbAvZones)\r\n    ),\r\n    (type contains \"publicip\"), case( \r\n    skuName =~ \"Basic\" or skuName =~ \"Global\", \"Not Applicable\",\r\n    coalesce(tostring(array_length(parse_json(zones))), 'Not Configured')\r\n    ),\r\n    (type == \"microsoft.network/virtualnetworkgateways\"), \"Public IP AZ Config\",\r\n    (type == \"microsoft.recoveryservices/vaults\"), \"Not Applicable\",\r\n    \"Undefined\"\r\n    )\r\n| extend avSets = case(\r\n    type == 'microsoft.compute/virtualmachines' and avZones in ('1', '2', '3'), \"Not Applicable\",\r\n    type == 'microsoft.compute/virtualmachines', (coalesce(extract('/availabilitySets/(.*)', 1, tostring(properties.availabilitySet.id)), 'Not Configured')),\r\n    type == 'microsoft.compute/virtualmachinescalesets' and avZones in ('1', '2', '3'), \"Not Applicable\",\r\n    type == 'microsoft.compute/virtualmachinescalesets', 'A regional (non-zonal) scale set uses placement groups, which act as an implicit availability set with five fault domains and five update domains.',\r\n    type == 'microsoft.web/sites', 'Not Applicable',\r\n    type == 'microsoft.web/serverfarms', 'Not Applicable',\r\n    type == 'microsoft.containerservice/managedclusters', case(\r\n    AvSets == 'Scale Sets' and avZones in ('1', '2', '3'), \"Not Applicable\",\r\n    AvSets == 'Scale Sets', \"A regional (non-zonal) scale set uses placement groups, which act as an implicit availability set with five fault domains and five update domains.\",\r\n    \"Scale Sets Not Configured\"\r\n    ),\r\n    type == 'microsoft.sql/servers/databases', 'Not Applicable',\r\n    type == 'microsoft.documentdb/databaseaccounts', 'Not Applicable',\r\n    type == 'microsoft.dbformysql/servers', \"Not Applicable\",\r\n    type == 'microsoft.dbformysql/flexibleservers', \"Not Applicable\",\r\n    type == \"microsoft.apimanagement/service\", \"Not Applicable\",\r\n    type contains \"storageaccounts\", \"Not Applicable\",\r\n    type == \"microsoft.network/azurefirewalls\", \"Not Applicable\",\r\n    type == \"microsoft.network/frontdoors\", \"Not Applicable\",\r\n    type == \"microsoft.cdn/profiles\", \"Not Applicable\",\r\n    type == \"microsoft.network/applicationgateways\", \"Not Applicable\",\r\n    type == \"microsoft.network/loadbalancers\", \"Not Applicable\",\r\n    type contains \"publicip\", tostring(properties.publicIPAddressVersion), //Field Override\r\n    type == \"microsoft.network/virtualnetworkgateways\", tostring(properties.gatewayType), //Field Override\r\n    type == \"microsoft.recoveryservices/vaults\", \"Not Applicable\",\r\n    \"Undefined\"\r\n    )\r\n| extend Capacity = case(\r\n    type == 'microsoft.compute/virtualmachines', \"Not Applicable\",\r\n    type == 'microsoft.compute/virtualmachinescalesets', tostring(sku.capacity),\r\n    type == 'microsoft.web/sites', \"ASP Config\",\r\n    type == 'microsoft.web/serverfarms', tostring(sku.capacity),\r\n    type == 'microsoft.containerservice/managedclusters', iif(isnotempty(AksMinimumNodePoolCount), tostring(AksMinimumNodePoolCount), \"0\"), // AKS with or without VMSS\r\n    type == 'microsoft.sql/servers/databases', tostring(sku.capacity),\r\n    type == 'microsoft.documentdb/databaseaccounts', 'Not Applicable',\r\n    type == 'microsoft.dbformysql/servers', tostring(sku.capacity),\r\n    type == 'microsoft.dbformysql/flexibleservers', tostring(sku.capacity),\r\n    type == \"microsoft.apimanagement/service\", tostring(sku.capacity),\r\n    type contains \"storageaccounts\", \"Not Applicable\", \r\n    type == \"microsoft.network/azurefirewalls\", \"Not Applicable\",\r\n    type == \"microsoft.network/frontdoors\", \"Not Applicable\",\r\n    type == \"microsoft.cdn/profiles\", \"Not Applicable\",\r\n    type == \"microsoft.network/applicationgateways\", tostring(iif(isnotempty(properties.autoscaleConfiguration), properties.autoscaleConfiguration.minCapacity, properties.sku.capacity)),\r\n    type == \"microsoft.network/loadbalancers\", \"Not Applicable\",\r\n    type contains \"publicip\", iif(type == \"microsoft.network/publicipprefixes\", \"PIP-prefix\", \"Single\"), //Field Override\r\n    type == \"microsoft.network/virtualnetworkgateways\", tostring(properties.sku.capacity),\r\n    type == \"microsoft.recoveryservices/vaults\", \"Not Applicable\",\r\n    \"Undefined\"\r\n    )\r\n| extend FaultDomain = case(\r\n    type == 'microsoft.compute/virtualmachines', \"Not Applicable\",\r\n    type == 'microsoft.compute/virtualmachinescalesets', iif(isnotempty(properties.platformFaultDomainCount), properties.platformFaultDomainCount, \"0\"),  // 1 - AZ, 5 - Regional VMSS\r\n    type == 'microsoft.web/sites', \"Not Applicable\",\r\n    type == 'microsoft.web/serverfarms', 'Not Applicable',\r\n    type == 'microsoft.containerservice/managedclusters', iif(isnotempty(tostring(FaultDomainCount)), tostring(FaultDomainCount), \"0\"),\r\n    type == 'microsoft.sql/servers/databases', \"Not Applicable\",\r\n    type == 'microsoft.documentdb/databaseaccounts', 'Not Applicable',\r\n    type == 'microsoft.dbformysql/servers', 'Not Applicable',\r\n    type == 'microsoft.dbformysql/flexibleservers', 'Not Applicable',\r\n    type == \"microsoft.apimanagement/service\", \"Not Applicable\",\r\n    type contains \"storageaccounts\", \"Not Applicable\",\r\n    type == \"microsoft.network/azurefirewalls\", \"Not Applicable\",\r\n    type == \"microsoft.network/frontdoors\", \"Not Applicable\",\r\n    type == \"microsoft.cdn/profiles\", \"Not Applicable\",\r\n    type == \"microsoft.network/applicationgateways\", \"Not Applicable\",\r\n    type == \"microsoft.network/loadbalancers\", \"Not Applicable\",\r\n    type contains \"publicip\", \"Not Applicable\",\r\n    type == \"microsoft.network/virtualnetworkgateways\", iff(properties.gatewayType == \"ExpressRoute\" and properties.vpnType == \"PolicyBased\", \"ErPolicyBased\", tostring(properties.vpnType)), //Field Override\r\n    type == \"microsoft.recoveryservices/vaults\", \"Not Applicable\",\r\n    \"Undefined\"\r\n    )\r\n| extend osDisk = case(\r\n    type == 'microsoft.compute/virtualmachines', iif(properties.storageProfile.osDisk.diffDiskSettings.option == \"Local\", \"Ephemeral\", properties.storageProfile.osDisk.managedDisk.storageAccountType),\r\n    type == 'microsoft.compute/virtualmachinescalesets', iif(properties.virtualMachineProfile.storageProfile.osDisk.diffDiskSettings.option == \"Local\", \"Ephemeral\", properties.virtualMachineProfile.storageProfile.osDisk.managedDisk.storageAccountType),\r\n    type == 'microsoft.web/sites', 'Not Applicable',\r\n    type == 'microsoft.web/serverfarms', 'Not Applicable',\r\n    type == 'microsoft.containerservice/managedclusters', AksNodePoolStorageAccountType,\r\n    type == 'microsoft.sql/servers/databases', properties.storageAccountType,\r\n    type == 'microsoft.documentdb/databaseaccounts', 'Not Applicable',\r\n    type == 'microsoft.dbformysql/servers', 'Not Applicable',\r\n    type == 'microsoft.dbformysql/flexibleservers', 'Not Applicable',\r\n    type == \"microsoft.apimanagement/service\", tostring(properties.platformVersion), //Field Override\r\n    type contains \"storageaccounts\", tostring(split(skuName, '_', 0)[0]),\r\n    type == \"microsoft.network/azurefirewalls\", \"Not Applicable\",\r\n    type == \"microsoft.network/frontdoors\", \"Not Applicable\",\r\n    type == \"microsoft.cdn/profiles\", \"Not Applicable\",\r\n    type == \"microsoft.network/applicationgateways\", \"Not Applicable\",\r\n    type == \"microsoft.network/loadbalancers\", tostring(LbIpType),  //Field Override\r\n    type contains \"publicip\", tostring(properties.publicIPAllocationMethod), //Field Override\r\n    type == \"microsoft.network/virtualnetworkgateways\", tostring(properties.vpnGatewayGeneration), //Field Override\r\n    type == \"microsoft.recoveryservices/vaults\", \"Not Applicable\",\r\n    'Not Applicable'\r\n    )\r\n| extend OSDisk = case(\r\n    isnotempty(osDisk), osDisk,\r\n    isempty(osDisk) and (type == 'microsoft.compute/virtualmachines') and state <> 'VM running', 'Unknown, start VM to get disk information.',\r\n    isempty(osDisk) and (type == 'microsoft.compute/virtualmachines') and isnotempty(properties.storageProfile.osDisk.vhd.uri), 'Unmanaged',\r\n    \"Unknown\")\r\n| extend ReadReplica = case (\r\n    type in ('microsoft.compute/virtualmachines', 'microsoft.compute/virtualmachinescalesets', 'microsoft.web/sites', 'microsoft.web/serverfarms', 'microsoft.containerservice/managedclusters'), \"Not Applicable\",\r\n    (type == 'microsoft.sql/servers/databases' and sku.tier <> 'DataWarehouse'), tostring(properties.readReplicaCount), // SQL DB\r\n    (type == 'microsoft.sql/servers/databases' and sku.tier == 'DataWarehouse'), \"Not Applicable\", // Synapse\r\n    type == 'microsoft.documentdb/databaseaccounts', tostring(array_length(parse_json(properties.readLocations))),\r\n    type == 'microsoft.dbformysql/servers', \"Not Applicable\",\r\n    type == 'microsoft.dbformysql/flexibleservers', \"Not Applicable\",\r\n    type == \"microsoft.apimanagement/service\", tostring(properties.additionalLocations),\r\n    type contains \"storageaccounts\", case(\r\n        location in~ ('qatarcentral'), 'Not Applicable',\r\n        split(skuName, '_', 1)[0] startswith \"ra\", \"Configured\",\r\n        \"Not Configured\"\r\n        ),\r\n    type == \"microsoft.network/azurefirewalls\", \"Not Applicable\",\r\n    type == \"microsoft.network/frontdoors\", \"Not Applicable\",\r\n    type == \"microsoft.cdn/profiles\", \"Not Applicable\",\r\n    type == \"microsoft.network/applicationgateways\", \"Not Applicable\",\r\n    type == \"microsoft.network/loadbalancers\", \"Not Applicable\",\r\n    type contains \"publicip\", \"Not Applicable\",\r\n    type == \"microsoft.network/virtualnetworkgateways\", iff(properties.gatewayType == \"ExpressRoute\", \"Not Applicable\", tostring(properties.activeActive)), //Field Override,\r\n    type == \"microsoft.recoveryservices/vaults\", \"Not Applicable\",\r\n    \"Undefined\"\r\n    )\r\n| extend AutomaticFailover = case(\r\n    type in ('microsoft.compute/virtualmachines', 'microsoft.compute/virtualmachinescalesets', 'microsoft.web/sites', 'microsoft.web/serverfarms', 'microsoft.containerservice/managedclusters', 'microsoft.sql/servers/databases'), \"Not Applicable\",\r\n    (type == 'microsoft.documentdb/databaseaccounts' and properties.enableAutomaticFailover == \"false\" and properties.enableMultipleWriteLocations == \"false\" and toint(ReadReplica) > 1), \"Not Configured\",\r\n    (type == 'microsoft.documentdb/databaseaccounts' and properties.enableAutomaticFailover == \"true\"), \"Configured\",\r\n    (type == 'microsoft.documentdb/databaseaccounts'), \"Not Applicable\",\r\n    type == 'microsoft.dbformysql/servers', \"Not Applicable\",\r\n    type == 'microsoft.dbformysql/flexibleservers', case(properties.haEnabled == \"Enabled\", \"Configured\", \"Not Applicable\"),\r\n    type == \"microsoft.apimanagement/service\", \"Not Applicable\",\r\n    type contains \"storageaccounts\", \"Not Applicable\",\r\n    type == \"microsoft.network/azurefirewalls\", \"Not Applicable\",\r\n    type == \"microsoft.network/frontdoors\", \"Not Applicable\",\r\n    type == \"microsoft.cdn/profiles\", \"Not Applicable\",\r\n    type == \"microsoft.network/applicationgateways\", iif(isnotempty(properties.autoscaleConfiguration), \"Configured\", \"Not Configured\"),\r\n    type == \"microsoft.network/loadbalancers\", \"Not Applicable\",\r\n    type contains \"publicip\", \"Not Applicable\",\r\n    type == \"microsoft.network/virtualnetworkgateways\", \"Not Applicable\",\r\n    type == \"microsoft.recoveryservices/vaults\", \"Not Applicable\",\r\n    \"Undefined\"\r\n    )\r\n| extend MultipleWriteLocations = case(\r\n    type in ('microsoft.compute/virtualmachines', 'microsoft.compute/virtualmachinescalesets', 'microsoft.web/sites', 'microsoft.web/serverfarms', 'microsoft.containerservice/managedclusters', 'microsoft.sql/servers/databases', 'microsoft.dbformysql/servers', 'microsoft.dbformysql/flexibleservers'), \"Not Applicable\",\r\n    (type == 'microsoft.documentdb/databaseaccounts' and properties.enableMultipleWriteLocations == \"false\"), \"Not Enabled\",\r\n    (type == 'microsoft.documentdb/databaseaccounts' and properties.enableMultipleWriteLocations == \"true\"), \"Enabled\",\r\n    (type == \"microsoft.apimanagement/service\"), \"Not Applicable\",\r\n    (type contains \"storageaccounts\"), \"Not Applicable\",\r\n    (type == \"microsoft.network/azurefirewalls\"), \"Not Applicable\",\r\n    (type == \"microsoft.network/frontdoors\"), \"Not Applicable\",\r\n    (type == \"microsoft.cdn/profiles\"), \"Not Applicable\",\r\n    (type == \"microsoft.network/applicationgateways\"), \"Not Applicable\",\r\n    (type == \"microsoft.network/loadbalancers\"), \"Not Applicable\",\r\n    (type contains \"publicip\"), \"Not Applicable\",\r\n    (type == \"microsoft.network/virtualnetworkgateways\"), \"Not Applicable\",\r\n    (type == \"microsoft.recoveryservices/vaults\"), \"Not Applicable\",\r\n    \"Undefined\"\r\n    )\r\n| extend StorageAutogrow = case(\r\n    type in ('microsoft.compute/virtualmachines', 'microsoft.compute/virtualmachinescalesets', 'microsoft.web/sites', 'microsoft.web/serverfarms', 'microsoft.containerservice/managedclusters', 'microsoft.sql/servers/databases', 'microsoft.documentdb/databaseaccounts'), \"Not Applicable\",\r\n    (type == 'microsoft.dbformysql/servers'), tostring(properties.storageProfile.storageAutogrow),\r\n    (type == 'microsoft.dbformysql/flexibleservers'), \"Not Applicable\",\r\n    (type == \"microsoft.apimanagement/service\"), \"Not Applicable\",\r\n    (type contains \"storageaccounts\"), \"Not Applicable\",\r\n    (type == \"microsoft.network/azurefirewalls\"), \"Not Applicable\",\r\n    (type == \"microsoft.network/frontdoors\"), \"Not Applicable\",\r\n    (type == \"microsoft.cdn/profiles\"), \"Not Applicable\",\r\n    (type == \"microsoft.network/applicationgateways\"), \"Not Applicable\",\r\n    (type == \"microsoft.network/loadbalancers\"), \"Not Applicable\",\r\n    (type contains \"publicip\"), \"Not Applicable\",\r\n    (type == \"microsoft.network/virtualnetworkgateways\"), \"Not Applicable\",\r\n    (type == \"microsoft.recoveryservices/vaults\"), \"Not Applicable\",\r\n    \"Undefined\"\r\n    )\r\n| extend ReplicationRole = case(\r\n    type in ('microsoft.compute/virtualmachines', 'microsoft.compute/virtualmachinescalesets', 'microsoft.web/sites', 'microsoft.web/serverfarms', 'microsoft.containerservice/managedclusters', 'microsoft.documentdb/databaseaccounts'), \"Not Applicable\",\r\n    (type == 'microsoft.sql/servers/databases' and sku.tier <> 'DataWarehouse'), iif(isnotempty(properties.secondaryType), \"replica\", \"master\"),\r\n    (type == 'microsoft.sql/servers/databases' and sku.tier == 'DataWarehouse'), \"Not Applicable\",\r\n    (type == 'microsoft.dbformysql/servers'), tostring(properties.replicationRole),\r\n    (type == 'microsoft.dbformysql/flexibleservers'), iif(properties.haEnabled == \"Enabled\", 'Not Applicable', tostring(properties.replicationRole)),\r\n    (type == \"microsoft.apimanagement/service\"), \"Not Applicable\",\r\n    (type contains \"storageaccounts\"), tostring(split(skuName, '_', 1)[0]),\r\n    (type == \"microsoft.network/azurefirewalls\"), \"Not Applicable\",\r\n    (type == \"microsoft.network/frontdoors\"), \"Not Applicable\",\r\n    (type == \"microsoft.cdn/profiles\"), \"Not Applicable\",\r\n    (type == \"microsoft.network/applicationgateways\"), \"Not Applicable\",\r\n    (type == \"microsoft.network/loadbalancers\"), \"Not Applicable\",\r\n    (type contains \"publicip\"), \"Not Applicable\",\r\n    (type == \"microsoft.network/virtualnetworkgateways\"), \"Not Applicable\",\r\n    (type == \"microsoft.recoveryservices/vaults\"), \"Not Applicable\",\r\n    \"Undefined\"\r\n    )\r\n| project \r\n    Type = tolower(type),\r\n    SkuName = tolower(skuName),\r\n    Kind = tolower(kind),\r\n    SubscriptionId = subscriptionId,\r\n    Name = tolower(name),\r\n    State = tolower(state),\r\n    Location = tolower(location),\r\n    ResourceGroup = resourceGroup,\r\n    Zones = tolower(tostring(zones)),\r\n    AvailabilityZone = tolower(avZones),\r\n    AvailabilitySet = tolower(avSets),\r\n    Capacity = tolower(Capacity),\r\n    FaultDomain = tolower(FaultDomain),\r\n    OSDisk = tolower(OSDisk),\r\n    ReadReplica = tolower(ReadReplica), \r\n    AutomaticFailover = tolower(AutomaticFailover),\r\n    MultipleWriteLocations = tolower(MultipleWriteLocations),\r\n    StorageAutogrow = tolower(StorageAutogrow),\r\n    ReplicationRole = tolower(ReplicationRole),\r\n    Environment = environment,\r\n    ResourceId = tolower(tostring(id)),\r\n    properties\r\n| join kind = leftouter (\r\n    securityresources\r\n    | where properties.displayName contains \"Azure Backup should\"\r\n    | extend Backup = tostring(properties.status.code)\r\n    | project ResourceId = tolower(tostring(properties.resourceDetails.Id)), Backup\r\n    )\r\n    on ResourceId\r\n| extend Backup = case(\r\n    Backup == \"Healthy\" or Backup == \"Unhealthy\", Backup,\r\n    \"Unknown\")\r\n| extend Backup = case(\r\n    (Type == 'microsoft.compute/virtualmachines') and (Backup == \"Healthy\" or Backup == \"Unhealthy\"), Backup, \r\n    (Type == \"microsoft.compute/virtualmachinescalesets\"), \"Not Applicable\", \r\n    (Type == \"microsoft.containerservice/managedclusters\"), \"Not Applicable\",\r\n    (Type == 'microsoft.sql/servers/databases'), \"Not Applicable\", \r\n    (Type == 'microsoft.documentdb/databaseaccounts'), iif(properties.backupPolicy.periodicModeProperties.backupStorageRedundancy == \"Geo\", \"Healthy\", \"Unhealthy\"),\r\n    (Type == 'microsoft.dbformysql/servers'), iif(properties.storageProfile.geoRedundantBackup == \"Enabled\", \"Healthy\", \"Unhealthy\"),\r\n    (Type contains \"storageaccounts\"), \"Not Applicable\",\r\n    (Type == \"microsoft.network/azurefirewalls\"), \"Not Applicable\",\r\n    (Type == \"microsoft.recoveryservices/vaults\"), \"Not Applicable\",\r\n    \"Unknown\"\r\n    )\r\n| extend AvailabilitySet = case(\r\n    AvailabilitySet == '-', 'None',\r\n    isnotempty(AvailabilitySet), AvailabilitySet,\r\n    \"Unknown\")\r\n| project Type, SkuName, Kind, SubscriptionId, Name, State, Location, ResourceGroup, Zones, AvailabilityZone, AvailabilitySet, Capacity, FaultDomain, OSDisk, ReadReplica, AutomaticFailover, MultipleWriteLocations, StorageAutogrow, ReplicationRole, Backup = tolower(Backup), Environment, ResourceId\r\n| where Type == 'microsoft.web/sites' and Kind contains 'functionapp' and Kind !contains 'workflowapp'",
+                      "query": ${kql_webapp_appservice_funcapp_resources_details},
                       "size": 3,
                       "title": "App Service - Function App",
                       "queryType": 1,
@@ -8741,9 +8184,9 @@
                         "formatters": [
                           {
                             "columnMatch": "$gen_group",
-                            "formatter": 15,
+                          "formatter": 13,
                             "formatOptions": {
-                              "linkTarget": null,
+                            "linkTarget": "Resource",
                               "showIcon": true
                             }
                           },
@@ -8841,6 +8284,10 @@
                             }
                           },
                           {
+                          "columnMatch": "Location",
+                          "formatter": 17
+                        },
+                        {
                             "columnMatch": "Zones",
                             "formatter": 5
                           },
@@ -9041,57 +8488,6 @@
         "groupType": "editable",
         "items": [
           {
-            "type": 9,
-            "content": {
-              "version": "KqlParameterItem/1.0",
-              "crossComponentResources": [
-                "{Subscriptions}"
-              ],
-              "parameters": [
-                {
-                  "id": "b3f445bb-65c7-45da-ae8a-dcfd2a90ee83",
-                  "version": "KqlParameterItem/1.0",
-                  "name": "SLA",
-                  "label": "Show SLA",
-                  "type": 10,
-                  "description": "This will show the SLA information for the focus area.",
-                  "isRequired": true,
-                  "typeSettings": {
-                    "additionalResourceOptions": [],
-                    "showDefault": false
-                  },
-                  "jsonData": "[{ \"value\": \"Yes\", \"label\": \"Yes\"},\r\n {\"value\": \"No\", \"label\": \"No\", \"selected\":true }]",
-                  "timeContext": {
-                    "durationMs": 86400000
-                  },
-                  "value": "Yes"
-                },
-                {
-                  "id": "53b645ef-7b95-461b-a947-208de6da0f26",
-                  "version": "KqlParameterItem/1.0",
-                  "name": "Help",
-                  "label": "Show Help",
-                  "type": 10,
-                  "description": "This will show additional information, and any prerequisites that may apply to the workbook.",
-                  "isRequired": true,
-                  "typeSettings": {
-                    "additionalResourceOptions": [],
-                    "showDefault": false
-                  },
-                  "jsonData": "[{ \"value\": \"Yes\", \"label\": \"Yes\"},\r\n {\"value\": \"No\", \"label\": \"No\", \"selected\":true }]",
-                  "timeContext": {
-                    "durationMs": 86400000
-                  },
-                  "value": "Yes"
-                }
-              ],
-              "style": "pills",
-              "queryType": 1,
-              "resourceType": "microsoft.resourcegraph/resources"
-            },
-            "name": "parameters - 0 - Copy"
-          },
-          {
             "type": 1,
             "content": {
               "json": "[SLA for API Management](https://azure.microsoft.com/support/legal/sla/api-management/)\r\n* We guarantee that API Management Service instances running in the Consumption Tier, Basic Tier, Standard Tier, and Premium Tier deployments scaled within a single region will respond to requests to perform operations at least 99.95% of the time.\r\n* We guarantee that API Management Service instances running in the Premium Tier with deployments scaled across two or more regions will respond to requests to perform operations at least 99.99% of the time.\r\n* No SLA is provided for the following:​\r\n * Developer tier of the API Management Service.\r\n * Any self-hosted API Management components.​\r\n \r\n> SLA accurate at time of release. Latest information is available [here](https://azure.microsoft.com/support/legal/sla/api-management/)",
@@ -9133,9 +8529,9 @@
                 "formatters": [
                   {
                     "columnMatch": "$gen_group",
-                    "formatter": 15,
+                    "formatter": 13,
                     "formatOptions": {
-                      "linkTarget": null,
+                      "linkTarget": "Resource",
                       "showIcon": true
                     }
                   },
@@ -9225,6 +8621,10 @@
                         }
                       ]
                     }
+                  },
+                  {
+                    "columnMatch": "Location",
+                    "formatter": 17
                   },
                   {
                     "columnMatch": "Zones",
@@ -9472,57 +8872,6 @@
         "groupType": "editable",
         "items": [
           {
-            "type": 9,
-            "content": {
-              "version": "KqlParameterItem/1.0",
-              "crossComponentResources": [
-                "{Subscription}"
-              ],
-              "parameters": [
-                {
-                  "id": "f46c904e-7777-498a-bcc3-f3340204ee71",
-                  "version": "KqlParameterItem/1.0",
-                  "name": "SLA",
-                  "label": "Show SLA",
-                  "type": 10,
-                  "description": "This will show the SLA information for the focus area.",
-                  "isRequired": true,
-                  "typeSettings": {
-                    "additionalResourceOptions": [],
-                    "showDefault": false
-                  },
-                  "jsonData": "[{ \"value\": \"Yes\", \"label\": \"Yes\"},\r\n {\"value\": \"No\", \"label\": \"No\", \"selected\":true }]",
-                  "timeContext": {
-                    "durationMs": 86400000
-                  },
-                  "value": "Yes"
-                },
-                {
-                  "id": "84fff300-b04a-4ef7-965c-8fcf0da7ac36",
-                  "version": "KqlParameterItem/1.0",
-                  "name": "Help",
-                  "label": "Show Help",
-                  "type": 10,
-                  "description": "This will show additional information, and any prerequisites that may apply to the workbook.",
-                  "isRequired": true,
-                  "typeSettings": {
-                    "additionalResourceOptions": [],
-                    "showDefault": false
-                  },
-                  "jsonData": "[{ \"value\": \"Yes\", \"label\": \"Yes\"},\r\n {\"value\": \"No\", \"label\": \"No\", \"selected\":true }]",
-                  "timeContext": {
-                    "durationMs": 86400000
-                  },
-                  "value": "Yes"
-                }
-              ],
-              "style": "pills",
-              "queryType": 0,
-              "resourceType": "microsoft.resourcegraph/resources"
-            },
-            "name": "parameters - 0 - Copy - Copy"
-          },
-          {
             "type": 1,
             "content": {
               "json": "[SLA for Azure Site Recovery](https://azure.microsoft.com/support/legal/sla/site-recovery/)\r\n* For each Protected Instance configured for On-Premises-to-On-Premises Failover, we guarantee at least 99.9% availability of the Site Recovery service. Availability is calculated over a monthly billing cycle.\r\n* For each Protected Instance configured for On-Premises-to-Azure planned and unplanned Failover, we guarantee a two-hour Recovery Time Objective.\r\n* For each Protected Instance configured for Azure-to-Azure Failover, we guarantee a two-hour Recovery Time Objective.\r\n\r\n> SLA accurate at time of release. Latest information is available [here](https://azure.microsoft.com/support/legal/sla/site-recovery/)",
@@ -9563,9 +8912,9 @@
                 "formatters": [
                   {
                     "columnMatch": "$gen_group",
-                    "formatter": 15,
+                    "formatter": 13,
                     "formatOptions": {
-                      "linkTarget": null,
+                      "linkTarget": "Resource",
                       "showIcon": true
                     }
                   },
@@ -9611,6 +8960,10 @@
                         }
                       ]
                     }
+                  },
+                  {
+                    "columnMatch": "Location",
+                    "formatter": 17
                   },
                   {
                     "columnMatch": "Zones",
