@@ -1,7 +1,7 @@
 ${extend_resource}
-| project Type, SkuName, Kind, SubscriptionId, Name, State, Location, ResourceGroup, Zones, AvailabilityZone, AvailabilitySet, Capacity, FaultDomain, OSDisk, ReadReplica, AutomaticFailover, MultipleWriteLocations, StorageAutogrow, ReplicationRole, Backup = tolower(Backup), Environment, ResourceId
+| project Type, SkuName, Kind, SubscriptionId, Name, State, Location, ResourceGroup, Zones, AvailabilityZone, AvailabilitySet, Capacity, FaultDomain, OSDisk, ReadReplica, AutomaticFailover, MultipleWriteLocations, StorageAutogrow, ReplicationRole, Backup = tolower(Backup), Environment
 | ${summarize_score}
-    by ResourceId, Type, Environment
+    by Name, Type, Environment
 | ${calculate_score}
-| project ResourceId, Type, Environment, tostring(ReliabilityScore)
+| project Name, Type, Environment, tostring(ReliabilityScore)
 | sort by Type

@@ -1,0 +1,2 @@
+${advisor_recommendation}
+| summarize count() by ImpactedField

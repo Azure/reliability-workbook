@@ -14,15 +14,18 @@ provider "azurerm" {
 
 locals {
   workbook_data_json = templatefile("${path.module}/workbook.tpl.json", {
-    "kql_summary_workbook_reliability_score"                                    = jsonencode(local.kql_summary_workbook_reliability_score)
-    "kql_summary_reliability_score_by_resource_environment"     = jsonencode(local.kql_summary_reliability_score_by_resource_environment)
-    "kql_summary_reliability_score_by_resourceType_environment" = jsonencode(local.kql_summary_reliability_score_by_resourceType_environment)
+    "kql_summary_workbook_reliability_score"                = jsonencode(local.kql_summary_workbook_reliability_score)
+    "kql_summary_reliability_score_by_resource_environment" = jsonencode(local.kql_summary_reliability_score_by_resource_environment)
+
+    "kql_advisor_resource"                  = jsonencode(local.kql_advisor_resource)
+    "kql_summary_advisor_by_recommendation" = jsonencode(local.kql_summary_advisor_by_recommendation)
+    "kql_summary_advisor_by_resourcetype"   = jsonencode(local.kql_summary_advisor_by_resourcetype)
 
     "kql_azuresiterecovery_resources_details" = jsonencode(local.kql_azuresiterecovery_resources_details)
 
-    "kql_compute_vm_resources_details"                 = jsonencode(local.kql_compute_vm_resources_details)
-    "kql_compute_vmss_resources_details"               = jsonencode(local.kql_compute_vmss_resources_details)
-    "kql_compute_appservice_funcapp_resources_details" = jsonencode(local.kql_compute_appservice_funcapp_resources_details)
+    "kql_compute_vm_resources_details"        = jsonencode(local.kql_compute_vm_resources_details)
+    "kql_compute_classicvm_resources_details" = jsonencode(local.kql_compute_classicvm_resources_details)
+    "kql_compute_vmss_resources_details"      = jsonencode(local.kql_compute_vmss_resources_details)
 
     "kql_container_aks_resources_details" = jsonencode(local.kql_container_aks_resources_details)
 
@@ -31,21 +34,25 @@ locals {
     "kql_database_cosmosdb_resources_details"      = jsonencode(local.kql_database_cosmosdb_resources_details)
     "kql_database_mysqlsingle_resources_details"   = jsonencode(local.kql_database_mysqlsingle_resources_details)
     "kql_database_mysqlflexible_resources_details" = jsonencode(local.kql_database_mysqlflexible_resources_details)
+    "kql_database_redis_resources_details"         = jsonencode(local.kql_database_redis_resources_details)
 
     "kql_integration_apim_resources_details" = jsonencode(local.kql_integration_apim_resources_details)
 
-    "kql_networking_azfw_resources_details"  = jsonencode(local.kql_networking_azfw_resources_details)
-    "kql_networking_afd_resources_details"   = jsonencode(local.kql_networking_afd_resources_details)
-    "kql_networking_appgw_resources_details" = jsonencode(local.kql_networking_appgw_resources_details)
-    "kql_networking_lb_resources_details"    = jsonencode(local.kql_networking_lb_resources_details)
+    "kql_networking_azfw_resources_details"   = jsonencode(local.kql_networking_azfw_resources_details)
+    "kql_networking_afd_resources_details"    = jsonencode(local.kql_networking_afd_resources_details)
+    "kql_networking_appgw_resources_details"  = jsonencode(local.kql_networking_appgw_resources_details)
+    "kql_networking_lb_resources_details"     = jsonencode(local.kql_networking_lb_resources_details)
+    "kql_networking_pip_resources_details"    = jsonencode(local.kql_networking_pip_resources_details)
+    "kql_networking_vnetgw_resources_details" = jsonencode(local.kql_networking_vnetgw_resources_details)
 
     "kql_storage_account_resources_details" = jsonencode(local.kql_storage_account_resources_details)
 
-    "kql_webapp_appsvc_resources_details" = jsonencode(local.kql_webapp_appsvc_resources_details)
+    "kql_webapp_appsvc_resources_details"             = jsonencode(local.kql_webapp_appsvc_resources_details)
+    "kql_webapp_appsvcplan_resources_details"         = jsonencode(local.kql_webapp_appsvcplan_resources_details)
+    "kql_webapp_appservice_funcapp_resources_details" = jsonencode(local.kql_webapp_appservice_funcapp_resources_details)
 
-    "kql_export_summary_by_resourceType_environment" = jsonencode(local.kql_export_summary_by_resourceType_environment)
-    "kql_export_summary_by_resource_environment"     = jsonencode(local.kql_export_summary_by_resource_environment)
-    "kql_export_resources_details"                               = jsonencode(local.kql_export_resources_details)
+    "kql_export_summary_by_resource_environment" = jsonencode(local.kql_export_summary_by_resource_environment)
+    "kql_export_resources_details"               = jsonencode(local.kql_export_resources_details)
 
   })
 
@@ -56,9 +63,10 @@ locals {
   //-------------------------------------------
   // Common KQL queries
   //-------------------------------------------
-  kql_calculate_score = file("${path.module}/template_kql/common/calculate_score.kql")
-  kql_extend_resource = file("${path.module}/template_kql/common/extend_resource.kql")
-  kql_summarize_score = file("${path.module}/template_kql/common/summarize_score.kql")
+  kql_calculate_score  = file("${path.module}/template_kql/common/calculate_score.kql")
+  kql_extend_resource  = file("${path.module}/template_kql/common/extend_resource.kql")
+  kql_summarize_score  = file("${path.module}/template_kql/common/summarize_score.kql")
+  kql_advisor_resource = file("${path.module}/template_kql/advisor/advisor_recommendation_details.kql")
 
   //-------------------------------------------
   // Summary tab
@@ -83,15 +91,22 @@ locals {
     }
   )
 
-  // Reliability Score by Resource Type, Environment
-  kql_summary_reliability_score_by_resourceType_environment = templatefile(
-    "${path.module}/template_kql/summary/summary_reliability_score_by_resourceType_environment.kql",
+  //Advisor by Recommendation
+  kql_summary_advisor_by_recommendation = templatefile(
+    "${path.module}/template_kql/summary/summary_advisor_by_recommendation.kql",
     {
-      "calculate_score" = local.kql_calculate_score
-      "extend_resource" = local.kql_extend_resource
-      "summarize_score" = local.kql_summarize_score
+      "advisor_recommendation" = local.kql_advisor_resource
     }
   )
+
+  //Advisor by ResourceType
+  kql_summary_advisor_by_resourcetype = templatefile(
+    "${path.module}/template_kql/summary/summary_advisor_by_resourcetype.kql",
+    {
+      "advisor_recommendation" = local.kql_advisor_resource
+    }
+  )
+
 
   //-------------------------------------------
   // Azure Site Recovery tab
@@ -106,14 +121,14 @@ locals {
   //-------------------------------------------
   // Compute tab
   //-------------------------------------------
-  kql_compute_appservice_funcapp_resources_details = templatefile(
-    "${path.module}/template_kql/compute/compute_appservice_funcapp_resources_details.kql",
+  kql_compute_vm_resources_details = templatefile(
+    "${path.module}/template_kql/compute/compute_vm_resources_details.kql",
     {
       "extend_resource" = local.kql_extend_resource
     }
   )
-  kql_compute_vm_resources_details = templatefile(
-    "${path.module}/template_kql/compute/compute_vm_resources_details.kql",
+  kql_compute_classicvm_resources_details = templatefile(
+    "${path.module}/template_kql/compute/compute_classicvm_resources_details.kql",
     {
       "extend_resource" = local.kql_extend_resource
     }
@@ -168,6 +183,12 @@ locals {
       "extend_resource" = local.kql_extend_resource
     }
   )
+  kql_database_redis_resources_details = templatefile(
+    "${path.module}/template_kql/database/database_redis_resources_details.kql",
+    {
+      "extend_resource" = local.kql_extend_resource
+    }
+  )
 
   //-------------------------------------------
   // Integration tab
@@ -206,6 +227,18 @@ locals {
       "extend_resource" = local.kql_extend_resource
     }
   )
+  kql_networking_pip_resources_details = templatefile(
+    "${path.module}/template_kql/networking/networking_pip_resources_details.kql",
+    {
+      "extend_resource" = local.kql_extend_resource
+    }
+  )
+  kql_networking_vnetgw_resources_details = templatefile(
+    "${path.module}/template_kql/networking/networking_vnetgw_resources_details.kql",
+    {
+      "extend_resource" = local.kql_extend_resource
+    }
+  )
 
   //-------------------------------------------
   // Storage tab
@@ -226,19 +259,22 @@ locals {
       "extend_resource" = local.kql_extend_resource
     }
   )
+  kql_webapp_appsvcplan_resources_details = templatefile(
+    "${path.module}/template_kql/webapp/webapp_appsvcplan_resources_details.kql",
+    {
+      "extend_resource" = local.kql_extend_resource
+    }
+  )
+  kql_webapp_appservice_funcapp_resources_details = templatefile(
+    "${path.module}/template_kql/webapp/webapp_appservice_funcapp_resources_details.kql",
+    {
+      "extend_resource" = local.kql_extend_resource
+    }
+  )
 
   //-------------------------------------------
   // Export tab
   //-------------------------------------------
-  // Summary by Resource Type, Environment
-  kql_export_summary_by_resourceType_environment = templatefile(
-    "${path.module}/template_kql/export/export_summary_by_resourceType_environment.kql",
-    {
-      "calculate_score" = local.kql_calculate_score
-      "extend_resource" = local.kql_extend_resource
-      "summarize_score" = local.kql_summarize_score
-    }
-  )
   // Summary by Resource, Environment
   kql_export_summary_by_resource_environment = templatefile(
     "${path.module}/template_kql/export/export_summary_by_resource_environment.kql",
