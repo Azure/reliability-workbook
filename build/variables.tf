@@ -18,3 +18,8 @@ variable "deploy_to_azure" {
   type    = bool
   default = false
 }
+
+variable "load_community_git_repo" {
+  type    = bool
+  default = false
+}

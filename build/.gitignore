@@ -33,3 +33,4 @@ ReliabilityWorkbook.json
 azuredeploy.json
 terraform.tfvars
 .infracost
+artifacts
