@@ -17,7 +17,7 @@ locals {
     // load workbook already deployed on Azure subscription or community GitHub repo
     "summary_workbook_resource_id" = var.load_community_git_repo ? "TBD" : azurerm_application_insights_workbook.summary[0].id
     "advisor_workbook_resource_id" = var.load_community_git_repo ? "TBD" : azurerm_application_insights_workbook.advisor[0].id
-    "export_workbook_resource_id"  = var.load_community_git_repo ? "TBD" : azurerm_application_insights_workbook.export[0].id //local.export_workbook_resource_id
+    "export_workbook_resource_id"  = var.load_community_git_repo ? "TBD" : azurerm_application_insights_workbook.export[0].id
 
     "kql_azuresiterecovery_resources_details" = jsonencode(local.kql_azuresiterecovery_resources_details)
 
