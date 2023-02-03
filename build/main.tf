@@ -15,11 +15,10 @@ provider "azurerm" {
 locals {
   workbook_data_json = templatefile("${path.module}/templates/workbook.tpl.json", {
     // load workbook already deployed on Azure subscription or community GitHub repo
-    "summary_workbook_resource_id" = var.load_community_git_repo ? "TBD" : azurerm_application_insights_workbook.summary[0].id
-    "advisor_workbook_resource_id" = var.load_community_git_repo ? "TBD" : azurerm_application_insights_workbook.advisor[0].id
-    "export_workbook_resource_id"  = var.load_community_git_repo ? "TBD" : azurerm_application_insights_workbook.export[0].id
-
-    "kql_azuresiterecovery_resources_details" = jsonencode(local.kql_azuresiterecovery_resources_details)
+    "summary_workbook_resource_id"           = var.load_community_git_repo ? "TBD" : azurerm_application_insights_workbook.summary[0].id
+    "advisor_workbook_resource_id"           = var.load_community_git_repo ? "TBD" : azurerm_application_insights_workbook.advisor[0].id
+    "export_workbook_resource_id"            = var.load_community_git_repo ? "TBD" : azurerm_application_insights_workbook.export[0].id
+    "azuresiterecovery_workbook_resource_id" = var.load_community_git_repo ? "TBD" : azurerm_application_insights_workbook.azuresiterecovery[0].id
 
     "kql_compute_vm_resources_details"        = jsonencode(local.kql_compute_vm_resources_details)
     "kql_compute_classicvm_resources_details" = jsonencode(local.kql_compute_classicvm_resources_details)
@@ -61,16 +60,6 @@ locals {
   kql_extend_resource  = file("${path.module}/template_kql/common/extend_resource.kql")
   kql_summarize_score  = file("${path.module}/template_kql/common/summarize_score.kql")
   kql_advisor_resource = file("${path.module}/template_kql/advisor/advisor_recommendation_details.kql")
-
-  //-------------------------------------------
-  // Azure Site Recovery tab
-  //-------------------------------------------
-  kql_azuresiterecovery_resources_details = templatefile(
-    "${path.module}/template_kql/azuresiterecovery/azuresiterecovery_resources_details.kql",
-    {
-      "extend_resource" = local.kql_extend_resource
-    }
-  )
 
   //-------------------------------------------
   // Compute tab
