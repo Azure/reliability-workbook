@@ -23,8 +23,3 @@ variable "load_book_from_community_gitrepo" {
   type    = bool
   default = false
 }
-
-variable "is_fta_edition" {
-  type    = bool
-  default = false
-}

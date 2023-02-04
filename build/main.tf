@@ -13,7 +13,7 @@ provider "azurerm" {
 }
 
 locals {
-  workbook_data_json = templatefile("${path.module}/templates/workbook.tpl.json", {
+  workbook_data_json = var.deploy_to_azure ? templatefile("${path.module}/templates/workbook.tpl.json", {
     // load workbook already deployed on Azure subscription or community GitHub repo
     "summary_workbook_resource_id"           = var.load_book_from_community_gitrepo ? "TBD" : azurerm_application_insights_workbook.summary[0].id
     "advisor_workbook_resource_id"           = var.load_book_from_community_gitrepo ? "TBD" : azurerm_application_insights_workbook.advisor[0].id
@@ -26,7 +26,7 @@ locals {
     "networking_workbook_resource_id"        = var.load_book_from_community_gitrepo ? "TBD" : azurerm_application_insights_workbook.networking[0].id
     "storage_workbook_resource_id"           = var.load_book_from_community_gitrepo ? "TBD" : azurerm_application_insights_workbook.storage[0].id
     "web_workbook_resource_id"               = var.load_book_from_community_gitrepo ? "TBD" : azurerm_application_insights_workbook.web[0].id
-  })
+  }) : null
 
   armtemplate_json = templatefile("${path.module}/azuredeploy.tpl.json", {
     "workbook_json" = jsonencode(local.workbook_data_json)
