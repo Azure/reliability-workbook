@@ -1,0 +1,527 @@
+{
+    "version": "Notebook/1.0",
+    "items": [
+      {
+        "type": 9,
+        "content": {
+            "version": "KqlParameterItem/1.0",
+            "parameters": [
+            {
+                "id": "08a55cf7-d48e-4ad0-9976-cdf193bab582",
+                "version": "KqlParameterItem/1.0",
+                "name": "Cloud",
+                "type": 2,
+                "isRequired": true,
+                "typeSettings": {
+                "additionalResourceOptions": [],
+                "showDefault": false
+                },
+                "jsonData": "[\r\n    { \"value\":\"AzureCloud\", \"label\":\"Azure\", \"selected\":true },\r\n    { \"value\":\"GovernmentCloud\", \"label\":\"Azure Government\" }\r\n]",
+                "timeContext": {
+                "durationMs": 86400000
+                }
+            },
+            {
+                "id": "aa0176d8-14ff-4dc5-9ae7-b8029f565674",
+                "version": "KqlParameterItem/1.0",
+                "name": "Subscriptions",
+                "type": 6,
+                "isRequired": true,
+                "multiSelect": true,
+                "quote": "'",
+                "delimiter": ",",
+                "typeSettings": {
+                "additionalResourceOptions": [
+                    "value::all"
+                ],
+                "includeAll": true,
+                "showDefault": false
+                },
+                "defaultValue": "value::all",
+                "value": [
+                "value::all"
+                ]
+            },
+            {
+                "id": "91aa9ba3-ed60-4472-8dd9-1c2cb6255757",
+                "version": "KqlParameterItem/1.0",
+                "name": "ResourceGroup",
+                "label": "Resource Group",
+                "type": 2,
+                "isRequired": true,
+                "multiSelect": true,
+                "quote": "'",
+                "delimiter": ",",
+                "query": "resources\r\n| distinct resourceGroup",
+                "crossComponentResources": [
+                "{Subscriptions}"
+                ],
+                "typeSettings": {
+                "additionalResourceOptions": [
+                    "value::all"
+                ],
+                "showDefault": false
+                },
+                "defaultValue": "value::all",
+                "queryType": 1,
+                "resourceType": "microsoft.resourcegraph/resources"
+            },
+            {
+                "id": "5a4f6d34-9f89-4ef8-b4ee-fb0580ec016d",
+                "version": "KqlParameterItem/1.0",
+                "name": "Environment",
+                "type": 2,
+                "multiSelect": true,
+                "quote": "'",
+                "delimiter": ",",
+                "query": "resources\r\n| extend Environment = case(\r\ntags.Environment <> \"\", tags.Environment,\r\ntags.environment <> \"\", tags.environment,\r\ntags.Env <> \"\", tags.Env,\r\ntags.env <> \"\", tags.env,\r\ntolower(name) contains \"prod\", \"Production\",\r\ntolower(name) contains \"dev\", \"Development\",\r\ntolower(name) contains \"qa\", \"QA\",\r\ntolower(name) contains \"uat\", \"UAT\",\r\ntolower(name) contains \"sit\", \"SIT\",\r\ntolower(name) contains \"test\", \"Test\",\r\n\"Undefined\")\r\n| distinct Environment",
+                "crossComponentResources": [
+                "{Subscriptions}"
+                ],
+                "typeSettings": {
+                "additionalResourceOptions": [
+                    "value::all"
+                ]
+                },
+                "defaultValue": "value::all",
+                "queryType": 1,
+                "resourceType": "microsoft.resourcegraph/resources"
+            },
+            {
+                "id": "9d6afcdc-172c-4bef-8bab-dc372c5d3bb4",
+                "version": "KqlParameterItem/1.0",
+                "name": "TagName",
+                "label": "Tag Name",
+                "type": 2,
+                "query": "Resources\r\n| where tags != '' and tags != '[]'\r\n| mvexpand tags\r\n| extend tagName = tostring(bag_keys(tags)[0])\r\n| distinct tagName\r\n| sort by tagName asc",
+                "crossComponentResources": [
+                "{Subscriptions}"
+                ],
+                "typeSettings": {
+                "additionalResourceOptions": []
+                },
+                "queryType": 1,
+                "resourceType": "microsoft.resourcegraph/resources",
+                "value": null
+            },
+            {
+                "id": "95781001-338b-4ed3-81dc-ce16f2a98bf0",
+                "version": "KqlParameterItem/1.0",
+                "name": "TagValue",
+                "label": "Tag Value",
+                "type": 2,
+                "query": "Resources\r\n| mvexpand tags\r\n| extend tagName = tostring(bag_keys(tags)[0])\r\n| extend tagValue = tostring(tags[tagName])\r\n| where tags != '' and tags != '[]' and tostring(bag_keys(tags)[0]) == '{TagName}'\r\n| distinct tagValue\r\n| sort by tagValue asc",
+                "crossComponentResources": [
+                "{Subscriptions}"
+                ],
+                "typeSettings": {
+                "additionalResourceOptions": []
+                },
+                "queryType": 1,
+                "resourceType": "microsoft.resourcegraph/resources",
+                "value": null
+            },
+            {
+                "id": "e929bc01-08ec-45fe-bc6a-4e0267460dfa",
+                "version": "KqlParameterItem/1.0",
+                "name": "SLA",
+                "label": "Show SLA",
+                "type": 10,
+                "description": "This will show the SLA information for the focus area",
+                "isRequired": true,
+                "typeSettings": {
+                "additionalResourceOptions": [],
+                "showDefault": false
+                },
+                "jsonData": "[{ \"value\": \"Yes\", \"label\": \"Yes\", \"selected\":true},\r\n {\"value\": \"No\", \"label\": \"No\"}]"
+            },
+            {
+                "id": "9581cbc6-0f0f-42be-8ae8-6fe94de00ab8",
+                "version": "KqlParameterItem/1.0",
+                "name": "Help",
+                "label": "Show Help",
+                "type": 10,
+                "isRequired": true,
+                "typeSettings": {
+                "additionalResourceOptions": []
+                },
+                "jsonData": "[{\"value\": \"Yes\", \"label\": \"Yes\", \"selected\":true },\r\n {\"value\": \"No\", \"label\": \"No\"}]"
+            }
+            ],
+            "style": "pills",
+            "queryType": 0,
+            "resourceType": "microsoft.operationalinsights/workspaces"
+        },
+        "name": "parameters - 13"
+      },
+      {
+        "type": 1,
+        "content": {
+          "json": "[SLA for API Management](https://azure.microsoft.com/support/legal/sla/api-management/)\r\n* We guarantee that API Management Service instances running in the Consumption Tier, Basic Tier, Standard Tier, and Premium Tier deployments scaled within a single region will respond to requests to perform operations at least 99.95% of the time.\r\n* We guarantee that API Management Service instances running in the Premium Tier with deployments scaled across two or more regions will respond to requests to perform operations at least 99.99% of the time.\r\n* No SLA is provided for the following:​\r\n * Developer tier of the API Management Service.\r\n * Any self-hosted API Management components.​\r\n \r\n> SLA accurate at time of release. Latest information is available [here](https://azure.microsoft.com/support/legal/sla/api-management/)",
+          "style": "upsell"
+        },
+        "conditionalVisibility": {
+          "parameterName": "SLA",
+          "comparison": "isEqualTo",
+          "value": "Yes"
+        },
+        "name": "text - 2 - Copy"
+      },
+      {
+        "type": 1,
+        "content": {
+          "json": "* Please note the Developer tier is for non-production use cases and evaluations. It does not offer an SLA.\r\n* API Management instances deleted using 2020-01-01-preview and later API versions will be soft-deleted and recoverable. APIM instances deleted using previous API versions will continue to be hard-deleted. Azure PowerShell and Azure CLI currently do not use the 2020-06-01-preview version and will also result in hard-delete behavior. Refer to [API Management soft-delete (preview)](https://learn.microsoft.com/azure/api-management/soft-delete) for more information.\r\n\r\n",
+          "style": "info"
+        },
+        "conditionalVisibility": {
+          "parameterName": "Help",
+          "comparison": "isEqualTo",
+          "value": "Yes"
+        },
+        "name": "text - 3 - Copy - Copy"
+      },
+      {
+        "type": 3,
+        "content": {
+          "version": "KqlItem/1.0",
+          "query": ${kql_integration_apim_resources_details},
+          "size": 0,
+          "title": "API Management",
+          "queryType": 1,
+          "resourceType": "microsoft.resourcegraph/resources",
+          "crossComponentResources": [
+            "{Subscriptions}"
+          ],
+          "gridSettings": {
+            "formatters": [
+              {
+                "columnMatch": "$gen_group",
+                "formatter": 13,
+                "formatOptions": {
+                  "linkTarget": "Resource",
+                  "showIcon": true
+                }
+              },
+              {
+                "columnMatch": "Type",
+                "formatter": 5
+              },
+              {
+                "columnMatch": "SkuName",
+                "formatter": 18,
+                "formatOptions": {
+                  "thresholdsOptions": "icons",
+                  "thresholdsGrid": [
+                    {
+                      "operator": "==",
+                      "thresholdValue": "developer",
+                      "representation": "2",
+                      "text": "{0}{1}"
+                    },
+                    {
+                      "operator": "==",
+                      "thresholdValue": "basic",
+                      "representation": "2",
+                      "text": "{0}{1}"
+                    },
+                    {
+                      "operator": "==",
+                      "thresholdValue": "standard",
+                      "representation": "2",
+                      "text": "{0}{1}"
+                    },
+                    {
+                      "operator": "==",
+                      "thresholdValue": "premium",
+                      "representation": "success",
+                      "text": "{0}{1}"
+                    },
+                    {
+                      "operator": "==",
+                      "thresholdValue": "isolated",
+                      "representation": "success",
+                      "text": "{0}{1}"
+                    },
+                    {
+                      "operator": "Default",
+                      "thresholdValue": null,
+                      "representation": "unknown",
+                      "text": "{0}{1}"
+                    }
+                  ]
+                }
+              },
+              {
+                "columnMatch": "Kind",
+                "formatter": 5
+              },
+              {
+                "columnMatch": "SubscriptionId",
+                "formatter": 5
+              },
+              {
+                "columnMatch": "Name",
+                "formatter": 5
+              },
+              {
+                "columnMatch": "State",
+                "formatter": 18,
+                "formatOptions": {
+                  "thresholdsOptions": "colors",
+                  "thresholdsGrid": [
+                    {
+                      "operator": "==",
+                      "thresholdValue": "succeeded",
+                      "representation": "green",
+                      "text": "{0}{1}"
+                    },
+                    {
+                      "operator": "!=",
+                      "thresholdValue": "succeeded",
+                      "representation": "orange",
+                      "text": "{0}{1}"
+                    },
+                    {
+                      "operator": "Default",
+                      "thresholdValue": null,
+                      "text": "{0}{1}"
+                    }
+                  ]
+                }
+              },
+              {
+                "columnMatch": "Location",
+                "formatter": 17
+              },
+              {
+                "columnMatch": "Zones",
+                "formatter": 5
+              },
+              {
+                "columnMatch": "AvailabilityZone",
+                "formatter": 18,
+                "formatOptions": {
+                  "thresholdsOptions": "icons",
+                  "thresholdsGrid": [
+                    {
+                      "operator": "==",
+                      "thresholdValue": "not applicable",
+                      "representation": "more",
+                      "text": "{0}{1}"
+                    },
+                    {
+                      "operator": "==",
+                      "thresholdValue": "not configured",
+                      "representation": "2",
+                      "text": "{0}{1}"
+                    },
+                    {
+                      "operator": "==",
+                      "thresholdValue": "1",
+                      "representation": "2",
+                      "text": "{0}{1}"
+                    },
+                    {
+                      "operator": "==",
+                      "thresholdValue": "2",
+                      "representation": "success",
+                      "text": "{0}{1}"
+                    },
+                    {
+                      "operator": "==",
+                      "thresholdValue": "3",
+                      "representation": "success",
+                      "text": "{0}{1}"
+                    },
+                    {
+                      "operator": "==",
+                      "thresholdValue": "configured",
+                      "representation": "success",
+                      "text": "{0}{1}"
+                    },
+                    {
+                      "operator": "Default",
+                      "thresholdValue": null,
+                      "representation": "Unknown",
+                      "text": "{0}{1}"
+                    }
+                  ]
+                }
+              },
+              {
+                "columnMatch": "AvailabilitySet",
+                "formatter": 5
+              },
+              {
+                "columnMatch": "Capacity",
+                "formatter": 18,
+                "formatOptions": {
+                  "thresholdsOptions": "icons",
+                  "thresholdsGrid": [
+                    {
+                      "operator": "==",
+                      "thresholdValue": "1",
+                      "representation": "2",
+                      "text": "{0}{1}"
+                    },
+                    {
+                      "operator": "==",
+                      "thresholdValue": "0",
+                      "representation": "2",
+                      "text": "{0}{1}"
+                    },
+                    {
+                      "operator": "!=",
+                      "thresholdValue": "1",
+                      "representation": "success",
+                      "text": "{0}{1}"
+                    },
+                    {
+                      "operator": "Default",
+                      "thresholdValue": null,
+                      "representation": "unknown",
+                      "text": "{0}{1}"
+                    }
+                  ]
+                }
+              },
+              {
+                "columnMatch": "FaultDomain",
+                "formatter": 5
+              },
+              {
+                "columnMatch": "OSDisk",
+                "formatter": 18,
+                "formatOptions": {
+                  "thresholdsOptions": "icons",
+                  "thresholdsGrid": [
+                    {
+                      "operator": "==",
+                      "thresholdValue": "stv2",
+                      "representation": "success",
+                      "text": "{0}{1}"
+                    },
+                    {
+                      "operator": "==",
+                      "thresholdValue": "stv1",
+                      "representation": "2",
+                      "text": "{0}{1}"
+                    },
+                    {
+                      "operator": "Default",
+                      "thresholdValue": null,
+                      "representation": "unknown",
+                      "text": "{0}{1}"
+                    }
+                  ]
+                }
+              },
+              {
+                "columnMatch": "ReadReplica",
+                "formatter": 5
+              },
+              {
+                "columnMatch": "AutomaticFailover",
+                "formatter": 5
+              },
+              {
+                "columnMatch": "MultipleWriteLocations",
+                "formatter": 5
+              },
+              {
+                "columnMatch": "StorageAutogrow",
+                "formatter": 5
+              },
+              {
+                "columnMatch": "ReplicationRole",
+                "formatter": 5
+              },
+              {
+                "columnMatch": "Backup",
+                "formatter": 5
+              },
+              {
+                "columnMatch": "Environment",
+                "formatter": 18,
+                "formatOptions": {
+                  "thresholdsOptions": "colors",
+                  "thresholdsGrid": [
+                    {
+                      "operator": "contains",
+                      "thresholdValue": "prod",
+                      "representation": "redBright",
+                      "text": "{0}{1}"
+                    },
+                    {
+                      "operator": "contains",
+                      "thresholdValue": "Prod",
+                      "representation": "redBright",
+                      "text": "{0}{1}"
+                    },
+                    {
+                      "operator": "Default",
+                      "thresholdValue": null,
+                      "text": "{0}{1}"
+                    }
+                  ]
+                }
+              },
+              {
+                "columnMatch": "SubscriptionName",
+                "formatter": 5
+              },
+              {
+                "columnMatch": "Tier",
+                "formatter": 18,
+                "formatOptions": {
+                  "thresholdsOptions": "icons",
+                  "thresholdsGrid": [
+                    {
+                      "operator": "==",
+                      "thresholdValue": "Premium",
+                      "representation": "success",
+                      "text": "{0}{1}"
+                    },
+                    {
+                      "operator": "Default",
+                      "thresholdValue": null,
+                      "representation": "2",
+                      "text": "{0}{1}"
+                    }
+                  ]
+                }
+              }
+            ],
+            "hierarchySettings": {
+              "treeType": 1,
+              "groupBy": [
+                "SubscriptionId"
+              ],
+              "expandTopLevel": false,
+              "finalBy": "Name"
+            },
+            "labelSettings": [
+              {
+                "columnId": "SkuName",
+                "label": "SKU"
+              },
+              {
+                "columnId": "SubscriptionId",
+                "label": "Subscription"
+              },
+              {
+                "columnId": "ResourceGroup",
+                "label": "Resource Group"
+              },
+              {
+                "columnId": "OSDisk",
+                "label": "Platform Version"
+              }
+            ]
+          },
+          "sortBy": []
+        },
+        "name": "kql_integration_apim_resources_details"
+      }
+    ]
+}

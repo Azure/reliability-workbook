@@ -19,7 +19,12 @@ variable "deploy_to_azure" {
   default = false
 }
 
-variable "load_community_git_repo" {
+variable "load_book_from_community_gitrepo" {
+  type    = bool
+  default = false
+}
+
+variable "is_fta_edition" {
   type    = bool
   default = false
 }
