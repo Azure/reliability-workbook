@@ -30,6 +30,16 @@ resource "random_uuid" "workbook_name_export" {
   }
 }
 
+resource "azurerm_application_insights_workbook" "export" {
+  count = var.deploy_to_azure ? 1 : 0
+
+  name                = random_uuid.workbook_name_export.result
+  resource_group_name = var.rg.name
+  location            = var.rg.location
+  display_name        = "${var.workbook_name}-export"
+  data_json           = local.workbook_export_json
+}
+
 resource "local_file" "export" {
   filename = "${path.module}/artifacts/ReliabilityWorkbookExport.json"
   content  = local.workbook_export_json

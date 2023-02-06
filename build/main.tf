@@ -16,6 +16,8 @@ locals {
   workbook_data_json = var.deploy_to_azure ? templatefile("${path.module}/templates/workbook.tpl.json", {
     // load workbook already deployed on Azure subscription or community GitHub repo
     "summary_workbook_resource_id"           = var.load_book_from_community_gitrepo ? "TBD" : azurerm_application_insights_workbook.summary[0].id
+    "advisor_workbook_resource_id"           = var.load_book_from_community_gitrepo ? "TBD" : azurerm_application_insights_workbook.advisor[0].id
+    "export_workbook_resource_id"            = var.load_book_from_community_gitrepo ? "TBD" : azurerm_application_insights_workbook.export[0].id
     "azuresiterecovery_workbook_resource_id" = var.load_book_from_community_gitrepo ? "TBD" : azurerm_application_insights_workbook.azuresiterecovery[0].id
     "compute_workbook_resource_id"           = var.load_book_from_community_gitrepo ? "TBD" : azurerm_application_insights_workbook.compute[0].id
     "containers_workbook_resource_id"        = var.load_book_from_community_gitrepo ? "TBD" : azurerm_application_insights_workbook.containers[0].id
