@@ -175,16 +175,9 @@
             "linkLabel": "Summary",
             "subTarget": "Summary2",
             "style": "link"
-          },
-          {
-            "id": "d983c7c7-b5a0-4245-86fa-52ac1266fb13",
-            "cellValue": "selectedTab",
-            "linkTarget": "parameter",
-            "linkLabel": "Azure Advisor",
-            "subTarget": "Advisor",
-            "style": "link"
-          },
-          {
+          }
+          ${linke_of_Advisor}
+          ,{
             "id": "88c013ec-1149-411f-8b35-02e737237a91",
             "cellValue": "selectedTab",
             "linkTarget": "parameter",
@@ -247,34 +240,13 @@
             "linkLabel": "Web",
             "subTarget": "Web",
             "style": "link"
-          },
-          {
-            "id": "0f548bfa-f959-4a25-a9ac-7c986be6d33b",
-            "cellValue": "selectedTab",
-            "linkTarget": "parameter",
-            "linkLabel": "Export",
-            "subTarget": "Export",
-            "style": "link"
           }
+          ${link_of_Export}
         ]
       },
       "name": "links - 5"
     },
-    {
-      "type": 12,
-      "content": {
-        "version": "NotebookGroup/1.0",
-        "groupType": "template",
-        "loadFromTemplateId": "${advisor_workbook_resource_id}",
-        "items": []
-      },
-      "conditionalVisibility": {
-        "parameterName": "selectedTab",
-        "comparison": "isEqualTo",
-        "value": "Advisor"
-      },
-      "name": "Advisor"
-    },
+    ${tab_of_Advisor}
     {
       "type": 12,
       "content": {
@@ -346,21 +318,7 @@
       },
       "name": "summary group"
     },
-    {
-      "type": 12,
-      "content": {
-        "version": "NotebookGroup/1.0",
-        "groupType": "template",
-        "loadFromTemplateId": "${export_workbook_resource_id}",
-        "items": []
-      },
-      "conditionalVisibility": {
-        "parameterName": "selectedTab",
-        "comparison": "isEqualTo",
-        "value": "Export"
-      },
-      "name": "ExportStep"
-    },
+    ${tab_of_Export}
     {
       "type": 12,
       "content": {

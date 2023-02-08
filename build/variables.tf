@@ -14,12 +14,7 @@ variable "workbook_name" {
   default = "FTA - Reliability Workbook"
 }
 
-variable "deploy_to_azure" {
-  type    = bool
-  default = false
-}
-
-variable "load_book_from_community_gitrepo" {
+variable "deploy_community_edition_to_azure" {
   type    = bool
   default = false
 }

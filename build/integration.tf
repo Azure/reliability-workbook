@@ -19,7 +19,7 @@ resource "random_uuid" "workbook_name_integration" {
 }
 
 resource "azurerm_application_insights_workbook" "integration" {
-  count = var.deploy_to_azure ? 1 : 0
+  count = var.deploy_community_edition_to_azure ? 1 : 0
 
   name                = random_uuid.workbook_name_integration.result
   resource_group_name = var.rg.name
