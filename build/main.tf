@@ -130,15 +130,15 @@ locals {
   }) : null
 
   workbook_data_json_for_public = templatefile("${path.module}/templates/workbook.tpl.json", {
-    "summary_workbook_resource_id"           = "community-Workbooks/Azure Advisor/Reliability/Tabs/ReliabilityWorkbookSummary.workbook"
-    "azuresiterecovery_workbook_resource_id" = "community-Workbooks/Azure Advisor/Reliability/Tabs/ReliabilityWorkbookAzureSiteRecovery.workbook"
-    "compute_workbook_resource_id"           = "community-Workbooks/Azure Advisor/Reliability/Tabs/ReliabilityWorkbookCompute.workbook"
-    "containers_workbook_resource_id"        = "community-Workbooks/Azure Advisor/Reliability/Tabs/ReliabilityWorkbookContainers.workbook"
-    "databases_workbook_resource_id"         = "community-Workbooks/Azure Advisor/Reliability/Tabs/ReliabilityWorkbookDatabases.workbook"
-    "integration_workbook_resource_id"       = "community-Workbooks/Azure Advisor/Reliability/Tabs/ReliabilityWorkbookIntegration.workbook"
-    "networking_workbook_resource_id"        = "community-Workbooks/Azure Advisor/Reliability/Tabs/ReliabilityWorkbookNetworking.workbook"
-    "storage_workbook_resource_id"           = "community-Workbooks/Azure Advisor/Reliability/Tabs/ReliabilityWorkbookStorage.workbook"
-    "web_workbook_resource_id"               = "community-Workbooks/Azure Advisor/Reliability/Tabs/ReliabilityWorkbookWeb.workbook"
+    "summary_workbook_resource_id"           = "TBD"
+    "azuresiterecovery_workbook_resource_id" = "community-Workbooks/Azure Advisor/Reliability/Template/AzureSiteRecovery/ReliabilityWorkbookAzureSiteRecovery.workbook"
+    "compute_workbook_resource_id"           = "community-Workbooks/Azure Advisor/Reliability/Template/Compute/ReliabilityWorkbookCompute.workbook"
+    "containers_workbook_resource_id"        = "community-Workbooks/Azure Advisor/Reliability/Template/Containers/ReliabilityWorkbookContainers.workbook"
+    "databases_workbook_resource_id"         = "community-Workbooks/Azure Advisor/Reliability/Template/Databases/ReliabilityWorkbookDatabases.workbook"
+    "integration_workbook_resource_id"       = "community-Workbooks/Azure Advisor/Reliability/Template/Integration/ReliabilityWorkbookIntegration.workbook"
+    "networking_workbook_resource_id"        = "community-Workbooks/Azure Advisor/Reliability/Template/Networking/ReliabilityWorkbookNetworking.workbook"
+    "storage_workbook_resource_id"           = "community-Workbooks/Azure Advisor/Reliability/Template/Storage/ReliabilityWorkbookStorage.workbook"
+    "web_workbook_resource_id"               = "community-Workbooks/Azure Advisor/Reliability/Template/Web/ReliabilityWorkbookWeb.workbook"
 
     "overview_information" = ""
     "link_of_Summary"      = ""
