@@ -13,21 +13,6 @@
                         "version": "KqlParameterItem/1.0",
                         "parameters": [
                         {
-                            "id": "08a55cf7-d48e-4ad0-9976-cdf193bab582",
-                            "version": "KqlParameterItem/1.0",
-                            "name": "Cloud",
-                            "type": 2,
-                            "isRequired": true,
-                            "typeSettings": {
-                            "additionalResourceOptions": [],
-                            "showDefault": false
-                            },
-                            "jsonData": "[\r\n    { \"value\":\"AzureCloud\", \"label\":\"Azure\", \"selected\":true },\r\n    { \"value\":\"GovernmentCloud\", \"label\":\"Azure Government\" }\r\n]",
-                            "timeContext": {
-                            "durationMs": 86400000
-                            }
-                        },
-                        {
                             "id": "aa0176d8-14ff-4dc5-9ae7-b8029f565674",
                             "version": "KqlParameterItem/1.0",
                             "name": "Subscriptions",
@@ -174,26 +159,6 @@
                       "name": "Advisor Help"
                     },
                     {
-                      "type": 1,
-                      "content": {
-                        "json": "> Azure Advisor recommendations are not yet available for Azure Government cloud",
-                        "style": "warning"
-                      },
-                      "conditionalVisibilities": [
-                        {
-                          "parameterName": "Help",
-                          "comparison": "isEqualTo",
-                          "value": "Yes"
-                        },
-                        {
-                          "parameterName": "Cloud",
-                          "comparison": "isEqualTo",
-                          "value": "GovernmentCloud"
-                        }
-                      ],
-                      "name": "Advisor Help - Gov"
-                    },
-                    {
                       "type": 3,
                       "content": {
                         "version": "KqlItem/1.0",
@@ -322,11 +287,6 @@
                           ]
                         },
                         "sortBy": []
-                      },
-                      "conditionalVisibility": {
-                        "parameterName": "Cloud",
-                        "comparison": "isEqualTo",
-                        "value": "AzureCloud"
                       },
                       "name": "query - 0"
                     }
