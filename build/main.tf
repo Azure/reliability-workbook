@@ -13,14 +13,6 @@ provider "azurerm" {
 }
 
 locals {
-  link_of_Export = var.deploy_community_edition_to_azure ? templatefile("${path.module}/templates/export_link.tpl.json", {}) : ""
-  tab_of_Export = var.deploy_community_edition_to_azure ? templatefile("${path.module}/templates/export_tab.tpl.json", {
-    "export_workbook_resource_id" = azurerm_application_insights_workbook.export[0].id
-  }) : ""
-  link_of_Advisor = var.deploy_community_edition_to_azure ? templatefile("${path.module}/templates/advisor_link.tpl.json", {}) : ""
-  tab_of_Advisor = var.deploy_community_edition_to_azure ? templatefile("${path.module}/templates/advisor_tab.tpl.json", {
-    "advisor_workbook_resource_id" = azurerm_application_insights_workbook.advisor[0].id
-  }) : ""
   workbook_data_json_for_community = var.deploy_community_edition_to_azure ? templatefile("${path.module}/templates/workbook.tpl.json", {
     // load workbook already deployed on Azure subscription or community GitHub repo
     "summary_workbook_resource_id"           = azurerm_application_insights_workbook.summary[0].id
@@ -33,10 +25,78 @@ locals {
     "storage_workbook_resource_id"           = azurerm_application_insights_workbook.storage[0].id
     "web_workbook_resource_id"               = azurerm_application_insights_workbook.web[0].id
 
-    "link_of_Export"   = local.link_of_Export
-    "tab_of_Export"    = local.tab_of_Export
-    "linke_of_Advisor" = local.link_of_Advisor
-    "tab_of_Advisor"   = local.tab_of_Advisor
+    // Show information on Overview tab
+    "overview_information" = <<-EOT
+          ,{
+            "type": 1,
+            "content": {
+              "json": "* This workbook source is maintained publicly as OpenSource in [GitHub Repository](https://github.com/Azure/reliability-workbook). There is no Service Level guarantees or warranties associated with the usage of this workbook. Refer [license](https://github.com/Azure/reliability-workbook/blob/main/LICENSE) for more details.\r\n\r\n> If there are any bugs or suggestions for improvements, feel free to raise an issue in the above GitHub repository. In case you want to reach out to maintainers, please email to [FTA Reliability vTeam](mailto:fta-reliability-team@microsoft.com)",
+              "style": "info"
+            },
+            "name": "text - 3"
+          }
+    EOT
+
+    // Enable Export
+    "link_of_Export" = <<-EOT
+          ,{
+            "id": "0f548bfa-f959-4a25-a9ac-7c986be6d33b",
+            "cellValue": "selectedTab",
+            "linkTarget": "parameter",
+            "linkLabel": "Export",
+            "subTarget": "Export",
+            "style": "link"
+          }
+    EOT
+
+    "tab_of_Export" = <<-EOT
+        {
+      "type": 12,
+      "content": {
+        "version": "NotebookGroup/1.0",
+        "groupType": "template",
+        "loadFromTemplateId": "${azurerm_application_insights_workbook.export[0].id}",
+        "items": []
+      },
+      "conditionalVisibility": {
+        "parameterName": "selectedTab",
+        "comparison": "isEqualTo",
+        "value": "Export"
+      },
+      "name": "ExportStep"
+    },
+    EOT
+
+    // Enable Advisor
+    "linke_of_Advisor" = <<-EOT
+         ,{
+            "id": "d983c7c7-b5a0-4245-86fa-52ac1266fb13",
+            "cellValue": "selectedTab",
+            "linkTarget": "parameter",
+            "linkLabel": "Azure Advisor",
+            "subTarget": "Advisor",
+            "style": "link"
+          }
+    EOT
+
+    "tab_of_Advisor" = <<-EOT
+    {
+      "type": 12,
+      "content": {
+        "version": "NotebookGroup/1.0",
+        "groupType": "template",
+        "loadFromTemplateId": "${azurerm_application_insights_workbook.advisor[0].id}",
+        "items": []
+      },
+      "conditionalVisibility": {
+        "parameterName": "selectedTab",
+        "comparison": "isEqualTo",
+        "value": "Advisor"
+      },
+      "name": "Advisor"
+    },
+    EOT
+
   }) : null
 
   workbook_data_json_for_public = templatefile("${path.module}/templates/workbook.tpl.json", {
@@ -50,10 +110,11 @@ locals {
     "storage_workbook_resource_id"           = "TBD"
     "web_workbook_resource_id"               = "TBD"
 
-    "link_of_Export"   = local.link_of_Export
-    "tab_of_Export"    = local.tab_of_Export
-    "linke_of_Advisor" = local.link_of_Advisor
-    "tab_of_Advisor"   = local.tab_of_Advisor
+    "overview_information" = ""
+    "link_of_Export" = ""
+    "tab_of_Export"  = ""
+    "linke_of_Advisor" = ""
+    "tab_of_Advisor"  = ""
   })
 
   armtemplate_json = templatefile("${path.module}/azuredeploy.tpl.json", {
