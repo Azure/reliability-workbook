@@ -152,16 +152,9 @@
             "linkLabel": "Overview",
             "subTarget": "OV",
             "style": "link"
-          },
-          {
-            "id": "d6656d8e-acfc-4d7d-853d-a8c628907ba6",
-            "cellValue": "selectedTab",
-            "linkTarget": "parameter",
-            "linkLabel": "Summary",
-            "subTarget": "Summary2",
-            "style": "link"
           }
-          ${linke_of_Advisor}
+          ${link_of_Summary}
+          ${link_of_Advisor}
           ,{
             "id": "88c013ec-1149-411f-8b35-02e737237a91",
             "cellValue": "selectedTab",
@@ -230,9 +223,9 @@
         ]
       },
       "name": "links - 5"
-    },
+    }
     ${tab_of_Advisor}
-    {
+    ,{
       "type": 12,
       "content": {
         "version": "NotebookGroup/1.0",
@@ -280,24 +273,10 @@
         "value": "OV"
       },
       "name": "Overview"
-    },
-    {
-      "type": 12,
-      "content": {
-        "version": "NotebookGroup/1.0",
-        "groupType": "template",
-        "loadFromTemplateId": "${summary_workbook_resource_id}",
-        "items": []
-      },
-      "conditionalVisibility": {
-        "parameterName": "selectedTab",
-        "comparison": "isEqualTo",
-        "value": "Summary2"
-      },
-      "name": "summary group"
-    },
+    }
+    ${tab_of_Summary}
     ${tab_of_Export}
-    {
+    ,{
       "type": 12,
       "content": {
         "version": "NotebookGroup/1.0",

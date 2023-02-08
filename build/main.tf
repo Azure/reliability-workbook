@@ -37,38 +37,38 @@ locals {
           }
     EOT
 
-    // Enable Export
-    "link_of_Export" = <<-EOT
+    // Enable Summary
+    "link_of_Summary" = <<-EOT
           ,{
-            "id": "0f548bfa-f959-4a25-a9ac-7c986be6d33b",
+            "id": "d6656d8e-acfc-4d7d-853d-a8c628907ba6",
             "cellValue": "selectedTab",
             "linkTarget": "parameter",
-            "linkLabel": "Export",
-            "subTarget": "Export",
+            "linkLabel": "Summary",
+            "subTarget": "Summary2",
             "style": "link"
           }
     EOT
 
-    "tab_of_Export" = <<-EOT
-        {
+    "tab_of_Summary" = <<-EOT
+    ,{
       "type": 12,
       "content": {
         "version": "NotebookGroup/1.0",
         "groupType": "template",
-        "loadFromTemplateId": "${azurerm_application_insights_workbook.export[0].id}",
+        "loadFromTemplateId": "${azurerm_application_insights_workbook.summary[0].id}",
         "items": []
       },
       "conditionalVisibility": {
         "parameterName": "selectedTab",
         "comparison": "isEqualTo",
-        "value": "Export"
+        "value": "Summary2"
       },
-      "name": "ExportStep"
-    },
+      "name": "summary group"
+    }
     EOT
 
     // Enable Advisor
-    "linke_of_Advisor" = <<-EOT
+    "link_of_Advisor" = <<-EOT
          ,{
             "id": "d983c7c7-b5a0-4245-86fa-52ac1266fb13",
             "cellValue": "selectedTab",
@@ -80,7 +80,7 @@ locals {
     EOT
 
     "tab_of_Advisor" = <<-EOT
-    {
+    ,{
       "type": 12,
       "content": {
         "version": "NotebookGroup/1.0",
@@ -94,7 +94,37 @@ locals {
         "value": "Advisor"
       },
       "name": "Advisor"
-    },
+    }
+    EOT
+
+    // Enable Export
+    "link_of_Export" = <<-EOT
+          ,{
+            "id": "0f548bfa-f959-4a25-a9ac-7c986be6d33b",
+            "cellValue": "selectedTab",
+            "linkTarget": "parameter",
+            "linkLabel": "Export",
+            "subTarget": "Export",
+            "style": "link"
+          }
+    EOT
+
+    "tab_of_Export" = <<-EOT
+    ,{
+      "type": 12,
+      "content": {
+        "version": "NotebookGroup/1.0",
+        "groupType": "template",
+        "loadFromTemplateId": "${azurerm_application_insights_workbook.export[0].id}",
+        "items": []
+      },
+      "conditionalVisibility": {
+        "parameterName": "selectedTab",
+        "comparison": "isEqualTo",
+        "value": "Export"
+      },
+      "name": "ExportStep"
+    }
     EOT
 
   }) : null
@@ -111,10 +141,12 @@ locals {
     "web_workbook_resource_id"               = "TBD"
 
     "overview_information" = ""
-    "link_of_Export" = ""
-    "tab_of_Export"  = ""
-    "linke_of_Advisor" = ""
-    "tab_of_Advisor"  = ""
+    "link_of_Summary"      = ""
+    "tab_of_Summary"       = ""
+    "link_of_Advisor"      = ""
+    "tab_of_Advisor"       = ""
+    "link_of_Export"       = ""
+    "tab_of_Export"        = ""
   })
 
   armtemplate_json = templatefile("${path.module}/azuredeploy.tpl.json", {
