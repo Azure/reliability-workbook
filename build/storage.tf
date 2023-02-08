@@ -30,6 +30,6 @@ resource "azurerm_application_insights_workbook" "storage" {
 }
 
 resource "local_file" "storage" {
-  filename = "${path.module}/artifacts/ReliabilityWorkbookStorage.json"
+  filename = "${path.module}/artifacts/ReliabilityWorkbookStorage.workbook"
   content  = local.workbook_storage_json
 }
