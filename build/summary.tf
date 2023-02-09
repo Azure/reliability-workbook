@@ -64,6 +64,6 @@ resource "azurerm_application_insights_workbook" "summary" {
 }
 
 resource "local_file" "summary" {
-  filename = "${path.module}/artifacts/ReliabilityWorkbookSummary.json"
+  filename = "${path.module}/artifacts/ReliabilityWorkbookSummary.workbook"
   content  = local.workbook_summary_json
 }

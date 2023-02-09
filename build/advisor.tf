@@ -24,6 +24,6 @@ resource "azurerm_application_insights_workbook" "advisor" {
 }
 
 resource "local_file" "advisor" {
-  filename = "${path.module}/artifacts/ReliabilityWorkbookAdvisor.json"
+  filename = "${path.module}/artifacts/ReliabilityWorkbookAdvisor.workbook"
   content  = local.workbook_advisor_json
 }

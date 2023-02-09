@@ -44,6 +44,6 @@ resource "azurerm_application_insights_workbook" "compute" {
 }
 
 resource "local_file" "compute" {
-  filename = "${path.module}/artifacts/ReliabilityWorkbookcompute.json"
+  filename = "${path.module}/artifacts/ReliabilityWorkbookCompute.workbook"
   content  = local.workbook_compute_json
 }

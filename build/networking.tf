@@ -65,6 +65,6 @@ resource "azurerm_application_insights_workbook" "networking" {
 }
 
 resource "local_file" "networking" {
-  filename = "${path.module}/artifacts/ReliabilityWorkbookNetworking.json"
+  filename = "${path.module}/artifacts/ReliabilityWorkbookNetworking.workbook"
   content  = local.workbook_networking_json
 }

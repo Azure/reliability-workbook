@@ -29,6 +29,6 @@ resource "azurerm_application_insights_workbook" "azuresiterecovery" {
 }
 
 resource "local_file" "azuresiterecovery" {
-  filename = "${path.module}/artifacts/ReliabilityWorkbookAzureSiteRecovery.json"
+  filename = "${path.module}/artifacts/ReliabilityWorkbookAzureSiteRecovery.workbook"
   content  = local.workbook_azuresiterecovery_json
 }

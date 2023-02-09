@@ -65,6 +65,6 @@ resource "azurerm_application_insights_workbook" "databases" {
 }
 
 resource "local_file" "databases" {
-  filename = "${path.module}/artifacts/ReliabilityWorkbookDatabases.json"
+  filename = "${path.module}/artifacts/ReliabilityWorkbookDatabases.workbook"
   content  = local.workbook_databases_json
 }

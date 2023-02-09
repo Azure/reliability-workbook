@@ -131,14 +131,14 @@ locals {
 
   workbook_data_json_for_public = templatefile("${path.module}/templates/workbook.tpl.json", {
     "summary_workbook_resource_id"           = "TBD"
-    "azuresiterecovery_workbook_resource_id" = "TBD"
-    "compute_workbook_resource_id"           = "TBD"
-    "containers_workbook_resource_id"        = "TBD"
-    "databases_workbook_resource_id"         = "TBD"
-    "integration_workbook_resource_id"       = "TBD"
-    "networking_workbook_resource_id"        = "TBD"
-    "storage_workbook_resource_id"           = "TBD"
-    "web_workbook_resource_id"               = "TBD"
+    "azuresiterecovery_workbook_resource_id" = "community-Workbooks/Azure Advisor/Reliability/Template/AzureSiteRecovery/ReliabilityWorkbookAzureSiteRecovery.workbook"
+    "compute_workbook_resource_id"           = "community-Workbooks/Azure Advisor/Reliability/Template/Compute/ReliabilityWorkbookCompute.workbook"
+    "containers_workbook_resource_id"        = "community-Workbooks/Azure Advisor/Reliability/Template/Containers/ReliabilityWorkbookContainers.workbook"
+    "databases_workbook_resource_id"         = "community-Workbooks/Azure Advisor/Reliability/Template/Databases/ReliabilityWorkbookDatabases.workbook"
+    "integration_workbook_resource_id"       = "community-Workbooks/Azure Advisor/Reliability/Template/Integration/ReliabilityWorkbookIntegration.workbook"
+    "networking_workbook_resource_id"        = "community-Workbooks/Azure Advisor/Reliability/Template/Networking/ReliabilityWorkbookNetworking.workbook"
+    "storage_workbook_resource_id"           = "community-Workbooks/Azure Advisor/Reliability/Template/Storage/ReliabilityWorkbookStorage.workbook"
+    "web_workbook_resource_id"               = "community-Workbooks/Azure Advisor/Reliability/Template/Web/ReliabilityWorkbookWeb.workbook"
 
     "overview_information" = ""
     "link_of_Summary"      = ""
@@ -184,12 +184,12 @@ resource "azurerm_application_insights_workbook" "example" {
 
 // Generate workbook JSON
 resource "local_file" "workbook" {
-  filename = "${path.module}/ReliabilityWorkbook.json"
+  filename = "${path.module}/ReliabilityWorkbook.workbook"
   content  = local.workbook_data_json_for_community
 }
 
 resource "local_file" "workbook_public" {
-  filename = "${path.module}/ReliabilityWorkbookPublic.json"
+  filename = "${path.module}/ReliabilityWorkbookPublic.workbook"
   content  = local.workbook_data_json_for_public
 }
 

@@ -41,6 +41,6 @@ resource "azurerm_application_insights_workbook" "export" {
 }
 
 resource "local_file" "export" {
-  filename = "${path.module}/artifacts/ReliabilityWorkbookExport.json"
+  filename = "${path.module}/artifacts/ReliabilityWorkbookExport.workbook"
   content  = local.workbook_export_json
 }

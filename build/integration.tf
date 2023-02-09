@@ -29,6 +29,6 @@ resource "azurerm_application_insights_workbook" "integration" {
 }
 
 resource "local_file" "integration" {
-  filename = "${path.module}/artifacts/ReliabilityWorkbookIntegration.json"
+  filename = "${path.module}/artifacts/ReliabilityWorkbookIntegration.workbook"
   content  = local.workbook_integration_json
 }

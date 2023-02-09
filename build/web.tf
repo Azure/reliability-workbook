@@ -43,6 +43,6 @@ resource "azurerm_application_insights_workbook" "web" {
 }
 
 resource "local_file" "web" {
-  filename = "${path.module}/artifacts/ReliabilityWorkbookWeb.json"
+  filename = "${path.module}/artifacts/ReliabilityWorkbookWeb.workbook"
   content  = local.workbook_web_json
 }
