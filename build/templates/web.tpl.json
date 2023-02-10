@@ -1,0 +1,1115 @@
+{
+    "version": "Notebook/1.0",
+    "items": [
+      {
+        "type": 9,
+        "content": {
+            "version": "KqlParameterItem/1.0",
+            "parameters": [
+            {
+                "id": "aa0176d8-14ff-4dc5-9ae7-b8029f565674",
+                "version": "KqlParameterItem/1.0",
+                "name": "Subscriptions",
+                "type": 6,
+                "isRequired": true,
+                "multiSelect": true,
+                "quote": "'",
+                "delimiter": ",",
+                "typeSettings": {
+                "additionalResourceOptions": [
+                    "value::all"
+                ],
+                "includeAll": true,
+                "showDefault": false
+                },
+                "defaultValue": "value::all",
+                "value": [
+                "value::all"
+                ]
+            },
+            {
+                "id": "91aa9ba3-ed60-4472-8dd9-1c2cb6255757",
+                "version": "KqlParameterItem/1.0",
+                "name": "ResourceGroup",
+                "label": "Resource Group",
+                "type": 2,
+                "isRequired": true,
+                "multiSelect": true,
+                "quote": "'",
+                "delimiter": ",",
+                "query": "resources\r\n| distinct resourceGroup",
+                "crossComponentResources": [
+                "{Subscriptions}"
+                ],
+                "typeSettings": {
+                "additionalResourceOptions": [
+                    "value::all"
+                ],
+                "showDefault": false
+                },
+                "defaultValue": "value::all",
+                "queryType": 1,
+                "resourceType": "microsoft.resourcegraph/resources"
+            },
+            {
+                "id": "5a4f6d34-9f89-4ef8-b4ee-fb0580ec016d",
+                "version": "KqlParameterItem/1.0",
+                "name": "Environment",
+                "type": 2,
+                "multiSelect": true,
+                "quote": "'",
+                "delimiter": ",",
+                "query": "resources\r\n| extend Environment = case(\r\ntags.Environment <> \"\", tags.Environment,\r\ntags.environment <> \"\", tags.environment,\r\ntags.Env <> \"\", tags.Env,\r\ntags.env <> \"\", tags.env,\r\ntolower(name) contains \"prod\", \"Production\",\r\ntolower(name) contains \"dev\", \"Development\",\r\ntolower(name) contains \"qa\", \"QA\",\r\ntolower(name) contains \"uat\", \"UAT\",\r\ntolower(name) contains \"sit\", \"SIT\",\r\ntolower(name) contains \"test\", \"Test\",\r\n\"Undefined\")\r\n| distinct Environment",
+                "crossComponentResources": [
+                "{Subscriptions}"
+                ],
+                "typeSettings": {
+                "additionalResourceOptions": [
+                    "value::all"
+                ]
+                },
+                "defaultValue": "value::all",
+                "queryType": 1,
+                "resourceType": "microsoft.resourcegraph/resources"
+            },
+            {
+                "id": "9d6afcdc-172c-4bef-8bab-dc372c5d3bb4",
+                "version": "KqlParameterItem/1.0",
+                "name": "TagName",
+                "label": "Tag Name",
+                "type": 2,
+                "query": "Resources\r\n| where tags != '' and tags != '[]'\r\n| mvexpand tags\r\n| extend tagName = tostring(bag_keys(tags)[0])\r\n| distinct tagName\r\n| sort by tagName asc",
+                "crossComponentResources": [
+                "{Subscriptions}"
+                ],
+                "typeSettings": {
+                "additionalResourceOptions": []
+                },
+                "queryType": 1,
+                "resourceType": "microsoft.resourcegraph/resources",
+                "value": null
+            },
+            {
+                "id": "95781001-338b-4ed3-81dc-ce16f2a98bf0",
+                "version": "KqlParameterItem/1.0",
+                "name": "TagValue",
+                "label": "Tag Value",
+                "type": 2,
+                "query": "Resources\r\n| mvexpand tags\r\n| extend tagName = tostring(bag_keys(tags)[0])\r\n| extend tagValue = tostring(tags[tagName])\r\n| where tags != '' and tags != '[]' and tostring(bag_keys(tags)[0]) == '{TagName}'\r\n| distinct tagValue\r\n| sort by tagValue asc",
+                "crossComponentResources": [
+                "{Subscriptions}"
+                ],
+                "typeSettings": {
+                "additionalResourceOptions": []
+                },
+                "queryType": 1,
+                "resourceType": "microsoft.resourcegraph/resources",
+                "value": null
+            },
+            {
+                "id": "e929bc01-08ec-45fe-bc6a-4e0267460dfa",
+                "version": "KqlParameterItem/1.0",
+                "name": "SLA",
+                "label": "Show SLA",
+                "type": 10,
+                "description": "This will show the SLA information for the focus area",
+                "isRequired": true,
+                "typeSettings": {
+                "additionalResourceOptions": [],
+                "showDefault": false
+                },
+                "jsonData": "[{ \"value\": \"Yes\", \"label\": \"Yes\", \"selected\":true},\r\n {\"value\": \"No\", \"label\": \"No\"}]"
+            },
+            {
+                "id": "9581cbc6-0f0f-42be-8ae8-6fe94de00ab8",
+                "version": "KqlParameterItem/1.0",
+                "name": "Help",
+                "label": "Show Help",
+                "type": 10,
+                "isRequired": true,
+                "typeSettings": {
+                "additionalResourceOptions": []
+                },
+                "jsonData": "[{\"value\": \"Yes\", \"label\": \"Yes\", \"selected\":true },\r\n {\"value\": \"No\", \"label\": \"No\"}]"
+            }
+            ],
+            "style": "pills",
+            "queryType": 0,
+            "resourceType": "microsoft.operationalinsights/workspaces"
+        },
+        "name": "parameters - 13"
+      },
+      {
+        "type": 11,
+        "content": {
+          "version": "LinkItem/1.0",
+          "style": "tabs",
+          "links": [
+            {
+              "id": "111d0db9-8c81-413d-9d93-bca6541aa953",
+              "cellValue": "selectedTab",
+              "linkTarget": "parameter",
+              "linkLabel": "App Service Plan",
+              "subTarget": "ASP",
+              "style": "link"
+            },
+            {
+              "id": "9b2af52f-ffd5-43d7-9055-9a76f56ca89a",
+              "cellValue": "selectedTab",
+              "linkTarget": "parameter",
+              "linkLabel": "App Service",
+              "subTarget": "AS",
+              "style": "link"
+              },
+              {
+                "id": "e59db88a-717c-4985-bcd6-fad4defbda76",
+                "cellValue": "selectedTab",
+                "linkTarget": "parameter",
+                "linkLabel": "Function App",
+                "subTarget": "FA",
+                "style": "link"
+            }
+          ]
+        },
+        "name": "links - 5"
+      },
+      {
+        "type": 12,
+        "content": {
+          "version": "NotebookGroup/1.0",
+          "groupType": "editable",
+          "items": [
+            {
+              "type": 1,
+              "content": {
+                "json": "SLA for App Service Plan\r\n* There is no specific SLA tied to App service plan itself. The SLAs are applicable for the services running on the App Service plans.\r\n\r\n> SLA accurate at time of release. Latest information is available [here](https://azure.microsoft.com/support/legal/sla/app-service/)",
+                "style": "upsell"
+              },
+              "conditionalVisibility": {
+                "parameterName": "SLA",
+                "comparison": "isEqualTo",
+                "value": "Yes"
+              },
+              "name": "asp-sla"
+            },
+            {
+              "type": 1,
+              "content": {
+                "json": "* Use isolated or Premium tier. These tiers support staging slots and automated backups.\r\n* Avoid scaling up or down. Instead, select a tier and instance size that meet your performance requirements under typical load, and then scale out the instances to handle changes in traffic volume. Scaling up and down may trigger an application restart.\r\n* Store configuration as app settings. Use app settings to hold configuration settings as app settings. Define the settings in your Resource Manager templates, or using PowerShell, so that you can apply them as part of an automated deployment / update process, which is more reliable.\r\n* Create separate App Service plans for production and test. Don't use slots on your production deployment for testing. All apps within the same App Service plan share the same VM instances. If you put production and test deployments in the same plan, it can negatively affect the production deployment. For example, load tests might degrade the live production site. By putting test deployments into a separate plan, you isolate them from the production version.\r\n* Separate web apps from web APIs. If your solution has both a web front end and a web API, consider decomposing them into separate App Service apps. This design makes it easier to decompose the solution by workload. You can run the web app and the API in separate App Service plans, so they can be scaled independently. If you don't need that level of scalability at first, you can deploy the apps into the same plan, and move them into separate plans later, if needed.\r\n* Create auto scaling configuration as part of App service plan.\r\n* Deploy App Service Plan in [availability zones](https://learn.microsoft.com/azure/reliability/migrate-app-service)\r\n\r\n> Azure generally recommends to leverage [Availability Zone](https://learn.microsoft.com/azure/availability-zones/az-overview) for better High Availability within the region by leveraging multiple zones inside region. By architecting your solutions to use replicated services in zones, you can protect your apps and data from the loss of a datacenter. \r\n\r\n> At this point, not all Azure regions and services support Availability Zones, the support matrix can be found [here](https://learn.microsoft.com/azure/availability-zones/az-region). Whenerver there is a Zonal recommendation for a particular service from this workbook, please note that that is applicable only for the regions supporting Availability Zones from the earlier list.",
+                "style": "info"
+              },
+              "conditionalVisibility": {
+                "parameterName": "Help",
+                "comparison": "isEqualTo",
+                "value": "Yes"
+              },
+              "name": "asp-help"
+            },
+            {
+              "type": 3,
+              "content": {
+                "version": "KqlItem/1.0",
+                "query": ${kql_webapp_appsvcplan_resources_details},
+                "size": 0,
+                "title": "App Service Plan",
+                "noDataMessage": "No App Service plans found",
+                "queryType": 1,
+                "resourceType": "microsoft.resourcegraph/resources",
+                "crossComponentResources": [
+                  "{Subscriptions}"
+                ],
+                "gridSettings": {
+                  "formatters": [
+                    {
+                      "columnMatch": "$gen_group",
+                        "formatter": 13,
+                      "formatOptions": {
+                          "linkTarget": "Resource",
+                        "showIcon": true
+                      }
+                    },
+                    {
+                      "columnMatch": "Type",
+                      "formatter": 5
+                    },
+                    {
+                      "columnMatch": "SkuName",
+                      "formatter": 18,
+                      "formatOptions": {
+                        "thresholdsOptions": "icons",
+                        "thresholdsGrid": [
+                          {
+                            "operator": "contains",
+                            "thresholdValue": "isolated",
+                            "representation": "success",
+                            "text": "{0}{1}"
+                          },
+                          {
+                            "operator": "contains",
+                            "thresholdValue": "premium",
+                            "representation": "success",
+                            "text": "{0}{1}"
+                          },
+                          {
+                            "operator": "regex",
+                            "thresholdValue": "(free|shared|basic|standard|dynamic)",
+                            "representation": "2",
+                            "text": "{0}{1}"
+                          },
+                          {
+                            "operator": "Default",
+                            "thresholdValue": null,
+                            "representation": "unknown",
+                            "text": "{0}{1}"
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "columnMatch": "SubscriptionId",
+                      "formatter": 5
+                    },
+                    {
+                        "columnMatch": "Name",
+                        "formatter": 5
+                      },
+                      {
+                      "columnMatch": "State",
+                      "formatter": 18,
+                      "formatOptions": {
+                        "thresholdsOptions": "icons",
+                        "thresholdsGrid": [
+                          {
+                            "operator": "==",
+                            "thresholdValue": "ready",
+                            "representation": "success",
+                            "text": "{0}{1}"
+                          },
+                          {
+                            "operator": "!=",
+                            "thresholdValue": "ready",
+                            "representation": "2",
+                            "text": "{0}{1}"
+                          },
+                          {
+                            "operator": "Default",
+                            "thresholdValue": null,
+                            "representation": "unknown",
+                            "text": "{0}{1}"
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "columnMatch": "Location",
+                      "formatter": 17
+                    },
+                    {
+                      "columnMatch": "Zones",
+                      "formatter": 5
+                    },
+                    {
+                      "columnMatch": "AvailabilityZone",
+                      "formatter": 18,
+                      "formatOptions": {
+                        "thresholdsOptions": "icons",
+                        "thresholdsGrid": [
+                          {
+                            "operator": "==",
+                            "thresholdValue": "configured",
+                            "representation": "success",
+                            "text": "{0}{1}"
+                          },
+                          {
+                            "operator": "==",
+                            "thresholdValue": "not configured",
+                            "representation": "2",
+                            "text": "{0}{1}"
+                          },
+                          {
+                            "operator": "==",
+                            "thresholdValue": "not applicable",
+                            "representation": "more",
+                            "text": "{0}{1}"
+                          },
+                          {
+                            "operator": "Default",
+                            "thresholdValue": null,
+                            "representation": "unknown",
+                            "text": "{0}{1}"
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "columnMatch": "AvailabilitySet",
+                      "formatter": 5
+                    },
+                    {
+                      "columnMatch": "Capacity",
+                      "formatter": 18,
+                      "formatOptions": {
+                        "thresholdsOptions": "icons",
+                        "thresholdsGrid": [
+                          {
+                            "operator": "regex",
+                            "thresholdValue": "(0|1)",
+                            "representation": "2",
+                            "text": "{0}{1}"
+                          },
+                          {
+                            "operator": "Default",
+                            "thresholdValue": null,
+                            "representation": "success",
+                            "text": "{0}{1}"
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "columnMatch": "FaultDomain",
+                      "formatter": 5
+                    },
+                    {
+                      "columnMatch": "OSDisk",
+                      "formatter": 5
+                    },
+                    {
+                      "columnMatch": "ReadReplica",
+                      "formatter": 5
+                    },
+                    {
+                      "columnMatch": "AutomaticFailover",
+                      "formatter": 5
+                    },
+                    {
+                      "columnMatch": "MultipleWriteLocations",
+                      "formatter": 5
+                    },
+                    {
+                      "columnMatch": "StorageAutogrow",
+                      "formatter": 5
+                    },
+                    {
+                      "columnMatch": "ReplicationRole",
+                      "formatter": 5
+                    },
+                    {
+                      "columnMatch": "Backup",
+                      "formatter": 5
+                    },
+                    {
+                      "columnMatch": "Environment",
+                      "formatter": 18,
+                      "formatOptions": {
+                        "thresholdsOptions": "colors",
+                        "thresholdsGrid": [
+                          {
+                            "operator": "contains",
+                            "thresholdValue": "prod",
+                            "representation": "redBright",
+                            "text": "{0}{1}"
+                          },
+                          {
+                            "operator": "contains",
+                            "thresholdValue": "Prod",
+                            "representation": "redBright",
+                            "text": "{0}{1}"
+                          },
+                          {
+                            "operator": "Default",
+                            "thresholdValue": null,
+                            "text": "{0}{1}"
+                          }
+                        ]
+                      }
+                    }
+                  ],
+                  "rowLimit": 9999,
+                  "hierarchySettings": {
+                    "treeType": 1,
+                    "groupBy": [
+                      "SubscriptionId"
+                      ],
+                      "finalBy": "Name"
+                  },
+                  "labelSettings": [
+                    {
+                      "columnId": "SkuName",
+                      "label": "SKU"
+                    },
+                    {
+                      "columnId": "SubscriptionId",
+                      "label": "Subscription"
+                    },
+                    {
+                      "columnId": "ResourceGroup",
+                      "label": "Resource Group"
+                    },
+                    {
+                      "columnId": "AvailabilityZone",
+                      "label": "Availability Zone"
+                    }
+                  ]
+                }
+              },
+              "name": "AppServicePlan query"
+            }
+          ]
+        },
+        "conditionalVisibility": {
+          "parameterName": "selectedTab",
+          "comparison": "isEqualTo",
+          "value": "ASP"
+        },
+        "name": "App Service Plan"
+      },
+      {
+        "type": 12,
+        "content": {
+          "version": "NotebookGroup/1.0",
+          "groupType": "editable",
+          "items": [
+            {
+        "type": 1,
+        "content": {
+          "json": "[SLA for App Service](https://azure.microsoft.com/support/legal/sla/app-service/)\r\n* We guarantee that Apps running in a customer subscription will be available 99.95% of the time. \r\n* No SLA is provided for Apps under either the Free or Shared tiers.\r\n\r\n> SLA accurate at time of release. Latest information is available [here](https://azure.microsoft.com/support/legal/sla/app-service/)",
+          "style": "upsell"
+        },
+        "conditionalVisibility": {
+          "parameterName": "SLA",
+          "comparison": "isEqualTo",
+          "value": "Yes"
+        },
+        "name": "text - 2 - Copy"
+      },
+      {
+        "type": 1,
+        "content": {
+          "json": "> * Use Standard or Premium tier. These tiers support staging slots and automated backups.\r\n* Avoid scaling up or down. Instead, select a tier and instance size that meet your performance requirements under typical load, and then scale out the instances to handle changes in traffic volume. Scaling up and down may trigger an application restart.\r\n* Store configuration as app settings. Use app settings to hold configuration settings as app settings. Define the settings in your Resource Manager templates, or using PowerShell, so that you can apply them as part of an automated deployment / update process, which is more reliable.\r\n* Create separate App Service plans for production and test. Don't use slots on your production deployment for testing. All apps within the same App Service plan share the same VM instances. If you put production and test deployments in the same plan, it can negatively affect the production deployment. For example, load tests might degrade the live production site. By putting test deployments into a separate plan, you isolate them from the production version.\r\n* Separate web apps from web APIs. If your solution has both a web front end and a web API, consider decomposing them into separate App Service apps. This design makes it easier to decompose the solution by workload. You can run the web app and the API in separate App Service plans, so they can be scaled independently. If you don't need that level of scalability at first, you can deploy the apps into the same plan, and move them into separate plans later, if needed.\r\n* Avoid using the App Service backup feature to back up Azure SQL databases. Instead, use SQL Database automated backups. App Service backup exports the database to a SQL BACPAC file, which costs DTUs.\r\n* Deploy to a staging slot. Create a deployment slot for staging. Deploy application updates to the staging slot, and verify the deployment before swapping it into production. This reduces the chance of a bad update in production. It also ensures that all instances are warmed up before being swapped into production. Many applications have a significant warmup and cold-start time.\r\n* Create a deployment slot to hold the last-known-good (LKG) deployment. When you deploy an update to production, move the previous production deployment into the LKG slot. This makes it easier to roll back a bad deployment. If you discover a problem later, you can quickly revert to the LKG version.\r\n* Enable diagnostics logging, including application logging and web server logging. Logging is important for monitoring and diagnostics.\r\n* Log to blob storage. This makes it easier to collect and analyze the data.\r\n* Create a separate storage account for logs. Don't use the same storage account for logs and application data. This helps to prevent logging from reducing application performance.\r\n* Monitor performance. Use a performance monitoring service such as Application Insights to monitor application performance and behavior under load. Performance monitoring gives you real-time insight into the application. It enables you to diagnose issues and perform root-cause analysis of failures.",
+          "style": "info"
+        },
+        "conditionalVisibility": {
+          "parameterName": "Help",
+          "comparison": "isEqualTo",
+          "value": "Yes"
+        },
+        "name": "text - 3 - Copy"
+      },
+      {
+        "type": 3,
+        "content": {
+          "version": "KqlItem/1.0",
+          "query": ${kql_webapp_appsvc_resources_details},
+          "size": 3,
+          "title": "App Service - Web App",
+          "queryType": 1,
+          "resourceType": "microsoft.resourcegraph/resources",
+          "crossComponentResources": [
+            "{Subscriptions}"
+          ],
+          "gridSettings": {
+            "formatters": [
+              {
+                "columnMatch": "$gen_group",
+                      "formatter": 13,
+                "formatOptions": {
+                        "linkTarget": "Resource",
+                  "showIcon": true
+                }
+              },
+              {
+                "columnMatch": "Type",
+                "formatter": 5
+              },
+              {
+                "columnMatch": "SkuName",
+                "formatter": 18,
+                "formatOptions": {
+                  "thresholdsOptions": "icons",
+                  "thresholdsGrid": [
+                    {
+                      "operator": "contains",
+                      "thresholdValue": "shared",
+                      "representation": "2",
+                      "text": "{0}{1}"
+                    },
+                    {
+                      "operator": "contains",
+                      "thresholdValue": "free",
+                      "representation": "2",
+                      "text": "{0}{1}"
+                    },
+                    {
+                      "operator": "contains",
+                      "thresholdValue": "basic",
+                      "representation": "2",
+                      "text": "{0}{1}"
+                    },
+                    {
+                      "operator": "contains",
+                      "thresholdValue": "develop",
+                      "representation": "2",
+                      "text": "{0}{1}"
+                    },
+                    {
+                      "operator": "contains",
+                      "thresholdValue": "standard",
+                      "representation": "success",
+                      "text": "{0}{1}"
+                    },
+                    {
+                      "operator": "contains",
+                      "thresholdValue": "premium",
+                      "representation": "success",
+                      "text": "{0}{1}"
+                    },
+                    {
+                      "operator": "Default",
+                      "thresholdValue": null,
+                      "representation": "unknown",
+                      "text": "{0}{1}"
+                    }
+                  ]
+                }
+              },
+              {
+                "columnMatch": "SubscriptionId",
+                "formatter": 5
+              },
+              {
+                "columnMatch": "Name",
+                "formatter": 5
+              },
+              {
+                "columnMatch": "State",
+                "formatter": 18,
+                "formatOptions": {
+                  "thresholdsOptions": "colors",
+                  "thresholdsGrid": [
+                    {
+                      "operator": "==",
+                      "thresholdValue": "running",
+                      "representation": "green",
+                      "text": "{0}{1}"
+                    },
+                    {
+                      "operator": "==",
+                      "thresholdValue": "stopped",
+                      "representation": "orange",
+                      "text": "{0}{1}"
+                    },
+                    {
+                      "operator": "Default",
+                      "thresholdValue": null,
+                      "text": "{0}{1}"
+                    }
+                  ]
+                }
+              },
+              {
+                      "columnMatch": "Location",
+                      "formatter": 17
+                    },
+                    {
+                "columnMatch": "Zones",
+                "formatter": 5
+              },
+              {
+                "columnMatch": "AvailabilitySet",
+                "formatter": 5
+              },
+              {
+                "columnMatch": "Capacity",
+                "formatter": 5
+              },
+              {
+                "columnMatch": "FaultDomain",
+                "formatter": 5
+              },
+              {
+                "columnMatch": "OSDisk",
+                "formatter": 5
+              },
+              {
+                "columnMatch": "ReadReplica",
+                "formatter": 5
+              },
+              {
+                "columnMatch": "AutomaticFailover",
+                "formatter": 5
+              },
+              {
+                "columnMatch": "MultipleWriteLocations",
+                "formatter": 5
+              },
+              {
+                "columnMatch": "StorageAutogrow",
+                "formatter": 5
+              },
+              {
+                "columnMatch": "ReplicationRole",
+                "formatter": 5
+              },
+              {
+                "columnMatch": "Backup",
+                "formatter": 5
+              },
+              {
+                "columnMatch": "Environment",
+                "formatter": 18,
+                "formatOptions": {
+                  "thresholdsOptions": "colors",
+                  "thresholdsGrid": [
+                    {
+                      "operator": "contains",
+                      "thresholdValue": "Prod",
+                      "representation": "redBright",
+                      "text": "{0}{1}"
+                    },
+                    {
+                      "operator": "contains",
+                      "thresholdValue": "prod",
+                      "representation": "redBright",
+                      "text": "{0}{1}"
+                    },
+                    {
+                      "operator": "Default",
+                      "thresholdValue": null,
+                      "text": "{0}{1}"
+                    }
+                  ]
+                }
+              },
+              {
+                "columnMatch": "SubscriptionName",
+                "formatter": 5
+              },
+              {
+                "columnMatch": "Status",
+                "formatter": 18,
+                "formatOptions": {
+                  "thresholdsOptions": "colors",
+                  "thresholdsGrid": [
+                    {
+                      "operator": "==",
+                      "thresholdValue": "Running",
+                      "representation": "green",
+                      "text": "{0}{1}"
+                    },
+                    {
+                      "operator": "==",
+                      "thresholdValue": "Stopped",
+                      "representation": "gray",
+                      "text": "{0}{1}"
+                    },
+                    {
+                      "operator": "Default",
+                      "thresholdValue": null,
+                      "text": "{0}{1}"
+                    }
+                  ]
+                }
+              },
+              {
+                "columnMatch": "Tier",
+                "formatter": 18,
+                "formatOptions": {
+                  "thresholdsOptions": "icons",
+                  "thresholdsGrid": [
+                    {
+                      "operator": "==",
+                      "thresholdValue": "Free",
+                      "representation": "2",
+                      "text": "{0}{1}"
+                    },
+                    {
+                      "operator": "==",
+                      "thresholdValue": "Shared",
+                      "representation": "2",
+                      "text": "{0}{1}"
+                    },
+                    {
+                      "operator": "Default",
+                      "thresholdValue": null,
+                      "representation": "success",
+                      "text": "{0}{1}"
+                    }
+                  ]
+                }
+              },
+              {
+                "columnMatch": "AppType",
+                "formatter": 5
+              }
+            ],
+            "hierarchySettings": {
+              "treeType": 1,
+              "groupBy": [
+                "SubscriptionId"
+              ],
+              "expandTopLevel": false,
+              "finalBy": "Name"
+            },
+            "labelSettings": [
+              {
+                "columnId": "SubscriptionId",
+                "label": "Subscription"
+              },
+              {
+                "columnId": "ResourceGroup",
+                "label": "Resource Group"
+              }
+            ]
+          }
+        },
+        "name": "kql_webapp_appsvc_resources_details"
+            }
+          ]
+        },
+        "conditionalVisibility": {
+          "parameterName": "selectedTab",
+          "comparison": "isEqualTo",
+          "value": "AS"
+        },
+        "name": "App Service"
+        },
+        {
+          "type": 12,
+          "content": {
+            "version": "NotebookGroup/1.0",
+            "groupType": "editable",
+            "items": [
+              {
+                "type": 1,
+                "content": {
+                  "json": "[SLA for App Service](https://azure.microsoft.com/support/legal/sla/app-service/)\r\n* We guarantee that Apps running in a customer subscription will be available 99.95% of the time. \r\n* No SLA is provided for Apps under either the Free or Shared tiers.\r\n\r\n> SLA accurate at time of release. Latest information is available [here](https://azure.microsoft.com/support/legal/sla/app-service/)",
+                  "style": "upsell"
+                },
+                "conditionalVisibility": {
+                  "parameterName": "SLA",
+                  "comparison": "isEqualTo",
+                  "value": "Yes"
+                },
+                "name": "text - 2 - Copy - Copy"
+              },
+              {
+                "type": 1,
+                "content": {
+                  "json": "* This section lists Function Apps running on an App Service Plan.\r\n* Filter using the subscriptions parameter as required.",
+                  "style": "info"
+                },
+                "conditionalVisibility": {
+                  "parameterName": "Help",
+                  "comparison": "isEqualTo",
+                  "value": "Yes"
+                },
+                "name": "text - 3 - Copy - Copy"
+              },
+              {
+                "type": 3,
+                "content": {
+                  "version": "KqlItem/1.0",
+                  "query": ${kql_webapp_appservice_funcapp_resources_details},
+                  "size": 3,
+                  "title": "App Service - Function App",
+                  "queryType": 1,
+                  "resourceType": "microsoft.resourcegraph/resources",
+                  "crossComponentResources": [
+                    "{Subscriptions}"
+                  ],
+                  "gridSettings": {
+                    "formatters": [
+                      {
+                        "columnMatch": "$gen_group",
+                      "formatter": 13,
+                        "formatOptions": {
+                        "linkTarget": "Resource",
+                          "showIcon": true
+                        }
+                      },
+                      {
+                        "columnMatch": "Type",
+                        "formatter": 5
+                      },
+                      {
+                        "columnMatch": "SkuName",
+                        "formatter": 18,
+                        "formatOptions": {
+                          "thresholdsOptions": "icons",
+                          "thresholdsGrid": [
+                            {
+                              "operator": "==",
+                              "thresholdValue": "dynamic",
+                              "representation": "success",
+                              "text": "{0}{1}"
+                            },
+                            {
+                              "operator": "contains",
+                              "thresholdValue": "free",
+                              "representation": "2",
+                              "text": "{0}{1}"
+                            },
+                            {
+                              "operator": "contains",
+                              "thresholdValue": "shared",
+                              "representation": "2",
+                              "text": "{0}{1}"
+                            },
+                            {
+                              "operator": "contains",
+                              "thresholdValue": "basic",
+                              "representation": "warning",
+                              "text": "{0}{1}"
+                            },
+                            {
+                              "operator": "contains",
+                              "thresholdValue": "develop",
+                              "representation": "warning",
+                              "text": "{0}{1}"
+                            },
+                            {
+                              "operator": "contains",
+                              "thresholdValue": "premium",
+                              "representation": "success",
+                              "text": "{0}{1}"
+                            },
+                            {
+                              "operator": "Default",
+                              "thresholdValue": null,
+                              "representation": "unknown",
+                              "text": "{0}{1}"
+                            }
+                          ]
+                        }
+                      },
+                      {
+                        "columnMatch": "Kind",
+                        "formatter": 5
+                      },
+                      {
+                        "columnMatch": "SubscriptionId",
+                        "formatter": 5
+                      },
+                      {
+                        "columnMatch": "Name",
+                        "formatter": 5
+                      },
+                      {
+                        "columnMatch": "State",
+                        "formatter": 18,
+                        "formatOptions": {
+                          "thresholdsOptions": "colors",
+                          "thresholdsGrid": [
+                            {
+                              "operator": "==",
+                              "thresholdValue": "running",
+                              "representation": "green",
+                              "text": "{0}{1}"
+                            },
+                            {
+                              "operator": "!=",
+                              "thresholdValue": "running",
+                              "representation": "orange",
+                              "text": "{0}{1}"
+                            },
+                            {
+                              "operator": "Default",
+                              "thresholdValue": null,
+                              "text": "{0}{1}"
+                            }
+                          ]
+                        }
+                      },
+                      {
+                      "columnMatch": "Location",
+                      "formatter": 17
+                    },
+                    {
+                        "columnMatch": "Zones",
+                        "formatter": 5
+                      },
+                      {
+                        "columnMatch": "AvailabilityZone",
+                        "formatter": 5
+                      },
+                      {
+                        "columnMatch": "AvailabilitySet",
+                        "formatter": 5
+                      },
+                      {
+                        "columnMatch": "Capacity",
+                        "formatter": 5
+                      },
+                      {
+                        "columnMatch": "FaultDomain",
+                        "formatter": 5
+                      },
+                      {
+                        "columnMatch": "OSDisk",
+                        "formatter": 5
+                      },
+                      {
+                        "columnMatch": "ReadReplica",
+                        "formatter": 5
+                      },
+                      {
+                        "columnMatch": "AutomaticFailover",
+                        "formatter": 5
+                      },
+                      {
+                        "columnMatch": "MultipleWriteLocations",
+                        "formatter": 5
+                      },
+                      {
+                        "columnMatch": "StorageAutogrow",
+                        "formatter": 5
+                      },
+                      {
+                        "columnMatch": "ReplicationRole",
+                        "formatter": 5
+                      },
+                      {
+                        "columnMatch": "Backup",
+                        "formatter": 18,
+                        "formatOptions": {
+                          "thresholdsOptions": "icons",
+                          "thresholdsGrid": [
+                            {
+                              "operator": "contains",
+                              "thresholdValue": "unknown",
+                              "representation": "unknown",
+                              "text": "{0}{1}"
+                            },
+                            {
+                              "operator": "Default",
+                              "thresholdValue": null,
+                              "representation": null,
+                              "text": "{0}{1}"
+                            }
+                          ]
+                        }
+                      },
+                      {
+                        "columnMatch": "Environment",
+                        "formatter": 18,
+                        "formatOptions": {
+                          "thresholdsOptions": "colors",
+                          "thresholdsGrid": [
+                            {
+                              "operator": "contains",
+                              "thresholdValue": "prod",
+                              "representation": "redBright",
+                              "text": "{0}{1}"
+                            },
+                            {
+                              "operator": "contains",
+                              "thresholdValue": "Prod",
+                              "representation": "redBright",
+                              "text": "{0}{1}"
+                            },
+                            {
+                              "operator": "Default",
+                              "thresholdValue": null,
+                              "text": "{0}{1}"
+                            }
+                          ]
+                        }
+                      },
+                      {
+                        "columnMatch": "SubscriptionName",
+                        "formatter": 5
+                      },
+                      {
+                        "columnMatch": "Status",
+                        "formatter": 18,
+                        "formatOptions": {
+                          "thresholdsOptions": "colors",
+                          "thresholdsGrid": [
+                            {
+                              "operator": "==",
+                              "thresholdValue": "Running",
+                              "representation": "green",
+                              "text": "{0}{1}"
+                            },
+                            {
+                              "operator": "==",
+                              "thresholdValue": "Stopped",
+                              "representation": "gray",
+                              "text": "{0}{1}"
+                            },
+                            {
+                              "operator": "Default",
+                              "thresholdValue": null,
+                              "text": "{0}{1}"
+                            }
+                          ]
+                        }
+                      },
+                      {
+                        "columnMatch": "Tier",
+                        "formatter": 18,
+                        "formatOptions": {
+                          "thresholdsOptions": "icons",
+                          "thresholdsGrid": [
+                            {
+                              "operator": "==",
+                              "thresholdValue": "Free",
+                              "representation": "2",
+                              "text": "{0}{1}"
+                            },
+                            {
+                              "operator": "==",
+                              "thresholdValue": "Shared",
+                              "representation": "2",
+                              "text": "{0}{1}"
+                            },
+                            {
+                              "operator": "Default",
+                              "thresholdValue": null,
+                              "representation": "success",
+                              "text": "{0}{1}"
+                            }
+                          ]
+                        }
+                      },
+                      {
+                        "columnMatch": "AppType",
+                        "formatter": 5
+                      }
+                    ],
+                    "rowLimit": 10000,
+                    "hierarchySettings": {
+                      "treeType": 1,
+                      "groupBy": [
+                        "SubscriptionId"
+                      ],
+                      "expandTopLevel": false,
+                      "finalBy": "Name"
+                    },
+                    "labelSettings": [
+                      {
+                        "columnId": "SubscriptionId",
+                        "label": "Subscription"
+                      },
+                      {
+                        "columnId": "ResourceGroup",
+                        "label": "Resource Group"
+                      }
+                    ]
+                  }
+                },
+                "name": "kql_webapp_appservice_funcapp_resources_details"
+              }
+            ]
+          },
+          "conditionalVisibility": {
+            "parameterName": "selectedTab",
+            "comparison": "isEqualTo",
+            "value": "FA"
+          },
+          "name": "function app"
+      }
+    
+    ]
+}

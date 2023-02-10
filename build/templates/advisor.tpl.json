@@ -1,0 +1,298 @@
+{
+    "version": "Notebook/1.0",
+    "items": [
+        {
+            "type": 12,
+            "content": {
+              "version": "NotebookGroup/1.0",
+              "groupType": "editable",
+              "items": [
+                {
+                    "type": 9,
+                    "content": {
+                        "version": "KqlParameterItem/1.0",
+                        "parameters": [
+                        {
+                            "id": "aa0176d8-14ff-4dc5-9ae7-b8029f565674",
+                            "version": "KqlParameterItem/1.0",
+                            "name": "Subscriptions",
+                            "type": 6,
+                            "isRequired": true,
+                            "multiSelect": true,
+                            "quote": "'",
+                            "delimiter": ",",
+                            "typeSettings": {
+                            "additionalResourceOptions": [
+                                "value::all"
+                            ],
+                            "includeAll": true,
+                            "showDefault": false
+                            },
+                            "defaultValue": "value::all",
+                            "value": [
+                            "value::all"
+                            ]
+                        },
+                        {
+                            "id": "91aa9ba3-ed60-4472-8dd9-1c2cb6255757",
+                            "version": "KqlParameterItem/1.0",
+                            "name": "ResourceGroup",
+                            "label": "Resource Group",
+                            "type": 2,
+                            "isRequired": true,
+                            "multiSelect": true,
+                            "quote": "'",
+                            "delimiter": ",",
+                            "query": "resources\r\n| distinct resourceGroup",
+                            "crossComponentResources": [
+                            "{Subscriptions}"
+                            ],
+                            "typeSettings": {
+                            "additionalResourceOptions": [
+                                "value::all"
+                            ],
+                            "showDefault": false
+                            },
+                            "defaultValue": "value::all",
+                            "queryType": 1,
+                            "resourceType": "microsoft.resourcegraph/resources"
+                        },
+                        {
+                            "id": "5a4f6d34-9f89-4ef8-b4ee-fb0580ec016d",
+                            "version": "KqlParameterItem/1.0",
+                            "name": "Environment",
+                            "type": 2,
+                            "multiSelect": true,
+                            "quote": "'",
+                            "delimiter": ",",
+                            "query": "resources\r\n| extend Environment = case(\r\ntags.Environment <> \"\", tags.Environment,\r\ntags.environment <> \"\", tags.environment,\r\ntags.Env <> \"\", tags.Env,\r\ntags.env <> \"\", tags.env,\r\ntolower(name) contains \"prod\", \"Production\",\r\ntolower(name) contains \"dev\", \"Development\",\r\ntolower(name) contains \"qa\", \"QA\",\r\ntolower(name) contains \"uat\", \"UAT\",\r\ntolower(name) contains \"sit\", \"SIT\",\r\ntolower(name) contains \"test\", \"Test\",\r\n\"Undefined\")\r\n| distinct Environment",
+                            "crossComponentResources": [
+                            "{Subscriptions}"
+                            ],
+                            "typeSettings": {
+                            "additionalResourceOptions": [
+                                "value::all"
+                            ]
+                            },
+                            "defaultValue": "value::all",
+                            "queryType": 1,
+                            "resourceType": "microsoft.resourcegraph/resources"
+                        },
+                        {
+                            "id": "9d6afcdc-172c-4bef-8bab-dc372c5d3bb4",
+                            "version": "KqlParameterItem/1.0",
+                            "name": "TagName",
+                            "label": "Tag Name",
+                            "type": 2,
+                            "query": "Resources\r\n| where tags != '' and tags != '[]'\r\n| mvexpand tags\r\n| extend tagName = tostring(bag_keys(tags)[0])\r\n| distinct tagName\r\n| sort by tagName asc",
+                            "crossComponentResources": [
+                            "{Subscriptions}"
+                            ],
+                            "typeSettings": {
+                            "additionalResourceOptions": []
+                            },
+                            "queryType": 1,
+                            "resourceType": "microsoft.resourcegraph/resources",
+                            "value": null
+                        },
+                        {
+                            "id": "95781001-338b-4ed3-81dc-ce16f2a98bf0",
+                            "version": "KqlParameterItem/1.0",
+                            "name": "TagValue",
+                            "label": "Tag Value",
+                            "type": 2,
+                            "query": "Resources\r\n| mvexpand tags\r\n| extend tagName = tostring(bag_keys(tags)[0])\r\n| extend tagValue = tostring(tags[tagName])\r\n| where tags != '' and tags != '[]' and tostring(bag_keys(tags)[0]) == '{TagName}'\r\n| distinct tagValue\r\n| sort by tagValue asc",
+                            "crossComponentResources": [
+                            "{Subscriptions}"
+                            ],
+                            "typeSettings": {
+                            "additionalResourceOptions": []
+                            },
+                            "queryType": 1,
+                            "resourceType": "microsoft.resourcegraph/resources",
+                            "value": null
+                        },
+                        {
+                            "id": "e929bc01-08ec-45fe-bc6a-4e0267460dfa",
+                            "version": "KqlParameterItem/1.0",
+                            "name": "SLA",
+                            "label": "Show SLA",
+                            "type": 10,
+                            "description": "This will show the SLA information for the focus area",
+                            "isRequired": true,
+                            "typeSettings": {
+                            "additionalResourceOptions": [],
+                            "showDefault": false
+                            },
+                            "jsonData": "[{ \"value\": \"Yes\", \"label\": \"Yes\", \"selected\":true},\r\n {\"value\": \"No\", \"label\": \"No\"}]"
+                        },
+                        {
+                            "id": "9581cbc6-0f0f-42be-8ae8-6fe94de00ab8",
+                            "version": "KqlParameterItem/1.0",
+                            "name": "Help",
+                            "label": "Show Help",
+                            "type": 10,
+                            "isRequired": true,
+                            "typeSettings": {
+                            "additionalResourceOptions": []
+                            },
+                            "jsonData": "[{\"value\": \"Yes\", \"label\": \"Yes\", \"selected\":true },\r\n {\"value\": \"No\", \"label\": \"No\"}]"
+                        }
+                        ],
+                        "style": "pills",
+                        "queryType": 0,
+                        "resourceType": "microsoft.operationalinsights/workspaces"
+                    },
+                    "name": "parameters - 13"
+                },
+                    {
+                      "type": 1,
+                      "content": {
+                        "json": "> Azure Advisor analyzes your configurations and usage telemetry and offers personalized, actionable recommendations to help you optimize your Azure resources for reliability, security, operational excellence, performance, and cost.\r\n\r\n* Azure Advisor is available automatically without any configuration.\r\n* The table in this workbook specifically relate to any reliability recommendations that may apply to the selected subscription(s).\r\n* Filter advisor recommendations using the subscriptions parameter as required.",
+                        "style": "info"
+                      },
+                      "conditionalVisibility": {
+                        "parameterName": "Help",
+                        "comparison": "isEqualTo",
+                        "value": "Yes"
+                      },
+                      "name": "Advisor Help"
+                    },
+                    {
+                      "type": 3,
+                      "content": {
+                        "version": "KqlItem/1.0",
+                        "query": ${kql_advisor_resource},
+                        "size": 3,
+                        "title": "Advisor - Reliability",
+                        "showExportToExcel": true,
+                        "queryType": 1,
+                        "resourceType": "microsoft.resourcegraph/resources",
+                        "crossComponentResources": [
+                          "{Subscriptions}"
+                        ],
+                        "gridSettings": {
+                          "formatters": [
+                            {
+                              "columnMatch": "$gen_group",
+                              "formatter": 13,
+                              "formatOptions": {
+                                "linkTarget": "Resource",
+                                "showIcon": true
+                              }
+                            },
+                            {
+                              "columnMatch": "Impact",
+                              "formatter": 18,
+                              "formatOptions": {
+                                "thresholdsOptions": "colors",
+                                "thresholdsGrid": [
+                                  {
+                                    "operator": "==",
+                                    "thresholdValue": "High",
+                                    "representation": "redBright",
+                                    "text": "{0}{1}"
+                                  },
+                                  {
+                                    "operator": "==",
+                                    "thresholdValue": "Medium",
+                                    "representation": "orange",
+                                    "text": "{0}{1}"
+                                  },
+                                  {
+                                    "operator": "==",
+                                    "thresholdValue": "Low",
+                                    "representation": "green",
+                                    "text": "{0}{1}"
+                                  },
+                                  {
+                                    "operator": "Default",
+                                    "thresholdValue": null,
+                                    "representation": "gray",
+                                    "text": "{0}{1}"
+                                  }
+                                ]
+                              }
+                            },
+                            {
+                              "columnMatch": "ImpactedField",
+                              "formatter": 16,
+                              "formatOptions": {
+                                "showIcon": true
+                              }
+                            },
+                            {
+                              "columnMatch": "ImpactedValue",
+                              "formatter": 5
+                            },
+                            {
+                              "columnMatch": "Description",
+                              "formatter": 18,
+                              "formatOptions": {
+                                "thresholdsOptions": "colors",
+                                "thresholdsGrid": [
+                                  {
+                                    "operator": "Default",
+                                    "thresholdValue": null,
+                                    "representation": "orange",
+                                    "text": "{0}{1}"
+                                  }
+                                ]
+                              }
+                            },
+                            {
+                              "columnMatch": "resourceGroup",
+                              "formatter": 14,
+                              "formatOptions": {
+                                "linkTarget": null,
+                                "showIcon": true
+                              }
+                            },
+                            {
+                              "columnMatch": "Category",
+                              "formatter": 5
+                            },
+                            {
+                              "columnMatch": "LastUpdated",
+                              "formatter": 6
+                            }
+                          ],
+                          "rowLimit": 10000,
+                          "hierarchySettings": {
+                            "treeType": 1,
+                            "groupBy": [
+                              "subscriptionId",
+                              "Impact",
+                              "Description"
+                            ],
+                            "finalBy": "ImpactedValue"
+                          },
+                          "labelSettings": [
+                            {
+                              "columnId": "ImpactedField",
+                              "label": "Resource Type"
+                            },
+                            {
+                              "columnId": "ImpactedValue",
+                              "label": "Resource"
+                            },
+                            {
+                              "columnId": "resourceGroup",
+                              "label": "Resource Group"
+                            },
+                            {
+                              "columnId": "LastUpdated",
+                              "label": "Last Updated"
+                            }
+                          ]
+                        },
+                        "sortBy": []
+                      },
+                      "name": "query - 0"
+                    }
+              ]
+            },
+            "name": "Advisor"
+          }
+    ]
+}
