@@ -24,6 +24,7 @@ locals {
     "networking_workbook_resource_id"        = azurerm_application_insights_workbook.networking[0].id
     "storage_workbook_resource_id"           = azurerm_application_insights_workbook.storage[0].id
     "web_workbook_resource_id"               = azurerm_application_insights_workbook.web[0].id
+    "servicealert_workbook_resource_id"      = azurerm_application_insights_workbook.servicealert[0].id
 
     // Show information on Overview tab
     "overview_information" = <<-EOT
@@ -139,6 +140,7 @@ locals {
     "networking_workbook_resource_id"        = "community-Workbooks/Azure Advisor/Reliability/Networking"
     "storage_workbook_resource_id"           = "community-Workbooks/Azure Advisor/Reliability/Storage"
     "web_workbook_resource_id"               = "community-Workbooks/Azure Advisor/Reliability/Web"
+    "servicealert_workbook_resource_id"      = "community-Workbooks/Azure Advisor/Reliability/ServiceAlert"
 
     "overview_information" = ""
     "link_of_Summary"      = ""
