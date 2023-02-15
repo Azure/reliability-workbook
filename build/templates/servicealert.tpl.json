@@ -151,7 +151,12 @@
                   "json": "Service Health alerts    allow customers to receive an alert when Azure sends service health    notifications to their Azure Subscription. \r\n\r\nAlerts can be configured based    on the class of notifications, the subscriptions affected, services    affected, and the region affected.    \r\n\r\nThe classes of    notification are:\r\n\r\n- **Service Issues** - Problems in the    Azure Services that affect you right now. \r\n- **Planned Maintenance** - Upcoming    Maintenance that can affect the availability of your services in the    future. \r\n- **Health Advisories** - Changes in    Azure Services that require your attention. Examples include deprecation    of Azure Feature or upgrade requirements (e.g., upgrade to a supported    PHP framework)·\r\n- **Security Advisories    -** Security related notifications or violations that may affect    the availability of your Azure Services.\r\n\r\nLearn More: [Documentation](https://docs.microsoft.com/en-us/azure/service-health/alerts-activity-log-service-notifications-portal)           ",
                   "style": "info"
                 },
-                "name": "text - 0"
+              "conditionalVisibility": {
+                "parameterName": "Help",
+                "comparison": "isEqualTo",
+                "value": "Yes"
+              },
+              "name": "alert-help"
               },
               {
                 "type": 3,
@@ -396,16 +401,12 @@
                   "gridSettings": {
                     "formatters": [
                       {
-                        "columnMatch": "$gen_group",
-                        "formatter": 15,
+                      "columnMatch": "subscriptionId",
+                      "formatter": 13,
                         "formatOptions": {
-                          "linkTarget": null,
+                        "linkTarget": "Resource",
                           "showIcon": true
                         }
-                      },
-                      {
-                        "columnMatch": "subscriptionId",
-                        "formatter": 5
                       },
                       {
                         "columnMatch": "alertEnabled",
@@ -541,14 +542,16 @@
                             }
                           ]
                         }
+                    },
+                    {
+                      "columnMatch": "Subscription",
+                      "formatter": 13,
+                      "formatOptions": {
+                        "linkTarget": "Resource",
+                        "showIcon": true
+                      }
                       }
                     ],
-                    "hierarchySettings": {
-                      "treeType": 1,
-                      "groupBy": [
-                        "subscriptionId"
-                      ]
-                    },
                     "labelSettings": [
                       {
                         "columnId": "subscriptionId",
@@ -605,13 +608,25 @@
                     "formatters": [
                       {
                         "columnMatch": "$gen_group",
-                        "formatter": 15,
+                      "formatter": 13,
                         "formatOptions": {
-                          "linkTarget": null,
+                        "linkTarget": "Resource",
                           "showIcon": true
                         }
                       },
                       {
+                      "columnMatch": "Subscription",
+                      "formatter": 13,
+                      "formatOptions": {
+                        "linkTarget": "Resource",
+                        "showIcon": true
+                      }
+                    },
+                    {
+                      "columnMatch": "id",
+                      "formatter": 5
+                    },
+                    {
                         "columnMatch": "name",
                         "formatter": 5
                       },
@@ -620,6 +635,10 @@
                         "formatter": 5
                       },
                       {
+                    "columnMatch": "category",
+                    "formatter": 1
+                  },
+                  {
                         "columnMatch": "alertEnabled",
                         "formatter": 18,
                         "formatOptions": {
@@ -645,10 +664,6 @@
                             }
                           ]
                         }
-                      },
-                      {
-                        "columnMatch": "incidentType",
-                        "formatter": 5
                       },
                       {
                         "columnMatch": "incident",
@@ -759,19 +774,16 @@
                         }
                       },
                       {
-                        "columnMatch": "--Group By--",
-                        "formatter": 15,
-                        "formatOptions": {
-                          "linkTarget": null,
-                          "showIcon": true
-                        }
+                      "columnMatch": "incidentType",
+                      "formatter": 5
                       }
                     ],
                     "hierarchySettings": {
                       "treeType": 1,
                       "groupBy": [
                         "subscriptionId"
-                      ]
+                    ],
+                    "finalBy": "id"
                     },
                     "labelSettings": [
                       {
