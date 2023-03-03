@@ -271,6 +271,14 @@
               "margin": "10px",
               "showBorder": true
             }
+          },
+          {
+            "type": 1,
+            "content": {
+              "json": "This workbook uses below filtering capabilities\r\n\r\n- Subscription\r\n- Resource Group\r\n- Environment - We look for tags with names Environment, environment, Env, env or look for common keywords (prod, dev, qa, uat, sit, test) as part of resource name to associate the environment for that resource within workbook. If there are no tags or naming conventions detected, we display environment as 'undefined'. This applies only within the workbook visualization and  no impact outside of workbook.\r\n- Tags - filter by any tag names and values\r\n\r\nAdditionally the workbook has below radio buttons\r\n\r\n- Show SLA - Displays the SLA for the service which we are looking at in that particular tab\r\n- Show Help - Displays resource level best practice configurations which can increase the reliability of the resource deployment",
+              "style": "info"
+            },
+            "name": "text - 4"
           }
           ${overview_information}
         ]
