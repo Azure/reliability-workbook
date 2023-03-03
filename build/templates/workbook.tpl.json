@@ -278,7 +278,15 @@
               "json": "This workbook uses below filtering capabilities\r\n\r\n- Subscription\r\n- Resource Group\r\n- Environment - We look for tags with names Environment, environment, Env, env or look for common keywords (prod, dev, qa, uat, sit, test) as part of resource name to associate the environment for that resource within workbook. If there are no tags or naming conventions detected, we display environment as 'undefined'. This applies only within the workbook visualization and  no impact outside of workbook.\r\n- Tags - filter by any tag names and values\r\n\r\nAdditionally the workbook has below radio buttons\r\n\r\n- Show SLA - Displays the SLA for the service which we are looking at in that particular tab\r\n- Show Help - Displays resource level best practice configurations which can increase the reliability of the resource deployment",
               "style": "info"
             },
-            "name": "text - 4"
+            "name": "filter details"
+          },
+          {
+            "type": 1,
+            "content": {
+              "json": "This workbook currently evaluates and recommends reliability best practices for select list of below services.\r\n\r\n- **Compute** : Virtual Machines, Virtual Machine Scale Sets\r\n- **Containers** : Azure Kubernetes service\r\n- **Databases** : SQL Database, Synapse SQL Pool, Cosmos DB, Azure Database for MySQL, Azure Cache for Redis\r\n- **Integration** : Azure API Management\r\n- **Networking** : Azure Firewall, Azure Front Door & CDN, Application Gateway, Load Balancer, Public IP, VPN & Express Route Gateway\r\n- **Storage** : Storage Account\r\n- **Web** : App Service Plan, App Service, Function App\r\n- **Azure Site Recovery**\r\n- **Service Alerts**",
+              "style": "info"
+            },
+            "name": "supported services"
           }
           ${overview_information}
         ]
