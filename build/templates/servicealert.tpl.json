@@ -171,6 +171,98 @@
                     "{Subscriptions}"
                   ],
                   "gridSettings": {
+                "formatters": [
+                  {
+                    "columnMatch": "Sub_Count",
+                    "formatter": 18,
+                    "formatOptions": {
+                      "thresholdsOptions": "icons",
+                      "thresholdsGrid": [
+                        {
+                          "operator": "Default",
+                          "thresholdValue": null,
+                          "representation": "Blank",
+                          "text": "{0}{1}"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "columnMatch": "Sub_alertEnabled_count",
+                    "formatter": 18,
+                    "formatOptions": {
+                      "thresholdsOptions": "icons",
+                      "thresholdsGrid": [
+                        {
+                          "operator": "Default",
+                          "thresholdValue": null,
+                          "representation": "Blank",
+                          "text": "{0}{1}"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "columnMatch": "Sub_Incident_Count",
+                    "formatter": 18,
+                    "formatOptions": {
+                      "thresholdsOptions": "icons",
+                      "thresholdsGrid": [
+                        {
+                          "operator": "Default",
+                          "thresholdValue": null,
+                          "representation": "Blank",
+                          "text": "{0}{1}"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "columnMatch": "Sub_Maintenance_Count",
+                    "formatter": 18,
+                    "formatOptions": {
+                      "thresholdsOptions": "icons",
+                      "thresholdsGrid": [
+                        {
+                          "operator": "Default",
+                          "thresholdValue": null,
+                          "representation": "Blank",
+                          "text": "{0}{1}"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "columnMatch": "Sub_Informational_Count",
+                    "formatter": 18,
+                    "formatOptions": {
+                      "thresholdsOptions": "icons",
+                      "thresholdsGrid": [
+                        {
+                          "operator": "Default",
+                          "thresholdValue": null,
+                          "representation": "Blank",
+                          "text": "{0}{1}"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "columnMatch": "Sub_Security_Count",
+                    "formatter": 18,
+                    "formatOptions": {
+                      "thresholdsOptions": "icons",
+                      "thresholdsGrid": [
+                        {
+                          "operator": "Default",
+                          "thresholdValue": null,
+                          "representation": "Blank",
+                          "text": "{0}{1}"
+                        }
+                      ]
+                    }
+                  }
+                ],
                     "labelSettings": [
                       {
                         "columnId": "Sub_Count",
@@ -178,23 +270,23 @@
                       },
                       {
                         "columnId": "Sub_alertEnabled_count",
-                        "label": "Sub. with Alert Enabled"
+                    "label": "Alert Enabled"
                       },
                       {
                         "columnId": "Sub_Incident_Count",
-                        "label": "Incident alert Configured Sub"
+                    "label": "Service Issues"
                       },
                       {
                         "columnId": "Sub_Maintenance_Count",
-                        "label": "Maintenance Alert Configured Sub"
+                    "label": "Planned Maintenance"
                       },
                       {
                         "columnId": "Sub_Informational_Count",
-                        "label": "Informational Alert Configured Sub"
+                    "label": "Health Advisories"
                       },
                       {
                         "columnId": "Sub_Security_Count",
-                        "label": "Security Alert Configured Sub"
+                    "label": "Security Advisories"
                       }
                     ]
                   }
@@ -216,6 +308,21 @@
                   "gridSettings": {
                     "formatters": [
                       {
+                    "columnMatch": "Sub_Count",
+                    "formatter": 18,
+                    "formatOptions": {
+                      "thresholdsOptions": "icons",
+                      "thresholdsGrid": [
+                        {
+                          "operator": "Default",
+                          "thresholdValue": null,
+                          "representation": "Blank",
+                          "text": "{0}{1}"
+                        }
+                      ]
+                    }
+                  },
+                  {
                         "columnMatch": "Sub_alertEnabled_count",
                         "formatter": 18,
                         "formatOptions": {
@@ -363,23 +470,23 @@
                       },
                       {
                         "columnId": "Sub_alertEnabled_count",
-                        "label": "Sub. with Alert Enabled"
+                    "label": "Alert Enabled"
                       },
                       {
                         "columnId": "Sub_Incident_Count",
-                        "label": "Incident alert Configured Sub"
+                    "label": "Service Issues"
                       },
                       {
                         "columnId": "Sub_Maintenance_Count",
-                        "label": "Maintenance Alert Configured Sub"
+                    "label": "Planned Maintenance"
                       },
                       {
                         "columnId": "Sub_Informational_Count",
-                        "label": "Informational Alert Configured Sub"
+                    "label": "Health Advisories"
                       },
                       {
                         "columnId": "Sub_Security_Count",
-                        "label": "Security Alert Configured Sub"
+                    "label": "Security Advisories"
                       }
                     ]
                   }
@@ -563,19 +670,19 @@
                       },
                       {
                         "columnId": "incident",
-                        "label": "Incident"
+                    "label": "Service Issues"
                       },
                       {
                         "columnId": "maintenance",
-                        "label": "Maintenance"
+                    "label": "Planned Maintenance"
                       },
                       {
                         "columnId": "informational",
-                        "label": "Informational"
+                    "label": "Health Advisories"
                       },
                       {
                         "columnId": "security",
-                        "label": "Security"
+                    "label": "Security Advisories"
                       }
                     ]
                   }
@@ -808,19 +915,19 @@
                       },
                       {
                         "columnId": "incident",
-                        "label": "Incident"
+                    "label": "Service Issues"
                       },
                       {
                         "columnId": "maintenance",
-                        "label": "Maintenance"
+                    "label": "Planned Maintenance"
                       },
                       {
                         "columnId": "informational",
-                        "label": "Informational"
+                    "label": "Health Advisories"
                       },
                       {
                         "columnId": "security",
-                        "label": "Security"
+                    "label": "Security Advisories"
                       }
                     ]
                   }
