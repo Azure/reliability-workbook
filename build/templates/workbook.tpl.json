@@ -26,8 +26,8 @@
             "value": [
               "value::all"
             ]
-    },
-    {
+          },
+          {
             "id": "91aa9ba3-ed60-4472-8dd9-1c2cb6255757",
             "version": "KqlParameterItem/1.0",
             "name": "ResourceGroup",
@@ -128,12 +128,13 @@
             "type": 10,
             "isRequired": true,
             "typeSettings": {
-              "additionalResourceOptions": []
+              "additionalResourceOptions": [],
+              "showDefault": false
             },
-            "jsonData": "[{\"value\": \"Yes\", \"label\": \"Yes\", \"selected\":true },\r\n {\"value\": \"No\", \"label\": \"No\"}]"
+            "jsonData": "[{\"value\": \"Yes\", \"label\": \"Yes\"},\r\n {\"value\": \"No\", \"label\": \"No\", \"selected\":true }]"
           }
         ],
-        "style": "pills",
+        "style": "above",
         "queryType": 0,
         "resourceType": "microsoft.operationalinsights/workspaces"
       },
