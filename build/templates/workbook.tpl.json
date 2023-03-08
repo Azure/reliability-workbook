@@ -126,6 +126,7 @@
             "name": "Help",
             "label": "Show Help",
             "type": 10,
+            "description": "This will show the additional reliability guidance for the focus area to help you decide on the right reliability posture of the service",
             "isRequired": true,
             "typeSettings": {
               "additionalResourceOptions": [],
