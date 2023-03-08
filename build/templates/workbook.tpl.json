@@ -126,6 +126,7 @@
             "name": "Help",
             "label": "Show Help",
             "type": 10,
+            "description": "This will show more information to help you understand resiliency the focus area",
             "isRequired": true,
             "typeSettings": {
               "additionalResourceOptions": [],
