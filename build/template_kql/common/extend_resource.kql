@@ -206,7 +206,7 @@ resources
     type == 'microsoft.documentdb/databaseaccounts', 'Not Applicable',
     type == 'microsoft.dbformysql/servers', tostring(sku.capacity),
     type == 'microsoft.dbformysql/flexibleservers', tostring(sku.capacity),
-    type == 'microsoft.cache/redis', tostring(properties.sku.capacity),
+    type == 'microsoft.cache/redis', strcat(properties.sku.family, properties.sku.capacity),
     type == "microsoft.apimanagement/service", tostring(sku.capacity),
     type contains "storageaccounts", "Not Applicable", 
     type == "microsoft.network/azurefirewalls", "Not Applicable",

@@ -20,7 +20,7 @@ extend ReliabilityScore = case(
     // MySQL Flexible - 4 checks  // score = ("status" + "sku"  + "replication" + "HaEnabled") * 100 / (4 * ResourceTotal)    // included NA items to show compliance  //********* Future - "read replica", "automatic failover", "backup"
     Type == 'microsoft.dbformysql/flexibleservers', (DBOnlineStateCount + OtherSku + ReplicationEnabled + NAReplicationEnabled + AvZoneCount + NAAvZoneCount) * 100 / (4 * ResourceTotal),
     // Redis - 4 checks // score = (state + sku + AZ + capacity) * 100 / (4 * ResourceTotal)
-    Type == 'microsoft.cache/redis', (SucceededStateCount + PremiumSkuCount + EnterpriseSkuCount + AvZoneCount + NAAvZoneCount + Gt1CapacityCount) * 100 / (4 * ResourceTotal),
+    Type == 'microsoft.cache/redis', (SucceededStateCount + OtherSku + AvZoneCount + NAAvZoneCount + RedisDedicatedCapacityCount) * 100 / (4 * ResourceTotal),
     // APIM - 5 checks // score = ("Tier" + state + "capacity" + AZ + stv2platform) * 100 / (5 * ResourceTotal) 
     Type == 'microsoft.apimanagement/service', (OtherSku + SucceededStateCount + Gt1CapacityCount + AvZoneCount + Stv2ApimCount) * 100 / (5 * ResourceTotal),
     // Storage - 2 checks // score = ( "kind" + "replication type") * 100 / (2 * ResourceTotal)    //********* Future - "access tier hot"

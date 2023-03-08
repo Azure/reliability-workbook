@@ -18,6 +18,7 @@ summarize
     NACapacityCount=dcountif(Name, (Capacity contains "not applicable")),
     ZeroCapacityCount=dcountif(Name, (Capacity contains "0")),
     Gt1CapacityCount=dcountif(Name, (Capacity !contains "not applicable") and (Capacity !contains "0") and (Capacity !contains "1") and (Capacity !contains "undefined")),
+    RedisDedicatedCapacityCount=dcountif(Name, (Capacity !contains "not applicable") and (Capacity !contains "0") and (Capacity !contains "undefined")),
     NAFaultDomainCount=dcountif(Name, (FaultDomain contains "not applicable")),
     ZeroFaultDomainCount=dcountif(Name, (FaultDomain contains "0")),
     Gt0FaultDomainCount=dcountif(Name, (FaultDomain !contains "not applicable") and (FaultDomain !contains "0") and (FaultDomain !contains "undefined")),
