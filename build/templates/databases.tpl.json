@@ -2603,6 +2603,11 @@
                     "json": "[Redis best practices](https://learn.microsoft.com/azure/architecture/framework/services/data/azure-cache-redis/reliability)\r\n\r\n* It is recommended to choose premium or enterprise tiers for better HA capability\r\n* Basic tier is not covered by SLA and hence should be avoided for production deployments.\r\n* It is recommended to avoid SKUs having shared CPUs for better resiliency & performance, SKU details can be referred in [docs](https://learn.microsoft.com/azure/azure-cache-for-redis/cache-planning-faq#azure-cache-for-redis-performance)\r\n* Enable Availability Zone if the region supports Availability Zones\r\n* Geo replication is preferred for DR across regions (active geo replication in case of enterprise tier). In this case replicas greater than 1 is not supported.\r\n\r\n> Azure generally recommends to leverage [Availability Zone](https://learn.microsoft.com/azure/availability-zones/az-overview) for better High Availability within the region by leveraging multiple zones inside region. By architecting your solutions to use replicated services in zones, you can protect your apps and data from the loss of a datacenter. \r\n\r\n> At this point, not all Azure regions and services support Availability Zones, the support matrix can be found [here](https://learn.microsoft.com/azure/availability-zones/az-region). Whenerver there is a Zonal recommendation for a particular service from this workbook, please note that that is applicable only for the regions supporting Availability Zones from the earlier list.\r\n",
                         "style": "info"
                       },
+                      "conditionalVisibility": {
+                        "parameterName": "Help",
+                        "comparison": "isEqualTo",
+                        "value": "Yes"
+                      },
                       "name": "text - 1"
                     },
                     {
