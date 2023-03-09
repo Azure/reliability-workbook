@@ -178,6 +178,7 @@
                   "query": ${kql_container_aks_resources_details},
                   "size": 0,
                   "title": "Azure Kubernetes Service (AKS)",
+                  "showExportToExcel": true,
                   "queryType": 1,
                   "resourceType": "microsoft.resourcegraph/resources",
                   "crossComponentResources": [

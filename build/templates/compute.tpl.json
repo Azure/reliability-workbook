@@ -210,6 +210,7 @@
                         "query": ${kql_compute_vm_resources_details},
                         "size": 3,
                         "title": "Virtual Machines",
+                        "showExportToExcel": true,
                         "queryType": 1,
                         "resourceType": "microsoft.resourcegraph/resources",
                         "crossComponentResources": [
@@ -526,6 +527,7 @@
                         "size": 1,
                         "title": "Classic Virtual Machines",
                         "noDataMessage": "No classic VMs found",
+                        "showExportToExcel": true,
                         "queryType": 1,
                         "resourceType": "microsoft.resourcegraph/resources",
                         "crossComponentResources": [
@@ -693,6 +695,7 @@
                         "query": ${kql_compute_vmss_resources_details},
                         "size": 3,
                         "title": "Virtual Machine Scale Sets",
+                        "showExportToExcel": true,
                         "queryType": 1,
                         "resourceType": "microsoft.resourcegraph/resources",
                         "crossComponentResources": [

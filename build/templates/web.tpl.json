@@ -213,6 +213,7 @@
                 "size": 0,
                 "title": "App Service Plan",
                 "noDataMessage": "No App Service plans found",
+                "showExportToExcel": true,
                 "queryType": 1,
                 "resourceType": "microsoft.resourcegraph/resources",
                 "crossComponentResources": [
@@ -425,7 +426,7 @@
                       }
                     }
                   ],
-                  "rowLimit": 9999,
+                  "rowLimit": 10000,
                   "hierarchySettings": {
                     "treeType": 1,
                     "groupBy": [
@@ -503,6 +504,7 @@
           "query": ${kql_webapp_appsvc_resources_details},
           "size": 3,
           "title": "App Service - Web App",
+          "showExportToExcel": true,
           "queryType": 1,
           "resourceType": "microsoft.resourcegraph/resources",
           "crossComponentResources": [
@@ -743,6 +745,7 @@
                 "formatter": 5
               }
             ],
+            "rowLimit": 10000,
             "hierarchySettings": {
               "treeType": 1,
               "groupBy": [
@@ -813,6 +816,7 @@
                   "query": ${kql_webapp_appservice_funcapp_resources_details},
                   "size": 3,
                   "title": "App Service - Function App",
+                  "showExportToExcel": true,
                   "queryType": 1,
                   "resourceType": "microsoft.resourcegraph/resources",
                   "crossComponentResources": [

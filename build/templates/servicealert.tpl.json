@@ -165,6 +165,7 @@
                   "query": ${service_alert_overall_summary},
                   "size": 4,
                   "title": "Service Health Alert Configuration - Overall Summary",
+                  "showExportToExcel": true,
                   "queryType": 1,
                   "resourceType": "microsoft.resourcegraph/resources",
                   "crossComponentResources": [
@@ -263,6 +264,7 @@
                     }
                   }
                 ],
+                    "rowLimit": 10000,
                     "labelSettings": [
                       {
                         "columnId": "Sub_Count",
@@ -300,6 +302,7 @@
                   "query": ${service_alert_overall_percentage_summary},
                   "size": 4,
                   "title": "Service Health Alert Configuration - Overall percentage summary ",
+                  "showExportToExcel": true,
                   "queryType": 1,
                   "resourceType": "microsoft.resourcegraph/resources",
                   "crossComponentResources": [
@@ -463,6 +466,7 @@
                         }
                       }
                     ],
+                    "rowLimit": 10000,
                     "labelSettings": [
                       {
                         "columnId": "Sub_Count",
@@ -500,6 +504,7 @@
                   "query": ${service_alert_summary_by_subscription},
                   "size": 0,
                   "title": "Service Health Alert Configuration Summary by Subscription",
+                  "showExportToExcel": true,
                   "queryType": 1,
                   "resourceType": "microsoft.resourcegraph/resources",
                   "crossComponentResources": [
@@ -659,6 +664,7 @@
                       }
                       }
                     ],
+                    "rowLimit": 10000,
                     "labelSettings": [
                       {
                         "columnId": "subscriptionId",
@@ -706,6 +712,7 @@
                   "title": "Service Health Alert Configuration Details for Configured Subscriptions",
                   "noDataMessage": "No service alerts have been configured for any of the subscriptions",
                   "noDataMessageStyle": 4,
+                  "showExportToExcel": true,
                   "queryType": 1,
                   "resourceType": "microsoft.resourcegraph/resources",
                   "crossComponentResources": [
@@ -885,6 +892,7 @@
                       "formatter": 5
                       }
                     ],
+                    "rowLimit": 10000,
                     "hierarchySettings": {
                       "treeType": 1,
                       "groupBy": [
