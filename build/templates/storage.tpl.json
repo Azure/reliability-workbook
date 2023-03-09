@@ -171,6 +171,7 @@
           "version": "KqlItem/1.0",
           "query": ${kql_storage_account_resources_details},
           "size": 3,
+          "showExportToExcel": true,
           "queryType": 1,
           "resourceType": "microsoft.resourcegraph/resources",
           "crossComponentResources": [

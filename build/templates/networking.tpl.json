@@ -235,6 +235,7 @@
                 "version": "KqlItem/1.0",
                 "query": ${kql_networking_lb_resources_details},
                 "size": 3,
+                "showExportToExcel": true,
                 "queryType": 1,
                 "resourceType": "microsoft.resourcegraph/resources",
                 "crossComponentResources": [
@@ -491,7 +492,7 @@
                       }
                     }
                   ],
-                  "rowLimit": 1000,
+                  "rowLimit": 10000,
                   "hierarchySettings": {
                     "treeType": 1,
                     "groupBy": [
@@ -557,6 +558,7 @@
                 "query": ${kql_networking_pip_resources_details},
                 "size": 0,
                 "title": "Public IP addresses and IP Prefixes",
+                "showExportToExcel": true,
                 "queryType": 1,
                 "resourceType": "microsoft.resourcegraph/resources",
                 "crossComponentResources": [
@@ -748,7 +750,7 @@
                       }
                       }
                     ],
-                    "rowLimit": 9999,
+                    "rowLimit": 10000,
                     "hierarchySettings": {
                       "treeType": 1,
                       "groupBy": [
@@ -847,6 +849,7 @@
                 "version": "KqlItem/1.0",
                 "query": ${kql_networking_appgw_resources_details},
                 "size": 3,
+                "showExportToExcel": true,
                 "queryType": 1,
                 "resourceType": "microsoft.resourcegraph/resources",
                 "crossComponentResources": [
@@ -1090,6 +1093,7 @@
                       "formatter": 5
                     }
                   ],
+                  "rowLimit": 10000,
                   "hierarchySettings": {
                     "treeType": 1,
                     "groupBy": [
@@ -1167,6 +1171,7 @@
                 "version": "KqlItem/1.0",
                 "query": ${kql_networking_azfw_resources_details},
                 "size": 0,
+                "showExportToExcel": true,
                 "queryType": 1,
                 "resourceType": "microsoft.resourcegraph/resources",
                 "crossComponentResources": [
@@ -1337,6 +1342,7 @@
                       "formatter": 5
                     }
                   ],
+                  "rowLimit": 10000,
                   "hierarchySettings": {
                     "treeType": 1,
                     "groupBy": [
@@ -1397,6 +1403,7 @@
                 "version": "KqlItem/1.0",
                 "query": ${kql_networking_afd_resources_details},
                 "size": 3,
+                "showExportToExcel": true,
                 "queryType": 1,
                 "resourceType": "microsoft.resourcegraph/resources",
                 "crossComponentResources": [
@@ -1553,6 +1560,7 @@
                       }
                     }
                   ],
+                  "rowLimit": 10000,
                   "hierarchySettings": {
                     "treeType": 1,
                     "groupBy": [
@@ -1619,6 +1627,7 @@
                 "query": ${kql_networking_vnetgw_resources_details},
                 "size": 0,
                 "title": "VPN and ExpressRoute Gateway",
+                "showExportToExcel": true,
                 "queryType": 1,
                 "resourceType": "microsoft.resourcegraph/resources",
                 "crossComponentResources": [
@@ -1907,7 +1916,7 @@
                       }
                     }
                   ],
-                  "rowLimit": 9999,
+                  "rowLimit": 10000,
                   "hierarchySettings": {
                     "treeType": 1,
                     "groupBy": [

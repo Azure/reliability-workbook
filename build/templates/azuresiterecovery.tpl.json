@@ -183,6 +183,7 @@
                             "version": "KqlItem/1.0",
                             "query": ${kql_azuresiterecovery_resources_details},
                             "size": 0,
+                            "showExportToExcel": true,
                             "queryType": 1,
                             "resourceType": "microsoft.resourcegraph/resources",
                             "crossComponentResources": [
@@ -298,6 +299,7 @@
                                   "formatter": 5
                                 }
                               ],
+                              "rowLimit": 10000,
                               "hierarchySettings": {
                                 "treeType": 1,
                                 "groupBy": [

@@ -234,6 +234,7 @@
                         "query": ${kql_database_sqldb_resources_details},
                         "size": 3,
                         "title": "Azure SQL Database",
+                        "showExportToExcel": true,
                         "queryType": 1,
                         "resourceType": "microsoft.resourcegraph/resources",
                         "crossComponentResources": [
@@ -660,6 +661,7 @@
                               "formatter": 5
                             }
                           ],
+                          "rowLimit": 10000,
                           "hierarchySettings": {
                             "treeType": 1,
                             "groupBy": [
@@ -734,6 +736,7 @@
                         "query": ${kql_database_synapse_resources_details},
                         "size": 3,
                         "title": "Dedicated SQL pool (formerly SQL DW)",
+                        "showExportToExcel": true,
                         "queryType": 1,
                         "resourceType": "microsoft.resourcegraph/resources",
                         "crossComponentResources": [
@@ -1043,6 +1046,7 @@
                               "formatter": 5
                             }
                           ],
+                          "rowLimit": 10000,
                           "hierarchySettings": {
                             "treeType": 1,
                             "groupBy": [
@@ -1117,6 +1121,7 @@
                         "query": ${kql_database_cosmosdb_resources_details},
                         "size": 3,
                         "title": "Cosmos DB",
+                        "showExportToExcel": true,
                         "queryType": 1,
                         "resourceType": "microsoft.resourcegraph/resources",
                         "crossComponentResources": [
@@ -1469,6 +1474,7 @@
                               "formatter": 5
                             }
                           ],
+                          "rowLimit": 10000,
                           "hierarchySettings": {
                             "treeType": 1,
                             "groupBy": [
@@ -1556,6 +1562,7 @@
                         "query": ${kql_database_mysqlsingle_resources_details},
                         "size": 3,
                         "title": "MySQL - Single",
+                        "showExportToExcel": true,
                         "queryType": 1,
                         "resourceType": "microsoft.resourcegraph/resources",
                         "crossComponentResources": [
@@ -1961,6 +1968,7 @@
                               "formatter": 5
                             }
                           ],
+                          "rowLimit": 10000,
                           "hierarchySettings": {
                             "treeType": 1,
                             "groupBy": [
@@ -2003,6 +2011,7 @@
                         "query": ${kql_database_mysqlflexible_resources_details},
                         "size": 3,
                         "title": "MySQL - Flexible",
+                        "showExportToExcel": true,
                         "queryType": 1,
                         "resourceType": "microsoft.resourcegraph/resources",
                         "crossComponentResources": [
@@ -2536,6 +2545,7 @@
                               }
                             }
                           ],
+                          "rowLimit": 10000,
                           "hierarchySettings": {
                             "treeType": 1,
                             "groupBy": [
@@ -2617,6 +2627,7 @@
                         "query": ${kql_database_redis_resources_details},
                         "size": 1,
                         "title": "Azure Cache for Redis",
+                        "showExportToExcel": true,
                         "queryType": 1,
                         "resourceType": "microsoft.resourcegraph/resources",
                         "crossComponentResources": [
@@ -2844,6 +2855,7 @@
                                 }
                               }
                             ],
+                            "rowLimit": 10000,
                             "hierarchySettings": {
                               "treeType": 1,
                               "groupBy": [

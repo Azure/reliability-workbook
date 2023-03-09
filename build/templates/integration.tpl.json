@@ -172,6 +172,7 @@
           "query": ${kql_integration_apim_resources_details},
           "size": 0,
           "title": "API Management",
+          "showExportToExcel": true,
           "queryType": 1,
           "resourceType": "microsoft.resourcegraph/resources",
           "crossComponentResources": [
