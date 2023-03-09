@@ -286,12 +286,24 @@
                             }
                           },
                           {
+                            "columnMatch": "Subscription",
+                            "formatter": 13,
+                            "formatOptions": {
+                              "linkTarget": "Resource",
+                              "showIcon": true
+                            }
+                          },
+                          {
+                            "columnMatch": "Name",
+                            "formatter": 5
+                          },
+                          {
                             "columnMatch": "SubscriptionId",
                             "formatter": 5
                             },
                             {
-                              "columnMatch": "Name",
-                              "formatter": 5
+                            "columnMatch": "ResourceName",
+                            "formatter": 1
                           }
                         ],
                         "rowLimit": 10000,
