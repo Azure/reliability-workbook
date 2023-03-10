@@ -157,14 +157,7 @@
           }
           ${link_of_Summary}
           ${link_of_Advisor}
-          ,{
-            "id": "88c013ec-1149-411f-8b35-02e737237a91",
-            "cellValue": "selectedTab",
-            "linkTarget": "parameter",
-            "linkLabel": "Azure Site Recovery",
-            "subTarget": "Backup",
-            "style": "link"
-          },
+          ,
           {
             "id": "9b8f2619-143e-47eb-a821-aadcf29c095d",
             "cellValue": "selectedTab",
@@ -219,6 +212,14 @@
             "linkTarget": "parameter",
             "linkLabel": "Web",
             "subTarget": "Web",
+            "style": "link"
+          },
+          {
+            "id": "88c013ec-1149-411f-8b35-02e737237a91",
+            "cellValue": "selectedTab",
+            "linkTarget": "parameter",
+            "linkLabel": "Azure Site Recovery",
+            "subTarget": "Backup",
             "style": "link"
           },
           {
