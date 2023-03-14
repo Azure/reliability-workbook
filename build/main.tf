@@ -192,20 +192,3 @@ resource "azurerm_application_insights_workbook" "example" {
   display_name        = var.workbook_name
   data_json           = local.workbook_data_json_for_community
 }
-
-// Generate workbook JSON
-resource "local_file" "workbook" {
-  filename = "${path.module}/ReliabilityWorkbook.workbook"
-  content  = local.workbook_data_json_for_community
-}
-
-resource "local_file" "workbook_public" {
-  filename = "${path.module}/ReliabilityWorkbookPublic.workbook"
-  content  = local.workbook_data_json_for_public
-}
-
-// Generate armtemplate JSON
-resource "local_file" "armtemplate" {
-  filename = "${path.module}/azuredeploy.json"
-  content  = local.armtemplate_json
-}
