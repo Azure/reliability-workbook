@@ -19,13 +19,10 @@
               "additionalResourceOptions": [
                 "value::all"
               ],
-              "includeAll": true,
+              "includeAll": false,
               "showDefault": false
             },
-            "defaultValue": "value::all",
-            "value": [
-              "value::all"
-            ]
+            "defaultValue": "value::all"
           },
           {
             "id": "91aa9ba3-ed60-4472-8dd9-1c2cb6255757",
