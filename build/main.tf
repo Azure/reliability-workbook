@@ -192,3 +192,8 @@ resource "azurerm_application_insights_workbook" "example" {
   display_name        = var.workbook_name
   data_json           = local.workbook_data_json_for_community
 }
+
+resource "local_file" "workbook_public" {
+  filename = "${path.module}/ReliabilityWorkbookPublic.workbook"
+  content  = local.workbook_data_json_for_public
+}
