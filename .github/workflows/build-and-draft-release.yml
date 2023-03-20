@@ -51,12 +51,8 @@ jobs:
         id: validate
         run: terraform validate -no-color
 
-      - name: Terraform Plan
-        id: plan
-        run: make terraform-plan
-
-      - name: Terraform Apply
-        run: terraform apply -no-color tfplan
+      - name: Build workbook by Terraform
+        run: make all
 
       - name: ls
         run: ls -lR
@@ -118,4 +114,5 @@ jobs:
           message: Update artifacts
           push: origin main --force --set-upstream
           add: |
-            artifacts/*.workbook
+            artifacts/
+
