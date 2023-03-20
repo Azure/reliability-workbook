@@ -51,20 +51,18 @@ jobs:
         id: validate
         run: terraform validate -no-color
 
-      - name: Terraform Plan
-        id: plan
-        run: terraform plan -input=false -no-color -out tfplan -target local_file.armtemplate -target local_file.workbook
+      - name: Build workbook by Terraform
+        run: make all
 
-      - name: Terraform Apply
-        run: terraform apply -no-color tfplan
+      - name: ls
+        run: ls -lR
 
-      - name: Upload asset - azuredeploy.json
+      - name: Upload workbook files
         uses: actions/upload-artifact@v3
         with:
           name: asset
           path: |
-            build/azuredeploy.json
-            build/ReliabilityWorkbook.json
+            build/artifacts/*
           if-no-files-found: error
 
   update_release_draft:
@@ -102,18 +100,19 @@ jobs:
         with:
           upload_url: ${{ steps.release_drafter.outputs.upload_url }}
           asset_path: |
-            asset/azuredeploy.json
-            asset/ReliabilityWorkbook.json
+            asset/*.workbook
           overwrite: true
-      - name: Move asset
+      - name: Create artifacts directory and move files from asset to it
         run: |
-          mv -f asset/azuredeploy.json asset/ReliabilityWorkbook.json workbooks/
+          rm -rf artifacts
+          mkdir artifacts
+          mv asset/* artifacts/
       - uses: EndBug/add-and-commit@v9.0.1
         with:
           author_name: github-actions
           author_email: '41898282+github-actions[bot]@users.noreply.github.com'
-          message: Update ARM template and Workbook
+          message: Update artifacts
           push: origin main --force --set-upstream
           add: |
-            workbooks/azuredeploy.json
-            workbooks/ReliabilityWorkbook.json
+            artifacts/
+
