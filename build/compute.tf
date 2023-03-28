@@ -2,6 +2,12 @@
 // Compute tab
 //-------------------------------------------
 locals {
+  kql_compute_vm_resources_details_summary = templatefile(
+    "${path.module}/template_kql/compute/compute_vm_resources_details_summary.kql",
+    {
+      "extend_resource" = local.kql_extend_resource
+    }
+  )
   kql_compute_vm_resources_details = templatefile(
     "${path.module}/template_kql/compute/compute_vm_resources_details.kql",
     {
@@ -14,6 +20,12 @@ locals {
       "extend_resource" = local.kql_extend_resource
     }
   )
+  kql_compute_vmss_resources_details_summary = templatefile(
+    "${path.module}/template_kql/compute/compute_vmss_resources_details_summary.kql",
+    {
+      "extend_resource" = local.kql_extend_resource
+    }
+  )
   kql_compute_vmss_resources_details = templatefile(
     "${path.module}/template_kql/compute/compute_vmss_resources_details.kql",
     {
@@ -22,9 +34,11 @@ locals {
   )
 
   workbook_compute_json = templatefile("${path.module}/templates/compute.tpl.json", {
-    "kql_compute_vm_resources_details"        = jsonencode(local.kql_compute_vm_resources_details)
-    "kql_compute_classicvm_resources_details" = jsonencode(local.kql_compute_classicvm_resources_details)
-    "kql_compute_vmss_resources_details"      = jsonencode(local.kql_compute_vmss_resources_details)
+    "kql_compute_vm_resources_details_summary"   = jsonencode(local.kql_compute_vm_resources_details_summary)
+    "kql_compute_vm_resources_details"           = jsonencode(local.kql_compute_vm_resources_details)
+    "kql_compute_classicvm_resources_details"    = jsonencode(local.kql_compute_classicvm_resources_details)
+    "kql_compute_vmss_resources_details_summary" = jsonencode(local.kql_compute_vmss_resources_details_summary)
+    "kql_compute_vmss_resources_details"         = jsonencode(local.kql_compute_vmss_resources_details)
   })
 }
 resource "random_uuid" "workbook_name_compute" {

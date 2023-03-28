@@ -230,6 +230,43 @@
               "type": 3,
               "content": {
                 "version": "KqlItem/1.0",
+                "query": ${kql_networking_lb_resources_details_summary},
+                "size": 3,
+                "title": "Load Balancer - Recommendation Summary",
+                "showExportToExcel": true,
+                "queryType": 1,
+                "resourceType": "microsoft.resourcegraph/resources",
+                "crossComponentResources": [
+                  "{Subscriptions}"
+                ],
+                "gridSettings": {
+                  "rowLimit": 10000,
+                  "labelSettings": [
+                    {
+                      "columnId": "ResourceTotal",
+                      "label": "Resource Total"
+                    },
+                    {
+                      "columnId": "BasicSku",
+                      "label": "Basic SKU"
+                    },
+                    {
+                      "columnId": "NotSucceeded",
+                      "label": "LB Not Succeeded"
+                    },
+                    {
+                      "columnId": "NoAVZone",
+                      "label": "No Availability Zone"
+                    }
+                  ]
+                }
+              },
+              "name": "kql_networking_lb_resources_details_summary"
+            },
+            {
+              "type": 3,
+              "content": {
+                "version": "KqlItem/1.0",
                 "query": ${kql_networking_lb_resources_details},
                 "size": 3,
                 "showExportToExcel": true,
@@ -552,8 +589,45 @@
               "type": 3,
               "content": {
                 "version": "KqlItem/1.0",
+                "query": ${kql_networking_pip_resources_details_summary},
+                "size": 3,
+                "title": "Public IP addresses and IP Prefixes - Recommendation Summary",
+                "showExportToExcel": true,
+                "queryType": 1,
+                "resourceType": "microsoft.resourcegraph/resources",
+                "crossComponentResources": [
+                  "{Subscriptions}"
+                ],
+                "gridSettings": {
+                  "rowLimit": 10000,
+                  "labelSettings": [
+                    {
+                      "columnId": "ResourceTotal",
+                      "label": "Resource Total"
+                    },
+                    {
+                      "columnId": "BasicSku",
+                      "label": "Basic SKU"
+                    },
+                    {
+                      "columnId": "NotSucceeded",
+                      "label": "IP Not Succeeded"
+                    },
+                    {
+                      "columnId": "NoAVZone",
+                      "label": "No Availability Zone"
+                    }
+                  ]
+                }
+              },
+              "name": "Public_IP_addresses_and_IP_Prefixes_summary"
+            },
+            {
+              "type": 3,
+              "content": {
+                "version": "KqlItem/1.0",
                 "query": ${kql_networking_pip_resources_details},
-                "size": 0,
+                "size": 3,
                 "title": "Public IP addresses and IP Prefixes",
                 "showExportToExcel": true,
                 "queryType": 1,
@@ -839,6 +913,51 @@
                 "value": "Yes"
               },
               "name": "text - 3 - Copy - Copy - Copy"
+            },
+            {
+              "type": 3,
+              "content": {
+                "version": "KqlItem/1.0",
+                "query": ${kql_networking_appgw_resources_details_summary},
+                "size": 3,
+                "title": "Application Gateway - Recommendation Summary",
+                "showExportToExcel": true,
+                "queryType": 1,
+                "resourceType": "microsoft.resourcegraph/resources",
+                "crossComponentResources": [
+                  "{Subscriptions}"
+                ],
+                "gridSettings": {
+                  "rowLimit": 10000,
+                  "labelSettings": [
+                    {
+                      "columnId": "ResourceTotal",
+                      "label": "Resource Total"
+                    },
+                    {
+                      "columnId": "ClassicSku",
+                      "label": "Classic SKU"
+                    },
+                    {
+                      "columnId": "NotRunning",
+                      "label": "AppGw Not Running"
+                    },
+                    {
+                      "columnId": "NoAVZone",
+                      "label": "No Availability Zone"
+                    },
+                    {
+                      "columnId": "CapacityLt2",
+                      "label": "Capacity < 2"
+                    },
+                    {
+                      "columnId": "NoAutoscaling",
+                      "label": "No Autoscaling"
+                    }
+                  ]
+                }
+              },
+              "name": "kql_networking_appgw_resources_details_summary"
             },
             {
               "type": 3,
@@ -1166,6 +1285,39 @@
               "type": 3,
               "content": {
                 "version": "KqlItem/1.0",
+                "query": ${kql_networking_azfw_resources_details_summary},
+                "size": 4,
+                "title": "Azure Firewall - Recommendations Summary",
+                "showExportToExcel": true,
+                "queryType": 1,
+                "resourceType": "microsoft.resourcegraph/resources",
+                "crossComponentResources": [
+                  "{Subscriptions}"
+                ],
+                "gridSettings": {
+                  "rowLimit": 10000,
+                  "labelSettings": [
+                    {
+                      "columnId": "ResourceTotal",
+                      "label": "Resource Total"
+                    },
+                    {
+                      "columnId": "NotSucceeded",
+                      "label": "AzFw Not Succeeded"
+                    },
+                    {
+                      "columnId": "NoAVZone",
+                      "label": "No Availability Zone"
+                    }
+                  ]
+                }
+              },
+              "name": "kql_networking_azfw_resources_details_summary"
+            },
+            {
+              "type": 3,
+              "content": {
+                "version": "KqlItem/1.0",
                 "query": ${kql_networking_azfw_resources_details},
                 "size": 0,
                 "showExportToExcel": true,
@@ -1398,6 +1550,39 @@
               "type": 3,
               "content": {
                 "version": "KqlItem/1.0",
+                "query": ${kql_networking_afd_resources_details_summary},
+                "size": 3,
+                "title": "Azure Front Door & CDN - Recommendation Summary",
+                "showExportToExcel": true,
+                "queryType": 1,
+                "resourceType": "microsoft.resourcegraph/resources",
+                "crossComponentResources": [
+                  "{Subscriptions}"
+                ],
+                "gridSettings": {
+                  "rowLimit": 10000,
+                  "labelSettings": [
+                    {
+                      "columnId": "ResourceTotal",
+                      "label": "Resource Total"
+                    },
+                    {
+                      "columnId": "ClassicSKU",
+                      "label": "Classic SKU"
+                    },
+                    {
+                      "columnId": "NotActive",
+                      "label": "AFD/CDN Not Active"
+                    }
+                  ]
+                }
+              },
+              "name": "kql_networking_afd_resources_details_summary"
+            },
+            {
+              "type": 3,
+              "content": {
+                "version": "KqlItem/1.0",
                 "query": ${kql_networking_afd_resources_details},
                 "size": 3,
                 "showExportToExcel": true,
@@ -1621,8 +1806,57 @@
               "type": 3,
               "content": {
                 "version": "KqlItem/1.0",
+                "query": ${kql_networking_vnetgw_resources_details_summary},
+                "size": 3,
+                "title": "VPN and ExpressRoute Gateway - Recommendations Summary",
+                "showExportToExcel": true,
+                "queryType": 1,
+                "resourceType": "microsoft.resourcegraph/resources",
+                "crossComponentResources": [
+                  "{Subscriptions}"
+                ],
+                "gridSettings": {
+                  "rowLimit": 10000,
+                  "labelSettings": [
+                    {
+                      "columnId": "ResourceTotal",
+                      "label": "Resource Total"
+                    },
+                    {
+                      "columnId": "NonAzSku",
+                      "label": "SKU Without Zone"
+                    },
+                    {
+                      "columnId": "NotSucceeded",
+                      "label": "GW Not Succeeded"
+                    },
+                    {
+                      "columnId": "CapacityLt2",
+                      "label": "Capacity < 2"
+                    },
+                    {
+                      "columnId": "PolicyBasedVpn",
+                      "label": "Policy Based VPN GW"
+                    },
+                    {
+                      "columnId": "Gen1GW",
+                      "label": "Generation1 GW"
+                    },
+                    {
+                      "columnId": "ActiveActiveGW",
+                      "label": "Active-Active GW"
+                    }
+                  ]
+                }
+              },
+              "name": "vpn_er_gateway_details_summary"
+            },
+            {
+              "type": 3,
+              "content": {
+                "version": "KqlItem/1.0",
                 "query": ${kql_networking_vnetgw_resources_details},
-                "size": 0,
+                "size": 3,
                 "title": "VPN and ExpressRoute Gateway",
                 "showExportToExcel": true,
                 "queryType": 1,
