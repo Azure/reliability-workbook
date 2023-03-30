@@ -1613,7 +1613,7 @@
                         "thresholdsGrid": [
                           {
                             "operator": "regex",
-                          "thresholdValue": "(classic|standard_microsoft|standard_akamai)",
+                          "thresholdValue": "(classic_frontdoor|standard_microsoft|standard_akamai)",
                             "representation": "orange",
                             "text": "{0}{1}"
                           },
