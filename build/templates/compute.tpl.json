@@ -239,6 +239,10 @@
                           {
                             "columnId": "NoBackup",
                             "label": "Missing Backup"
+                        },
+                        {
+                          "columnId": "UnHealthyBackup",
+                          "label": "Unhealthy Backup"
                           }
                         ]
                       },
@@ -567,7 +571,7 @@
                       "content": {
                         "version": "KqlItem/1.0",
                         "query": ${kql_compute_classicvm_resources_details},
-                        "size": 1,
+                        "size": 3,
                         "title": "Classic Virtual Machines",
                         "noDataMessage": "No classic VMs found",
                         "showExportToExcel": true,

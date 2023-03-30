@@ -1286,7 +1286,7 @@
               "content": {
                 "version": "KqlItem/1.0",
                 "query": ${kql_networking_azfw_resources_details_summary},
-                "size": 4,
+                "size": 3,
                 "title": "Azure Firewall - Recommendations Summary",
                 "showExportToExcel": true,
                 "queryType": 1,
@@ -1319,7 +1319,7 @@
               "content": {
                 "version": "KqlItem/1.0",
                 "query": ${kql_networking_azfw_resources_details},
-                "size": 0,
+                "size": 3,
                 "showExportToExcel": true,
                 "queryType": 1,
                 "resourceType": "microsoft.resourcegraph/resources",
@@ -1613,7 +1613,7 @@
                         "thresholdsGrid": [
                           {
                             "operator": "regex",
-                            "thresholdValue": "(classic|standard_microsoft)",
+                          "thresholdValue": "(classic|standard_microsoft|standard_akamai)",
                             "representation": "orange",
                             "text": "{0}{1}"
                           },
@@ -1843,8 +1843,8 @@
                       "label": "Generation1 GW"
                     },
                     {
-                      "columnId": "ActiveActiveGW",
-                      "label": "Active-Active GW"
+                      "columnId": "NoActiveActiveGW",
+                      "label": "Non Active-Active GW"
                     }
                   ]
                 }

@@ -1,4 +1,4 @@
 ${extend_resource}
 | project Type, SkuName, Kind, SubscriptionId, Name, State, Location, ResourceGroup, Zones, AvailabilityZone, AvailabilitySet, Capacity, FaultDomain, OSDisk, ReadReplica, AutomaticFailover, MultipleWriteLocations, StorageAutogrow, ReplicationRole, Backup = tolower(Backup), Environment
 | where Type == 'microsoft.network/frontdoors' or Type == 'microsoft.cdn/profiles'
-| summarize ResourceTotal=count(Name), ClassicSKU=dcountif(Name, SkuName == "standard_microsoft"), NotActive=dcountif(Name, (State != "active" and State != "enabled"))
+| summarize ResourceTotal=count(Name), ClassicSKU=dcountif(Name, (SkuName == "standard_microsoft" or SkuName == "standard_akamai")), NotActive=dcountif(Name, (State != "active" and State != "enabled"))
