@@ -1,0 +1,4 @@
+${extend_resource}
+| project Type, SkuName, Kind, SubscriptionId, Name, State, Location, ResourceGroup, Zones, AvailabilityZone, AvailabilitySet, Capacity, FaultDomain, OSDisk, ReadReplica, AutomaticFailover, MultipleWriteLocations, StorageAutogrow, ReplicationRole, Backup = tolower(Backup), Environment
+| where Type == 'microsoft.network/virtualnetworkgateways'
+| summarize ResourceTotal=count(Name), NonAzSku=dcountif(Name, SkuName !endswith "az"), NotSucceeded=dcountif(Name, State != "succeeded"), CapacityLt2=dcountif(Name, (Capacity == "0" or Capacity == "1")), PolicyBasedVpn=dcountif(Name, (FaultDomain != "routebased" and FaultDomain != "erpolicybased")), Gen1GW=dcountif(Name, OSDisk == "generation1"), NoActiveActiveGW=dcountif(Name, ReadReplica == "false")

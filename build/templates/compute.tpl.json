@@ -204,6 +204,56 @@
                       "type": 3,
                       "content": {
                         "version": "KqlItem/1.0",
+                      "query": ${kql_compute_vm_resources_details_summary},
+                      "size": 3,
+                      "title": "Virtual Machines - Recommendation Summary",
+                      "showExportToExcel": true,
+                      "queryType": 1,
+                      "resourceType": "microsoft.resourcegraph/resources",
+                      "crossComponentResources": [
+                        "{Subscriptions}"
+                      ],
+                      "gridSettings": {
+                        "rowLimit": 10000,
+                        "labelSettings": [
+                          {
+                            "columnId": "ResourceTotal",
+                            "label": "Resource Total"
+                          },
+                          {
+                            "columnId": "NotRunning",
+                            "label": "VM Not Running"
+                          },
+                          {
+                            "columnId": "NoAVZone",
+                            "label": "No Availability Zone"
+                          },
+                          {
+                            "columnId": "NoAVSet",
+                            "label": "No Availability Set"
+                          },
+                          {
+                            "columnId": "OSDiskRecommendation",
+                            "label": "OS Disk Recommendation"
+                          },
+                          {
+                            "columnId": "NoBackup",
+                            "label": "Missing Backup"
+                        },
+                        {
+                          "columnId": "UnHealthyBackup",
+                          "label": "Unhealthy Backup"
+                          }
+                        ]
+                      },
+                      "sortBy": []
+                    },
+                    "name": "kql_compute_vm_resources_details_summary"
+                  },
+                  {
+                    "type": 3,
+                    "content": {
+                      "version": "KqlItem/1.0",
                         "query": ${kql_compute_vm_resources_details},
                         "size": 3,
                         "title": "Virtual Machines",
@@ -521,7 +571,7 @@
                       "content": {
                         "version": "KqlItem/1.0",
                         "query": ${kql_compute_classicvm_resources_details},
-                        "size": 1,
+                        "size": 3,
                         "title": "Classic Virtual Machines",
                         "noDataMessage": "No classic VMs found",
                         "showExportToExcel": true,
@@ -689,6 +739,52 @@
                       "type": 3,
                       "content": {
                         "version": "KqlItem/1.0",
+                    "query": ${kql_compute_vmss_resources_details_summary},
+                    "size": 3,
+                    "title": "Virtual Machine Scale Sets - Recommendation Summary",
+                    "showExportToExcel": true,
+                    "queryType": 1,
+                    "resourceType": "microsoft.resourcegraph/resources",
+                    "crossComponentResources": [
+                      "{Subscriptions}"
+                    ],
+                    "gridSettings": {
+                      "rowLimit": 10000,
+                      "labelSettings": [
+                        {
+                          "columnId": "ResourceTotal",
+                          "label": "Resource Total"
+                        },
+                        {
+                          "columnId": "NotSucceeded",
+                          "label": "VMSS Not Succeeded"
+                        },
+                        {
+                          "columnId": "NoAVZone",
+                          "label": "No Availability Zone"
+                        },
+                        {
+                          "columnId": "CapacityLt2",
+                          "label": "Capacity < 2"
+                        },
+                        {
+                          "columnId": "NoFaultDomain",
+                          "label": "No Fault Domain"
+                        },
+                        {
+                          "columnId": "OSDiskRecommendation",
+                          "label": "OS Disk Recommendation"
+                        }
+                      ]
+                    },
+                    "sortBy": []
+                  },
+                  "name": "kql_compute_vmss_resources_details_summary"
+                },
+                {
+                  "type": 3,
+                  "content": {
+                    "version": "KqlItem/1.0",
                         "query": ${kql_compute_vmss_resources_details},
                         "size": 3,
                         "title": "Virtual Machine Scale Sets",
@@ -826,12 +922,6 @@
                                   {
                                     "operator": "==",
                                     "thresholdValue": "1",
-                                    "representation": "2",
-                                    "text": "{0}{1}"
-                                  },
-                                  {
-                                    "operator": "==",
-                                    "thresholdValue": "2",
                                     "representation": "2",
                                     "text": "{0}{1}"
                                   },

@@ -2,6 +2,12 @@
 // Storage tab
 //-------------------------------------------
 locals {
+  kql_storage_account_resources_details_summary = templatefile(
+    "${path.module}/template_kql/storage/storage_account_resources_details_summary.kql",
+    {
+      "extend_resource" = local.kql_extend_resource
+    }
+  )
   kql_storage_account_resources_details = templatefile(
     "${path.module}/template_kql/storage/storage_account_resources_details.kql",
     {
@@ -9,8 +15,8 @@ locals {
     }
   )
   workbook_storage_json = templatefile("${path.module}/templates/storage.tpl.json", {
-    "kql_storage_account_resources_details" = jsonencode(local.kql_storage_account_resources_details)
-
+    "kql_storage_account_resources_details_summary" = jsonencode(local.kql_storage_account_resources_details_summary)
+    "kql_storage_account_resources_details"         = jsonencode(local.kql_storage_account_resources_details)
   })
 }
 resource "random_uuid" "workbook_name_storage" {

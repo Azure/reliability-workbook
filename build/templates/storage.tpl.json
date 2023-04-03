@@ -166,6 +166,39 @@
         "type": 3,
         "content": {
           "version": "KqlItem/1.0",
+          "query": ${kql_storage_account_resources_details_summary},
+          "size": 3,
+          "title": "Storage Account - Recommendations Summary",
+          "showExportToExcel": true,
+          "queryType": 1,
+          "resourceType": "microsoft.resourcegraph/resources",
+          "crossComponentResources": [
+            "{Subscriptions}"
+          ],
+          "gridSettings": {
+            "rowLimit": 10000,
+            "labelSettings": [
+              {
+                "columnId": "ResourceTotal",
+                "label": "Resource Total"
+              },
+              {
+                "columnId": "Storagev1",
+                "label": "Storage V1"
+              },
+              {
+                "columnId": "NoReplica",
+                "label": "Replication Not Enabled"
+              }
+            ]
+          }
+        },
+        "name": "kql_storage_account_resources_details_summary"
+      },
+      {
+        "type": 3,
+        "content": {
+          "version": "KqlItem/1.0",
           "query": ${kql_storage_account_resources_details},
           "size": 3,
           "showExportToExcel": true,

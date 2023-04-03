@@ -3,8 +3,20 @@
 //-------------------------------------------
 locals {
 
+  kql_networking_azfw_resources_details_summary = templatefile(
+    "${path.module}/template_kql/networking/networking_azfw_resources_details_summary.kql",
+    {
+      "extend_resource" = local.kql_extend_resource
+    }
+  )
   kql_networking_azfw_resources_details = templatefile(
     "${path.module}/template_kql/networking/networking_azfw_resources_details.kql",
+    {
+      "extend_resource" = local.kql_extend_resource
+    }
+  )
+  kql_networking_afd_resources_details_summary = templatefile(
+    "${path.module}/template_kql/networking/networking_afd_resources_details_summary.kql",
     {
       "extend_resource" = local.kql_extend_resource
     }
@@ -15,8 +27,20 @@ locals {
       "extend_resource" = local.kql_extend_resource
     }
   )
+  kql_networking_appgw_resources_details_summary = templatefile(
+    "${path.module}/template_kql/networking/networking_appgw_resources_details_summary.kql",
+    {
+      "extend_resource" = local.kql_extend_resource
+    }
+  )
   kql_networking_appgw_resources_details = templatefile(
     "${path.module}/template_kql/networking/networking_appgw_resources_details.kql",
+    {
+      "extend_resource" = local.kql_extend_resource
+    }
+  )
+  kql_networking_lb_resources_details_summary = templatefile(
+    "${path.module}/template_kql/networking/networking_lb_resources_details_summary.kql",
     {
       "extend_resource" = local.kql_extend_resource
     }
@@ -27,8 +51,20 @@ locals {
       "extend_resource" = local.kql_extend_resource
     }
   )
+  kql_networking_pip_resources_details_summary = templatefile(
+    "${path.module}/template_kql/networking/networking_pip_resources_details_summary.kql",
+    {
+      "extend_resource" = local.kql_extend_resource
+    }
+  )
   kql_networking_pip_resources_details = templatefile(
     "${path.module}/template_kql/networking/networking_pip_resources_details.kql",
+    {
+      "extend_resource" = local.kql_extend_resource
+    }
+  )
+  kql_networking_vnetgw_resources_details_summary = templatefile(
+    "${path.module}/template_kql/networking/networking_vnetgw_resources_details_summary.kql",
     {
       "extend_resource" = local.kql_extend_resource
     }
@@ -40,12 +76,18 @@ locals {
     }
   )
   workbook_networking_json = templatefile("${path.module}/templates/networking.tpl.json", {
-    "kql_networking_azfw_resources_details"   = jsonencode(local.kql_networking_azfw_resources_details)
-    "kql_networking_afd_resources_details"    = jsonencode(local.kql_networking_afd_resources_details)
-    "kql_networking_appgw_resources_details"  = jsonencode(local.kql_networking_appgw_resources_details)
-    "kql_networking_lb_resources_details"     = jsonencode(local.kql_networking_lb_resources_details)
-    "kql_networking_pip_resources_details"    = jsonencode(local.kql_networking_pip_resources_details)
-    "kql_networking_vnetgw_resources_details" = jsonencode(local.kql_networking_vnetgw_resources_details)
+    "kql_networking_azfw_resources_details_summary"   = jsonencode(local.kql_networking_azfw_resources_details_summary)
+    "kql_networking_azfw_resources_details"           = jsonencode(local.kql_networking_azfw_resources_details)
+    "kql_networking_afd_resources_details_summary"    = jsonencode(local.kql_networking_afd_resources_details_summary)
+    "kql_networking_afd_resources_details"            = jsonencode(local.kql_networking_afd_resources_details)
+    "kql_networking_appgw_resources_details_summary"  = jsonencode(local.kql_networking_appgw_resources_details_summary)
+    "kql_networking_appgw_resources_details"          = jsonencode(local.kql_networking_appgw_resources_details)
+    "kql_networking_lb_resources_details_summary"     = jsonencode(local.kql_networking_lb_resources_details_summary)
+    "kql_networking_lb_resources_details"             = jsonencode(local.kql_networking_lb_resources_details)
+    "kql_networking_pip_resources_details_summary"    = jsonencode(local.kql_networking_pip_resources_details_summary)
+    "kql_networking_pip_resources_details"            = jsonencode(local.kql_networking_pip_resources_details)
+    "kql_networking_vnetgw_resources_details_summary" = jsonencode(local.kql_networking_vnetgw_resources_details_summary)
+    "kql_networking_vnetgw_resources_details"         = jsonencode(local.kql_networking_vnetgw_resources_details)
   })
 }
 resource "random_uuid" "workbook_name_networking" {

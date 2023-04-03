@@ -242,53 +242,75 @@
           {
             "type": 1,
             "content": {
-              "json": "## Reliability Workbook\r\n\r\nThe objective of this workbook is to provide an overview of the configured state of deployment options that affect the resilience and/or availability SLA for common Azure resource types. The workbook is to be used as guidance only, and does not represent a guarantee for a service level.\r\n\r\n* Building a reliable application in the cloud is different from traditional application development. While historically you may have purchased levels of redundant higher-end hardware to minimize the chance of an entire application platform failing, in the cloud, we acknowledge up front that failures will happen. Instead of trying to prevent failures altogether, the goal is to minimize the effects of a single failing component.\r\n* To assess your workload using the tenets found in the Microsoft Azure Well-Architected Framework, see the [Microsoft Azure Well-Architected Review](https://learn.microsoft.com/assessments/?id=azure-architecture-review&mode=pre-assessment).\r\n* Reliable applications are:\r\n\t* Resilient and recover gracefully from failures, and they continue to function with minimal downtime and data loss before full recovery.\r\n\t* Highly available (HA) and run as designed in a healthy state with no significant downtime.\r\n* Understanding how these elements work together — and how they affect cost — is essential to building a reliable application. It can help you determine how much downtime is acceptable, the potential cost to your business, and which functions are necessary during a recovery.\r\n* Reliability considerations for individual Azure services are provided in the [Resiliency checklist for specific Azure services](https://learn.microsoft.com/azure/architecture/checklist/resiliency-per-service).\r\n\r\n> Reference: [Microsoft Azure Well-Architected Framework - Reliability Pillar](https://learn.microsoft.com/azure/architecture/framework/resiliency/overview)"
+                "json": "## Reliability workbook\r\n\r\nThe objective of this workbook is to provide an overview of the configured state of deployment options that affect the resilience and/or availability SLA for common Azure resource types. The workbook is to be used as guidance only, and does not represent a guarantee for a service level.\r\n\r\n* Building a reliable application in the cloud is different from traditional application development. While historically you may have purchased levels of redundant higher-end hardware to minimize the chance of an entire application platform failing, in the cloud, we acknowledge up front that failures will happen. Instead of trying to prevent failures altogether, the goal is to minimize the effects of a single failing component.\r\n* To assess your workload using the tenets found in the Microsoft Azure Well-Architected Framework, see the [Microsoft Azure Well-Architected Review](https://learn.microsoft.com/assessments/?id=azure-architecture-review&mode=pre-assessment).\r\n* Reliable applications are:\r\n\t* Resilient and recover gracefully from failures, and they continue to function with minimal downtime and data loss before full recovery.\r\n\t* Highly available (HA) and run as designed in a healthy state with no significant downtime.\r\n* Understanding how these elements work together — and how they affect cost — is essential to building a reliable application. It can help you determine how much downtime is acceptable, the potential cost to your business, and which functions are necessary during a recovery.\r\n* Reliability considerations for individual Azure services are provided in the [Resiliency checklist for specific Azure services](https://learn.microsoft.com/azure/architecture/checklist/resiliency-per-service).\r\n\r\n> Reference: [Microsoft Azure Well-Architected Framework - Reliability Pillar](https://learn.microsoft.com/azure/architecture/framework/resiliency/overview)"
             },
             "name": "text - 0"
-          },
-          {
-            "type": 1,
-            "content": {
-              "json": "Indicates an implemented feature that can result in a more resilient implementation, a higher SLA, and/or increased ability to restore a service.",
-              "style": "success"
-            },
-            "customWidth": "50",
-            "name": "text - 1",
-            "styleSettings": {
-              "margin": "10px",
-              "showBorder": true
-            }
-          },
-          {
-            "type": 1,
-            "content": {
-              "json": "Indicates a feature that has not been implemented, and therefore can result in a less resilient implementation, a reduced SLA, and/or reduced ability to restore a service.",
-              "style": "warning"
-            },
-            "customWidth": "50",
-            "name": "text - 2",
-            "styleSettings": {
-              "margin": "10px",
-              "showBorder": true
-            }
-          },
-          {
-            "type": 1,
-            "content": {
-              "json": "This workbook uses below filtering capabilities\r\n\r\n- Subscription\r\n- Resource Group\r\n- Environment - We look for tags with names Environment, environment, Env, env or look for common keywords (prod, dev, qa, uat, sit, test) as part of resource name to associate the environment for that resource within workbook. If there are no tags or naming conventions detected, we display environment as 'undefined'. This applies only within the workbook visualization and  no impact outside of workbook.\r\n- Tags - filter by any tag names and values\r\n\r\nAdditionally the workbook has below radio buttons\r\n\r\n- Show SLA - Displays the SLA for the service which we are looking at in that particular tab\r\n- Show Help - Displays resource level best practice configurations which can increase the reliability of the resource deployment",
-              "style": "info"
-            },
-            "name": "filter details"
-          },
-          {
-            "type": 1,
-            "content": {
-              "json": "This workbook currently evaluates and recommends reliability best practices for select list of below services.\r\n\r\n- **Compute** : Virtual Machines, Virtual Machine Scale Sets\r\n- **Containers** : Azure Kubernetes service\r\n- **Databases** : SQL Database, Synapse SQL Pool, Cosmos DB, Azure Database for MySQL, Azure Cache for Redis\r\n- **Integration** : Azure API Management\r\n- **Networking** : Azure Firewall, Azure Front Door & CDN, Application Gateway, Load Balancer, Public IP, VPN & Express Route Gateway\r\n- **Storage** : Storage Account\r\n- **Web** : App Service Plan, App Service, Function App\r\n- **Azure Site Recovery**\r\n- **Service Alerts**",
-              "style": "info"
-            },
-            "name": "supported services"
           }
           ${overview_information}
+          ,{
+            "type": 12,
+            "content": {
+              "version": "NotebookGroup/1.0",
+              "groupType": "editable",
+              "title": "Services supported",
+              "expandable": true,
+              "items": [
+                {
+                  "type": 1,
+                  "content": {
+                    "json": "This workbook currently evaluates and recommends reliability best practices for select list of below services.\r\n\r\n- **Compute** : Virtual Machines, Virtual Machine Scale Sets\r\n- **Containers** : Azure Kubernetes service\r\n- **Databases** : SQL Database, Synapse SQL Pool, Cosmos DB, Azure Database for MySQL, Azure Cache for Redis\r\n- **Integration** : Azure API Management\r\n- **Networking** : Azure Firewall, Azure Front Door & CDN, Application Gateway, Load Balancer, Public IP, VPN & Express Route Gateway\r\n- **Storage** : Storage Account\r\n- **Web** : App Service Plan, App Service, Function App\r\n- **Azure Site Recovery**\r\n- **Service Alerts**"
+                  },
+                  "name": "supported services"
+                }
+              ]
+            },
+            "name": "workbook_services_support"
+          },
+          {
+            "type": 12,
+            "content": {
+              "version": "NotebookGroup/1.0",
+              "groupType": "editable",
+              "title": "Usage instructions",
+              "expandable": true,
+              "items": [
+                {
+                  "type": 1,
+                  "content": {
+                    "json": "#### Filters\r\nThis workbook uses below filtering capabilities\r\n\r\n- Subscription\r\n- Resource Group\r\n- Environment - We look for tags with names Environment, environment, Env, env or look for common keywords (prod, dev, qa, uat, sit, test) as part of resource name to associate the environment for that resource within workbook. If there are no tags or naming conventions detected, we display environment as 'undefined'. This applies only within the workbook visualization and  no impact outside of workbook.\r\n- Tags - filter by any tag names and values\r\n\r\nAdditionally the workbook has below radio buttons\r\n\r\n- Show SLA - Displays the SLA for the service which we are looking at in that particular tab\r\n- Show Help - Displays resource level best practice configurations which can increase the reliability of the resource deployment"
+                  },
+                  "name": "filter details"
+                },
+                {
+                  "type": 1,
+                  "content": {
+                    "json": "Indicates an implemented feature that can result in a more resilient implementation, a higher SLA, and/or increased ability to restore a service.",
+                    "style": "success"
+                  },
+                  "customWidth": "50",
+                  "name": "text - 1",
+                  "styleSettings": {
+                    "margin": "10px",
+                    "showBorder": true
+                  }
+                },
+                {
+                  "type": 1,
+                  "content": {
+                    "json": "Indicates a feature that has not been implemented, and therefore can result in a less resilient implementation, a reduced SLA, and/or reduced ability to restore a service.",
+                    "style": "warning"
+                  },
+                  "customWidth": "50",
+                  "name": "text - 2",
+                  "styleSettings": {
+                    "margin": "10px",
+                    "showBorder": true
+                  }
+                }
+              ]
+            },
+            "name": "how_to_use_this_workbook"
+          }
         ]
       },
       "conditionalVisibility": {

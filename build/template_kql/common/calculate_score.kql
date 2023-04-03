@@ -27,10 +27,10 @@ extend ReliabilityScore = case(
     Type == 'microsoft.storage/storageaccounts' or Type == 'microsoft.classicstorage/storageaccounts', (V2StorageEnabled + RAStorageEnabled + NARAStorageEnabled) * 100 / (2 * ResourceTotal),
     // AzureFirewall - 1 check // score = (State + AZ) * 100 / (2 * ResourceTotal)
     Type == 'microsoft.network/azurefirewalls', (AzFWSucceededStateCount + AvZoneCount + NAAvZoneCount)* 100 / (2 * ResourceTotal),
-    // AFD and CDN - 1 check // score = state  * 100 / (1 * ResourceTotal)
-    Type == 'microsoft.cdn/profiles' or Type == 'microsoft.network/frontdoors', (CDNEnabledStateCount + AFDEnabledStateCount) * 100 / ResourceTotal,
+    // AFD and CDN - 2 check // score = state + non-legacy-sku  * 100 / (2 * ResourceTotal)
+    Type == 'microsoft.cdn/profiles' or Type == 'microsoft.network/frontdoors', (AfdActiveStateCount + AfdNonLegacySkuCount) * 100 / (2 * ResourceTotal),
     // AppGW - 5 checks    // score = (state + AZ + Tier + autoscaling + capacity) * 100 / (5 * ResourceTotal)
-    Type == 'microsoft.network/applicationgateways', (RunningState + AvZoneCount + NAAvZoneCount + OtherAppGwSkuCount + AutoScaleAppGwCount + Gt1CapacityCount) * 100 / (5 * ResourceTotal),
+    Type == 'microsoft.network/applicationgateways', (RunningState + AvZoneCount + NAAvZoneCount + V2AppGwSkuCount + AutoScaleAppGwCount + Gt1CapacityCount) * 100 / (5 * ResourceTotal),
     // LB - 3 checks  // score = (SKU + state + AZ) * 100 / (3 * ResourceTotal)
     Type == 'microsoft.network/loadbalancers', (OtherSku + SucceededStateCount + AvZoneCount + NAAvZoneCount) * 100 / (3 * ResourceTotal),
     // Public IP - 3 checks // score = (SKU + state + AZ) * 100 / (3 * ResourceTotal)
