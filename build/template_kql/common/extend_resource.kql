@@ -131,7 +131,7 @@ resources
     "Undefined"
     )
 | extend avZones = case(
-    location !in~ ('brazilsouth', 'canadacentral', 'centralus', 'eastus', 'eastus2', 'southcentralus', 'usgovvirginia', 'westus2', 'westus3', 'francecentral', 'germanywestcentral', 'northeurope', 'norwayeast', 'uksouth', 'westeurope', 'swedencentral', 'switzerlandnorth', 'qatarcentral', 'uaenorth', 'southafricanorth', 'australiaeast', 'centralindia', 'japaneast', 'koreacentral', 'southeastasia', 'eastasia', 'chinanorth3'), 'Not Applicable',
+    location !in~ ('brazilsouth', 'canadacentral', 'centralus', 'eastus', 'eastus2', 'southcentralus', 'usgovvirginia', 'westus2', 'westus3', 'francecentral', 'germanywestcentral', 'northeurope', 'norwayeast', 'uksouth', 'westeurope', 'swedencentral', 'switzerlandnorth', 'polandcentral', 'qatarcentral', 'uaenorth', 'southafricanorth', 'australiaeast', 'centralindia', 'japaneast', 'koreacentral', 'southeastasia', 'eastasia', 'chinanorth3'), 'Not Applicable',
     (type == 'microsoft.compute/virtualmachines'), coalesce(tostring(zones[0]), 'Not Configured'),
     (type == 'microsoft.classiccompute/virtualmachines'), 'Not Applicable',
     (type == 'microsoft.compute/virtualmachinescalesets'), coalesce(tostring(array_length(parse_json(zones))), 'Not Configured'),
@@ -139,7 +139,12 @@ resources
     (type == 'microsoft.containerservice/managedclusters' and isempty(AvZones)), "Not Configured",
     (type == 'microsoft.web/sites'), "ASP AZ config",
     (type == 'microsoft.web/serverfarms'), iff(properties.zoneRedundant == 'true', 'Configured', 'Not Configured'),
-    (type == 'microsoft.sql/servers/databases' and sku.tier <> 'DataWarehouse'), iif(isempty(properties.zoneRedundant) or properties.zoneRedundant == "false", 'Not Configured', 'Configured'),
+    (type == 'microsoft.sql/servers/databases' and sku.tier <> 'DataWarehouse'), case( //SQL AZ SKU & region availability filter
+    sku.name == 'Basic' or sku.name == 'Standard' or sku.name == 'System', 'Not Applicable',
+    sku.name == 'GeneralPurpose' and location !in~ ('westeurope', 'northeurope', 'westus2', 'francecentral', 'eastus', 'eastus2', 'southeastasia', 'qatarcentral', 'australiaeast', 'japaneast', 'uksouth'), 'Not Applicable',
+    properties.zoneRedundant == 'true', 'Configured',
+    'Not Configured'
+    ),
     (type == 'microsoft.sql/servers/databases' and sku.tier == 'DataWarehouse'), "Not Applicable",
     (type == 'microsoft.documentdb/databaseaccounts'), iif(properties.locations[0].isZoneRedundant == "false", 'Not Configured', 'Configured'), 
     (type == 'microsoft.dbformysql/servers'), "Not Applicable",
