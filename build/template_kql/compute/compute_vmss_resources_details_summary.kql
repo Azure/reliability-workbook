@@ -1,0 +1,4 @@
+${extend_resource}
+| project Type, SkuName, Kind, SubscriptionId, Name, State, Location, ResourceGroup, Zones, AvailabilityZone, AvailabilitySet, Capacity, FaultDomain, OSDisk, ReadReplica, AutomaticFailover, MultipleWriteLocations, StorageAutogrow, ReplicationRole, Backup = tolower(Backup), Environment
+| where Type == 'microsoft.compute/virtualmachinescalesets'
+| summarize ResourceTotal=count(Name), NotSucceeded=dcountif(Name, State != "succeeded"), NoAVZone=dcountif(Name, AvailabilityZone == "not configured"), CapacityLt2=dcountif(Name, (Capacity == "0" or Capacity == "1")), NoFaultDomain=dcountif(Name, (FaultDomain != "1" and FaultDomain != "5")), OSDiskRecommendation=dcountif(Name, (OSDisk != "premium_lrs" and OSDisk != "ephemeral"))
