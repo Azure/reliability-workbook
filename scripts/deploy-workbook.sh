@@ -5,6 +5,7 @@ log() {
     echo "$(date '+%Y-%m-%d %H:%M:%S'): $1" | tee -a log
 }
 
+# Get user input
 prompt() {
     varname=$1
     optional=$3
@@ -51,7 +52,12 @@ base_url="https://raw.githubusercontent.com/Azure/reliability-workbook/main/"
 [ ! -f workbook_filelist ] && wget $base_url/artifacts/workbook_filelist
 cat workbook_filelist | while read f
 do
-    [ ! -f $f ] && wget $base_url/artifacts/$f
+    log "Download workbook file: $f"
+    if [ -f $f ]; then
+        log "Skip download because the file already exists"
+    else
+        wget $base_url/artifacts/$f
+    fi
 done
 
 # Deploy Workbook
@@ -62,9 +68,12 @@ do
   file_size=$(stat -c%s "$f")
   if [ ! -e ${filename_base}_id -o $file_size -eq 0 ]; then
     log "Deploy ${filename_base}"
-    az deployment group create --name $filename_base -g $resource_group_name --template-uri $base_url/artifacts/azuredeploy.json --parameters serializedData=@$filename --parameters name=$filename_base --query 'properties.outputs.resource_id.value' -o json > ${filename_base}_id
+    { az deployment group create --name $filename_base -g $resource_group_name --template-uri $base_url/artifacts/azuredeploy.json --parameters serializedData=@$filename --parameters name=$filename_base --query 'properties.outputs.resource_id.value' -o json; } > ${filename_base}_id &
   fi
 done
+
+# Wait for all deployment processes
+wait
 
 [ ! -e workbook.tpl.json ] && wget $base_url/build/templates/workbook.tpl.json
 for f in *_id
