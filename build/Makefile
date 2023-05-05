@@ -7,7 +7,13 @@ help:
 .DEFAULT_GOAL := help
 
 .PHONY: all
-all: build-workbook build-bicep ## Execute all steps
+all: init build-workbook build-bicep ## Execute all steps
+
+.PHONY: init
+init: ## Initialize terraform
+	terraform fmt -check
+	terraform init
+	terraform validate -no-color
 
 .PHONY: build-workbook
 build-workbook: ## Execute terraform plan
@@ -15,6 +21,11 @@ build-workbook: ## Execute terraform plan
 	terraform plan -input=false -no-color -out tfplan $(addprefix -target local_file.,$(basename $(notdir $(TERRAFORM_TARGET))))
 	terraform apply -no-color tfplan
 	(cd artifacts && ls *.workbook > workbook_filelist)
+
+.PHONY: build-workbook-public
+build-workbook-public: ## Execute terraform plan to generate public edition
+	terraform plan -input=false -no-color -out tfplan -target local_file.workbook_public
+	terraform apply -no-color tfplan
 
 .PHONY: build-bicep
 build-bicep: ## Build Bicep files

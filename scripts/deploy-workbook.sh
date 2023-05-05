@@ -4,50 +4,81 @@
 log() {
     echo "$(date '+%Y-%m-%d %H:%M:%S'): $1" | tee -a log
 }
-
-# Get user input
-prompt() {
-    varname=$1
-    optional=$3
-    read_str=
-    while :
-    do
-        echo -n "$2"
-        read read_str
-        if [ x$read_str = x"" -a x$optional = x"" ]; then
-            continue
-        else
-            break
-        fi
-    done
-    eval "$varname=$read_str"
+error() {
+    echo "$(date '+%Y-%m-%d %H:%M:%S'): $1" | tee -a log
+    exit 1
 }
 
-# Get target subscription from user input
-prompt subscription_id "Enter target Subscription ID: "
+# Get option from script argument, which is used to specify Subscription ID, Resource Group name and Tenant name
+help() {
+  echo "Usage: $0 -s <Subscription ID> -g <Resource Group> [-t <Tenant ID>] [-c Create Resource Group if not exist] [-l <location>] [-b <Base URL of Workbook>]" 1>&2
+  # Write command example with explanation
+  echo "Example 1: When you want to deploy workbook to resource group myResourceGroup in subscription" 1>&2
+  echo "         $0 -s 00000000-0000-0000-0000-000000000000 -g myResourceGroup -t 00000000-0000-0000-0000-000000000000" 1>&2
+  echo "Example 2: When you want to deploy workbook to resource group myResourceGroup in subscription and create resource group if not exist" 1>&2
+  echo "         $0 -s 00000000-0000-0000-0000-000000000000 -g myResourceGroup -t 00000000-0000-0000-0000-000000000000 -c -l japaneast" 1>&2
+   
+  exit 1
+}
 
-# Get target resource group from user input
-prompt resource_group_name "Enter target Resource Group name: "
+while getopts :s:g:t:cl:b: OPT
+do
+  case $OPT in
+    s) subscription_id=$OPTARG
+       ;;
+    g) resource_group_name=$OPTARG
+       ;;
+    t) tenant=$OPTARG
+       ;;
+    c) create_rg=1
+       ;;
+    l) location=$OPTARG
+       ;;
+    b) base_url=$OPTARG
+       ;;
+    *) help
+       ;;
+  esac
+done
 
-# If this script doesn't run on CloudShell, it will execute login to Azure
-if [ x$ACC_CLOUD = x"" ]; then
-  # Get tenant from user input
-  prompt tenant "Enter target Tenant name(optional): " this-is-option
-  [ x$tenant != x"" ] && tenant="-t $tenant"
-
-  # az login
-  log "Login to Azure"
-  az login $tenant --use-device-code
+# Check subscription_id, resource_group_name and tenant. tenant is optional.
+if [ x$subscription_id = x"" -o x$resource_group_name = x"" ]; then
+    help
 fi
+
+# Check create_rg option, if specific it, location is required.
+if [ x$create_rg != x"" -a x$location = x"" ]; then
+    help
+fi
+
+# If not set base_url, use default value
+[ x$base_url = x"" ] && base_url="https://raw.githubusercontent.com/Azure/reliability-workbook/main/"
+
+[ x$tenant != x"" ] && tenant="-t $tenant"
+
+# az login
+log "Check token whether need to login or not"
+az account get-access-token --subscription $subscription_id > /dev/null 2>&1
+if [ $? -ne 0 ]; then
+  log "Please login to Azure"
+  az login $tenant --use-device-code
+  [ $? -ne 0 ] && error "Please input correct SubscriptionID and Tenant ID"
+fi
+
 
 log "Check existance of target resource group"
-az group show --name $resource_group_name --subscription $subscription_id
+az group show --name $resource_group_name --subscription $subscription_id > /dev/null 2>&1
 if [ $? -ne 0 ]; then
-    log "Please input correct SubscriptionID and Resource Group name"
-    exit 1
+    if [ x$create_rg = x"" ]; then
+        log "Resource group $resource_group_name does not exist. Please create it or specify -c and -l option to create it automatically"
+        exit 1
+    else
+        log "Create resource group $resource_group_name"
+        az group create --name $resource_group_name --subscription $subscription_id --location $location
+        [ $? -ne 0 ] && error "Please input correct SubscriptionID and Resource Group name"
+    fi
 fi
 
-base_url="https://raw.githubusercontent.com/Azure/reliability-workbook/main/"
 # Download file list
 [ ! -f workbook_filelist ] && wget $base_url/artifacts/workbook_filelist
 cat workbook_filelist | while read f
@@ -65,11 +96,8 @@ for f in *.workbook
 do
   filename_base=`basename $f .workbook`
   filename=`basename $f`
-  file_size=$(stat -c%s "$f")
-  if [ ! -e ${filename_base}_id -o $file_size -eq 0 ]; then
-    log "Deploy ${filename_base}"
-    { az deployment group create --name $filename_base -g $resource_group_name --template-uri $base_url/artifacts/azuredeploy.json --parameters serializedData=@$filename --parameters name=$filename_base --query 'properties.outputs.resource_id.value' -o json; } > ${filename_base}_id &
-  fi
+  log "Deploy ${filename_base}"
+  { az deployment group create --name $filename_base -g $resource_group_name --template-uri $base_url/artifacts/azuredeploy.json --parameters serializedData=@$filename --parameters name=$filename_base --query 'properties.outputs.resource_id.value' -o json; } > ${filename_base}_id &
 done
 
 # Wait for all deployment processes
@@ -211,3 +239,4 @@ sed -i "s/\${tab_of_Export}/$escaped_replacement_text/g" workbook.tpl.json
 
 log "Deploy FTA - Reliability Workbook"
 az deployment group create -g $resource_group_name --template-uri $base_url/artifacts/azuredeploy.json --parameters name="FTA - Reliability Workbook" serializedData=@workbook.tpl.json
+\rm *_id
