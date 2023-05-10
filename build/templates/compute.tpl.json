@@ -493,6 +493,12 @@
                                   {
                                     "operator": "==",
                                     "thresholdValue": "unhealthy",
+                                    "representation": "3",
+                                    "text": "{0}{1}"
+                                  },
+                                  {
+                                    "operator": "==",
+                                    "thresholdValue": "not configured",
                                     "representation": "2",
                                     "text": "{0}{1}"
                                   },

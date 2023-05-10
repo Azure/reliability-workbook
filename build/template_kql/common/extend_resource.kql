@@ -397,17 +397,17 @@ resources
     Environment = environment,
     properties
 | join kind = leftouter (
-    securityresources
-    | where properties.displayName contains "Azure Backup should"
-    | extend Backup = tostring(properties.status.code)
-    | project Name = tolower(tostring(properties.resourceDetails.Id)), Backup
+    recoveryservicesresources
+    | where name startswith "VM;"
+    | project Name = tolower(tostring(properties.dataSourceInfo.resourceID)), Backup = tostring(properties.protectionStatus)
     )
     on Name
 | extend Backup = case(
     Backup == "Healthy" or Backup == "Unhealthy", Backup,
     "Unknown")
 | extend Backup = case(
-    (Type == 'microsoft.compute/virtualmachines') and (Backup == "Healthy" or Backup == "Unhealthy"), Backup, 
+    (Type == 'microsoft.compute/virtualmachines'), iif(Backup == "Unknown", "Not Configured", Backup),
+    (Type == 'microsoft.classiccompute/virtualmachines'), iif(Backup == "Unknown", "Not Configured", Backup),
     (Type == "microsoft.compute/virtualmachinescalesets"), "Not Applicable", 
     (Type == "microsoft.containerservice/managedclusters"), "Not Applicable",
     (Type == 'microsoft.sql/servers/databases'), "Not Applicable", 
