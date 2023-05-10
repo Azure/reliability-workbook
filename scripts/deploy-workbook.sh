@@ -11,7 +11,7 @@ error() {
 
 # Get option from script argument, which is used to specify Subscription ID, Resource Group name and Tenant name
 help() {
-  echo "Usage: $0 -s <Subscription ID> -g <Resource Group> [-t <Tenant ID>] [-c Create Resource Group if not exist] [-l <location>] [-b <Base URL of Workbook>]" 1>&2
+  echo "Usage: $0 -s <Subscription ID> -g <Resource Group> [-t <Tenant ID>] [-c Create Resource Group if not exist] [-l <location>] [-b <Base URL of Workbook>] [-d]" 1>&2
   # Write command example with explanation
   echo "Example 1: When you want to deploy workbook to resource group myResourceGroup in subscription" 1>&2
   echo "         $0 -s 00000000-0000-0000-0000-000000000000 -g myResourceGroup -t 00000000-0000-0000-0000-000000000000" 1>&2
@@ -21,7 +21,7 @@ help() {
   exit 1
 }
 
-while getopts :s:g:t:cl:b: OPT
+while getopts :s:g:t:cl:b:d OPT
 do
   case $OPT in
     s) subscription_id=$OPTARG
@@ -35,6 +35,8 @@ do
     l) location=$OPTARG
        ;;
     b) base_url=$OPTARG
+       ;;
+    d) developer_mode=1
        ;;
     *) help
        ;;
@@ -79,15 +81,25 @@ if [ $? -ne 0 ]; then
     fi
 fi
 
+if [ x$developer_mode != x"" ]; then
+    log "Developer mode is enabled. Deploy Advisor version."
+    wget $base_url/workbooks/ReliabilityWorkbookPublic.workbook
+    az deployment group create -g $resource_group_name --template-uri $base_url/workbooks/azuredeploy.json --parameters name="FTA - Reliability Workbook - Advisor version" serializedData=@ReliabilityWorkbookPublic.workbook
+    exit 0
+fi
+
 # Download file list
-[ ! -f workbook_filelist ] && wget $base_url/artifacts/workbook_filelist
+[ ! -f workbook_filelist ] && wget $base_url/workbooks/workbook_filelist
 cat workbook_filelist | while read f
 do
     log "Download workbook file: $f"
     if [ -f $f ]; then
         log "Skip download because the file already exists"
     else
-        wget $base_url/artifacts/$f
+        wget $base_url/workbooks/$f
+        if [ $? -ne 0 ]; then
+            error "Failed to download $f"
+        fi
     fi
 done
 
@@ -97,7 +109,7 @@ do
   filename_base=`basename $f .workbook`
   filename=`basename $f`
   log "Deploy ${filename_base}"
-  { az deployment group create --name $filename_base -g $resource_group_name --template-uri $base_url/artifacts/azuredeploy.json --parameters serializedData=@$filename --parameters name=$filename_base --query 'properties.outputs.resource_id.value' -o json; } > ${filename_base}_id &
+  { az deployment group create --name $filename_base -g $resource_group_name --template-uri $base_url/workbooks/azuredeploy.json --parameters serializedData=@$filename --parameters name=$filename_base --query 'properties.outputs.resource_id.value' -o json; } > ${filename_base}_id &
 done
 
 # Wait for all deployment processes
@@ -238,5 +250,5 @@ escaped_replacement_text=$(printf '%s\n' "$tab_of_Export" | sed 's:[\/&]:\\&:g;$
 sed -i "s/\${tab_of_Export}/$escaped_replacement_text/g" workbook.tpl.json
 
 log "Deploy FTA - Reliability Workbook"
-az deployment group create -g $resource_group_name --template-uri $base_url/artifacts/azuredeploy.json --parameters name="FTA - Reliability Workbook" serializedData=@workbook.tpl.json
+az deployment group create -g $resource_group_name --template-uri $base_url/workbooks/azuredeploy.json --parameters name="FTA - Reliability Workbook" serializedData=@workbook.tpl.json
 \rm *_id

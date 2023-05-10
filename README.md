@@ -8,6 +8,8 @@ This Reliability Workbook consists of several co-workbooks. For easy deployment,
 
 ### Usage
 
+Simply download the deploy script and use it. You don't need to clone this repository.
+
 ```shell
 $ ./deploy-workbook.sh 
 Usage: ./deploy-workbook.sh -s <Subscription ID> -g <Resource Group> [-t <Tenant ID>] [-c Create Resource Group if not exist] [-l <location>] [-b <Base URL of Workbook>]
@@ -29,12 +31,26 @@ Example 2: When you want to deploy workbook to resource group myResourceGroup in
 
 ### Deploy steps
 
+1. Create directory to run the script.
+    ```shell
+    $ mkdir deploy-workbook
+    ```
 1. Download the scripts provided in the `script` folder in this repository.
-1. Make the script executable: `chmod +x deploy-workbook.sh`
-1. Run the script with the required parameters:  
-   `./deploy-workbook.sh -s 00000000-0000-0000-0000-000000000000 -g myResourceGroup`  
+    ```shell
+    $ wget https://raw.githubusercontent.com/Azure/reliability-workbook/scripts/deploy-workbook.sh
+    ```
+1. Make the script executable.
+    ```shell
+    chmod +x deploy-workbook.sh
+    ```
+1. Run the script with the required parameters.
+    ```shell
+    ./deploy-workbook.sh -s 00000000-0000-0000-0000-000000000000 -g myResourceGroup
+    ```
    If you want to create a new Resource Group, you can use the `-c` parameter with `-l <location>`:  
-   `./deploy-workbook.sh -s 00000000-0000-0000-0000-000000000000 -g myResourceGroup -c -l japaneast`
+    ```shell
+    ./deploy-workbook.sh -s 00000000-0000-0000-0000-000000000000 -g myResourceGroup -c -l japaneast
+    ```
 
 ## Note
 * Azure Security Center with Azure Defender is required for VM backup information.

@@ -7,7 +7,7 @@ help:
 .DEFAULT_GOAL := help
 
 .PHONY: all
-all: init build-workbook build-bicep ## Execute all steps
+all: init build-workbook build-workbook-public build-bicep ## Execute all steps
 
 .PHONY: init
 init: ## Initialize terraform

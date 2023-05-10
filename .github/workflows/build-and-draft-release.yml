@@ -89,17 +89,14 @@ jobs:
           asset_path: |
             asset/*.workbook
           overwrite: true
-      - name: Create artifacts directory and move files from asset to it
+      - name: Move files from asset to workbooks directory
         run: |
-          rm -rf artifacts
-          mkdir artifacts
-          mv asset/* artifacts/
+          mv -f asset/* workbooks/
       - uses: EndBug/add-and-commit@v9.0.1
         with:
           author_name: github-actions
           author_email: '41898282+github-actions[bot]@users.noreply.github.com'
-          message: Update artifacts
+          message: Git push workbook files
           push: origin main --force --set-upstream
           add: |
-            artifacts/
-
+            workbooks/
