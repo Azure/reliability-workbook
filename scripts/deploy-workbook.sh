@@ -54,7 +54,7 @@ if [ x$create_rg != x"" -a x$location = x"" ]; then
 fi
 
 # If not set base_url, use default value
-[ x$base_url = x"" ] && base_url="https://raw.githubusercontent.com/Azure/reliability-workbook/main/"
+[ x$base_url = x"" ] && base_url="https://raw.githubusercontent.com/Azure/reliability-workbook/main"
 
 [ x$tenant != x"" ] && tenant="-t $tenant"
 
