@@ -20,7 +20,8 @@ build-workbook: ## Execute terraform plan
 	mkdir -p artifacts
 	terraform plan -input=false -no-color -out tfplan $(addprefix -target local_file.,$(basename $(notdir $(TERRAFORM_TARGET))))
 	terraform apply -no-color tfplan
-	(cd artifacts && ls *.workbook > workbook_filelist)
+# Exept ReliabilityWorkbookPublic.workbook from the list of files. It will be used for developer mode only.
+	(cd artifacts && ls *.workbook | grep -v ReliabilityWorkbookPublic.workbook > workbook_filelist)
 
 .PHONY: build-workbook-public
 build-workbook-public: ## Execute terraform plan to generate public edition
