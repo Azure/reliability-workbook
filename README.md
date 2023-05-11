@@ -36,7 +36,7 @@ This Reliability Workbook consists of several co-workbooks. For easy deployment,
 
     ```shell
     $ ./deploy-workbook.sh 
-    Usage: ./deploy-workbook.sh -s <Subscription ID> -g <Resource Group> [-t <Tenant ID>] [-c Create Resource Group if not exist] [-l <location>] [-b <Base URL of Workbook>]
+    Usage: ./deploy-workbook.sh -s <Subscription ID> -g <Resource Group> [-t <Tenant ID>] [-c Create Resource Group if not exist] [-l <location>] [-b <Base URL of Workbook>] [-d]
     Example 1: When you want to deploy workbook to resource group myResourceGroup in subscription
             ./deploy-workbook.sh -s 00000000-0000-0000-0000-000000000000 -g myResourceGroup -t 00000000-0000-0000-0000-000000000000
     Example 2: When you want to deploy workbook to resource group myResourceGroup in subscription and create resource group if not exist
