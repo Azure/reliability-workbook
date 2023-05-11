@@ -6,19 +6,6 @@ This workbook focus on the Reliability pillar of the Azure Well-Architected Fram
 
 This Reliability Workbook consists of several co-workbooks. For easy deployment, you can use the deployment tool. For more information about using this tool, see below.
 
-### Usage
-
-Simply download the deploy script and use it. You don't need to clone this repository.
-
-```shell
-$ ./deploy-workbook.sh 
-Usage: ./deploy-workbook.sh -s <Subscription ID> -g <Resource Group> [-t <Tenant ID>] [-c Create Resource Group if not exist] [-l <location>] [-b <Base URL of Workbook>]
-Example 1: When you want to deploy workbook to resource group myResourceGroup in subscription
-         ./deploy-workbook.sh -s 00000000-0000-0000-0000-000000000000 -g myResourceGroup -t 00000000-0000-0000-0000-000000000000
-Example 2: When you want to deploy workbook to resource group myResourceGroup in subscription and create resource group if not exist
-         ./deploy-workbook.sh -s 00000000-0000-0000-0000-000000000000 -g myResourceGroup -t 00000000-0000-0000-0000-000000000000 -c -l japaneast
-```
-
 ### Pre-requisites
 
 - This tool needs to run on Linux, WSL, or Azure Cloud Shell. You cannot use a Windows environment.
@@ -44,21 +31,35 @@ Example 2: When you want to deploy workbook to resource group myResourceGroup in
     chmod +x deploy-workbook.sh
     ```
 1. Run the script with the required parameters.
+
+    Usage:
+
+    ```shell
+    $ ./deploy-workbook.sh 
+    Usage: ./deploy-workbook.sh -s <Subscription ID> -g <Resource Group> [-t <Tenant ID>] [-c Create Resource Group if not exist] [-l <location>] [-b <Base URL of Workbook>] [-d]
+    Example 1: When you want to deploy workbook to resource group myResourceGroup in subscription
+            ./deploy-workbook.sh -s 00000000-0000-0000-0000-000000000000 -g myResourceGroup -t 00000000-0000-0000-0000-000000000000
+    Example 2: When you want to deploy workbook to resource group myResourceGroup in subscription and create resource group if not exist
+            ./deploy-workbook.sh -s 00000000-0000-0000-0000-000000000000 -g myResourceGroup -t 00000000-0000-0000-0000-000000000000 -c -l japaneast
+    ```
+
+    If you want to deploy the workbook to an existing Resource Group, you can use the following command:
+
     ```shell
     ./deploy-workbook.sh -s 00000000-0000-0000-0000-000000000000 -g myResourceGroup
     ```
-   If you want to create a new Resource Group, you can use the `-c` parameter with `-l <location>`:  
+
+    If you want to create a new Resource Group, you can use the `-c` parameter with `-l <location>`:  
+
     ```shell
     ./deploy-workbook.sh -s 00000000-0000-0000-0000-000000000000 -g myResourceGroup -c -l japaneast
     ```
 
-## Note
-* Azure Security Center with Azure Defender is required for VM backup information.
-* VMs have to be running for disk information to be available.
-
 ## FAQ
 
-### [Deploy steps] How to specify a tenant ID?
+### Deploy steps
+
+#### How to specify a tenant ID?
 
 If you have access to many tenants, az command may take a long time. To prevent this behavior, you may want to specify tenant ID with `-t` option.
 
@@ -66,10 +67,16 @@ If you have access to many tenants, az command may take a long time. To prevent 
 ./deploy-workbook.sh -s 00000000-0000-0000-0000-000000000000 -g myResourceGroup -t 00000000-0000-0000-0000-000000000000 -c -l japaneast
 ```
 
-### [Deploy steps] I got a syntax error after deploying and opening the Workbook. How do I fix it?
+#### I got a syntax error after deploying and opening the Workbook. How do I fix it?
 
 You may be using Windows environment like Git Bash. If you are running on this script in Windows, there may be something wrong with the newline characters.
 In this case, please try in Azure Cloud Shell, WSL or pure Linux environment.
+
+### Workbook
+
+#### Why is the disk information not available?
+
+VMs have to be running for disk information to be available.
 
 ## Contributing
 
