@@ -29,7 +29,7 @@ override.tf.json
 terraform.rc
 
 # Ignore built files
-ReliabilityWorkbook.json
 azuredeploy.json
 terraform.tfvars
 .infracost
+artifacts

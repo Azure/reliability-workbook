@@ -1,0 +1,1281 @@
+{
+    "version": "Notebook/1.0",
+    "items": [
+      {
+        "type": 9,
+        "content": {
+            "version": "KqlParameterItem/1.0",
+            "parameters": [
+            {
+                "id": "aa0176d8-14ff-4dc5-9ae7-b8029f565674",
+                "version": "KqlParameterItem/1.0",
+                "name": "Subscriptions",
+                "type": 6,
+                "isRequired": true,
+                "multiSelect": true,
+                "quote": "'",
+                "delimiter": ",",
+                "typeSettings": {
+                "additionalResourceOptions": [
+                    "value::all"
+                ],
+                "includeAll": false,
+                "showDefault": false
+                },
+                "defaultValue": "value::all"
+            },
+            {
+                "id": "91aa9ba3-ed60-4472-8dd9-1c2cb6255757",
+                "version": "KqlParameterItem/1.0",
+                "name": "ResourceGroup",
+                "label": "Resource Group",
+                "type": 2,
+                "isRequired": true,
+                "multiSelect": true,
+                "quote": "'",
+                "delimiter": ",",
+                "query": "resources\r\n| distinct resourceGroup",
+                "crossComponentResources": [
+                "{Subscriptions}"
+                ],
+                "typeSettings": {
+                "additionalResourceOptions": [
+                    "value::all"
+                ],
+                "showDefault": false
+                },
+                "defaultValue": "value::all",
+                "queryType": 1,
+                "resourceType": "microsoft.resourcegraph/resources"
+            },
+            {
+                "id": "5a4f6d34-9f89-4ef8-b4ee-fb0580ec016d",
+                "version": "KqlParameterItem/1.0",
+                "name": "Environment",
+                "type": 2,
+                "multiSelect": true,
+                "quote": "'",
+                "delimiter": ",",
+                "query": "resources\r\n| extend Environment = case(\r\ntags.Environment <> \"\", tags.Environment,\r\ntags.environment <> \"\", tags.environment,\r\ntags.Env <> \"\", tags.Env,\r\ntags.env <> \"\", tags.env,\r\ntolower(name) contains \"prod\", \"Production\",\r\ntolower(name) contains \"dev\", \"Development\",\r\ntolower(name) contains \"qa\", \"QA\",\r\ntolower(name) contains \"uat\", \"UAT\",\r\ntolower(name) contains \"sit\", \"SIT\",\r\ntolower(name) contains \"test\", \"Test\",\r\n\"Undefined\")\r\n| distinct Environment",
+                "crossComponentResources": [
+                "{Subscriptions}"
+                ],
+                "typeSettings": {
+                "additionalResourceOptions": [
+                    "value::all"
+                ]
+                },
+                "defaultValue": "value::all",
+                "queryType": 1,
+                "resourceType": "microsoft.resourcegraph/resources"
+            },
+            {
+                "id": "9d6afcdc-172c-4bef-8bab-dc372c5d3bb4",
+                "version": "KqlParameterItem/1.0",
+                "name": "TagName",
+                "label": "Tag Name",
+                "type": 2,
+                "query": "Resources\r\n| where tags != '' and tags != '[]'\r\n| mvexpand tags\r\n| extend tagName = tostring(bag_keys(tags)[0])\r\n| distinct tagName\r\n| sort by tagName asc",
+                "crossComponentResources": [
+                "{Subscriptions}"
+                ],
+                "typeSettings": {
+                "additionalResourceOptions": []
+                },
+                "queryType": 1,
+                "resourceType": "microsoft.resourcegraph/resources",
+                "value": null
+            },
+            {
+                "id": "95781001-338b-4ed3-81dc-ce16f2a98bf0",
+                "version": "KqlParameterItem/1.0",
+                "name": "TagValue",
+                "label": "Tag Value",
+                "type": 2,
+                "query": "Resources\r\n| mvexpand tags\r\n| extend tagName = tostring(bag_keys(tags)[0])\r\n| extend tagValue = tostring(tags[tagName])\r\n| where tags != '' and tags != '[]' and tostring(bag_keys(tags)[0]) == '{TagName}'\r\n| distinct tagValue\r\n| sort by tagValue asc",
+                "crossComponentResources": [
+                "{Subscriptions}"
+                ],
+                "typeSettings": {
+                "additionalResourceOptions": []
+                },
+                "queryType": 1,
+                "resourceType": "microsoft.resourcegraph/resources",
+                "value": null
+            },
+            {
+                "id": "e929bc01-08ec-45fe-bc6a-4e0267460dfa",
+                "version": "KqlParameterItem/1.0",
+                "name": "SLA",
+                "label": "Show SLA",
+                "type": 10,
+                "description": "This will show the SLA information for the focus area",
+                "isRequired": true,
+                "typeSettings": {
+                "additionalResourceOptions": [],
+                "showDefault": false
+                },
+                "jsonData": "[{ \"value\": \"Yes\", \"label\": \"Yes\", \"selected\":true},\r\n {\"value\": \"No\", \"label\": \"No\"}]"
+            },
+            {
+                "id": "9581cbc6-0f0f-42be-8ae8-6fe94de00ab8",
+                "version": "KqlParameterItem/1.0",
+                "name": "Help",
+                "label": "Show Help",
+                "type": 10,
+                "isRequired": true,
+                "typeSettings": {
+                "additionalResourceOptions": []
+                },
+                "jsonData": "[{\"value\": \"Yes\", \"label\": \"Yes\", \"selected\":true },\r\n {\"value\": \"No\", \"label\": \"No\"}]"
+            }
+            ],
+            "style": "pills",
+            "queryType": 0,
+            "resourceType": "microsoft.operationalinsights/workspaces"
+        },
+        "name": "parameters - 13"
+        },
+        {
+          "type": 12,
+          "content": {
+            "version": "NotebookGroup/1.0",
+            "groupType": "editable",
+            "items": [
+              {
+                "type": 11,
+                "content": {
+                  "version": "LinkItem/1.0",
+                  "style": "tabs",
+                  "links": [
+                    {
+                      "id": "bec50763-3978-4739-8e39-ffc849278745",
+                      "cellValue": "selectedTab",
+                      "linkTarget": "parameter",
+                      "linkLabel": "Virtual Machines",
+                      "subTarget": "cVM",
+                      "style": "link"
+                    },
+                    {
+                      "id": "db54cc9d-e67e-4687-b9e6-e73aefb9638c",
+                      "cellValue": "selectedTab",
+                      "linkTarget": "parameter",
+                      "linkLabel": "Virtual Machine Scale Sets",
+                      "subTarget": "cVMSS",
+                      "style": "link"
+                    }
+                  ]
+                },
+                "name": "links - 5"
+              },
+              {
+                "type": 12,
+                "content": {
+                  "version": "NotebookGroup/1.0",
+                  "groupType": "editable",
+                  "items": [
+                    {
+                      "type": 1,
+                      "content": {
+                        "json": "[SLA for Virtual Machines](https://azure.microsoft.com/support/legal/sla/virtual-machines/)\r\n* For all Virtual Machines that have two or more instances deployed across two or more Availability Zones in the same Azure region, we guarantee you will have Virtual Machine Connectivity to at least one instance at least 99.99% of the time.\r\n* For all Virtual Machines that have two or more instances deployed in the same Availability Set or in the same Dedicated Host Group, we guarantee you will have Virtual Machine Connectivity to at least one instance at least 99.95% of the time.\r\n* For any Single Instance Virtual Machine using Premium SSD or Ultra Disk for all Operating System Disks and Data Disks, we guarantee you will have Virtual Machine Connectivity of at least 99.9%.\r\n* For any Single Instance Virtual Machine using Standard SSD Managed Disks for Operating System Disk and Data Disks, we guarantee you will have Virtual Machine Connectivity of at least 99.5%.\r\n* For any Single Instance Virtual Machine using Standard HDD Managed Disks for Operating System Disks and Data Disks, we guarantee you will have Virtual Machine Connectivity of at least 95%.\r\n\r\n> SLA accurate at time of release. Latest information is available [here](https://azure.microsoft.com/support/legal/sla/virtual-machines/)",
+                        "style": "upsell"
+                      },
+                      "conditionalVisibility": {
+                        "parameterName": "SLA",
+                        "comparison": "isEqualTo",
+                        "value": "Yes"
+                      },
+                      "name": "text - 2"
+                    },
+                    {
+                      "type": 1,
+                      "content": {
+                        "json": "> [Virtual machine resilliency checklist](https://learn.microsoft.com/azure/architecture/checklist/resiliency-per-service#virtual-machines)\r\n* Avoid running a production workload on a single VM. A single VM deployment is not resilient to planned or unplanned maintenance. Instead, put multiple VMs in an availability set or virtual machine scale set, with a load balancer in front.\r\n* Specify an availability set when you provision the VM. Currently, there is no way to add a VM to an availability set after the VM is provisioned. When you add a new VM to an existing availability set, make sure to create a NIC for the VM, and add the NIC to the back-end address pool on the load balancer. Otherwise, the load balancer won't route network traffic to that VM.\r\n* Put each application tier into a separate Availability Set. In an N-tier application, don't put VMs from different tiers into the same availability set. VMs in an availability set are placed across fault domains (FDs) and update domains (UD). However, to get the redundancy benefit of FDs and UDs, every VM in the availability set must be able to handle the same client requests.\r\n* Replicate VMs using Azure Site Recovery. When you replicate Azure VMs using Site Recovery, all the VM disks are continuously replicated to the target region asynchronously. The recovery points are created every few minutes. This gives you a Recovery Point Objective (RPO) in the order of minutes. You can conduct disaster recovery drills as many times as you want, without affecting the production application or the ongoing replication.\r\n* Choose the right VM size based on performance requirements. When moving an existing workload to Azure, start with the VM size that's the closest match to your on-premises servers. Then measure the performance of your actual workload with respect to CPU, memory, and disk IOPS, and adjust the size if needed. This helps to ensure the application behaves as expected in a cloud environment. Also, if you need multiple NICs, be aware of the NIC limit for each size.\r\n* Use managed disks for VHDs. Managed disks provide better reliability for VMs in an availability set, because the disks are sufficiently isolated from each other to avoid single points of failure. Also, managed disks aren't subject to the IOPS limits of VHDs created in a storage account.\r\n* Install applications on a data disk, not the OS disk. Otherwise, you may reach the disk size limit.\r\n* Use Azure Backup to back up VMs. Backups protect against accidental data loss.\r\n* Enable diagnostic logs. Include basic health metrics, infrastructure logs, and boot diagnostics. Boot diagnostics can help you diagnose a boot failure if your VM gets into a nonbootable state.\r\n* Configure Azure Monitor. Collect and analyze monitoring data from Azure virtual machines including the guest operating system and the workloads that run in it.\r\n\r\n* Azure Security Center with Azure Defender is required for VM backup information.\r\n* VMs have to be running for disk information to be available.\r\n* VM SLAs apply to both operating system and data disks - only operating system disks are represented in this workbook.\r\n\r\n> Azure generally recommends to leverage [Availability Zone](https://learn.microsoft.com/azure/availability-zones/az-overview) for better High Availability within the region by leveraging multiple zones inside region. By architecting your solutions to use replicated services in zones, you can protect your apps and data from the loss of a datacenter. \r\n\r\n> At this point, not all Azure regions and services support Availability Zones, the support matrix can be found [here](https://learn.microsoft.com/azure/availability-zones/az-region). Whenerver there is a Zonal recommendation for a particular service from this workbook, please note that that is applicable only for the regions supporting Availability Zones from the earlier list.",
+                        "style": "info"
+                      },
+                      "conditionalVisibility": {
+                        "parameterName": "Help",
+                        "comparison": "isEqualTo",
+                        "value": "Yes"
+                      },
+                      "name": "text - 3"
+                    },
+                    {
+                      "type": 3,
+                      "content": {
+                        "version": "KqlItem/1.0",
+                      "query": ${kql_compute_vm_resources_details_summary},
+                      "size": 3,
+                      "title": "Virtual Machines - Recommendation Summary",
+                      "showExportToExcel": true,
+                      "queryType": 1,
+                      "resourceType": "microsoft.resourcegraph/resources",
+                      "crossComponentResources": [
+                        "{Subscriptions}"
+                      ],
+                      "gridSettings": {
+                        "rowLimit": 10000,
+                        "labelSettings": [
+                          {
+                            "columnId": "ResourceTotal",
+                            "label": "Resource Total"
+                          },
+                          {
+                            "columnId": "NotRunning",
+                            "label": "VM Not Running"
+                          },
+                          {
+                            "columnId": "NoAVZone",
+                            "label": "No Availability Zone"
+                          },
+                          {
+                            "columnId": "NoAVSet",
+                            "label": "No Availability Set"
+                          },
+                          {
+                            "columnId": "OSDiskRecommendation",
+                            "label": "OS Disk Recommendation"
+                          },
+                          {
+                            "columnId": "NoBackup",
+                            "label": "Missing Backup"
+                        },
+                        {
+                          "columnId": "UnHealthyBackup",
+                          "label": "Unhealthy Backup"
+                          }
+                        ]
+                      },
+                      "sortBy": []
+                    },
+                    "name": "kql_compute_vm_resources_details_summary"
+                  },
+                  {
+                    "type": 3,
+                    "content": {
+                      "version": "KqlItem/1.0",
+                        "query": ${kql_compute_vm_resources_details},
+                        "size": 3,
+                        "title": "Virtual Machines",
+                        "showExportToExcel": true,
+                        "queryType": 1,
+                        "resourceType": "microsoft.resourcegraph/resources",
+                        "crossComponentResources": [
+                          "{Subscriptions}"
+                        ],
+                        "gridSettings": {
+                          "formatters": [
+                            {
+                              "columnMatch": "$gen_group",
+                              "formatter": 13,
+                              "formatOptions": {
+                                "linkTarget": "Resource",
+                                "showIcon": true
+                              }
+                            },
+                            {
+                              "columnMatch": "Name",
+                              "formatter": 5
+                            },
+                            {
+                              "columnMatch": "SubscriptionId",
+                              "formatter": 5
+                            },
+                            {
+                              "columnMatch": "State",
+                              "formatter": 18,
+                              "formatOptions": {
+                                "thresholdsOptions": "colors",
+                                "thresholdsGrid": [
+                                  {
+                                    "operator": "==",
+                                    "thresholdValue": "vm running",
+                                    "representation": "green",
+                                    "text": "{0}{1}"
+                                  },
+                                  {
+                                    "operator": "==",
+                                    "thresholdValue": "vm deallocated",
+                                    "representation": "gray",
+                                    "text": "{0}{1}"
+                                  },
+                                  {
+                                    "operator": "Default",
+                                    "thresholdValue": null,
+                                    "text": "{0}{1}"
+                                  }
+                                ]
+                              }
+                            },
+                            {
+                              "columnMatch": "Location",
+                              "formatter": 17
+                            },
+                            {
+                              "columnMatch": "Zones",
+                              "formatter": 5
+                            },
+                            {
+                              "columnMatch": "AvailabilityZone",
+                              "formatter": 18,
+                              "formatOptions": {
+                                "thresholdsOptions": "icons",
+                                "thresholdsGrid": [
+                                  {
+                                    "operator": "==",
+                                    "thresholdValue": "not configured",
+                                    "representation": "2",
+                                    "text": "{0}{1}"
+                                  },
+                                  {
+                                    "operator": "==",
+                                    "thresholdValue": "1",
+                                    "representation": "success",
+                                    "text": "{0}{1}"
+                                  },
+                                  {
+                                    "operator": "==",
+                                    "thresholdValue": "2",
+                                    "representation": "success",
+                                    "text": "{0}{1}"
+                                  },
+                                  {
+                                    "operator": "==",
+                                    "thresholdValue": "3",
+                                    "representation": "success",
+                                    "text": "{0}{1}"
+                                  },
+                                  {
+                                    "operator": "==",
+                                    "thresholdValue": "not applicable",
+                                    "representation": "more",
+                                    "text": "{0}{1}"
+                                  },
+                                  {
+                                    "operator": "==",
+                                    "thresholdValue": "configured",
+                                    "representation": "success",
+                                    "text": "{0}{1}"
+                                  },
+                                  {
+                                    "operator": "==",
+                                    "thresholdValue": "undefined",
+                                    "representation": "unknown",
+                                    "text": "{0}{1}"
+                                  },
+                                  {
+                                    "operator": "Default",
+                                    "thresholdValue": null,
+                                    "representation": "unknown",
+                                    "text": "{0}{1}"
+                                  }
+                                ]
+                              }
+                            },
+                            {
+                              "columnMatch": "AvailabilitySet",
+                              "formatter": 18,
+                              "formatOptions": {
+                                "thresholdsOptions": "icons",
+                                "thresholdsGrid": [
+                                  {
+                                    "operator": "==",
+                                    "thresholdValue": "undefined",
+                                    "representation": "unknown",
+                                    "text": "{0}{1}"
+                                  },
+                                  {
+                                    "operator": "==",
+                                    "thresholdValue": "not applicable",
+                                    "representation": "more",
+                                    "text": "{0}{1}"
+                                  },
+                                  {
+                                    "operator": "contains",
+                                    "thresholdValue": "not configured",
+                                    "representation": "2",
+                                    "text": "{0}{1}"
+                                  },
+                                  {
+                                    "operator": "Default",
+                                    "thresholdValue": null,
+                                    "representation": "success",
+                                    "text": "{0}{1}"
+                                  }
+                                ]
+                              }
+                            },
+                            {
+                              "columnMatch": "Capacity",
+                              "formatter": 5
+                            },
+                            {
+                              "columnMatch": "FaultDomain",
+                              "formatter": 5
+                            },
+                            {
+                              "columnMatch": "OSDisk",
+                              "formatter": 18,
+                              "formatOptions": {
+                                "thresholdsOptions": "icons",
+                                "thresholdsGrid": [
+                                  {
+                                    "operator": "contains",
+                                    "thresholdValue": "premium",
+                                    "representation": "success",
+                                    "text": "{0}{1}"
+                                  },
+                                  {
+                                    "operator": "contains",
+                                    "thresholdValue": "ultra",
+                                    "representation": "success",
+                                    "text": "{0}{1}"
+                                  },
+                                  {
+                                    "operator": "contains",
+                                    "thresholdValue": "ephemeral",
+                                    "representation": "success",
+                                    "text": "{0}{1}"
+                                  },
+                                  {
+                                    "operator": "contains",
+                                    "thresholdValue": "standard",
+                                    "representation": "2",
+                                    "text": "{0}{1}"
+                                  },
+                                  {
+                                    "operator": "contains",
+                                    "thresholdValue": "unmanaged",
+                                    "representation": "2",
+                                    "text": "{0}{1}"
+                                  },
+                                  {
+                                    "operator": "Default",
+                                    "thresholdValue": null,
+                                    "representation": "unknown",
+                                    "text": "{0}{1}"
+                                  }
+                                ]
+                              }
+                            },
+                            {
+                              "columnMatch": "ReadReplica",
+                              "formatter": 5
+                            },
+                            {
+                              "columnMatch": "AutomaticFailover",
+                              "formatter": 5
+                            },
+                            {
+                              "columnMatch": "MultipleWriteLocations",
+                              "formatter": 5
+                            },
+                            {
+                              "columnMatch": "StorageAutogrow",
+                              "formatter": 5
+                            },
+                            {
+                              "columnMatch": "ReplicationRole",
+                              "formatter": 5
+                            },
+                            {
+                              "columnMatch": "Backup",
+                              "formatter": 18,
+                              "formatOptions": {
+                                "thresholdsOptions": "icons",
+                                "thresholdsGrid": [
+                                  {
+                                    "operator": "==",
+                                    "thresholdValue": "healthy",
+                                    "representation": "success",
+                                    "text": "{0}{1}"
+                                  },
+                                  {
+                                    "operator": "==",
+                                    "thresholdValue": "unhealthy",
+                                    "representation": "3",
+                                    "text": "{0}{1}"
+                                  },
+                                  {
+                                    "operator": "==",
+                                    "thresholdValue": "not configured",
+                                    "representation": "2",
+                                    "text": "{0}{1}"
+                                  },
+                                  {
+                                    "operator": "Default",
+                                    "thresholdValue": null,
+                                    "representation": "unknown",
+                                    "text": "{0}{1}"
+                                  }
+                                ]
+                              }
+                            },
+                            {
+                              "columnMatch": "Environment",
+                              "formatter": 18,
+                              "formatOptions": {
+                                "thresholdsOptions": "colors",
+                                "thresholdsGrid": [
+                                  {
+                                    "operator": "contains",
+                                    "thresholdValue": "Prod",
+                                    "representation": "redBright",
+                                    "text": "{0}{1}"
+                                  },
+                                  {
+                                    "operator": "contains",
+                                    "thresholdValue": "prod",
+                                    "representation": "redBright",
+                                    "text": "{0}{1}"
+                                  },
+                                  {
+                                    "operator": "Default",
+                                    "thresholdValue": null,
+                                    "text": "{0}{1}"
+                                  }
+                                ]
+                              }
+                            },
+                            {
+                              "columnMatch": "SubscriptionName",
+                              "formatter": 5
+                            },
+                            {
+                              "columnMatch": "OSDisk_UltraorPremium",
+                              "formatter": 5
+                            },
+                            {
+                              "columnMatch": "OSDisk_Type",
+                              "formatter": 5
+                            }
+                          ],
+                          "rowLimit": 10000,
+                          "hierarchySettings": {
+                            "treeType": 1,
+                            "groupBy": [
+                              "SubscriptionId"
+                            ],
+                            "expandTopLevel": false,
+                            "finalBy": "Name"
+                          }
+                        },
+                        "sortBy": []
+                      },
+                      "name": "kql_compute_vm_resources_details"
+                    },
+                    {
+                        "type": 1,
+                        "content": {
+                          "json": "* Classic Virtual Machines are in path of retirement. Please migrate to Resource Manager based VMs immediately\r\n\r\n> Retirement announcement in the [docs](https://learn.microsoft.com/azure/virtual-machines/classic-vm-deprecation)",
+                          "style": "warning"
+                        },
+                        "name": "classic-vm-retirement"
+                      },
+                      {
+                      "type": 3,
+                      "content": {
+                        "version": "KqlItem/1.0",
+                        "query": ${kql_compute_classicvm_resources_details},
+                        "size": 3,
+                        "title": "Classic Virtual Machines",
+                        "noDataMessage": "No classic VMs found",
+                        "showExportToExcel": true,
+                        "queryType": 1,
+                        "resourceType": "microsoft.resourcegraph/resources",
+                        "crossComponentResources": [
+                          "{Subscriptions}"
+                        ],
+                        "gridSettings": {
+                          "formatters": [
+                            {
+                              "columnMatch": "$gen_group",
+                                "formatter": 13,
+                              "formatOptions": {
+                                  "linkTarget": "Resource",
+                                "showIcon": true
+                              }
+                            },
+                            {
+                                "columnMatch": "Type",
+                                "formatter": 5
+                              },
+                              {
+                                "columnMatch": "Kind",
+                                "formatter": 5
+                              },
+                              {
+                                "columnMatch": "SubscriptionId",
+                                "formatter": 5
+                              },
+                              {
+                                "columnMatch": "Name",
+                                "formatter": 5
+                              },
+                              {
+                              "columnMatch": "Location",
+                              "formatter": 17
+                            },
+                            {
+                                "columnMatch": "Zones",
+                                "formatter": 5
+                              },
+                              {
+                                "columnMatch": "AvailabilityZone",
+                                "formatter": 5
+                              },
+                              {
+                                "columnMatch": "Capacity",
+                                "formatter": 5
+                              },
+                              {
+                                "columnMatch": "FaultDomain",
+                                "formatter": 5
+                              },
+                              {
+                                "columnMatch": "ReadReplica",
+                                "formatter": 5
+                              },
+                              {
+                                "columnMatch": "AutomaticFailover",
+                                "formatter": 5
+                              },
+                              {
+                                "columnMatch": "MultipleWriteLocations",
+                                "formatter": 5
+                              },
+                              {
+                                "columnMatch": "StorageAutogrow",
+                                "formatter": 5
+                              },
+                              {
+                                "columnMatch": "ReplicationRole",
+                                "formatter": 5
+                              },
+                              {
+                                "columnMatch": "Environment",
+                                "formatter": 18,
+                                "formatOptions": {
+                                  "thresholdsOptions": "colors",
+                                  "thresholdsGrid": [
+                                    {
+                                      "operator": "contains",
+                                      "thresholdValue": "prod",
+                                      "representation": "redBright",
+                                      "text": "{0}{1}"
+                                    },
+                                    {
+                                      "operator": "contains",
+                                      "thresholdValue": "Prod",
+                                      "representation": "redBright",
+                                      "text": "{0}{1}"
+                                    },
+                                    {
+                                      "operator": "Default",
+                                      "thresholdValue": null,
+                                      "text": "{0}{1}"
+                                    }
+                                  ]
+                                }
+                              },
+                              {
+                              "columnMatch": "subscriptionId",
+                              "formatter": 5
+                            }
+                          ],
+                          "hierarchySettings": {
+                            "treeType": 1,
+                            "groupBy": [
+                                "SubscriptionId"
+                              ],
+                              "finalBy": "Name"
+                            },
+                            "labelSettings": [
+                              {
+                                "columnId": "SubscriptionId",
+                                "label": "Subscription"
+                          }
+                            ]
+                        }
+                      },
+                      "name": "Classic VM"
+                    }
+                  ]
+                },
+                "conditionalVisibility": {
+                  "parameterName": "selectedTab",
+                  "comparison": "isEqualTo",
+                  "value": "cVM"
+                },
+                "name": "cVMsGroup"
+              },
+              {
+                "type": 12,
+                "content": {
+                  "version": "NotebookGroup/1.0",
+                  "groupType": "editable",
+                  "items": [
+                    {
+                      "type": 1,
+                      "content": {
+                        "json": "[SLA for Virtual Machine Scale Sets](https://azure.microsoft.com/support/legal/sla/virtual-machine-scale-sets/)\r\n* Virtual Machine Scale Sets is a free service, therefore, it does not have a financially backed SLA itself. However, if the Virtual Machine Scale Sets includes Virtual Machines in at least 2 Fault Domains, the availability of the underlying Virtual Machines SLA for two or more instances applies.\r\n* If the scale set contains a single Virtual Machine, the availability for a Single Instance Virtual Machine applies. See the [Virtual Machines SLA](https://azure.microsoft.com/support/legal/sla/virtual-machines/) for more details.\r\n\r\n> SLA accurate at time of release. Latest information is available [here](https://azure.microsoft.com/support/legal/sla/virtual-machine-scale-sets/)",
+                        "style": "upsell"
+                      },
+                      "conditionalVisibility": {
+                        "parameterName": "SLA",
+                        "comparison": "isEqualTo",
+                        "value": "Yes"
+                      },
+                      "name": "text - 2"
+                    },
+                    {
+                      "type": 1,
+                      "content": {
+                        "json": "[Virtual machine scale set resiliency checklist](https://learn.microsoft.com/azure/architecture/checklist/resiliency-per-service#virtual-machines)\r\n\r\n* Avoid running a production workload on a single VM in a Scale set. A single VM deployment is not resilient to planned or unplanned maintenance. Instead, put multiple VMs in a virtual machine scale set, with a load balancer in front.\r\n* Put each application tier into a separate Scale Set. In an N-tier application, don't put VMs from different tiers into the same scale set. \r\n* Make sure to select multiple fault domains for the scale set to achieve resiliency during failures.\r\n* Always enable Zone redundancy for VMs in scale sets whenever the region support zone redundancy\r\n* Enable Overprovision settings to create multiple VMs during scaling and remove failure VMs. This increases chances of successful provision during scaling event.\r\n* Choose the right VM size based on performance requirements. When moving an existing workload to Azure, start with the VM size that's the closest match to your on-premises servers. Then measure the performance of your actual workload with respect to CPU, memory, and disk IOPS, and adjust the size if needed. This helps to ensure the application behaves as expected in a cloud environment. Also, if you need multiple NICs, be aware of the NIC limit for each size.\r\n* Use managed disks for VHDs. Managed disks provide better reliability for VMs in an availability set, because the disks are sufficiently isolated from each other to avoid single points of failure. Also, managed disks aren't subject to the IOPS limits of VHDs created in a storage account.\r\n* Configure Azure Monitor. Collect and analyze monitoring data from Azure virtual machines including the guest operating system and the workloads that run in it.\r\n* VMs have to be running for disk information to be available.\r\n* VM SLAs apply to both operating system and data disks - only operating system disks are represented in this workbook.\r\n* Capacity specifies the number of virtual machines in the scale set.\r\n\r\n\r\n> Azure generally recommends to leverage [Availability Zone](https://learn.microsoft.com/azure/availability-zones/az-overview) for better High Availability within the region by leveraging multiple zones inside region. By architecting your solutions to use replicated services in zones, you can protect your apps and data from the loss of a datacenter. \r\n\r\n> At this point, not all Azure regions and services support Availability Zones, the support matrix can be found [here](https://learn.microsoft.com/azure/availability-zones/az-region). Whenerver there is a Zonal recommendation for a particular service from this workbook, please note that that is applicable only for the regions supporting Availability Zones from the earlier list.",
+                        "style": "info"
+                      },
+                      "conditionalVisibility": {
+                        "parameterName": "Help",
+                        "comparison": "isEqualTo",
+                        "value": "Yes"
+                      },
+                      "name": "text - 3"
+                    },
+                    {
+                      "type": 3,
+                      "content": {
+                        "version": "KqlItem/1.0",
+                    "query": ${kql_compute_vmss_resources_details_summary},
+                    "size": 3,
+                    "title": "Virtual Machine Scale Sets - Recommendation Summary",
+                    "showExportToExcel": true,
+                    "queryType": 1,
+                    "resourceType": "microsoft.resourcegraph/resources",
+                    "crossComponentResources": [
+                      "{Subscriptions}"
+                    ],
+                    "gridSettings": {
+                      "rowLimit": 10000,
+                      "labelSettings": [
+                        {
+                          "columnId": "ResourceTotal",
+                          "label": "Resource Total"
+                        },
+                        {
+                          "columnId": "NotSucceeded",
+                          "label": "VMSS Not Succeeded"
+                        },
+                        {
+                          "columnId": "NoAVZone",
+                          "label": "No Availability Zone"
+                        },
+                        {
+                          "columnId": "CapacityLt2",
+                          "label": "Capacity < 2"
+                        },
+                        {
+                          "columnId": "NoFaultDomain",
+                          "label": "No Fault Domain"
+                        },
+                        {
+                          "columnId": "OSDiskRecommendation",
+                          "label": "OS Disk Recommendation"
+                        }
+                      ]
+                    },
+                    "sortBy": []
+                  },
+                  "name": "kql_compute_vmss_resources_details_summary"
+                },
+                {
+                  "type": 3,
+                  "content": {
+                    "version": "KqlItem/1.0",
+                        "query": ${kql_compute_vmss_resources_details},
+                        "size": 3,
+                        "title": "Virtual Machine Scale Sets",
+                        "showExportToExcel": true,
+                        "queryType": 1,
+                        "resourceType": "microsoft.resourcegraph/resources",
+                        "crossComponentResources": [
+                          "{Subscriptions}"
+                        ],
+                        "gridSettings": {
+                          "formatters": [
+                            {
+                              "columnMatch": "$gen_group",
+                              "formatter": 13,
+                              "formatOptions": {
+                                "linkTarget": "Resource",
+                                "showIcon": true
+                              }
+                            },
+                            {
+                              "columnMatch": "Type",
+                              "formatter": 5
+                            },
+                            {
+                              "columnMatch": "Name",
+                              "formatter": 5
+                            },
+                            {
+                              "columnMatch": "SubscriptionId",
+                              "formatter": 5
+                            },
+                            {
+                              "columnMatch": "State",
+                              "formatter": 18,
+                              "formatOptions": {
+                                "thresholdsOptions": "colors",
+                                "thresholdsGrid": [
+                                  {
+                                    "operator": "==",
+                                    "thresholdValue": "succeeded",
+                                    "representation": "green",
+                                    "text": "{0}{1}"
+                                  },
+                                  {
+                                    "operator": "!=",
+                                    "thresholdValue": "succeeded",
+                                    "representation": "gray",
+                                    "text": "{0}{1}"
+                                  },
+                                  {
+                                    "operator": "Default",
+                                    "thresholdValue": null,
+                                    "text": "{0}{1}"
+                                  }
+                                ]
+                              }
+                            },
+                            {
+                              "columnMatch": "Zones",
+                              "formatter": 5
+                            },
+                            {
+                              "columnMatch": "AvailabilityZone",
+                              "formatter": 18,
+                              "formatOptions": {
+                                "thresholdsOptions": "icons",
+                                "thresholdsGrid": [
+                                  {
+                                    "operator": "==",
+                                    "thresholdValue": "not configured",
+                                    "representation": "2",
+                                    "text": "{0}{1}"
+                                  },
+                                  {
+                                    "operator": "==",
+                                    "thresholdValue": "undefined",
+                                    "representation": "unknown",
+                                    "text": "{0}{1}"
+                                  },
+                                  {
+                                    "operator": "==",
+                                    "thresholdValue": "1",
+                                    "representation": "2",
+                                    "text": "{0}{1}"
+                                  },
+                                  {
+                                    "operator": "==",
+                                    "thresholdValue": "2",
+                                    "representation": "2",
+                                    "text": "{0}{1}"
+                                  },
+                                  {
+                                    "operator": "==",
+                                    "thresholdValue": "3",
+                                    "representation": "success",
+                                    "text": "{0}{1}"
+                                  },
+                                  {
+                                    "operator": "==",
+                                    "thresholdValue": "not applicable",
+                                    "representation": "more",
+                                    "text": "{0}{1}"
+                                  },
+                                  {
+                                    "operator": "==",
+                                    "thresholdValue": "configured",
+                                    "representation": "success",
+                                    "text": "{0}{1}"
+                                  },
+                                  {
+                                    "operator": "Default",
+                                    "thresholdValue": null,
+                                    "representation": "unknown",
+                                    "text": "{0}{1}"
+                                  }
+                                ]
+                              }
+                            },
+                            {
+                              "columnMatch": "AvailabilitySet",
+                              "formatter": 5
+                            },
+                            {
+                              "columnMatch": "Capacity",
+                              "formatter": 18,
+                              "formatOptions": {
+                                "thresholdsOptions": "icons",
+                                "thresholdsGrid": [
+                                  {
+                                    "operator": "==",
+                                    "thresholdValue": "0",
+                                    "representation": "2",
+                                    "text": "{0}{1}"
+                                  },
+                                  {
+                                    "operator": "==",
+                                    "thresholdValue": "1",
+                                    "representation": "2",
+                                    "text": "{0}{1}"
+                                  },
+                                  {
+                                    "operator": "Default",
+                                    "thresholdValue": null,
+                                    "representation": "success",
+                                    "text": "{0}{1}"
+                                  }
+                                ]
+                              }
+                            },
+                            {
+                              "columnMatch": "FaultDomain",
+                              "formatter": 18,
+                              "formatOptions": {
+                                "thresholdsOptions": "icons",
+                                "thresholdsGrid": [
+                                  {
+                                    "operator": "==",
+                                    "thresholdValue": "0",
+                                    "representation": "warning",
+                                    "text": "{0}{1}"
+                                  },
+                                  {
+                                    "operator": "==",
+                                    "thresholdValue": "1",
+                                    "representation": "success",
+                                    "text": "{0}{1}"
+                                  },
+                                  {
+                                    "operator": "==",
+                                    "thresholdValue": "5",
+                                    "representation": "success",
+                                    "text": "{0}{1}"
+                                  },
+                                  {
+                                    "operator": "==",
+                                    "thresholdValue": "not applicable",
+                                    "representation": "more",
+                                    "text": "{0}{1}"
+                                  },
+                                  {
+                                    "operator": "==",
+                                    "thresholdValue": "undefined",
+                                    "representation": "unknown",
+                                    "text": "{0}{1}"
+                                  },
+                                  {
+                                    "operator": "Default",
+                                    "thresholdValue": null,
+                                    "representation": "unknown",
+                                    "text": "{0}{1}"
+                                  }
+                                ]
+                              }
+                            },
+                            {
+                              "columnMatch": "OSDisk",
+                              "formatter": 18,
+                              "formatOptions": {
+                                "thresholdsOptions": "icons",
+                                "thresholdsGrid": [
+                                  {
+                                    "operator": "contains",
+                                    "thresholdValue": "premium",
+                                    "representation": "success",
+                                    "text": "{0}{1}"
+                                  },
+                                  {
+                                    "operator": "contains",
+                                    "thresholdValue": "ultra",
+                                    "representation": "success",
+                                    "text": "{0}{1}"
+                                  },
+                                  {
+                                    "operator": "contains",
+                                    "thresholdValue": "ephemeral",
+                                    "representation": "success",
+                                    "text": "{0}{1}"
+                                  },
+                                  {
+                                    "operator": "contains",
+                                    "thresholdValue": "standard",
+                                    "representation": "warning",
+                                    "text": "{0}{1}"
+                                  },
+                                  {
+                                    "operator": "==",
+                                    "thresholdValue": "unmanaged",
+                                    "representation": "warning",
+                                    "text": "{0}{1}"
+                                  },
+                                  {
+                                    "operator": "Default",
+                                    "thresholdValue": null,
+                                    "representation": "unknown",
+                                    "text": "{0}{1}"
+                                  }
+                                ]
+                              }
+                            },
+                            {
+                              "columnMatch": "ReadReplica",
+                              "formatter": 5
+                            },
+                            {
+                              "columnMatch": "AutomaticFailover",
+                              "formatter": 5
+                            },
+                            {
+                              "columnMatch": "MultipleWriteLocations",
+                              "formatter": 5
+                            },
+                            {
+                              "columnMatch": "StorageAutogrow",
+                              "formatter": 5
+                            },
+                            {
+                              "columnMatch": "ReplicationRole",
+                              "formatter": 5
+                            },
+                            {
+                              "columnMatch": "Backup",
+                              "formatter": 5
+                            },
+                            {
+                              "columnMatch": "Environment",
+                              "formatter": 18,
+                              "formatOptions": {
+                                "thresholdsOptions": "colors",
+                                "thresholdsGrid": [
+                                  {
+                                    "operator": "contains",
+                                    "thresholdValue": "Prod",
+                                    "representation": "redBright",
+                                    "text": "{0}{1}"
+                                  },
+                                  {
+                                    "operator": "contains",
+                                    "thresholdValue": "prod",
+                                    "representation": "redBright",
+                                    "text": "{0}{1}"
+                                  },
+                                  {
+                                    "operator": "Default",
+                                    "thresholdValue": null,
+                                    "text": "{0}{1}"
+                                  }
+                                ]
+                              }
+                            },
+                            {
+                              "columnMatch": "SubscriptionName",
+                              "formatter": 5
+                            },
+                            {
+                              "columnMatch": "ZonesCount",
+                              "formatter": 5
+                            },
+                            {
+                              "columnMatch": "cCapacity",
+                              "formatter": 5
+                            },
+                            {
+                              "columnMatch": "FaultDomainCount",
+                              "formatter": 18,
+                              "formatOptions": {
+                                "thresholdsOptions": "icons",
+                                "thresholdsGrid": [
+                                  {
+                                    "operator": ">=",
+                                    "thresholdValue": "2",
+                                    "representation": "success",
+                                    "text": "{0}{1}"
+                                  },
+                                  {
+                                    "operator": "<",
+                                    "thresholdValue": "2",
+                                    "representation": "2",
+                                    "text": "{0}{1}"
+                                  },
+                                  {
+                                    "operator": "Default",
+                                    "thresholdValue": null,
+                                    "representation": "Blank",
+                                    "text": "{0}{1}"
+                                  }
+                                ]
+                              }
+                            },
+                            {
+                              "columnMatch": "cFaultDomainCount",
+                              "formatter": 18,
+                              "formatOptions": {
+                                "thresholdsOptions": "icons",
+                                "thresholdsGrid": [
+                                  {
+                                    "operator": "==",
+                                    "thresholdValue": "Configured",
+                                    "representation": "success",
+                                    "text": "{0}{1}"
+                                  },
+                                  {
+                                    "operator": "==",
+                                    "thresholdValue": "Warning",
+                                    "representation": "2",
+                                    "text": "{0}{1}"
+                                  },
+                                  {
+                                    "operator": "Default",
+                                    "thresholdValue": null,
+                                    "representation": "unknown",
+                                    "text": "{0}{1}"
+                                  }
+                                ]
+                              }
+                            },
+                            {
+                              "columnMatch": "ManagedDiskType",
+                              "formatter": 18,
+                              "formatOptions": {
+                                "thresholdsOptions": "icons",
+                                "thresholdsGrid": [
+                                  {
+                                    "operator": "contains",
+                                    "thresholdValue": "Premium",
+                                    "representation": "success",
+                                    "text": "{0}{1}"
+                                  },
+                                  {
+                                    "operator": "contains",
+                                    "thresholdValue": "Standard",
+                                    "representation": "2",
+                                    "text": "{0}{1}"
+                                  },
+                                  {
+                                    "operator": "Default",
+                                    "thresholdValue": null,
+                                    "representation": "unknown",
+                                    "text": "{0}{1}"
+                                  }
+                                ]
+                              }
+                            },
+                            {
+                              "columnMatch": "Overprovision",
+                              "formatter": 18,
+                              "formatOptions": {
+                                "thresholdsOptions": "icons",
+                                "thresholdsGrid": [
+                                  {
+                                    "operator": "==",
+                                    "thresholdValue": "Enabled",
+                                    "representation": "success",
+                                    "text": "{0}{1}"
+                                  },
+                                  {
+                                    "operator": "==",
+                                    "thresholdValue": "Not Enabled",
+                                    "representation": "2",
+                                    "text": "{0}{1}"
+                                  },
+                                  {
+                                    "operator": "Default",
+                                    "thresholdValue": null,
+                                    "representation": "unknown",
+                                    "text": "{0}{1}"
+                                  }
+                                ]
+                              }
+                            },
+                            {
+                              "columnMatch": "OSDisk_UltraorPremium",
+                              "formatter": 18,
+                              "formatOptions": {
+                                "thresholdsOptions": "icons",
+                                "thresholdsGrid": [
+                                  {
+                                    "operator": "==",
+                                    "thresholdValue": "Configured",
+                                    "representation": "success",
+                                    "text": "{0}{1}"
+                                  },
+                                  {
+                                    "operator": "==",
+                                    "thresholdValue": "Warning",
+                                    "representation": "2",
+                                    "text": "{0}{1}"
+                                  },
+                                  {
+                                    "operator": "Default",
+                                    "thresholdValue": null,
+                                    "representation": "unknown",
+                                    "text": "{0}{1}"
+                                  }
+                                ]
+                              }
+                            },
+                            {
+                              "columnMatch": "OSDisk_Type",
+                              "formatter": 5
+                            }
+                          ],
+                          "rowLimit": 10000,
+                          "hierarchySettings": {
+                            "treeType": 1,
+                            "groupBy": [
+                              "SubscriptionId"
+                            ],
+                            "expandTopLevel": false,
+                            "finalBy": "Name"
+                          },
+                          "labelSettings": [
+                            {
+                              "columnId": "SubscriptionId",
+                              "label": "Subscription"
+                            },
+                            {
+                              "columnId": "ResourceGroup",
+                              "label": "Resource Group"
+                            },
+                            {
+                              "columnId": "AvailabilityZone",
+                              "label": "Availability Zone Count"
+                            },
+                            {
+                              "columnId": "FaultDomain",
+                              "label": "Fault Domain Count"
+                            }
+                          ]
+                        },
+                        "sortBy": []
+                      },
+                      "name": "kql_compute_vmss_resources_details"
+                    }
+                  ]
+                },
+                "conditionalVisibility": {
+                  "parameterName": "selectedTab",
+                  "comparison": "isEqualTo",
+                  "value": "cVMSS"
+                },
+                "name": "cVMSSGroup"
+              }
+            ]
+          },
+          "name": "Compute"
+        }
+    ]
+}

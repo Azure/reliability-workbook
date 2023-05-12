@@ -1,0 +1,19 @@
+resources
+| distinct subscriptionId
+| join kind=leftouter(
+    resources
+    | where type == "microsoft.insights/activitylogalerts"    
+    | mv-expand category = properties.condition.allOf
+    | extend category = category.equals, alertEnabled = properties.enabled
+    | where category == "ServiceHealth" and alertEnabled == "true"
+    | extend incidentType = iff(isnull(properties.condition.allOf[1]), "All", properties.condition.allOf)
+    | extend incident = iff(incidentType contains "Incident" or incidentType == "All", "true", "false")
+    | extend maintenance = iff(incidentType contains "Maintenance" or incidentType == "All", "true", "false")
+    | extend informational = iff(incidentType contains "Informational" or incidentType contains "ActionRequired" or incidentType == "All", "true", "false")
+    | extend security = iff(incidentType contains "Security" or incidentType == "All", "true", "false")
+    | project id, name, subscriptionId, category, alertEnabled, incident, maintenance, informational, security
+    | summarize count_alertEnabled=countif(alertEnabled == "true"), count_incident=countif(incident == "true"), count_maintenance=countif(maintenance == "true"), count_informational=countif(informational == "true"), count_security=countif(security == "true") by subscriptionId
+    )
+    on subscriptionId
+| project subscriptionId, alertEnabled=iff(isnotnull(count_alertEnabled), count_alertEnabled, 0), incident=iff(isnotnull(count_incident), count_incident, 0), maintenance=iff(isnotnull(count_maintenance), count_maintenance, 0), informational=iff(isnotnull(count_informational), count_informational, 0), security=iff(isnotnull(count_security), count_security, 0)
+| summarize Sub_Count=count(subscriptionId), Sub_alertEnabled_count=countif(alertEnabled > 0) * 100.0 / count(subscriptionId), Sub_Incident_Count=countif(incident > 0) * 100.0 / count(subscriptionId), Sub_Maintenance_Count=countif(maintenance > 0) * 100.0 / count(subscriptionId), Sub_Informational_Count=countif(informational > 0) * 100.0 / count(subscriptionId), Sub_Security_Count=countif(security > 0) * 100.0 / count(subscriptionId)

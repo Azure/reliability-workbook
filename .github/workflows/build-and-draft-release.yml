@@ -38,33 +38,18 @@ jobs:
       - uses: actions/checkout@main
       - uses: hashicorp/setup-terraform@v2
 
-      - name: Terraform fmt
-        id: fmt
-        run: terraform fmt -check
-        continue-on-error: true
+      - name: Build workbook by Terraform
+        run: make all
 
-      - name: Terraform Init
-        id: init
-        run: terraform init
+      - name: ls
+        run: ls -lR
 
-      - name: Terraform Validate
-        id: validate
-        run: terraform validate -no-color
-
-      - name: Terraform Plan
-        id: plan
-        run: terraform plan -input=false -no-color -out tfplan -target local_file.armtemplate -target local_file.workbook
-
-      - name: Terraform Apply
-        run: terraform apply -no-color tfplan
-
-      - name: Upload asset - azuredeploy.json
+      - name: Upload workbook files
         uses: actions/upload-artifact@v3
         with:
           name: asset
           path: |
-            build/azuredeploy.json
-            build/ReliabilityWorkbook.json
+            build/artifacts/*
           if-no-files-found: error
 
   update_release_draft:
@@ -102,18 +87,16 @@ jobs:
         with:
           upload_url: ${{ steps.release_drafter.outputs.upload_url }}
           asset_path: |
-            asset/azuredeploy.json
-            asset/ReliabilityWorkbook.json
+            asset/*.workbook
           overwrite: true
-      - name: Move asset
+      - name: Move files from asset to workbooks directory
         run: |
-          mv -f asset/azuredeploy.json asset/ReliabilityWorkbook.json workbooks/
+          mv -f asset/* workbooks/
       - uses: EndBug/add-and-commit@v9.0.1
         with:
           author_name: github-actions
           author_email: '41898282+github-actions[bot]@users.noreply.github.com'
-          message: Update ARM template and Workbook
+          message: Git push workbook files
           push: origin main --force --set-upstream
           add: |
-            workbooks/azuredeploy.json
-            workbooks/ReliabilityWorkbook.json
+            workbooks/

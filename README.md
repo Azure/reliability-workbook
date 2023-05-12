@@ -1,16 +1,82 @@
 # Reliability Workbook
 
-[![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FAzure%2Freliability-workbook%2Fmain%2Fworkbooks%2Fazuredeploy.json)
-
 This workbook focus on the Reliability pillar of the Azure Well-Architected Framework and provides insights into the reliability aspects deployed in Azure subscriptions.
 
-User needs to import the Azure Monitor workbook available in this repository, the detailed instructions have been provided: [Import Workbook](import.md)
+## Deploy
 
-User needs to have at least [Workbook Contributor](https://docs.microsoft.com/en-us/azure/role-based-access-control/built-in-roles#workbook-contributor) access to import the workbook and [Monitoring Reader](https://docs.microsoft.com/en-us/azure/role-based-access-control/built-in-roles#monitoring-reader) to have access to monitoring information.
+This Reliability Workbook consists of several co-workbooks. For easy deployment, you can use the deployment tool. For more information about using this tool, see below.
 
-### Note
-* Azure Security Center with Azure Defender is required for VM backup information.
-* VMs have to be running for disk information to be available.
+### Pre-requisites
+
+- This tool needs to run on Linux, WSL, or Azure Cloud Shell. You cannot use a Windows environment.
+  - [Azure Cloud Shell](https://learn.microsoft.com/en-us/azure/cloud-shell/quickstart?tabs=azurecli) is currently recommended for easy deployment.
+- If you don't run this tool in Azure Cloud Shell, you may need to install the following tools:
+  - Install Azure CLI. See [Install Azure CLI](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli?view=azure-cli-latest).
+  - Install `wget` command-line tool. If not installed, you can install it using the package manager for your Linux distribution (e.g., `apt-get install wget` for Debian/Ubuntu or `yum install wget` for CentOS/RHEL).
+- User needs to have at least [Workbook Contributor](https://docs.microsoft.com/en-us/azure/role-based-access-control/built-in-roles#workbook-contributor) access to import the workbook and [Monitoring Reader](https://docs.microsoft.com/en-us/azure/role-based-access-control/built-in-roles#monitoring-reader) to have access to monitoring information.
+  - If you would like to create Resource Group when no Resource Group exists, the user must have permission access to create Resource Group.
+
+### Deploy steps
+
+1. Create directory to run the script.
+    ```shell
+    $ mkdir deploy-workbook
+    ```
+1. Download the scripts provided in the `script` folder in this repository.
+    ```shell
+    $ wget https://raw.githubusercontent.com/Azure/reliability-workbook/scripts/deploy-workbook.sh
+    ```
+1. Make the script executable.
+    ```shell
+    chmod +x deploy-workbook.sh
+    ```
+1. Run the script with the required parameters.
+
+    Usage:
+
+    ```shell
+    $ ./deploy-workbook.sh 
+    Usage: ./deploy-workbook.sh -s <Subscription ID> -g <Resource Group> [-t <Tenant ID>] [-c Create Resource Group if not exist] [-l <location>] [-b <Base URL of Workbook>] [-d]
+    Example 1: When you want to deploy workbook to resource group myResourceGroup in subscription
+            ./deploy-workbook.sh -s 00000000-0000-0000-0000-000000000000 -g myResourceGroup -t 00000000-0000-0000-0000-000000000000
+    Example 2: When you want to deploy workbook to resource group myResourceGroup in subscription and create resource group if not exist
+            ./deploy-workbook.sh -s 00000000-0000-0000-0000-000000000000 -g myResourceGroup -t 00000000-0000-0000-0000-000000000000 -c -l japaneast
+    ```
+
+    If you want to deploy the workbook to an existing Resource Group, you can use the following command:
+
+    ```shell
+    ./deploy-workbook.sh -s 00000000-0000-0000-0000-000000000000 -g myResourceGroup
+    ```
+
+    If you want to create a new Resource Group, you can use the `-c` parameter with `-l <location>`:  
+
+    ```shell
+    ./deploy-workbook.sh -s 00000000-0000-0000-0000-000000000000 -g myResourceGroup -c -l japaneast
+    ```
+
+## FAQ
+
+### Deploy steps
+
+#### How to specify a tenant ID?
+
+If you have access to many tenants, az command may take a long time. To prevent this behavior, you may want to specify tenant ID with `-t` option.
+
+```shell
+./deploy-workbook.sh -s 00000000-0000-0000-0000-000000000000 -g myResourceGroup -t 00000000-0000-0000-0000-000000000000 -c -l japaneast
+```
+
+#### I got a syntax error after deploying and opening the Workbook. How do I fix it?
+
+You may be using Windows environment like Git Bash. If you are running on this script in Windows, there may be something wrong with the newline characters.
+In this case, please try in Azure Cloud Shell, WSL or pure Linux environment.
+
+### Workbook
+
+#### Why is the disk information not available?
+
+VMs have to be running for disk information to be available.
 
 ## Contributing
 
