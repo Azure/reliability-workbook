@@ -24,7 +24,7 @@ This Reliability Workbook consists of several co-workbooks. For easy deployment,
     ```
 1. Download the scripts provided in the `script` folder in this repository.
     ```shell
-    $ wget https://raw.githubusercontent.com/Azure/reliability-workbook/scripts/deploy-workbook.sh
+    $ wget https://raw.githubusercontent.com/Azure/reliability-workbook/main/scripts/deploy-workbook.sh
     ```
 1. Make the script executable.
     ```shell
