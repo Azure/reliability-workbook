@@ -53,8 +53,18 @@ if [ x$create_rg != x"" -a x$location = x"" ]; then
     help
 fi
 
-# If not set base_url, use default value
-[ x$base_url = x"" ] && base_url="https://raw.githubusercontent.com/Azure/reliability-workbook/main"
+public_repo_url="https://raw.githubusercontent.com/Azure/reliability-workbook/main"
+deployment_template_for_workbook="$public_repo_url/workbooks/azuredeploy.json"
+case $base_url in
+    "") # If not set base_url, use default value
+      ;;
+    ".") # If set base_url with current directory, use default value
+      ;;
+    *) # If set base_url with other value, use it
+      public_repo_url=$base_url
+      deployment_template_for_workbook="$base_url/workbooks/azuredeploy.json"
+      ;;
+esac
 
 [ x$tenant != x"" ] && tenant="-t $tenant"
 
@@ -67,6 +77,8 @@ if [ $? -ne 0 ]; then
   [ $? -ne 0 ] && error "Please input correct SubscriptionID and Tenant ID"
 fi
 
+log "Set subscription: $subscription_id"
+az account set --subscription $subscription_id
 
 log "Check existance of target resource group"
 az group show --name $resource_group_name --subscription $subscription_id > /dev/null 2>&1
@@ -83,39 +95,59 @@ fi
 
 if [ x$developer_mode != x"" ]; then
     log "Developer mode is enabled. Deploy Advisor version."
-    wget $base_url/workbooks/ReliabilityWorkbookPublic.workbook
-    az deployment group create -g $resource_group_name --template-uri $base_url/workbooks/azuredeploy.json --parameters name="FTA - Reliability Workbook - Advisor version" serializedData=@ReliabilityWorkbookPublic.workbook
+    wget $public_repo_url/workbooks/ReliabilityWorkbookPublic.workbook
+    az deployment group create -g $resource_group_name --template-uri $deployment_template_for_workbook --parameters name="FTA - Reliability Workbook - Advisor version" serializedData=@ReliabilityWorkbookPublic.workbook
     exit 0
 fi
 
 # Download file list
-[ ! -f workbook_filelist ] && wget $base_url/workbooks/workbook_filelist
-cat workbook_filelist | while read f
-do
-    log "Download workbook file: $f"
-    if [ -f $f ]; then
-        log "Skip download because the file already exists"
-    else
-        wget $base_url/workbooks/$f
-        if [ $? -ne 0 ]; then
-            error "Failed to download $f"
-        fi
-    fi
-done
+# - If set base_url with current directory, doen't download file list to use local file
+if [ x$base_url != x"." ]; then
+  [ ! -f workbook_filelist ] && wget $public_repo_url/workbooks/workbook_filelist
+  cat workbook_filelist | while read f
+  do
+      log "Download workbook file: $f"
+      if [ -f $f ]; then
+          log "Skip download because the file already exists"
+      else
+          wget $public_repo_url/workbooks/$f
+          if [ $? -ne 0 ]; then
+              error "Failed to download $f"
+          fi
+      fi
+  done
+fi
 
 # Deploy Workbook
-for f in *.workbook
+for f in `find . -maxdepth 1 -type f -name "*.workbook"`
 do
   filename_base=`basename $f .workbook`
   filename=`basename $f`
   log "Deploy ${filename_base}"
-  { az deployment group create --name $filename_base -g $resource_group_name --template-uri $base_url/workbooks/azuredeploy.json --parameters serializedData=@$filename --parameters name=$filename_base --query 'properties.outputs.resource_id.value' -o json; } > ${filename_base}_id &
+  { az deployment group create --name $filename_base -g $resource_group_name --template-uri $deployment_template_for_workbook --parameters serializedData=@$filename --parameters name=$filename_base --query 'properties.outputs.resource_id.value' -o json; } > ${filename_base}_id &
 done
 
 # Wait for all deployment processes
 wait
 
-[ ! -e workbook.tpl.json ] && wget $base_url/build/templates/workbook.tpl.json
+# Check empty for *_id files
+for f in `find . -maxdepth 1 -type f -name "*_id"`
+do
+  if [ ! -s $f ]; then
+    ls -l
+    # When error is occured, won't delete *_id files
+    error "Failed to deploy workbook. Please check the error message.:${f}"
+  fi
+done
+
+# If use local file, skip to get resource ID and replace placeholder
+if [ x$base_url = x"." ]; then
+  log "Succeeded. Skip to get resource ID and replace placeholder because base_url is current directory"
+  \rm *_id
+  exit 0
+fi
+
+[ ! -e workbook.tpl.json ] && wget $public_repo_url/build/templates/workbook.tpl.json
 for f in *_id
 do
     resource_id=`cat $f | tr -d '\"'`
@@ -250,5 +282,5 @@ escaped_replacement_text=$(printf '%s\n' "$tab_of_Export" | sed 's:[\/&]:\\&:g;$
 sed -i "s/\${tab_of_Export}/$escaped_replacement_text/g" workbook.tpl.json
 
 log "Deploy FTA - Reliability Workbook"
-az deployment group create -g $resource_group_name --template-uri $base_url/workbooks/azuredeploy.json --parameters name="FTA - Reliability Workbook" serializedData=@workbook.tpl.json
+az deployment group create -g $resource_group_name --template-uri $deployment_template_for_workbook --parameters name="FTA - Reliability Workbook" serializedData=@workbook.tpl.json
 \rm *_id
