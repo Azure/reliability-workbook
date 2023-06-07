@@ -10,9 +10,13 @@ error() {
 }
 
 cleanup() {
-  log "Clean up temporary files"
-  \rm *_id
-  \rm workbook.json
+  if [ $is_failed -ne 0 ]; then
+    log "Deployment failed. Please check log file."
+  else
+    log "Clean up temporary files"
+    \rm *_id
+    \rm workbook.json
+  fi
 }
 
 deploy_workbook() {
@@ -21,6 +25,7 @@ deploy_workbook() {
   log "Start to deploy $filename"
   az deployment group create --name $deployment_name -g $resource_group_name --template-uri $deployment_template_for_workbook --parameters serializedData=@$filename --parameters name=$deployment_name -o table
   if [ $? -ne 0 ]; then
+    is_failed=1
     log "Failed to deploy $filename"
   else
     log "Succeeded to deploy $filename"
@@ -28,6 +33,8 @@ deploy_workbook() {
 }
 
 trap cleanup EXIT
+
+is_failed=0 # Flag to check whether deployment is failed or not and use it to determine cleanup
 
 # Get option from script argument, which is used to specify Subscription ID, Resource Group name and Tenant name
 help() {
@@ -132,6 +139,7 @@ if [ x$base_url != x"." ]; then
       else
           wget $public_repo_url/workbooks/$f
           if [ $? -ne 0 ]; then
+              is_failed=1
               error "Failed to download $f"
           fi
       fi
@@ -164,8 +172,10 @@ for f in $deployed_workbook_list
 do
   resource_id=`az deployment group show -g $resource_group_name -n $f --query 'properties.outputs.resource_id.value' -o tsv`
   if [ $? -ne 0 ]; then
-      log "Failed to get resource ID of $f"
+      is_failed=1
+      error "Failed to get resource ID of $f"
   fi
+  log "Get resource ID of deployed workbook: $f -> $resource_id"
   echo $resource_id > ${f}_id
 done
 
@@ -308,3 +318,9 @@ sed -i "s/\${tab_of_Export}/$escaped_replacement_text/g" workbook.json
 
 log "Deploy FTA - Reliability Workbook"
 az deployment group create -g $resource_group_name --template-uri $deployment_template_for_workbook --parameters name="FTA - Reliability Workbook" serializedData=@workbook.json -o table
+# If failed deployment command, mark the deployment as failed
+if [ $? -ne 0 ]; then
+  is_failed=1
+  log "Failed to deploy workbook"
+  exit 1
+fi
