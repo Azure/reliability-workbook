@@ -2,12 +2,32 @@
 
 # Return current date and time with passed log message
 log() {
-    echo "$(date '+%Y-%m-%d %H:%M:%S'): $1" | tee -a log
+  echo "$(date '+%Y-%m-%d %H:%M:%S'): $1" | tee -a log
 }
 error() {
-    echo "$(date '+%Y-%m-%d %H:%M:%S'): $1" | tee -a log
-    exit 1
+  echo "$(date '+%Y-%m-%d %H:%M:%S'): $1" | tee -a log
+  exit 1
 }
+
+cleanup() {
+  log "Clean up temporary files"
+  \rm *_id
+  \rm workbook.json
+}
+
+deploy_workbook() {
+  deployment_name=$1
+  filename=$2
+  log "Start to deploy $filename"
+  az deployment group create --name $deployment_name -g $resource_group_name --template-uri $deployment_template_for_workbook --parameters serializedData=@$filename --parameters name=$deployment_name -o table
+  if [ $? -ne 0 ]; then
+    log "Failed to deploy $filename"
+  else
+    log "Succeeded to deploy $filename"
+  fi
+}
+
+trap cleanup EXIT
 
 # Get option from script argument, which is used to specify Subscription ID, Resource Group name and Tenant name
 help() {
@@ -78,7 +98,7 @@ if [ $? -ne 0 ]; then
 fi
 
 log "Set subscription: $subscription_id"
-az account set --subscription $subscription_id
+az account set --subscription $subscription_id -o table
 
 log "Check existance of target resource group"
 az group show --name $resource_group_name --subscription $subscription_id > /dev/null 2>&1
@@ -119,42 +139,47 @@ if [ x$base_url != x"." ]; then
 fi
 
 # Deploy Workbook
+deployed_workbook_list=""
 for f in `find . -maxdepth 1 -type f -name "*.workbook"`
 do
   filename_base=`basename $f .workbook`
   filename=`basename $f`
-  log "Deploy ${filename_base}"
-  { az deployment group create --name $filename_base -g $resource_group_name --template-uri $deployment_template_for_workbook --parameters serializedData=@$filename --parameters name=$filename_base --query 'properties.outputs.resource_id.value' -o json; } > ${filename_base}_id &
+  # Capture deployment name to use replacing placeholder with resource ID in workbook.tpl.json
+  deployed_workbook_list="$deployed_workbook_list $filename_base"
+  # Deploy workbook on background
+  deploy_workbook $filename_base $filename &
 done
 
 # Wait for all deployment processes
 wait
 
-# Check empty for *_id files
-for f in `find . -maxdepth 1 -type f -name "*_id"`
-do
-  if [ ! -s $f ]; then
-    ls -l
-    # When error is occured, won't delete *_id files
-    error "Failed to deploy workbook. Please check the error message.:${f}"
-  fi
-done
-
 # If use local file, skip to get resource ID and replace placeholder
 if [ x$base_url = x"." ]; then
   log "Succeeded. Skip to get resource ID and replace placeholder because base_url is current directory"
-  \rm *_id
   exit 0
 fi
 
-[ ! -e workbook.tpl.json ] && wget $public_repo_url/build/templates/workbook.tpl.json
-for f in *_id
+# Get resource ID from deployed workbook by using deployment name
+for f in $deployed_workbook_list
+do
+  resource_id=`az deployment group show -g $resource_group_name -n $f --query 'properties.outputs.resource_id.value' -o tsv`
+  if [ $? -ne 0 ]; then
+      log "Failed to get resource ID of $f"
+  fi
+  echo $resource_id > ${f}_id
+done
+
+workbook_template_file="workbook.tpl.json"
+[ ! -e $workbook_template_file ] && wget $public_repo_url/build/templates/workbook.tpl.json
+# Copy workbook template file to workbook.json to keep workbook.tpl.json to use again
+cp -f $workbook_template_file workbook.json
+for f in `find . -maxdepth 1 -type f -name "*_id"`
 do
     resource_id=`cat $f | tr -d '\"'`
     # Get resource type from filename (e.g.: ReliabilityWorkbookExport.workbook -> export)
     resource_type=`echo $f | sed -e 's/.*Workbook\([^.]*\).*_id/\L\1/g'`
     # Replace placeholder in the file
-    sed -i "s#\\\${${resource_type}_workbook_resource_id}#$resource_id#g" workbook.tpl.json
+    sed -i "s#\\\${${resource_type}_workbook_resource_id}#$resource_id#g" workbook.json
 done
 
 overview_information=$(cat <<EOS
@@ -170,7 +195,7 @@ EOS
 )
 
 escaped_replacement_text=$(printf '%s\n' "$overview_information" | sed 's:[\/&]:\\&:g;$!s/$/\\/')
-sed -i "s/\${overview_information}/$escaped_replacement_text/g" workbook.tpl.json
+sed -i "s/\${overview_information}/$escaped_replacement_text/g" workbook.json
 
 link_of_Summary=$(cat <<EOS
           ,{
@@ -184,7 +209,7 @@ link_of_Summary=$(cat <<EOS
 EOS
 )
 escaped_replacement_text=$(printf '%s\n' "$link_of_Summary" | sed 's:[\/&]:\\&:g;$!s/$/\\/')
-sed -i "s/\${link_of_Summary}/$escaped_replacement_text/g" workbook.tpl.json
+sed -i "s/\${link_of_Summary}/$escaped_replacement_text/g" workbook.json
 
 summary_id=$(cat ReliabilityWorkbookSummary_id | tr -d '\"')
 tab_of_Summary=$(cat <<EOS
@@ -206,7 +231,7 @@ tab_of_Summary=$(cat <<EOS
 EOS
 )
 escaped_replacement_text=$(printf '%s\n' "$tab_of_Summary" | sed 's:[\/&]:\\&:g;$!s/$/\\/')
-sed -i "s/\${tab_of_Summary}/$escaped_replacement_text/g" workbook.tpl.json
+sed -i "s/\${tab_of_Summary}/$escaped_replacement_text/g" workbook.json
 
 
 link_of_Advisor=$(cat <<EOS
@@ -221,7 +246,7 @@ link_of_Advisor=$(cat <<EOS
 EOS
 )
 escaped_replacement_text=$(printf '%s\n' "$link_of_Advisor" | sed 's:[\/&]:\\&:g;$!s/$/\\/')
-sed -i "s/\${link_of_Advisor}/$escaped_replacement_text/g" workbook.tpl.json
+sed -i "s/\${link_of_Advisor}/$escaped_replacement_text/g" workbook.json
 
 advisor_id=$(cat ReliabilityWorkbookAdvisor_id | tr -d '\"')
 tab_of_Advisor=$(cat <<EOS
@@ -243,7 +268,7 @@ tab_of_Advisor=$(cat <<EOS
 EOS
 )
 escaped_replacement_text=$(printf '%s\n' "$tab_of_Advisor" | sed 's:[\/&]:\\&:g;$!s/$/\\/')
-sed -i "s/\${tab_of_Advisor}/$escaped_replacement_text/g" workbook.tpl.json
+sed -i "s/\${tab_of_Advisor}/$escaped_replacement_text/g" workbook.json
 
 link_of_Export=$(cat <<EOS
           ,{
@@ -257,7 +282,7 @@ link_of_Export=$(cat <<EOS
 EOS
 )
 escaped_replacement_text=$(printf '%s\n' "$link_of_Export" | sed 's:[\/&]:\\&:g;$!s/$/\\/')
-sed -i "s/\${link_of_Export}/$escaped_replacement_text/g" workbook.tpl.json
+sed -i "s/\${link_of_Export}/$escaped_replacement_text/g" workbook.json
 
 export_id=$(cat ReliabilityWorkbookExport_id | tr -d '\"')
 tab_of_Export=$(cat <<EOS
@@ -279,8 +304,7 @@ tab_of_Export=$(cat <<EOS
 EOS
 )
 escaped_replacement_text=$(printf '%s\n' "$tab_of_Export" | sed 's:[\/&]:\\&:g;$!s/$/\\/')
-sed -i "s/\${tab_of_Export}/$escaped_replacement_text/g" workbook.tpl.json
+sed -i "s/\${tab_of_Export}/$escaped_replacement_text/g" workbook.json
 
 log "Deploy FTA - Reliability Workbook"
-az deployment group create -g $resource_group_name --template-uri $deployment_template_for_workbook --parameters name="FTA - Reliability Workbook" serializedData=@workbook.tpl.json
-\rm *_id
+az deployment group create -g $resource_group_name --template-uri $deployment_template_for_workbook --parameters name="FTA - Reliability Workbook" serializedData=@workbook.json -o table
