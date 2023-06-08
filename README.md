@@ -72,6 +72,22 @@ If you have access to many tenants, az command may take a long time. To prevent 
 You may be using Windows environment like Git Bash. If you are running on this script in Windows, there may be something wrong with the newline characters.
 In this case, please try in Azure Cloud Shell, WSL or pure Linux environment.
 
+#### Can I deploy from local Workbook files?
+
+Yes, you can deploy from local Workbook files.
+
+If you want to deploy the workbook files from your current directory, you can use the -b option with a dot (.).
+This will deploy all *.workbook files in the current directory. This option is useful when you want to test your workbooks in a development environment.
+
+Here is how you can do it:
+
+```bash
+./deploy-workbook.sh -s 00000000-0000-0000-0000-000000000000 -g myResourceGroup -c -l japaneast -b .
+```
+
+Please note that when the dot is not specified with -b option, the script will perform resource ID replacement.
+However, when the dot is specified, the script will not perform such actions; it will simply deploy the *.workbook files.
+
 ### Workbook
 
 #### Why is the disk information not available?
