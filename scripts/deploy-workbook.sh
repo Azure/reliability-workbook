@@ -14,8 +14,8 @@ cleanup() {
     log "Deployment failed. Please check log file."
   else
     log "Clean up temporary files"
-    \rm *_id
-    \rm workbook.json
+    \rm -f *_id
+    \rm -f workbook.json
   fi
 }
 
@@ -161,11 +161,6 @@ done
 # Wait for all deployment processes
 wait
 
-# If use local file, skip to get resource ID and replace placeholder
-if [ x$base_url = x"." ]; then
-  log "Succeeded. Skip to get resource ID and replace placeholder because base_url is current directory"
-  exit 0
-fi
 
 # Get resource ID from deployed workbook by using deployment name
 for f in $deployed_workbook_list
@@ -190,6 +185,7 @@ do
     resource_type=`echo $f | sed -e 's/.*Workbook\([^.]*\).*_id/\L\1/g'`
     # Replace placeholder in the file
     sed -i "s#\\\${${resource_type}_workbook_resource_id}#$resource_id#g" workbook.json
+    log "Replace $resource_type workbook resource ID: $resource_id"
 done
 
 overview_information=$(cat <<EOS
@@ -221,7 +217,7 @@ EOS
 escaped_replacement_text=$(printf '%s\n' "$link_of_Summary" | sed 's:[\/&]:\\&:g;$!s/$/\\/')
 sed -i "s/\${link_of_Summary}/$escaped_replacement_text/g" workbook.json
 
-summary_id=$(cat ReliabilityWorkbookSummary_id | tr -d '\"')
+summary_id=$([ -f ReliabilityWorkbookSummary_id ] && cat ReliabilityWorkbookSummary_id | tr -d '\"')
 tab_of_Summary=$(cat <<EOS
     ,{
       "type": 12,
@@ -258,7 +254,7 @@ EOS
 escaped_replacement_text=$(printf '%s\n' "$link_of_Advisor" | sed 's:[\/&]:\\&:g;$!s/$/\\/')
 sed -i "s/\${link_of_Advisor}/$escaped_replacement_text/g" workbook.json
 
-advisor_id=$(cat ReliabilityWorkbookAdvisor_id | tr -d '\"')
+advisor_id=$([ -f ReliabilityWorkbookAdvisor_id ] && cat ReliabilityWorkbookAdvisor_id | tr -d '\"')
 tab_of_Advisor=$(cat <<EOS
     ,{
       "type": 12,
@@ -294,7 +290,7 @@ EOS
 escaped_replacement_text=$(printf '%s\n' "$link_of_Export" | sed 's:[\/&]:\\&:g;$!s/$/\\/')
 sed -i "s/\${link_of_Export}/$escaped_replacement_text/g" workbook.json
 
-export_id=$(cat ReliabilityWorkbookExport_id | tr -d '\"')
+export_id=$([ -f ReliabilityWorkbookExport_id ] && cat ReliabilityWorkbookExport_id | tr -d '\"')
 tab_of_Export=$(cat <<EOS
     ,{
       "type": 12,

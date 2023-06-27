@@ -85,9 +85,6 @@ Here is how you can do it:
 ./deploy-workbook.sh -s 00000000-0000-0000-0000-000000000000 -g myResourceGroup -c -l japaneast -b .
 ```
 
-Please note that when the dot is not specified with -b option, the script will perform resource ID replacement.
-However, when the dot is specified, the script will not perform such actions; it will simply deploy the *.workbook files.
-
 ### Workbook
 
 #### Why is the disk information not available?
