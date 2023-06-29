@@ -2,12 +2,39 @@
 
 # Return current date and time with passed log message
 log() {
-    echo "$(date '+%Y-%m-%d %H:%M:%S'): $1" | tee -a log
+  echo "$(date '+%Y-%m-%d %H:%M:%S'): $1" | tee -a log
 }
 error() {
-    echo "$(date '+%Y-%m-%d %H:%M:%S'): $1" | tee -a log
-    exit 1
+  echo "$(date '+%Y-%m-%d %H:%M:%S'): $1" | tee -a log
+  exit 1
 }
+
+cleanup() {
+  if [ $is_failed -ne 0 ]; then
+    log "Deployment failed. Please check log file."
+  else
+    log "Clean up temporary files"
+    \rm -f *_id
+    \rm -f workbook.json
+  fi
+}
+
+deploy_workbook() {
+  deployment_name=$1
+  filename=$2
+  log "Start to deploy $filename"
+  az deployment group create --name $deployment_name -g $resource_group_name --template-uri $deployment_template_for_workbook --parameters serializedData=@$filename --parameters name=$deployment_name -o table
+  if [ $? -ne 0 ]; then
+    is_failed=1
+    log "Failed to deploy $filename"
+  else
+    log "Succeeded to deploy $filename"
+  fi
+}
+
+trap cleanup EXIT
+
+is_failed=0 # Flag to check whether deployment is failed or not and use it to determine cleanup
 
 # Get option from script argument, which is used to specify Subscription ID, Resource Group name and Tenant name
 help() {
@@ -53,8 +80,18 @@ if [ x$create_rg != x"" -a x$location = x"" ]; then
     help
 fi
 
-# If not set base_url, use default value
-[ x$base_url = x"" ] && base_url="https://raw.githubusercontent.com/Azure/reliability-workbook/main"
+public_repo_url="https://raw.githubusercontent.com/Azure/reliability-workbook/main"
+deployment_template_for_workbook="$public_repo_url/workbooks/azuredeploy.json"
+case $base_url in
+    "") # If not set base_url, use default value
+      ;;
+    ".") # If set base_url with current directory, use default value
+      ;;
+    *) # If set base_url with other value, use it
+      public_repo_url=$base_url
+      deployment_template_for_workbook="$base_url/workbooks/azuredeploy.json"
+      ;;
+esac
 
 [ x$tenant != x"" ] && tenant="-t $tenant"
 
@@ -67,6 +104,8 @@ if [ $? -ne 0 ]; then
   [ $? -ne 0 ] && error "Please input correct SubscriptionID and Tenant ID"
 fi
 
+log "Set subscription: $subscription_id"
+az account set --subscription $subscription_id -o table
 
 log "Check existance of target resource group"
 az group show --name $resource_group_name --subscription $subscription_id > /dev/null 2>&1
@@ -83,46 +122,70 @@ fi
 
 if [ x$developer_mode != x"" ]; then
     log "Developer mode is enabled. Deploy Advisor version."
-    wget $base_url/workbooks/ReliabilityWorkbookPublic.workbook
-    az deployment group create -g $resource_group_name --template-uri $base_url/workbooks/azuredeploy.json --parameters name="FTA - Reliability Workbook - Advisor version" serializedData=@ReliabilityWorkbookPublic.workbook
+    wget $public_repo_url/workbooks/ReliabilityWorkbookPublic.workbook
+    az deployment group create -g $resource_group_name --template-uri $deployment_template_for_workbook --parameters name="FTA - Reliability Workbook - Advisor version" serializedData=@ReliabilityWorkbookPublic.workbook
     exit 0
 fi
 
 # Download file list
-[ ! -f workbook_filelist ] && wget $base_url/workbooks/workbook_filelist
-cat workbook_filelist | while read f
-do
-    log "Download workbook file: $f"
-    if [ -f $f ]; then
-        log "Skip download because the file already exists"
-    else
-        wget $base_url/workbooks/$f
-        if [ $? -ne 0 ]; then
-            error "Failed to download $f"
-        fi
-    fi
-done
+# - If set base_url with current directory, doen't download file list to use local file
+if [ x$base_url != x"." ]; then
+  [ ! -f workbook_filelist ] && wget $public_repo_url/workbooks/workbook_filelist
+  cat workbook_filelist | while read f
+  do
+      log "Download workbook file: $f"
+      if [ -f $f ]; then
+          log "Skip download because the file already exists"
+      else
+          wget $public_repo_url/workbooks/$f
+          if [ $? -ne 0 ]; then
+              is_failed=1
+              error "Failed to download $f"
+          fi
+      fi
+  done
+fi
 
 # Deploy Workbook
-for f in *.workbook
+deployed_workbook_list=""
+for f in `find . -maxdepth 1 -type f -name "*.workbook"`
 do
   filename_base=`basename $f .workbook`
   filename=`basename $f`
-  log "Deploy ${filename_base}"
-  { az deployment group create --name $filename_base -g $resource_group_name --template-uri $base_url/workbooks/azuredeploy.json --parameters serializedData=@$filename --parameters name=$filename_base --query 'properties.outputs.resource_id.value' -o json; } > ${filename_base}_id &
+  # Capture deployment name to use replacing placeholder with resource ID in workbook.tpl.json
+  deployed_workbook_list="$deployed_workbook_list $filename_base"
+  # Deploy workbook on background
+  deploy_workbook $filename_base $filename &
 done
 
 # Wait for all deployment processes
 wait
 
-[ ! -e workbook.tpl.json ] && wget $base_url/build/templates/workbook.tpl.json
-for f in *_id
+
+# Get resource ID from deployed workbook by using deployment name
+for f in $deployed_workbook_list
+do
+  resource_id=`az deployment group show -g $resource_group_name -n $f --query 'properties.outputs.resource_id.value' -o tsv`
+  if [ $? -ne 0 ]; then
+      is_failed=1
+      error "Failed to get resource ID of $f"
+  fi
+  log "Get resource ID of deployed workbook: $f -> $resource_id"
+  echo $resource_id > ${f}_id
+done
+
+workbook_template_file="workbook.tpl.json"
+[ ! -e $workbook_template_file ] && wget $public_repo_url/build/templates/workbook.tpl.json
+# Copy workbook template file to workbook.json to keep workbook.tpl.json to use again
+cp -f $workbook_template_file workbook.json
+for f in `find . -maxdepth 1 -type f -name "*_id"`
 do
     resource_id=`cat $f | tr -d '\"'`
     # Get resource type from filename (e.g.: ReliabilityWorkbookExport.workbook -> export)
     resource_type=`echo $f | sed -e 's/.*Workbook\([^.]*\).*_id/\L\1/g'`
     # Replace placeholder in the file
-    sed -i "s#\\\${${resource_type}_workbook_resource_id}#$resource_id#g" workbook.tpl.json
+    sed -i "s#\\\${${resource_type}_workbook_resource_id}#$resource_id#g" workbook.json
+    log "Replace $resource_type workbook resource ID: $resource_id"
 done
 
 overview_information=$(cat <<EOS
@@ -138,7 +201,7 @@ EOS
 )
 
 escaped_replacement_text=$(printf '%s\n' "$overview_information" | sed 's:[\/&]:\\&:g;$!s/$/\\/')
-sed -i "s/\${overview_information}/$escaped_replacement_text/g" workbook.tpl.json
+sed -i "s/\${overview_information}/$escaped_replacement_text/g" workbook.json
 
 link_of_Summary=$(cat <<EOS
           ,{
@@ -152,9 +215,9 @@ link_of_Summary=$(cat <<EOS
 EOS
 )
 escaped_replacement_text=$(printf '%s\n' "$link_of_Summary" | sed 's:[\/&]:\\&:g;$!s/$/\\/')
-sed -i "s/\${link_of_Summary}/$escaped_replacement_text/g" workbook.tpl.json
+sed -i "s/\${link_of_Summary}/$escaped_replacement_text/g" workbook.json
 
-summary_id=$(cat ReliabilityWorkbookSummary_id | tr -d '\"')
+summary_id=$([ -f ReliabilityWorkbookSummary_id ] && cat ReliabilityWorkbookSummary_id | tr -d '\"')
 tab_of_Summary=$(cat <<EOS
     ,{
       "type": 12,
@@ -174,7 +237,7 @@ tab_of_Summary=$(cat <<EOS
 EOS
 )
 escaped_replacement_text=$(printf '%s\n' "$tab_of_Summary" | sed 's:[\/&]:\\&:g;$!s/$/\\/')
-sed -i "s/\${tab_of_Summary}/$escaped_replacement_text/g" workbook.tpl.json
+sed -i "s/\${tab_of_Summary}/$escaped_replacement_text/g" workbook.json
 
 
 link_of_Advisor=$(cat <<EOS
@@ -189,9 +252,9 @@ link_of_Advisor=$(cat <<EOS
 EOS
 )
 escaped_replacement_text=$(printf '%s\n' "$link_of_Advisor" | sed 's:[\/&]:\\&:g;$!s/$/\\/')
-sed -i "s/\${link_of_Advisor}/$escaped_replacement_text/g" workbook.tpl.json
+sed -i "s/\${link_of_Advisor}/$escaped_replacement_text/g" workbook.json
 
-advisor_id=$(cat ReliabilityWorkbookAdvisor_id | tr -d '\"')
+advisor_id=$([ -f ReliabilityWorkbookAdvisor_id ] && cat ReliabilityWorkbookAdvisor_id | tr -d '\"')
 tab_of_Advisor=$(cat <<EOS
     ,{
       "type": 12,
@@ -211,7 +274,7 @@ tab_of_Advisor=$(cat <<EOS
 EOS
 )
 escaped_replacement_text=$(printf '%s\n' "$tab_of_Advisor" | sed 's:[\/&]:\\&:g;$!s/$/\\/')
-sed -i "s/\${tab_of_Advisor}/$escaped_replacement_text/g" workbook.tpl.json
+sed -i "s/\${tab_of_Advisor}/$escaped_replacement_text/g" workbook.json
 
 link_of_Export=$(cat <<EOS
           ,{
@@ -225,9 +288,9 @@ link_of_Export=$(cat <<EOS
 EOS
 )
 escaped_replacement_text=$(printf '%s\n' "$link_of_Export" | sed 's:[\/&]:\\&:g;$!s/$/\\/')
-sed -i "s/\${link_of_Export}/$escaped_replacement_text/g" workbook.tpl.json
+sed -i "s/\${link_of_Export}/$escaped_replacement_text/g" workbook.json
 
-export_id=$(cat ReliabilityWorkbookExport_id | tr -d '\"')
+export_id=$([ -f ReliabilityWorkbookExport_id ] && cat ReliabilityWorkbookExport_id | tr -d '\"')
 tab_of_Export=$(cat <<EOS
     ,{
       "type": 12,
@@ -247,8 +310,13 @@ tab_of_Export=$(cat <<EOS
 EOS
 )
 escaped_replacement_text=$(printf '%s\n' "$tab_of_Export" | sed 's:[\/&]:\\&:g;$!s/$/\\/')
-sed -i "s/\${tab_of_Export}/$escaped_replacement_text/g" workbook.tpl.json
+sed -i "s/\${tab_of_Export}/$escaped_replacement_text/g" workbook.json
 
 log "Deploy FTA - Reliability Workbook"
-az deployment group create -g $resource_group_name --template-uri $base_url/workbooks/azuredeploy.json --parameters name="FTA - Reliability Workbook" serializedData=@workbook.tpl.json
-\rm *_id
+az deployment group create -g $resource_group_name --template-uri $deployment_template_for_workbook --parameters name="FTA - Reliability Workbook" serializedData=@workbook.json -o table
+# If failed deployment command, mark the deployment as failed
+if [ $? -ne 0 ]; then
+  is_failed=1
+  log "Failed to deploy workbook"
+  exit 1
+fi
