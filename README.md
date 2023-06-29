@@ -82,8 +82,11 @@ This will deploy all *.workbook files in the current directory. This option is u
 Here is how you can do it:
 
 ```bash
-./deploy-workbook.sh -s 00000000-0000-0000-0000-000000000000 -g myResourceGroup -c -l japaneast -b .
+cd workbooks
+../scripts/deploy-workbook.sh -s 00000000-0000-0000-0000-000000000000 -g myResourceGroup -c -l japaneast -b .
 ```
+
+Note: Change to the directory where your workbooks are located. This isn't necessary if the workbooks are in the same directory as the script, as is the case if you are just downloading the script.
 
 ### Workbook
 
