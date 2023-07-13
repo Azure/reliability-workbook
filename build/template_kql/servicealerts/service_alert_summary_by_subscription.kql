@@ -2,17 +2,24 @@ resources
 | distinct subscriptionId
 | join kind=leftouter(
     resources
-    | where type == "microsoft.insights/activitylogalerts"
-    | mv-expand category = properties.condition.allOf
-    | extend category = category.equals, alertEnabled = properties.enabled
-    | where category == "ServiceHealth" and alertEnabled == "true"
-    | extend incidentType = iff(isnull(properties.condition.allOf[1]), "All", properties.condition.allOf)
-    | extend incident = iff(incidentType contains "Incident" or incidentType == "All", "true", "false")
-    | extend maintenance = iff(incidentType contains "Maintenance" or incidentType == "All", "true", "false")
-    | extend informational = iff(incidentType contains "Informational" or incidentType contains "ActionRequired" or incidentType == "All", "true", "false")    
-    | extend security = iff(incidentType contains "Security" or incidentType == "All", "true", "false")
-    | project id, name, subscriptionId, category, alertEnabled, incident, maintenance, informational, security
-    | summarize count_alertEnabled=countif(alertEnabled == "true"), count_incident=countif(incident == "true"), count_maintenance=countif(maintenance == "true"), count_informational=countif(informational == "true"), count_security=countif(security == "true") by subscriptionId) 
+    | where type =~ "microsoft.insights/activitylogalerts"
+    | mv-expand condition1 = properties.condition.allOf
+    | mv-expand condition2 = condition1.anyOf
+    | extend alertEnabled = tostring(properties.enabled)
+    | summarize set_condition1=make_set(condition1.equals), set_condition2=make_set(condition2.equals) by id, name,type,tenantId,resourceGroup,subscriptionId, alertEnabled
+    | where set_has_element(set_condition1, "ServiceHealth")
+    | extend category = "ServiceHealth"
+    | extend all = iff(set_has_element(set_condition1, "ServiceHealth") and array_length(set_condition2) == 0, true, false)
+    // Service issue
+    | extend incident = iff(all, true, iff(set_has_element(set_condition1, "Incident"), true, set_has_element(set_condition2, "Incident")))
+    // Planned maintenance
+    | extend maintenance = iff(all, true, iff(set_has_element(set_condition1, "Maintenance"), true, set_has_element(set_condition2, "Maintenance")))
+    // Health advisories
+    | extend informational = iff(all, true, iff(set_has_element(set_condition1, "Informational") or set_has_element(set_condition1, "ActionRequired"), true, set_has_element(set_condition2, "Informational") or set_has_element(set_condition2, "ActionRequired")))
+    // Security advisory
+    | extend security = iff(all, true, iff(set_has_element(set_condition1, "Security"), true, set_has_element(set_condition2, "Security")))
+    | project id, name, subscriptionId, category, tostring(alertEnabled), tostring(incident), tostring(maintenance), tostring(informational), tostring(security)
+    | summarize count_alertEnabled=countif(alertEnabled == "true"), count_incident=countif(incident == "True"), count_maintenance=countif(maintenance == "True"), count_informational=countif(informational == "True"), count_security=countif(security == "True") by subscriptionId) 
     on subscriptionId
 | project subscriptionId, alertEnabled=iff(isnotnull(count_alertEnabled), count_alertEnabled, 0), incident=iff(isnotnull(count_incident), count_incident, 0), maintenance=iff(isnotnull(count_maintenance), count_maintenance, 0), informational=iff(isnotnull(count_informational), count_informational, 0), security=iff(isnotnull(count_security), count_security, 0)
 | order by incident, maintenance, informational, security desc

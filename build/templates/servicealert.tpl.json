@@ -787,13 +787,13 @@
                           "thresholdsGrid": [
                             {
                               "operator": "==",
-                              "thresholdValue": "true",
+                              "thresholdValue": "True",
                               "representation": "success",
                               "text": "{0}{1}"
                             },
                             {
                               "operator": "==",
-                              "thresholdValue": "false",
+                              "thresholdValue": "False",
                               "representation": "2",
                               "text": "{0}{1}"
                             },
@@ -814,13 +814,13 @@
                           "thresholdsGrid": [
                             {
                               "operator": "==",
-                              "thresholdValue": "true",
+                              "thresholdValue": "True",
                               "representation": "success",
                               "text": "{0}{1}"
                             },
                             {
                               "operator": "==",
-                              "thresholdValue": "false",
+                              "thresholdValue": "False",
                               "representation": "2",
                               "text": "{0}{1}"
                             },
@@ -841,13 +841,13 @@
                           "thresholdsGrid": [
                             {
                               "operator": "==",
-                              "thresholdValue": "true",
+                              "thresholdValue": "True",
                               "representation": "success",
                               "text": "{0}{1}"
                             },
                             {
                               "operator": "==",
-                              "thresholdValue": "false",
+                              "thresholdValue": "False",
                               "representation": "2",
                               "text": "{0}{1}"
                             },
@@ -868,13 +868,13 @@
                           "thresholdsGrid": [
                             {
                               "operator": "==",
-                              "thresholdValue": "true",
+                              "thresholdValue": "True",
                               "representation": "success",
                               "text": "{0}{1}"
                             },
                             {
                               "operator": "==",
-                              "thresholdValue": "false",
+                              "thresholdValue": "False",
                               "representation": "2",
                               "text": "{0}{1}"
                             },
