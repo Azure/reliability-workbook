@@ -411,7 +411,7 @@ resources
     (Type == "microsoft.compute/virtualmachinescalesets"), "Not Applicable", 
     (Type == "microsoft.containerservice/managedclusters"), "Not Applicable",
     (Type == 'microsoft.sql/servers/databases'), "Not Applicable", 
-    (Type == 'microsoft.documentdb/databaseaccounts'), iif(properties.backupPolicy.periodicModeProperties.backupStorageRedundancy == "Geo", "Healthy", "Unhealthy"),
+    (Type == 'microsoft.documentdb/databaseaccounts'), iif(properties.backupPolicy.type!="Continuous",iif(properties.backupPolicy.periodicModeProperties.backupStorageRedundancy == "Geo", "Healthy", "Unhealthy"),"Healthy"),
     (Type == 'microsoft.dbformysql/servers'), iif(properties.storageProfile.geoRedundantBackup == "Enabled", "Healthy", "Unhealthy"),
     (Type contains "storageaccounts"), "Not Applicable",
     (Type == "microsoft.network/azurefirewalls"), "Not Applicable",
