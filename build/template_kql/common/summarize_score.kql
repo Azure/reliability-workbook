@@ -35,7 +35,7 @@ summarize
     DBPausedStateCount=dcountif(Name, State contains "paused"),
     DBGeoStorage=dcountif(Name, OSDisk == "grs"),
     DBLrsStorage=dcountif(Name, OSDisk == "lrs"),
-    Gt0DbReplica=dcountif(Name, (ReadReplica !contains "not applicable") and (ReadReplica !contains "0") and (ReadReplica !contains "undefined")),
+    Gt0DbReplica=dcountif(Name, (ReadReplica !contains "not applicable") and (ReadReplica !contains "1") and (ReadReplica !contains "undefined")),
     Lt1DbReplica=dcountif(Name, ReadReplica contains "0"),
     NotEnabledDbMultiWrite=dcountif(Name, MultipleWriteLocations contains "not enabled"),
     NADbMultiWrite=dcountif(Name, MultipleWriteLocations contains "not applicable"),
