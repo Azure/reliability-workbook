@@ -8,8 +8,10 @@ locals {
       "extend_resource" = local.kql_extend_resource
     }
   )
+  kql_azuresiterecovery_resources_protectedItem_details = templatefile("${path.module}/template_kql/azuresiterecovery/azuresiterecovery_resources_protectedItem_details.kql", {})
   workbook_azuresiterecovery_json = templatefile("${path.module}/templates/azuresiterecovery.tpl.json", {
-    "kql_azuresiterecovery_resources_details" = jsonencode(local.kql_azuresiterecovery_resources_details)
+    "kql_azuresiterecovery_resources_details"               = jsonencode(local.kql_azuresiterecovery_resources_details)
+    "kql_azuresiterecovery_resources_protectedItem_details" = jsonencode(local.kql_azuresiterecovery_resources_protectedItem_details)
   })
 }
 resource "random_uuid" "workbook_name_azuresiterecovery" {

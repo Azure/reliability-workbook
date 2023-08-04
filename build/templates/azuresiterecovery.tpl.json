@@ -1,329 +1,813 @@
 {
-    "version": "Notebook/1.0",
-    "items": [
-        {
+  "version": "Notebook/1.0",
+  "items": [
+    {
+      "type": 12,
+      "content": {
+        "version": "NotebookGroup/1.0",
+        "groupType": "editable",
+        "items": [
+          {
+            "type": 9,
+            "content": {
+              "version": "KqlParameterItem/1.0",
+              "parameters": [
+                {
+                  "id": "aa0176d8-14ff-4dc5-9ae7-b8029f565674",
+                  "version": "KqlParameterItem/1.0",
+                  "name": "Subscriptions",
+                  "label": "Subscriptions",
+                  "type": 6,
+                  "isRequired": true,
+                  "multiSelect": true,
+                  "quote": "'",
+                  "delimiter": ",",
+                  "typeSettings": {
+                    "additionalResourceOptions": [
+                      "value::all"
+                    ],
+                    "includeAll": false,
+                    "showDefault": false
+                  },
+                  "defaultValue": "value::all"
+                },
+                {
+                  "id": "91aa9ba3-ed60-4472-8dd9-1c2cb6255757",
+                  "version": "KqlParameterItem/1.0",
+                  "name": "ResourceGroup",
+                  "label": "Resource Group",
+                  "type": 2,
+                  "isRequired": true,
+                  "multiSelect": true,
+                  "quote": "'",
+                  "delimiter": ",",
+                  "query": "resources\r\n| distinct resourceGroup",
+                  "crossComponentResources": [
+                    "{Subscriptions}"
+                  ],
+                  "typeSettings": {
+                    "additionalResourceOptions": [
+                      "value::all"
+                    ],
+                    "showDefault": false
+                  },
+                  "defaultValue": "value::all",
+                  "queryType": 1,
+                  "resourceType": "microsoft.resourcegraph/resources"
+                },
+                {
+                  "id": "5a4f6d34-9f89-4ef8-b4ee-fb0580ec016d",
+                  "version": "KqlParameterItem/1.0",
+                  "name": "Environment",
+                  "type": 2,
+                  "multiSelect": true,
+                  "quote": "'",
+                  "delimiter": ",",
+                  "query": "resources\r\n| extend Environment = case(\r\ntags.Environment <> \"\", tags.Environment,\r\ntags.environment <> \"\", tags.environment,\r\ntags.Env <> \"\", tags.Env,\r\ntags.env <> \"\", tags.env,\r\ntolower(name) contains \"prod\", \"Production\",\r\ntolower(name) contains \"dev\", \"Development\",\r\ntolower(name) contains \"qa\", \"QA\",\r\ntolower(name) contains \"uat\", \"UAT\",\r\ntolower(name) contains \"sit\", \"SIT\",\r\ntolower(name) contains \"test\", \"Test\",\r\n\"Undefined\")\r\n| distinct Environment",
+                  "crossComponentResources": [
+                    "{Subscriptions}"
+                  ],
+                  "typeSettings": {
+                    "additionalResourceOptions": [
+                      "value::all"
+                    ],
+                    "showDefault": false
+                  },
+                  "defaultValue": "value::all",
+                  "queryType": 1,
+                  "resourceType": "microsoft.resourcegraph/resources"
+                },
+                {
+                  "id": "9d6afcdc-172c-4bef-8bab-dc372c5d3bb4",
+                  "version": "KqlParameterItem/1.0",
+                  "name": "TagName",
+                  "label": "Tag Name",
+                  "type": 2,
+                  "query": "Resources\r\n| where tags != '' and tags != '[]'\r\n| mvexpand tags\r\n| extend tagName = tostring(bag_keys(tags)[0])\r\n| distinct tagName\r\n| sort by tagName asc",
+                  "crossComponentResources": [
+                    "{Subscriptions}"
+                  ],
+                  "typeSettings": {
+                    "additionalResourceOptions": []
+                  },
+                  "queryType": 1,
+                  "resourceType": "microsoft.resourcegraph/resources",
+                  "value": null
+                },
+                {
+                  "id": "95781001-338b-4ed3-81dc-ce16f2a98bf0",
+                  "version": "KqlParameterItem/1.0",
+                  "name": "TagValue",
+                  "label": "Tag Value",
+                  "type": 2,
+                  "query": "Resources\r\n| mvexpand tags\r\n| extend tagName = tostring(bag_keys(tags)[0])\r\n| extend tagValue = tostring(tags[tagName])\r\n| where tags != '' and tags != '[]' and tostring(bag_keys(tags)[0]) == '{TagName}'\r\n| distinct tagValue\r\n| sort by tagValue asc",
+                  "crossComponentResources": [
+                    "{Subscriptions}"
+                  ],
+                  "typeSettings": {
+                    "additionalResourceOptions": []
+                  },
+                  "queryType": 1,
+                  "resourceType": "microsoft.resourcegraph/resources",
+                  "value": null
+                },
+                {
+                  "id": "e929bc01-08ec-45fe-bc6a-4e0267460dfa",
+                  "version": "KqlParameterItem/1.0",
+                  "name": "SLA",
+                  "label": "Show SLA",
+                  "type": 10,
+                  "description": "This will show the SLA information for the focus area",
+                  "isRequired": true,
+                  "typeSettings": {
+                    "additionalResourceOptions": [],
+                    "showDefault": false
+                  },
+                  "jsonData": "[{ \"value\": \"Yes\", \"label\": \"Yes\", \"selected\":true},\r\n {\"value\": \"No\", \"label\": \"No\"}]"
+                },
+                {
+                  "id": "9581cbc6-0f0f-42be-8ae8-6fe94de00ab8",
+                  "version": "KqlParameterItem/1.0",
+                  "name": "Help",
+                  "label": "Show Help",
+                  "type": 10,
+                  "isRequired": true,
+                  "typeSettings": {
+                    "additionalResourceOptions": []
+                  },
+                  "jsonData": "[{\"value\": \"Yes\", \"label\": \"Yes\", \"selected\":true },\r\n {\"value\": \"No\", \"label\": \"No\"}]"
+                }
+              ],
+              "style": "pills",
+              "queryType": 1,
+              "resourceType": "microsoft.resourcegraph/resources"
+            },
+            "name": "parameters - 13"
+          },
+          {
             "type": 12,
             "content": {
-            "version": "NotebookGroup/1.0",
-            "groupType": "editable",
-            "items": [
+              "version": "NotebookGroup/1.0",
+              "groupType": "editable",
+              "items": [
                 {
-                "type": 9,
-                "content": {
-                    "version": "KqlParameterItem/1.0",
-                    "parameters": [
-                    {
-                        "id": "aa0176d8-14ff-4dc5-9ae7-b8029f565674",
-                        "version": "KqlParameterItem/1.0",
-                        "name": "Subscriptions",
-                        "label": "Subscriptions",
-                        "type": 6,
-                        "isRequired": true,
-                        "multiSelect": true,
-                        "quote": "'",
-                        "delimiter": ",",
-                        "typeSettings": {
-                        "additionalResourceOptions": [
-                            "value::all"
-                        ],
-                        "includeAll": false,
-                        "showDefault": false
-                        },
-                        "defaultValue": "value::all"
-                    },
-                    {
-                        "id": "91aa9ba3-ed60-4472-8dd9-1c2cb6255757",
-                        "version": "KqlParameterItem/1.0",
-                        "name": "ResourceGroup",
-                        "label": "Resource Group",
-                        "type": 2,
-                        "isRequired": true,
-                        "multiSelect": true,
-                        "quote": "'",
-                        "delimiter": ",",
-                        "query": "resources\r\n| distinct resourceGroup",
-                        "crossComponentResources": [
-                        "{Subscriptions}"
-                        ],
-                        "typeSettings": {
-                        "additionalResourceOptions": [
-                            "value::all"
-                        ],
-                        "showDefault": false
-                        },
-                        "defaultValue": "value::all",
-                        "queryType": 1,
-                        "resourceType": "microsoft.resourcegraph/resources"
-                    },
-                    {
-                        "id": "5a4f6d34-9f89-4ef8-b4ee-fb0580ec016d",
-                        "version": "KqlParameterItem/1.0",
-                        "name": "Environment",
-                        "label": "Environment",
-                        "type": 2,
-                        "multiSelect": true,
-                        "quote": "'",
-                        "delimiter": ",",
-                        "query": "resources\r\n| extend Environment = case(\r\ntags.Environment <> \"\", tags.Environment,\r\ntags.environment <> \"\", tags.environment,\r\ntags.Env <> \"\", tags.Env,\r\ntags.env <> \"\", tags.env,\r\ntolower(name) contains \"prod\", \"Production\",\r\ntolower(name) contains \"dev\", \"Development\",\r\ntolower(name) contains \"qa\", \"QA\",\r\ntolower(name) contains \"uat\", \"UAT\",\r\ntolower(name) contains \"sit\", \"SIT\",\r\ntolower(name) contains \"test\", \"Test\",\r\n\"Undefined\")\r\n| distinct Environment",
-                        "crossComponentResources": [
-                        "{Subscriptions}"
-                        ],
-                        "typeSettings": {
-                        "additionalResourceOptions": [
-                            "value::all"
-                        ],
-                        "showDefault": false
-                        },
-                        "defaultValue": "value::all",
-                        "queryType": 1,
-                        "resourceType": "microsoft.resourcegraph/resources"
-                    },
-                    {
-                        "id": "9d6afcdc-172c-4bef-8bab-dc372c5d3bb4",
-                        "version": "KqlParameterItem/1.0",
-                        "name": "TagName",
-                        "label": "Tag Name",
-                        "type": 2,
-                        "query": "Resources\r\n| where tags != '' and tags != '[]'\r\n| mvexpand tags\r\n| extend tagName = tostring(bag_keys(tags)[0])\r\n| distinct tagName\r\n| sort by tagName asc",
-                        "crossComponentResources": [
-                        "{Subscriptions}"
-                        ],
-                        "typeSettings": {
-                        "additionalResourceOptions": []
-                        },
-                        "queryType": 1,
-                        "resourceType": "microsoft.resourcegraph/resources",
-                        "value": null
-                    },
-                    {
-                        "id": "95781001-338b-4ed3-81dc-ce16f2a98bf0",
-                        "version": "KqlParameterItem/1.0",
-                        "name": "TagValue",
-                        "label": "Tag Value",
-                        "type": 2,
-                        "query": "Resources\r\n| mvexpand tags\r\n| extend tagName = tostring(bag_keys(tags)[0])\r\n| extend tagValue = tostring(tags[tagName])\r\n| where tags != '' and tags != '[]' and tostring(bag_keys(tags)[0]) == '{TagName}'\r\n| distinct tagValue\r\n| sort by tagValue asc",
-                        "crossComponentResources": [
-                        "{Subscriptions}"
-                        ],
-                        "typeSettings": {
-                        "additionalResourceOptions": []
-                        },
-                        "queryType": 1,
-                        "resourceType": "microsoft.resourcegraph/resources",
-                        "value": null
-                    },
-                    {
-                        "id": "e929bc01-08ec-45fe-bc6a-4e0267460dfa",
-                        "version": "KqlParameterItem/1.0",
-                        "name": "SLA",
-                        "label": "Show SLA",
-                        "type": 10,
-                        "description": "This will show the SLA information for the focus area",
-                        "isRequired": true,
-                        "typeSettings": {
-                        "additionalResourceOptions": [],
-                        "showDefault": false
-                        },
-                        "jsonData": "[{ \"value\": \"Yes\", \"label\": \"Yes\", \"selected\":true},\r\n {\"value\": \"No\", \"label\": \"No\"}]"
-                    },
-                    {
-                        "id": "9581cbc6-0f0f-42be-8ae8-6fe94de00ab8",
-                        "version": "KqlParameterItem/1.0",
-                        "name": "Help",
-                        "label": "Show Help",
-                        "type": 10,
-                        "isRequired": true,
-                        "typeSettings": {
-                        "additionalResourceOptions": []
-                        },
-                        "jsonData": "[{\"value\": \"Yes\", \"label\": \"Yes\", \"selected\":true },\r\n {\"value\": \"No\", \"label\": \"No\"}]"
-                    }
+                  "type": 1,
+                  "content": {
+                    "json": "[SLA for Azure Site Recovery](https://azure.microsoft.com/support/legal/sla/site-recovery/)\r\n* For each Protected Instance configured for On-Premises-to-On-Premises Failover, we guarantee at least 99.9% availability of the Site Recovery service. Availability is calculated over a monthly billing cycle.\r\n* For each Protected Instance configured for On-Premises-to-Azure planned and unplanned Failover, we guarantee a two-hour Recovery Time Objective.\r\n* For each Protected Instance configured for Azure-to-Azure Failover, we guarantee a two-hour Recovery Time Objective.\r\n\r\n> SLA accurate at time of release. Latest information is available [here](https://azure.microsoft.com/support/legal/sla/site-recovery/)",
+                    "style": "upsell"
+                  },
+                  "conditionalVisibility": {
+                    "parameterName": "SLA",
+                    "comparison": "isEqualTo",
+                    "value": "Yes"
+                  },
+                  "name": "Backup SLA"
+                },
+                {
+                  "type": 1,
+                  "content": {
+                    "json": "> Azure Site Recovery can help your business to keep doing business during major IT outages. Azure Site Recovery offers ease of deployment, cost effectiveness, and dependability. <br>Deploy replication, failover, and recovery processes through Site Recovery to help keep your applications running during planned and unplanned outages.\r\n\r\n* Where configured, Azure Site Recovery protected Virtual Machines will be listed in a table. \r\n* Ensure that each of the following parameters are selected from the drop down lists:\r\n\t* Subscription\r\n\t* Vault\r\n\t* Resource Group",
+                    "style": "info"
+                  },
+                  "conditionalVisibility": {
+                    "parameterName": "Help",
+                    "comparison": "isEqualTo",
+                    "value": "Yes"
+                  },
+                  "name": "Backup Help"
+                },
+                {
+                  "type": 3,
+                  "content": {
+                    "version": "KqlItem/1.0",
+                    "query": ${kql_azuresiterecovery_resources_details},
+                    "size": 0,
+                    "title": "List of Azure Site Recovery",
+                    "exportedParameters": [
+                      {
+                        "fieldName": "Name",
+                        "parameterName": "SiteRecoveryResourceId",
+                        "parameterType": 5,
+                        "defaultValue": ""
+                      }
                     ],
-                    "style": "pills",
-                    "queryType": 0,
-                    "resourceType": "microsoft.operationalinsights/workspaces"
-                },
-                "name": "parameters - 13"
-                },
-                {
-                    "type": 12,
-                    "content": {
-                      "version": "NotebookGroup/1.0",
-                      "groupType": "editable",
-                      "items": [
+                    "showExportToExcel": true,
+                    "queryType": 1,
+                    "resourceType": "microsoft.resourcegraph/resources",
+                    "crossComponentResources": [
+                      "{Subscriptions}"
+                    ],
+                    "gridSettings": {
+                      "formatters": [
                         {
-                          "type": 1,
-                          "content": {
-                            "json": "[SLA for Azure Site Recovery](https://azure.microsoft.com/support/legal/sla/site-recovery/)\r\n* For each Protected Instance configured for On-Premises-to-On-Premises Failover, we guarantee at least 99.9% availability of the Site Recovery service. Availability is calculated over a monthly billing cycle.\r\n* For each Protected Instance configured for On-Premises-to-Azure planned and unplanned Failover, we guarantee a two-hour Recovery Time Objective.\r\n* For each Protected Instance configured for Azure-to-Azure Failover, we guarantee a two-hour Recovery Time Objective.\r\n\r\n> SLA accurate at time of release. Latest information is available [here](https://azure.microsoft.com/support/legal/sla/site-recovery/)",
-                            "style": "upsell"
-                          },
-                          "conditionalVisibility": {
-                            "parameterName": "SLA",
-                            "comparison": "isEqualTo",
-                            "value": "Yes"
-                          },
-                          "name": "Backup SLA"
+                          "columnMatch": "$gen_group",
+                          "formatter": 13,
+                          "formatOptions": {
+                            "linkTarget": "Resource",
+                            "linkIsContextBlade": false,
+                            "showIcon": true
+                          }
                         },
                         {
-                          "type": 1,
-                          "content": {
-                            "json": "> Azure Site Recovery can help your business to keep doing business during major IT outages. Azure Site Recovery offers ease of deployment, cost effectiveness, and dependability. <br>Deploy replication, failover, and recovery processes through Site Recovery to help keep your applications running during planned and unplanned outages.\r\n\r\n* Where configured, Azure Site Recovery protected Virtual Machines will be listed in a table. \r\n* Ensure that each of the following parameters are selected from the drop down lists:\r\n\t* Subscription\r\n\t* Vault\r\n\t* Resource Group",
-                            "style": "info"
-                          },
-                          "conditionalVisibility": {
-                            "parameterName": "Help",
-                            "comparison": "isEqualTo",
-                            "value": "Yes"
-                          },
-                          "name": "Backup Help"
+                          "columnMatch": "Subscription",
+                          "formatter": 13,
+                          "formatOptions": {
+                            "linkTarget": "Resource",
+                            "linkIsContextBlade": false,
+                            "showIcon": true
+                          }
                         },
                         {
-                          "type": 3,
-                          "content": {
-                            "version": "KqlItem/1.0",
-                            "query": ${kql_azuresiterecovery_resources_details},
-                            "size": 0,
-                            "showExportToExcel": true,
-                            "queryType": 1,
-                            "resourceType": "microsoft.resourcegraph/resources",
-                            "crossComponentResources": [
-                              "{Subscriptions}"
-                            ],
-                            "gridSettings": {
-                              "formatters": [
-                                {
-                                  "columnMatch": "$gen_group",
-                                  "formatter": 13,
-                                  "formatOptions": {
-                                    "linkTarget": "Resource",
-                                    "showIcon": true
-                                  }
-                                },
-                                {
-                                  "columnMatch": "Type",
-                                  "formatter": 5
-                                },
-                                {
-                                  "columnMatch": "Name",
-                                  "formatter": 5
-                                },
-                                {
-                                  "columnMatch": "Kind",
-                                  "formatter": 5
-                                },
-                                {
-                                  "columnMatch": "SubscriptionId",
-                                  "formatter": 5
-                                },
-                                {
-                                  "columnMatch": "State",
-                                  "formatter": 18,
-                                  "formatOptions": {
-                                    "thresholdsOptions": "icons",
-                                    "thresholdsGrid": [
-                                      {
-                                        "operator": "==",
-                                        "thresholdValue": "succeeded",
-                                        "representation": "success",
-                                        "text": "{0}{1}"
-                                      },
-                                      {
-                                        "operator": "!=",
-                                        "thresholdValue": "succeeded",
-                                        "representation": "2",
-                                        "text": "{0}{1}"
-                                      },
-                                      {
-                                        "operator": "Default",
-                                        "thresholdValue": null,
-                                        "representation": "unknown",
-                                        "text": "{0}{1}"
-                                      }
-                                    ]
-                                  }
-                                },
-                                {
-                                  "columnMatch": "Location",
-                                  "formatter": 17
-                                },
-                                {
-                                  "columnMatch": "Zones",
-                                  "formatter": 5
-                                },
-                                {
-                                  "columnMatch": "AvailabilityZone",
-                                  "formatter": 5
-                                },
-                                {
-                                  "columnMatch": "AvailabilitySet",
-                                  "formatter": 5
-                                },
-                                {
-                                  "columnMatch": "Capacity",
-                                  "formatter": 5
-                                },
-                                {
-                                  "columnMatch": "FaultDomain",
-                                  "formatter": 5
-                                },
-                                {
-                                  "columnMatch": "OSDisk",
-                                  "formatter": 5
-                                },
-                                {
-                                  "columnMatch": "ReadReplica",
-                                  "formatter": 5
-                                },
-                                {
-                                  "columnMatch": "AutomaticFailover",
-                                  "formatter": 5
-                                },
-                                {
-                                  "columnMatch": "MultipleWriteLocations",
-                                  "formatter": 5
-                                },
-                                {
-                                  "columnMatch": "StorageAutogrow",
-                                  "formatter": 5
-                                },
-                                {
-                                  "columnMatch": "ReplicationRole",
-                                  "formatter": 5
-                                },
-                                {
-                                  "columnMatch": "Backup",
-                                  "formatter": 5
-                                },
-                                {
-                                  "columnMatch": "SubscriptionName",
-                                  "formatter": 5
-                                }
-                              ],
-                              "rowLimit": 10000,
-                              "hierarchySettings": {
-                                "treeType": 1,
-                                "groupBy": [
-                                  "SubscriptionId"
-                                ],
-                                "finalBy": "Name"
+                          "columnMatch": "Name",
+                          "formatter": 5
+                        },
+                        {
+                          "columnMatch": "Type",
+                          "formatter": 5
+                        },
+                        {
+                          "columnMatch": "SkuName",
+                          "formatter": 5
+                        },
+                        {
+                          "columnMatch": "Kind",
+                          "formatter": 5
+                        },
+                        {
+                          "columnMatch": "SubscriptionId",
+                          "formatter": 5
+                        },
+                        {
+                          "columnMatch": "Group",
+                          "formatter": 1
+                        },
+                        {
+                          "columnMatch": "Zones",
+                          "formatter": 5
+                        },
+                        {
+                          "columnMatch": "AvailabilityZone",
+                          "formatter": 5
+                        },
+                        {
+                          "columnMatch": "AvailabilitySet",
+                          "formatter": 5
+                        },
+                        {
+                          "columnMatch": "Capacity",
+                          "formatter": 5
+                        },
+                        {
+                          "columnMatch": "FaultDomain",
+                          "formatter": 5
+                        },
+                        {
+                          "columnMatch": "OSDisk",
+                          "formatter": 5
+                        },
+                        {
+                          "columnMatch": "ReadReplica",
+                          "formatter": 5
+                        },
+                        {
+                          "columnMatch": "AutomaticFailover",
+                          "formatter": 5
+                        },
+                        {
+                          "columnMatch": "MultipleWriteLocations",
+                          "formatter": 5
+                        },
+                        {
+                          "columnMatch": "StorageAutogrow",
+                          "formatter": 5
+                        },
+                        {
+                          "columnMatch": "ReplicationRole",
+                          "formatter": 5
+                        },
+                        {
+                          "columnMatch": "Backup",
+                          "formatter": 5
+                        },
+                        {
+                          "columnMatch": "asrUnprotectedItemCounts",
+                          "formatter": 18,
+                          "formatOptions": {
+                            "thresholdsOptions": "icons",
+                            "thresholdsGrid": [
+                              {
+                                "operator": ">=",
+                                "thresholdValue": "1",
+                                "representation": "3",
+                                "text": "{0}{1}"
                               },
-                              "labelSettings": [
+                              {
+                                "operator": "Default",
+                                "thresholdValue": null,
+                                "representation": "success",
+                                "text": "{0}{1}"
+                              }
+                            ],
+                            "compositeBarSettings": {
+                              "labelText": "",
+                              "columnSettings": [
                                 {
-                                  "columnId": "SubscriptionId",
-                                  "label": "Subscription"
+                                  "columnName": "asrFailoverUnHealthyItemCounts",
+                                  "color": "blue"
+                                },
+                                {
+                                  "columnName": "asrRelicationUnHealthyItemCounts",
+                                  "color": "greenDarkDark"
                                 }
                               ]
                             }
-                          },
-                          "name": "kql_azuresiterecovery_resources_details"
+                          }
+                        },
+                        {
+                          "columnMatch": "asrRelicationUnHealthyItemCounts",
+                          "formatter": 18,
+                          "formatOptions": {
+                            "thresholdsOptions": "icons",
+                            "thresholdsGrid": [
+                              {
+                                "operator": ">=",
+                                "thresholdValue": "1",
+                                "representation": "3",
+                                "text": "{0}{1}"
+                              },
+                              {
+                                "operator": "Default",
+                                "thresholdValue": null,
+                                "representation": "success",
+                                "text": "{0}{1}"
+                              }
+                            ]
+                          }
+                        },
+                        {
+                          "columnMatch": "asrFailoverUnHealthyItemCounts",
+                          "formatter": 18,
+                          "formatOptions": {
+                            "thresholdsOptions": "icons",
+                            "thresholdsGrid": [
+                              {
+                                "operator": ">=",
+                                "thresholdValue": "1",
+                                "representation": "3",
+                                "text": "{0}{1}"
+                              },
+                              {
+                                "operator": "Default",
+                                "thresholdValue": null,
+                                "representation": "success",
+                                "text": "{0}{1}"
+                              }
+                            ]
+                          }
+                        },
+                        {
+                          "columnMatch": "asrIsReplicationAgentUpdateRequiredItemCounts",
+                          "formatter": 18,
+                          "formatOptions": {
+                            "thresholdsOptions": "icons",
+                            "thresholdsGrid": [
+                              {
+                                "operator": ">=",
+                                "thresholdValue": "1",
+                                "representation": "3",
+                                "text": "{0}{1}"
+                              },
+                              {
+                                "operator": "Default",
+                                "thresholdValue": null,
+                                "representation": "success",
+                                "text": "{0}{1}"
+                              }
+                            ]
+                          }
+                        }
+                      ],
+                      "rowLimit": 10000,
+                      "hierarchySettings": {
+                        "treeType": 1,
+                        "groupBy": [
+                          "SubscriptionId"
+                        ],
+                        "expandTopLevel": true,
+                        "finalBy": "Name"
+                      },
+                      "labelSettings": [
+                        {
+                          "columnId": "SubscriptionId",
+                          "label": "Subscription"
+                        },
+                        {
+                          "columnId": "asrRrotectedTotalItemCounts",
+                          "label": "Protected Items"
+                        },
+                        {
+                          "columnId": "asrUnprotectedItemCounts",
+                          "label": "Unprotected Status"
+                        },
+                        {
+                          "columnId": "asrRelicationUnHealthyItemCounts",
+                          "label": "Unhealthy Replication"
+                        },
+                        {
+                          "columnId": "asrFailoverUnHealthyItemCounts",
+                          "label": "Unhealthy Failover"
+                        },
+                        {
+                          "columnId": "asrIsReplicationAgentUpdateRequiredItemCounts",
+                          "label": "Is needed Agent Update"
                         }
                       ]
                     },
-                    "name": "Backup"
+                    "sortBy": []
+                  },
+                  "name": "kql_azuresiterecovery_resources_details"
+                },
+                {
+                  "type": 3,
+                  "content": {
+                    "version": "KqlItem/1.0",
+                    "query": ${kql_azuresiterecovery_resources_protectedItem_details},
+                    "size": 0,
+                    "title": "List of protected items (Please select Site Recovery resource above the pane)",
+                    "queryType": 1,
+                    "resourceType": "microsoft.resourcegraph/resources",
+                    "crossComponentResources": [
+                      "{Subscriptions}"
+                    ],
+                    "gridSettings": {
+                      "formatters": [
+                        {
+                          "columnMatch": "vmId",
+                          "formatter": 13,
+                          "formatOptions": {
+                            "linkTarget": "Resource",
+                            "showIcon": true,
+                            "customColumnWidthSetting": "26.4286ch"
+                          }
+                        },
+                        {
+                          "columnMatch": "realVmId",
+                          "formatter": 18,
+                          "formatOptions": {
+                            "thresholdsOptions": "icons",
+                            "thresholdsGrid": [
+                              {
+                                "operator": "is Empty",
+                                "representation": "3",
+                                "text": "VM not found"
+                              },
+                              {
+                                "operator": "Default",
+                                "thresholdValue": null,
+                                "representation": "success",
+                                "text": ""
+                              }
+                            ],
+                            "customColumnWidthSetting": "16.5714ch"
+                          }
+                        },
+                        {
+                          "columnMatch": "currentVmLocation",
+                          "formatter": 17,
+                          "formatOptions": {
+                            "customColumnWidthSetting": "110px"
+                          }
+                        },
+                        {
+                          "columnMatch": "replicationHealth",
+                          "formatter": 18,
+                          "formatOptions": {
+                            "thresholdsOptions": "icons",
+                            "thresholdsGrid": [
+                              {
+                                "operator": "==",
+                                "thresholdValue": "Critical",
+                                "representation": "4",
+                                "text": "{0}{1}"
+                              },
+                              {
+                                "operator": "==",
+                                "thresholdValue": "Error",
+                                "representation": "3",
+                                "text": "{0}{1}"
+                              },
+                              {
+                                "operator": "==",
+                                "thresholdValue": "Warning",
+                                "representation": "2",
+                                "text": "{0}{1}"
+                              },
+                              {
+                                "operator": "Default",
+                                "thresholdValue": null,
+                                "representation": "success",
+                                "text": "{0}{1}"
+                              }
+                            ]
+                          }
+                        },
+                        {
+                          "columnMatch": "failoverHealth",
+                          "formatter": 18,
+                          "formatOptions": {
+                            "thresholdsOptions": "icons",
+                            "thresholdsGrid": [
+                              {
+                                "operator": "==",
+                                "thresholdValue": "Error",
+                                "representation": "3",
+                                "text": "{0}{1}"
+                              },
+                              {
+                                "operator": "==",
+                                "thresholdValue": "Critical",
+                                "representation": "4",
+                                "text": "{0}{1}"
+                              },
+                              {
+                                "operator": "==",
+                                "thresholdValue": "Warning",
+                                "representation": "2",
+                                "text": "{0}{1}"
+                              },
+                              {
+                                "operator": "Default",
+                                "thresholdValue": null,
+                                "representation": "success",
+                                "text": "{0}{1}"
+                              }
+                            ]
+                          }
+                        },
+                        {
+                          "columnMatch": "protectionStateDescription",
+                          "formatter": 18,
+                          "formatOptions": {
+                            "thresholdsOptions": "icons",
+                            "thresholdsGrid": [
+                              {
+                                "operator": "!=",
+                                "thresholdValue": "Protected",
+                                "representation": "2",
+                                "text": "{0}{1}"
+                              },
+                              {
+                                "operator": "Default",
+                                "thresholdValue": null,
+                                "representation": "success",
+                                "text": "{0}{1}"
+                              }
+                            ]
+                          }
+                        },
+                        {
+                          "columnMatch": "testFailoverState",
+                          "formatter": 18,
+                          "formatOptions": {
+                            "thresholdsOptions": "icons",
+                            "thresholdsGrid": [
+                              {
+                                "operator": "!=",
+                                "thresholdValue": "MarkedForDeletion",
+                                "representation": "2",
+                                "text": "{0}{1}"
+                              },
+                              {
+                                "operator": "Default",
+                                "thresholdValue": null,
+                                "representation": "success",
+                                "text": "{0}{1}"
+                              }
+                            ]
+                          }
+                        },
+                        {
+                          "columnMatch": "activeLocation",
+                          "formatter": 5
+                        },
+                        {
+                          "columnMatch": "primaryFabricLocation",
+                          "formatter": 5
+                        },
+                        {
+                          "columnMatch": "recoveryFabricLocation",
+                          "formatter": 5
+                        },
+                        {
+                          "columnMatch": "initialPrimaryFabricLocation",
+                          "formatter": 5
+                        },
+                        {
+                          "columnMatch": "initialRecoveryFabricLocation",
+                          "formatter": 5
+                        },
+                        {
+                          "columnMatch": "lastHeartbeat",
+                          "formatter": 6,
+                          "dateFormat": {
+                            "showUtcTime": null,
+                            "formatName": "shortDateTimePattern"
+                          }
+                        },
+                        {
+                          "columnMatch": "rpoInSeconds",
+                          "formatter": 18,
+                          "formatOptions": {
+                            "thresholdsOptions": "icons",
+                            "thresholdsGrid": [
+                              {
+                                "operator": ">=",
+                                "thresholdValue": "1800",
+                                "representation": "2",
+                                "text": "{0}{1}"
+                              },
+                              {
+                                "operator": "is Empty",
+                                "representation": "unknown",
+                                "text": "{0}{1}"
+                              },
+                              {
+                                "operator": "Default",
+                                "thresholdValue": null,
+                                "representation": "success",
+                                "text": "{0}{1}"
+                              }
+                            ]
+                          },
+                          "numberFormat": {
+                            "unit": 24,
+                            "options": {
+                              "style": "decimal",
+                              "maximumFractionDigits": 1
+                            }
+                          }
+                        },
+                        {
+                          "columnMatch": "diffNowAndlastSuccessfulTestFailoverTime",
+                          "formatter": 18,
+                          "formatOptions": {
+                            "thresholdsOptions": "icons",
+                            "thresholdsGrid": [
+                              {
+                                "operator": "is Empty",
+                                "thresholdValue": "-1",
+                                "representation": "2",
+                                "text": "Test failover has not been performed"
+                              },
+                              {
+                                "operator": ">",
+                                "thresholdValue": "180",
+                                "representation": "2",
+                                "text": "{0} {1}"
+                              },
+                              {
+                                "operator": "<=",
+                                "thresholdValue": "180",
+                                "representation": "success",
+                                "text": "{0} {1}"
+                              },
+                              {
+                                "operator": "Default",
+                                "thresholdValue": null,
+                                "representation": "unknown",
+                                "text": "{0}{1}"
+                              }
+                            ]
+                          },
+                          "numberFormat": {
+                            "unit": 27,
+                            "options": {
+                              "style": "decimal"
+                            }
+                          },
+                          "dateFormat": {
+                            "showUtcTime": null,
+                            "formatName": "shortDateTimePattern"
+                          }
+                        },
+                        {
+                          "columnMatch": "isReplicationAgentUpdateRequired",
+                          "formatter": 18,
+                          "formatOptions": {
+                            "thresholdsOptions": "icons",
+                            "thresholdsGrid": [
+                              {
+                                "operator": "==",
+                                "thresholdValue": "true",
+                                "representation": "4",
+                                "text": "{0}{1}"
+                              },
+                              {
+                                "operator": "Default",
+                                "thresholdValue": null,
+                                "representation": "success",
+                                "text": "{0}{1}"
+                              }
+                            ]
+                          }
+                        },
+                        {
+                          "columnMatch": "vmLocation",
+                          "formatter": 17,
+                          "formatOptions": {
+                            "customColumnWidthSetting": "108px"
+                          }
+                        }
+                      ],
+                      "sortBy": [
+                        {
+                          "itemKey": "$gen_link_vmId_0",
+                          "sortOrder": 1
+                        }
+                      ],
+                      "labelSettings": [
+                        {
+                          "columnId": "vmId",
+                          "label": "Target VM"
+                        },
+                        {
+                          "columnId": "realVmId",
+                          "label": "VM existence"
+                        },
+                        {
+                          "columnId": "currentVmLocation",
+                          "label": "VM location"
+                        },
+                        {
+                          "columnId": "statusOfFailoverorFailback",
+                          "label": "Status of Failover"
+                        },
+                        {
+                          "columnId": "replicationHealth",
+                          "label": "Replication Health"
+                        },
+                        {
+                          "columnId": "failoverHealth",
+                          "label": "Failover Health"
+                        },
+                        {
+                          "columnId": "protectionStateDescription",
+                          "label": "Protection status"
+                        },
+                        {
+                          "columnId": "testFailoverState",
+                          "label": "Test failover status"
+                        },
+                        {
+                          "columnId": "initialPrimaryFabricLocation",
+                          "label": "Primary location"
+                        },
+                        {
+                          "columnId": "initialRecoveryFabricLocation",
+                          "label": "Recovery location"
+                        },
+                        {
+                          "columnId": "lastHeartbeat",
+                          "label": "Last heartbeat"
+                        },
+                        {
+                          "columnId": "agentVersion",
+                          "label": "Agent version"
+                        },
+                        {
+                          "columnId": "rpoInSeconds",
+                          "label": "RPO"
+                        },
+                        {
+                          "columnId": "diffNowAndlastSuccessfulTestFailoverTime",
+                          "label": "Failover elapsed days"
+                        },
+                        {
+                          "columnId": "isReplicationAgentUpdateRequired",
+                          "label": "Agent update required"
+                        }
+                      ]
+                    },
+                    "sortBy": [
+                      {
+                        "itemKey": "$gen_link_vmId_0",
+                        "sortOrder": 1
+                      }
+                    ]
+                  },
+                  "name": "kql_azuresiterecovery_resources_protectedItem_details"
                 }
-            ]
+              ]
             },
-            "name": "summary group"
-        }
-    ]
+            "name": "Backup"
+          }
+        ]
+      },
+      "name": "summary group"
+    }
+  ],
+  "fallbackResourceIds": [
+    "Azure Monitor"
+  ],
+  "$schema": "https://github.com/Microsoft/Application-Insights-Workbooks/blob/master/schema/workbook.json"
 }

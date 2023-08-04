@@ -398,10 +398,25 @@ resources
     properties
 | join kind = leftouter (
     recoveryservicesresources
-    | where name startswith "VM;"
-    | project Name = tolower(tostring(properties.dataSourceInfo.resourceID)), Backup = tostring(properties.protectionStatus)
+    | extend vmId = case(
+        name startswith "VM;", tolower(tostring(properties.dataSourceInfo.resourceID)),
+        type == "microsoft.recoveryservices/vaults/replicationfabrics/replicationprotectioncontainers/replicationprotecteditems", tolower(tostring(properties.providerSpecificDetails.dataSourceInfo.resourceId)),
+        ''
     )
-    on Name
+    | extend asrId = iff(type == "microsoft.recoveryservices/vaults/replicationfabrics/replicationprotectioncontainers/replicationprotecteditems", tolower(tostring(strcat_array(array_slice(split(properties.recoveryFabricId, '/'), 0, 8), '/'))), '')
+    | extend resourceId = case(
+        name startswith "VM;", vmId,
+        type == "microsoft.recoveryservices/vaults/replicationfabrics/replicationprotectioncontainers/replicationprotecteditems", asrId,
+        ''
+    )
+    | extend Backup = tostring(properties.protectionStatus)
+    | extend replicationHealth = properties.replicationHealth
+    | extend failoverHealth = properties.failoverHealth
+    | extend protectionStateDescription = properties.protectionStateDescription
+    | extend isReplicationAgentUpdateRequired = properties.providerSpecificDetails.isReplicationAgentUpdateRequired
+    | project resourceId, vmId, asrId, Backup, replicationHealth, failoverHealth, protectionStateDescription, isReplicationAgentUpdateRequired
+  )
+  on $left.Name == $right.resourceId
 | extend Backup = case(
     Backup == "Healthy" or Backup == "Unhealthy", Backup,
     "Unknown")
