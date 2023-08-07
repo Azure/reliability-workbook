@@ -433,7 +433,7 @@
                     "version": "KqlItem/1.0",
                     "query": ${kql_azuresiterecovery_resources_protectedItem_details},
                     "size": 0,
-                    "title": "List of protected items (Please select Site Recovery resource above the pane)",
+                    "title": "List of protected items (Please select the Site Recovery resource row in the above pane)",
                     "queryType": 1,
                     "resourceType": "microsoft.resourcegraph/resources",
                     "crossComponentResources": [
