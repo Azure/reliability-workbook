@@ -602,6 +602,35 @@
                   "{Subscriptions}"
                 ],
                 "gridSettings": {
+                  "formatters": [
+                    {
+                      "columnMatch": "ResourceTotal",
+                      "formatter": 22,
+                      "formatOptions": {
+                        "compositeBarSettings": {
+                          "labelText": "",
+                          "columnSettings": [
+                            {
+                              "columnName": "BasicSku",
+                              "color": "blue"
+                            },
+                            {
+                              "columnName": "NotSucceeded",
+                              "color": "pink"
+                            },
+                            {
+                              "columnName": "NoAVZone",
+                              "color": "orange"
+                            },
+                            {
+                              "columnName": "AVZonewithLessThan3",
+                              "color": "grayBlue"
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  ],
                   "rowLimit": 10000,
                   "labelSettings": [
                     {
@@ -614,11 +643,15 @@
                     },
                     {
                       "columnId": "NotSucceeded",
-                      "label": "IP Not Succeeded"
+                      "label": "Failed"
                     },
                     {
                       "columnId": "NoAVZone",
                       "label": "No Availability Zone"
+                    },
+                    {
+                      "columnId": "AVZonewithLessThan3",
+                      "label": "No zone redundant"
                     }
                   ]
                 }
