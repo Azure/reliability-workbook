@@ -187,6 +187,14 @@
                       "linkLabel": "Redis",
                       "subTarget": "Redis",
                       "style": "link"
+                    },
+                    {
+                      "id": "fe5d57cb-c0e8-4661-b932-953cdb6e5e50",
+                      "cellValue": "selectedTab",
+                      "linkTarget": "parameter",
+                      "linkLabel": "PostgreSQL - Flexible Server",
+                      "subTarget": "PostgreSQL - Flexible Server",
+                      "style": "link"
                     }
                   ]
                 },
@@ -2607,7 +2615,7 @@
                     {
                       "type": 1,
                       "content": {
-                    "json": "[Redis best practices](https://learn.microsoft.com/azure/architecture/framework/services/data/azure-cache-redis/reliability)\r\n\r\n* It is recommended to choose premium or enterprise tiers for better HA capability\r\n* Basic tier is not covered by SLA and hence should be avoided for production deployments.\r\n* It is recommended to avoid SKUs having shared CPUs for better resiliency & performance, SKU details can be referred in [docs](https://learn.microsoft.com/azure/azure-cache-for-redis/cache-planning-faq#azure-cache-for-redis-performance)\r\n* Enable Availability Zone if the region supports Availability Zones\r\n* Geo replication is preferred for DR across regions (active geo replication in case of enterprise tier). In this case replicas greater than 1 is not supported.\r\n\r\n> Azure generally recommends to leverage [Availability Zone](https://learn.microsoft.com/azure/availability-zones/az-overview) for better High Availability within the region by leveraging multiple zones inside region. By architecting your solutions to use replicated services in zones, you can protect your apps and data from the loss of a datacenter. \r\n\r\n> At this point, not all Azure regions and services support Availability Zones, the support matrix can be found [here](https://learn.microsoft.com/azure/availability-zones/az-region). Whenerver there is a Zonal recommendation for a particular service from this workbook, please note that that is applicable only for the regions supporting Availability Zones from the earlier list.\r\n",
+                        "json": "[Redis best practices](https://learn.microsoft.com/azure/architecture/framework/services/data/azure-cache-redis/reliability)\r\n\r\n* It is recommended to choose premium or enterprise tiers for better HA capability\r\n* Basic tier is not covered by SLA and hence should be avoided for production deployments.\r\n* It is recommended to avoid SKUs having shared CPUs for better resiliency & performance, SKU details can be referred in [docs](https://learn.microsoft.com/azure/azure-cache-for-redis/cache-planning-faq#azure-cache-for-redis-performance)\r\n* Enable Availability Zone if the region supports Availability Zones\r\n* Geo replication is preferred for DR across regions (active geo replication in case of enterprise tier). In this case replicas greater than 1 is not supported.\r\n\r\n> Azure generally recommends to leverage [Availability Zone](https://learn.microsoft.com/azure/availability-zones/az-overview) for better High Availability within the region by leveraging multiple zones inside region. By architecting your solutions to use replicated services in zones, you can protect your apps and data from the loss of a datacenter. \r\n\r\n> At this point, not all Azure regions and services support Availability Zones, the support matrix can be found [here](https://learn.microsoft.com/azure/availability-zones/az-region). Whenerver there is a Zonal recommendation for a particular service from this workbook, please note that that is applicable only for the regions supporting Availability Zones from the earlier list.\r\n",
                         "style": "info"
                       },
                       "conditionalVisibility": {
@@ -2629,257 +2637,257 @@
                         "resourceType": "microsoft.resourcegraph/resources",
                         "crossComponentResources": [
                           "{Subscriptions}"
-                          ],
-                          "gridSettings": {
-                            "formatters": [
-                              {
-                                "columnMatch": "$gen_group",
-                                "formatter": 13,
-                                "formatOptions": {
-                                  "linkTarget": "Resource",
-                                  "showIcon": true
-                                }
-                              },
-                              {
-                                "columnMatch": "Subscription",
-                                "formatter": 13,
-                                "formatOptions": {
-                                  "linkTarget": "Resource",
-                                  "showIcon": true
-                                }
-                              },
-                              {
-                                "columnMatch": "Type",
-                                "formatter": 5
-                              },
-                              {
-                                "columnMatch": "SkuName",
-                                "formatter": 18,
-                                "formatOptions": {
-                                  "thresholdsOptions": "icons",
-                                  "thresholdsGrid": [
-                                    {
-                                      "operator": "contains",
-                                      "thresholdValue": "premium",
-                                      "representation": "success",
-                                      "text": "{0}{1}"
-                                    },
-                                    {
-                                      "operator": "contains",
-                                      "thresholdValue": "enterprise",
-                                      "representation": "success",
-                                      "text": "{0}{1}"
-                                    },
-                                    {
-                                      "operator": "contains",
-                                      "thresholdValue": "basic",
-                                      "representation": "2",
-                                      "text": "{0}{1}"
-                                    },
-                                    {
-                                      "operator": "contains",
-                                      "thresholdValue": "standard",
-                                      "representation": "success",
-                                      "text": "{0}{1}"
-                                    },
-                                    {
-                                      "operator": "Default",
-                                      "thresholdValue": null,
-                                      "representation": "unknown",
-                                      "text": "{0}{1}"
-                                    }
-                                  ]
-                                }
-                              },
-                              {
-                                "columnMatch": "Kind",
-                                "formatter": 5
-                              },
-                              {
-                                "columnMatch": "SubscriptionId",
-                                "formatter": 5
-                              },
-                              {
-                                "columnMatch": "Name",
-                                "formatter": 5
-                              },
-                              {
-                                "columnMatch": "State",
-                                "formatter": 18,
-                                "formatOptions": {
-                                  "thresholdsOptions": "icons",
-                                  "thresholdsGrid": [
-                                    {
-                                      "operator": "==",
-                                      "thresholdValue": "succeeded",
-                                      "representation": "success",
-                                      "text": "{0}{1}"
-                                    },
-                                    {
-                                      "operator": "Default",
-                                      "thresholdValue": null,
-                                      "representation": "warning",
-                                      "text": "{0}{1}"
-                                    }
-                                  ]
-                                }
-                              },
-                              {
+                        ],
+                        "gridSettings": {
+                          "formatters": [
+                            {
+                              "columnMatch": "$gen_group",
+                              "formatter": 13,
+                              "formatOptions": {
+                                "linkTarget": "Resource",
+                                "showIcon": true
+                              }
+                            },
+                            {
+                              "columnMatch": "Subscription",
+                              "formatter": 13,
+                              "formatOptions": {
+                                "linkTarget": "Resource",
+                                "showIcon": true
+                              }
+                            },
+                            {
+                              "columnMatch": "Type",
+                              "formatter": 5
+                            },
+                            {
+                              "columnMatch": "SkuName",
+                              "formatter": 18,
+                              "formatOptions": {
+                                "thresholdsOptions": "icons",
+                                "thresholdsGrid": [
+                                  {
+                                    "operator": "contains",
+                                    "thresholdValue": "premium",
+                                    "representation": "success",
+                                    "text": "{0}{1}"
+                                  },
+                                  {
+                                    "operator": "contains",
+                                    "thresholdValue": "enterprise",
+                                    "representation": "success",
+                                    "text": "{0}{1}"
+                                  },
+                                  {
+                                    "operator": "contains",
+                                    "thresholdValue": "basic",
+                                    "representation": "2",
+                                    "text": "{0}{1}"
+                                  },
+                                  {
+                                    "operator": "contains",
+                                    "thresholdValue": "standard",
+                                    "representation": "success",
+                                    "text": "{0}{1}"
+                                  },
+                                  {
+                                    "operator": "Default",
+                                    "thresholdValue": null,
+                                    "representation": "unknown",
+                                    "text": "{0}{1}"
+                                  }
+                                ]
+                              }
+                            },
+                            {
+                              "columnMatch": "Kind",
+                              "formatter": 5
+                            },
+                            {
+                              "columnMatch": "SubscriptionId",
+                              "formatter": 5
+                            },
+                            {
+                              "columnMatch": "Name",
+                              "formatter": 5
+                            },
+                            {
+                              "columnMatch": "State",
+                              "formatter": 18,
+                              "formatOptions": {
+                                "thresholdsOptions": "icons",
+                                "thresholdsGrid": [
+                                  {
+                                    "operator": "==",
+                                    "thresholdValue": "succeeded",
+                                    "representation": "success",
+                                    "text": "{0}{1}"
+                                  },
+                                  {
+                                    "operator": "Default",
+                                    "thresholdValue": null,
+                                    "representation": "warning",
+                                    "text": "{0}{1}"
+                                  }
+                                ]
+                              }
+                            },
+                            {
                               "columnMatch": "Location",
                               "formatter": 17
                             },
                             {
-                                "columnMatch": "Zones",
-                                "formatter": 5
-                              },
-                              {
-                                "columnMatch": "AvailabilityZone",
-                                "formatter": 18,
-                                "formatOptions": {
-                                  "thresholdsOptions": "icons",
-                                  "thresholdsGrid": [
-                                    {
-                                      "operator": "==",
-                                      "thresholdValue": "not applicable",
-                                      "representation": "more",
-                                      "text": "{0}{1}"
-                                    },
-                                    {
-                                      "operator": "==",
-                                      "thresholdValue": "not configured",
-                                      "representation": "2",
-                                      "text": "{0}{1}"
-                                    },
-                                    {
-                                      "operator": "regex",
-                                      "thresholdValue": "(1|2|3)",
-                                      "representation": "success",
-                                      "text": "{0}{1}"
-                                    },
-                                    {
-                                      "operator": "Default",
-                                      "thresholdValue": null,
-                                      "representation": "unknown",
-                                      "text": "{0}{1}"
-                                    }
-                                  ]
-                                }
-                              },
-                              {
-                                "columnMatch": "AvailabilitySet",
-                                "formatter": 5
-                              },
-                              {
-                                "columnMatch": "Capacity",
-                                "formatter": 18,
-                                "formatOptions": {
-                                  "thresholdsOptions": "icons",
-                                  "thresholdsGrid": [
-                                    {
-                                "operator": "==",
-                                "thresholdValue": "c0",
-                                      "representation": "2",
-                                      "text": "{0}{1}"
-                                    },
-                                    {
-                                      "operator": "Default",
-                                      "thresholdValue": null,
-                                      "representation": "success",
-                                      "text": "{0}{1}"
-                                    }
-                                  ]
-                                },
-                                "tooltipFormat": {
-                                  "tooltip": "Shared or Dedicated CPU"
-                                }
-                              },
-                              {
-                                "columnMatch": "FaultDomain",
-                                "formatter": 5
-                              },
-                              {
-                                "columnMatch": "OSDisk",
-                                "formatter": 5
-                              },
-                              {
-                                "columnMatch": "ReadReplica",
-                                "formatter": 5
-                              },
-                              {
-                                "columnMatch": "AutomaticFailover",
-                                "formatter": 5
-                              },
-                              {
-                                "columnMatch": "MultipleWriteLocations",
-                                "formatter": 5
-                              },
-                              {
-                                "columnMatch": "StorageAutogrow",
-                                "formatter": 5
-                              },
-                              {
-                                "columnMatch": "ReplicationRole",
-                                "formatter": 5
-                              },
-                              {
-                                "columnMatch": "Backup",
-                                "formatter": 5
-                              },
-                              {
-                                "columnMatch": "Environment",
-                                "formatter": 18,
-                                "formatOptions": {
-                                  "thresholdsOptions": "colors",
-                                  "thresholdsGrid": [
-                                    {
-                                      "operator": "contains",
-                                      "thresholdValue": "prod",
-                                      "representation": "redBright",
-                                      "text": "{0}{1}"
-                                    },
-                                    {
-                                      "operator": "contains",
-                                      "thresholdValue": "Prod",
-                                      "representation": "redBright",
-                                      "text": "{0}{1}"
-                                    },
-                                    {
-                                      "operator": "Default",
-                                      "thresholdValue": null,
-                                      "text": "{0}{1}"
-                                    }
-                                  ]
-                                }
+                              "columnMatch": "Zones",
+                              "formatter": 5
+                            },
+                            {
+                              "columnMatch": "AvailabilityZone",
+                              "formatter": 18,
+                              "formatOptions": {
+                                "thresholdsOptions": "icons",
+                                "thresholdsGrid": [
+                                  {
+                                    "operator": "==",
+                                    "thresholdValue": "not applicable",
+                                    "representation": "more",
+                                    "text": "{0}{1}"
+                                  },
+                                  {
+                                    "operator": "==",
+                                    "thresholdValue": "not configured",
+                                    "representation": "2",
+                                    "text": "{0}{1}"
+                                  },
+                                  {
+                                    "operator": "regex",
+                                    "thresholdValue": "(1|2|3)",
+                                    "representation": "success",
+                                    "text": "{0}{1}"
+                                  },
+                                  {
+                                    "operator": "Default",
+                                    "thresholdValue": null,
+                                    "representation": "unknown",
+                                    "text": "{0}{1}"
+                                  }
+                                ]
                               }
+                            },
+                            {
+                              "columnMatch": "AvailabilitySet",
+                              "formatter": 5
+                            },
+                            {
+                              "columnMatch": "Capacity",
+                              "formatter": 18,
+                              "formatOptions": {
+                                "thresholdsOptions": "icons",
+                                "thresholdsGrid": [
+                                  {
+                                    "operator": "==",
+                                    "thresholdValue": "c0",
+                                    "representation": "2",
+                                    "text": "{0}{1}"
+                                  },
+                                  {
+                                    "operator": "Default",
+                                    "thresholdValue": null,
+                                    "representation": "success",
+                                    "text": "{0}{1}"
+                                  }
+                                ]
+                              },
+                              "tooltipFormat": {
+                                "tooltip": "Shared or Dedicated CPU"
+                              }
+                            },
+                            {
+                              "columnMatch": "FaultDomain",
+                              "formatter": 5
+                            },
+                            {
+                              "columnMatch": "OSDisk",
+                              "formatter": 5
+                            },
+                            {
+                              "columnMatch": "ReadReplica",
+                              "formatter": 5
+                            },
+                            {
+                              "columnMatch": "AutomaticFailover",
+                              "formatter": 5
+                            },
+                            {
+                              "columnMatch": "MultipleWriteLocations",
+                              "formatter": 5
+                            },
+                            {
+                              "columnMatch": "StorageAutogrow",
+                              "formatter": 5
+                            },
+                            {
+                              "columnMatch": "ReplicationRole",
+                              "formatter": 5
+                            },
+                            {
+                              "columnMatch": "Backup",
+                              "formatter": 5
+                            },
+                            {
+                              "columnMatch": "Environment",
+                              "formatter": 18,
+                              "formatOptions": {
+                                "thresholdsOptions": "colors",
+                                "thresholdsGrid": [
+                                  {
+                                    "operator": "contains",
+                                    "thresholdValue": "prod",
+                                    "representation": "redBright",
+                                    "text": "{0}{1}"
+                                  },
+                                  {
+                                    "operator": "contains",
+                                    "thresholdValue": "Prod",
+                                    "representation": "redBright",
+                                    "text": "{0}{1}"
+                                  },
+                                  {
+                                    "operator": "Default",
+                                    "thresholdValue": null,
+                                    "text": "{0}{1}"
+                                  }
+                                ]
+                              }
+                            }
+                          ],
+                          "rowLimit": 10000,
+                          "hierarchySettings": {
+                            "treeType": 1,
+                            "groupBy": [
+                              "SubscriptionId"
                             ],
-                            "rowLimit": 10000,
-                            "hierarchySettings": {
-                              "treeType": 1,
-                              "groupBy": [
-                                "SubscriptionId"
-                              ],
-                              "finalBy": "Name"
+                            "finalBy": "Name"
+                          },
+                          "labelSettings": [
+                            {
+                              "columnId": "SkuName",
+                              "label": "Tier"
+                            },
+                            {
+                              "columnId": "SubscriptionId",
+                              "label": "Subscription"
+                            },
+                            {
+                              "columnId": "ResourceGroup",
+                              "label": "Resource Group"
+                            },
+                            {
+                              "columnId": "Capacity",
+                              "label": "SKU"
+                            }
+                          ]
+                        }
                       },
-                            "labelSettings": [
-                              {
-                                "columnId": "SkuName",
-                                "label": "Tier"
-                              },
-                              {
-                                "columnId": "SubscriptionId",
-                                "label": "Subscription"
-                              },
-                              {
-                                "columnId": "ResourceGroup",
-                                "label": "Resource Group"
-                              },
-                              {
-                                "columnId": "Capacity",
-                                "label": "SKU"
-                              }
-                            ]
-                          }
-                        },
                       "name": "Azure Cache for Redis"
                     }
                   ]
@@ -2890,6 +2898,190 @@
                   "value": "Redis"
                 },
                 "name": "Redis"
+              },
+              {
+                "type": 12,
+                "content": {
+                  "version": "NotebookGroup/1.0",
+                  "groupType": "editable",
+                  "items": [
+                    {
+                      "type": 1,
+                      "content": {
+                        "json": "[SLA for Azure Databases for PostgreSQL - Flexible Server](https://azure.microsoft.com/support/legal/sla/)\r\n\r\n* Single Server: We guarantee at least 99.99% of the time customers will have connectivity between their Microsoft Azure Database for PostgreSQL Server and our Internet gateway\r\n* Flexible Server:\r\n\t- We guarantee at least 99.99% of the time customers will have connectivity to their Microsoft Azure Database for PostgreSQL– Flexible server configured with Zone Redundant High Availability.\r\n\t- We guarantee at least 99.95% of the time customers will have connectivity to their Microsoft Azure Database for PostgreSQL– Flexible server configured with Same Zone High Availability.\r\n\t- We guarantee at least 99.9% of the time customers will have connectivity to their Microsoft Azure Database for PostgreSQL– Flexible server configured without any redundancy.\r\n\r\n> \r\n\r\n> SLA accurate at time of release. Latest information is available [here](https://azure.microsoft.com/support/legal/sla/)",
+                        "style": "upsell"
+                      },
+                      "conditionalVisibility": {
+                        "parameterName": "SLA",
+                        "comparison": "isEqualTo",
+                        "value": "Yes"
+                      },
+                      "name": "text - 0"
+                    },
+                    {
+                      "type": 1,
+                      "content": {
+                        "json": "[PostgreSQL Flexible Server best practices](https://learn.microsoft.com/en-us/azure/postgresql/flexible-server/concepts-high-availability)\r\n\r\n* It is recommended to create cross region read replicas in another region.\r\n* Enable Availability Zone in Flexible server if the region supports Availability Zones.\r\n* Validate and configure backup retention period.\r\n\r\n[Configure High Availability](https://learn.microsoft.com/en-us/azure/postgresql/flexible-server/how-to-manage-high-availability-portal)\r\n\r\n> Azure generally recommends to leverage [Availability Zone](https://learn.microsoft.com/azure/availability-zones/az-overview) for better High Availability within the region by leveraging multiple zones inside region. By architecting your solutions to use replicated services in zones, you can protect your apps and data from the loss of a datacenter. \r\n\r\n> At this point, not all Azure regions and services support Availability Zones, the support matrix can be found [here](https://learn.microsoft.com/azure/availability-zones/az-region). Whenerver there is a Zonal recommendation for a particular service from this workbook, please note that that is applicable only for the regions supporting Availability Zones from the earlier list.\r\n",
+                        "style": "info"
+                      },
+                      "conditionalVisibility": {
+                        "parameterName": "Help",
+                        "comparison": "isEqualTo",
+                        "value": "Yes"
+                      },
+                      "name": "text - 1"
+                    },
+                    {
+                      "type": 3,
+                      "content": {
+                        "version": "KqlItem/1.0",
+                        "query": ${kql_database_postgresql_resources_detail},
+                        "size": 1,
+                        "title": "Azure Database for PostgreSQL - Flexible Server",
+                        "showExportToExcel": true,
+                        "queryType": 1,
+                        "resourceType": "microsoft.resourcegraph/resources",
+                        "crossComponentResources": [
+                          "{Subscriptions}"
+                        ],
+                        "gridSettings": {
+                          "formatters": [
+                            {
+                              "columnMatch": "$gen_group",
+                              "formatter": 13,
+                              "formatOptions": {
+                                "linkTarget": "Resource",
+                                "showIcon": true
+                              }
+                            },
+                            {
+                              "columnMatch": "Subscription",
+                              "formatter": 13,
+                              "formatOptions": {
+                                "linkTarget": "Resource",
+                                "showIcon": true
+                              }
+                            },
+                            {
+                              "columnMatch": "Type",
+                              "formatter": 5
+                            },
+
+                            {
+                              "columnMatch": "SubscriptionId",
+                              "formatter": 5
+                            },
+                            {
+                              "columnMatch": "Name",
+                              "formatter": 5
+                            },
+                            {
+                              "columnMatch": "location",
+                              "formatter": 17
+                            },
+                            {
+                              "columnMatch": "Zones",
+                              "formatter": 5
+                            },
+                            {
+                              "columnMatch": "Status",
+                              "formatter": 18,
+                              "formatOptions": {
+                                "thresholdsOptions": "colors",
+                                "thresholdsGrid": [
+                                  {
+                                    "operator": "contains",
+                                    "thresholdValue": "Stopped",
+                                    "representation": "orange",
+                                    "text": "{0}{1}"
+                                  },
+                                  {
+                                    "operator": "contains",
+                                    "thresholdValue": "Available",
+                                    "representation": "green",
+                                    "text": "{0}{1}"
+                                  },
+                                  {
+                                    "operator": "Default",
+                                    "thresholdValue": null,
+                                    "text": "{0}{1}"
+                                  }
+                                ]
+                              }
+                            },
+                            {
+                              "columnMatch": "High Availability",
+                              "formatter": 18,
+                              "formatOptions": {
+                                "thresholdsOptions": "icons",
+                                "thresholdsGrid": [
+                                  {
+                                    "operator": "contains",
+                                    "thresholdValue": "Zone redundant",
+                                    "representation": "success",
+                                    "text": "{0}{1}"
+                                  },
+                                  {
+                                    "operator": "contains",
+                                    "thresholdValue": "Disabled",
+                                    "representation": "failed",
+                                    "text": "{0}{1}"
+                                  },
+                                  {
+                                    "operator": "Default",
+                                    "thresholdValue": null,
+                                    "text": "{0}{1}"
+                                  }
+                                ]
+                              }
+                            },
+                            {
+                              "columnMatch": "Geo Backup",
+                              "formatter": 18,
+                              "formatOptions": {
+                                "thresholdsOptions": "icons",
+                                "thresholdsGrid": [
+                                  {
+                                    "operator": "contains",
+                                    "thresholdValue": "Enabled",
+                                    "representation": "success",
+                                    "text": "{0}{1}"
+                                  },
+                                  {
+                                    "operator": "contains",
+                                    "thresholdValue": "Disabled",
+                                    "representation": "failed",
+                                    "text": "{0}{1}"
+                                  },
+                                  {
+                                    "operator": "Default",
+                                    "thresholdValue": null,
+                                    "text": "{0}{1}"
+                                  }
+                                ]
+                              }
+                            }
+                          ],
+                          "rowLimit": 10000,
+                          "hierarchySettings": {
+                            "treeType": 1,
+                            "groupBy": [
+                              "subscriptionId"
+                            ],
+                            "finalBy": "Name"
+                          }
+                        }
+                      },
+                      "name": "Azure Databases for PostgreSQL - Flexible Server"
+                    }
+                  ]
+                },
+                "conditionalVisibility": {
+                  "parameterName": "selectedTab",
+                  "comparison": "isEqualTo",
+                  "value": "PostgreSQL - Flexible Server"
+                },
+                "name": "PostgreSQL - Flexible Server"
               }
             ]
           },
