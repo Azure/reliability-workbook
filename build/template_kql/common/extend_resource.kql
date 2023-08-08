@@ -399,13 +399,13 @@ resources
 | join kind = leftouter (
     recoveryservicesresources
     | extend vmId = case(
-        name startswith "VM;", tolower(tostring(properties.dataSourceInfo.resourceID)),
+        properties.backupManagementType == "AzureIaasVM", tolower(tostring(properties.dataSourceInfo.resourceID)),
         type == "microsoft.recoveryservices/vaults/replicationfabrics/replicationprotectioncontainers/replicationprotecteditems", tolower(tostring(properties.providerSpecificDetails.dataSourceInfo.resourceId)),
         ''
     )
     | extend asrId = iff(type == "microsoft.recoveryservices/vaults/replicationfabrics/replicationprotectioncontainers/replicationprotecteditems", tolower(tostring(strcat_array(array_slice(split(properties.recoveryFabricId, '/'), 0, 8), '/'))), '')
     | extend resourceId = case(
-        name startswith "VM;", vmId,
+        properties.backupManagementType == "AzureIaasVM", vmId,
         type == "microsoft.recoveryservices/vaults/replicationfabrics/replicationprotectioncontainers/replicationprotecteditems", asrId,
         ''
     )
