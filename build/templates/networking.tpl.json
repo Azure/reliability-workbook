@@ -651,7 +651,7 @@
                     },
                     {
                       "columnId": "AVZonewithLessThan3",
-                      "label": "No zone redundant"
+                      "label": "Single Availability Zone"
                     }
                   ]
                 }
