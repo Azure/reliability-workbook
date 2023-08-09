@@ -1,0 +1,2 @@
+${extend_resource}
+|project Name = name,typeDisplayName,Status = status, ['High Availability'] = highAvailability,['GeoRedundantBackup'] = backup,Zone = az, Sku = sku.name, ['Sku Tier'] = sku.tier, Region = locationDisplayName, ['Resource Group'] = resourceGroup,Resource = id, Type = type, subscriptionId, Tags = tags\n| sort by (tolower(tostring(Name))) asc
