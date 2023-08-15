@@ -2935,7 +2935,7 @@
                       "type": 3,
                       "content": {
                         "version": "KqlItem/1.0",
-                        "query": ${kql_database_postgresqlsingle_resources_detail},
+                        "query": ${kql_database_postgresqlsingle_resources_details},
                         "size": 3,
                         "title": "PostgreSQL - Single",
                         "showExportToExcel": true,
@@ -3384,7 +3384,7 @@
                       "type": 3,
                       "content": {
                         "version": "KqlItem/1.0",
-                        "query": ${kql_database_postgresqlflexible_resources_detail},
+                        "query": ${kql_database_postgresqlflexible_resources_details},
                         "size": 1,
                         "title": "PostgreSQL - Flexible",
                         "showExportToExcel": true,
