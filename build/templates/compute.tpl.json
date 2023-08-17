@@ -218,6 +218,43 @@
                       ],
                       "gridSettings": {
                         "rowLimit": 10000,
+                        "formatters": [
+                          {
+                            "columnMatch": "ResourceTotal",
+                            "formatter": 22,
+                            "formatOptions": {
+                              "compositeBarSettings": {
+                                "labelText": "",
+                                "columnSettings": [
+                                  {
+                                    "columnName": "NotRunning",
+                                    "color": "amethyst"
+                                  },
+                                  {
+                                    "columnName": "NoAVZone",
+                                    "color": "blue"
+                                  },
+                                  {
+                                    "columnName": "NoAVSet",
+                                    "color": "brown"
+                                  },
+                                  {
+                                    "columnName": "OSDiskRecommendation",
+                                    "color": "orange"
+                                  },
+                                  {
+                                    "columnName": "NoBackup",
+                                    "color": "pink"
+                                  },
+                                  {
+                                    "columnName": "UnHealthyBackup",
+                                    "color": "redBright"
+                                  }
+                                ]
+                              }
+                            }
+                          }
+                        ],
                         "labelSettings": [
                           {
                             "columnId": "ResourceTotal",
@@ -759,6 +796,39 @@
                     ],
                     "gridSettings": {
                       "rowLimit": 10000,
+                      "formatters": [
+                        {
+                          "columnMatch": "ResourceTotal",
+                          "formatter": 22,
+                          "formatOptions": {
+                            "compositeBarSettings": {
+                              "labelText": "",
+                              "columnSettings": [
+                                {
+                                  "columnName": "NotSucceeded",
+                                  "color": "lightBlue"
+                                },
+                                {
+                                  "columnName": "NoAVZone",
+                                  "color": "orange"
+                                },
+                                {
+                                  "columnName": "CapacityLt2",
+                                  "color": "purple"
+                                },
+                                {
+                                  "columnName": "NoFaultDomain",
+                                  "color": "redBright"
+                                },
+                                {
+                                  "columnName": "OSDiskRecommendation",
+                                  "color": "yellow"
+                                }
+                              ]
+                            }
+                          }
+                        }
+                      ],
                       "labelSettings": [
                         {
                           "columnId": "ResourceTotal",
@@ -1058,6 +1128,10 @@
                               "formatter": 5
                             },
                             {
+                              "columnMatch": "orchestrationMode",
+                              "formatter": 1
+                            },
+                            {
                               "columnMatch": "Environment",
                               "formatter": 18,
                               "formatOptions": {
@@ -1260,6 +1334,10 @@
                             {
                               "columnId": "FaultDomain",
                               "label": "Fault Domain Count"
+                            },
+                            {
+                              "columnId": "orchestrationMode",
+                              "label": "Orchestration Mode"
                             }
                           ]
                         },
