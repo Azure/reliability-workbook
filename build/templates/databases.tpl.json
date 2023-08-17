@@ -3515,7 +3515,7 @@
                           "hierarchySettings": {
                             "treeType": 1,
                             "groupBy": [
-                              "subscriptionId"
+                              "SubscriptionId"
                             ],
                             "finalBy": "Name"
                           }
