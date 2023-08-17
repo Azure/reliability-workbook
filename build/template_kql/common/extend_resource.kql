@@ -34,7 +34,9 @@ resources
     (type == 'microsoft.sql/servers/databases') or 
     (type == 'microsoft.documentdb/databaseaccounts') or 
     (type == 'microsoft.dbformysql/servers') or 
-    (type == 'microsoft.dbformysql/flexibleservers') or 
+    (type == 'microsoft.dbformysql/flexibleservers') or
+    (type == 'microsoft.dbforpostgresql/servers') or 
+    (type == 'microsoft.dbforpostgresql/flexibleservers') or 
     (type == 'microsoft.cache/redis') or
     (type == "microsoft.apimanagement/service") or 
     (type == "microsoft.storage/storageaccounts" or type == "microsoft.classicstorage/storageaccounts") or 
@@ -93,6 +95,8 @@ resources
     type == 'microsoft.documentdb/databaseaccounts', tostring(properties.provisioningState),
     type == 'microsoft.dbformysql/servers', tostring(properties.userVisibleState),
     type == 'microsoft.dbformysql/flexibleservers', tostring(properties.state),
+    type == 'microsoft.dbforpostgresql/servers', tostring(properties.userVisibleState),
+    type == 'microsoft.dbforpostgresql/flexibleservers', tostring(properties.state),
     type == 'microsoft.cache/redis', tostring(properties.provisioningState),
     type == "microsoft.apimanagement/service", tostring(properties.provisioningState),
     type contains "storageaccounts", tostring(properties.provisioningState),
@@ -117,6 +121,8 @@ resources
     type == 'microsoft.documentdb/databaseaccounts', tostring(properties.databaseAccountOfferType),
     type == 'microsoft.dbformysql/servers', tostring(sku.tier),
     type == 'microsoft.dbformysql/flexibleservers', tostring(sku.tier),
+    type == 'microsoft.dbforpostgresql/servers', tostring(sku.tier),
+    type == 'microsoft.dbforpostgresql/flexibleservers', tostring(sku.tier),
     type == 'microsoft.cache/redis', tostring(properties.sku.name),
     type == "microsoft.apimanagement/service", tostring(sku.name),
     type contains 'storageaccounts', tostring(replace('-', '_', tostring(iff(type =~ "microsoft.storage/storageaccounts", sku.name, properties.accountType)))),
@@ -149,6 +155,8 @@ resources
     (type == 'microsoft.documentdb/databaseaccounts'), iif(properties.locations[0].isZoneRedundant == "false", 'Not Configured', 'Configured'), 
     (type == 'microsoft.dbformysql/servers'), "Not Applicable",
     (type == 'microsoft.dbformysql/flexibleservers'), iif(properties.haEnabled == "Enabled", 'Configured', 'Not Configured'),
+    (type == 'microsoft.dbforpostgresql/servers'), "Not Applicable",
+    (type == 'microsoft.dbforpostgresql/flexibleservers'), coalesce(tostring(array_length(parse_json(zones))), 'Not Configured'),
     (type == 'microsoft.cache/redis'), coalesce(tostring(array_length(parse_json(zones))), 'Not Configured'),
     (type == "microsoft.apimanagement/service"), coalesce(tostring(array_length(parse_json(zones))), 'Not Configured'),
     (type contains 'storageaccounts'), case(split(skuName, '_', 1)[0] contains "zrs", "Configured", "Not Configured"),
@@ -170,6 +178,7 @@ resources
     (type == "microsoft.recoveryservices/vaults"), "Not Applicable",
     "Undefined"
     )
+| extend az = properties.availabilityZone
 | extend avSets = case(
     type == 'microsoft.compute/virtualmachines' and avZones in ('1', '2', '3'), "Not Applicable",
     type == 'microsoft.compute/virtualmachines', (coalesce(extract('/availabilitySets/(.*)', 1, tostring(properties.availabilitySet.id)), 'Not Configured')),
@@ -187,6 +196,8 @@ resources
     type == 'microsoft.documentdb/databaseaccounts', 'Not Applicable',
     type == 'microsoft.dbformysql/servers', "Not Applicable",
     type == 'microsoft.dbformysql/flexibleservers', "Not Applicable",
+    type == 'microsoft.dbforpostgresql/servers', "Not Applicable",
+    type == 'microsoft.dbforpostgresql/flexibleservers', "Not Applicable",
     type == 'microsoft.cache/redis', "Not Applicable",
     type == "microsoft.apimanagement/service", "Not Applicable",
     type contains "storageaccounts", "Not Applicable",
@@ -211,6 +222,8 @@ resources
     type == 'microsoft.documentdb/databaseaccounts', 'Not Applicable',
     type == 'microsoft.dbformysql/servers', tostring(sku.capacity),
     type == 'microsoft.dbformysql/flexibleservers', tostring(sku.capacity),
+    type == 'microsoft.dbforpostgresql/servers', tostring(sku.capacity),
+    type == 'microsoft.dbforpostgresql/flexibleservers', tostring(sku.capacity),
     type == 'microsoft.cache/redis', strcat(properties.sku.family, properties.sku.capacity),
     type == "microsoft.apimanagement/service", tostring(sku.capacity),
     type contains "storageaccounts", "Not Applicable", 
@@ -235,6 +248,8 @@ resources
     type == 'microsoft.documentdb/databaseaccounts', 'Not Applicable',
     type == 'microsoft.dbformysql/servers', 'Not Applicable',
     type == 'microsoft.dbformysql/flexibleservers', 'Not Applicable',
+    type == 'microsoft.dbforpostgresql/servers', 'Not Applicable',
+    type == 'microsoft.dbforpostgresql/flexibleservers', 'Not Applicable',
     type == 'microsoft.cache/redis', 'Not Applicable',
     type == "microsoft.apimanagement/service", "Not Applicable",
     type contains "storageaccounts", "Not Applicable",
@@ -259,6 +274,8 @@ resources
     type == 'microsoft.documentdb/databaseaccounts', 'Not Applicable',
     type == 'microsoft.dbformysql/servers', 'Not Applicable',
     type == 'microsoft.dbformysql/flexibleservers', 'Not Applicable',
+    type == 'microsoft.dbforpostgresql/servers', 'Not Applicable',
+    type == 'microsoft.dbforpostgresql/flexibleservers', 'Not Applicable',
     type == 'microsoft.cache/redis', 'Not Applicable',
     type == "microsoft.apimanagement/service", tostring(properties.platformVersion), //Field Override
     type contains "storageaccounts", tostring(split(skuName, '_', 0)[0]),
@@ -284,6 +301,8 @@ resources
     type == 'microsoft.documentdb/databaseaccounts', tostring(array_length(parse_json(properties.readLocations))),
     type == 'microsoft.dbformysql/servers', "Not Applicable",
     type == 'microsoft.dbformysql/flexibleservers', "Not Applicable",
+    type == 'microsoft.dbforpostgresql/servers', "Not Applicable",
+    type == 'microsoft.dbforpostgresql/flexibleservers', "Not Applicable",
     type == 'microsoft.cache/redis', 'Not Applicable',
     type == "microsoft.apimanagement/service", tostring(properties.additionalLocations),
     type contains "storageaccounts", case(
@@ -308,6 +327,8 @@ resources
     (type == 'microsoft.documentdb/databaseaccounts'), "Not Applicable",
     type == 'microsoft.dbformysql/servers', "Not Applicable",
     type == 'microsoft.dbformysql/flexibleservers', case(properties.haEnabled == "Enabled", "Configured", "Not Applicable"),
+    type == 'microsoft.dbforpostgresql/servers', "Not Applicable",
+    type == 'microsoft.dbforpostgresql/flexibleservers', case(properties.haEnabled == "Enabled", "Configured", "Not Applicable"),
     type == 'microsoft.cache/redis', 'Not Applicable',
     type == "microsoft.apimanagement/service", "Not Applicable",
     type contains "storageaccounts", "Not Applicable",
@@ -322,7 +343,7 @@ resources
     "Undefined"
     )
 | extend MultipleWriteLocations = case(
-    type in ('microsoft.compute/virtualmachines', 'microsoft.classiccompute/virtualmachines', 'microsoft.compute/virtualmachinescalesets', 'microsoft.web/sites', 'microsoft.web/serverfarms', 'microsoft.containerservice/managedclusters', 'microsoft.sql/servers/databases', 'microsoft.dbformysql/servers', 'microsoft.dbformysql/flexibleservers'), "Not Applicable",
+    type in ('microsoft.compute/virtualmachines', 'microsoft.classiccompute/virtualmachines', 'microsoft.compute/virtualmachinescalesets', 'microsoft.web/sites', 'microsoft.web/serverfarms', 'microsoft.containerservice/managedclusters', 'microsoft.sql/servers/databases', 'microsoft.dbformysql/servers', 'microsoft.dbformysql/flexibleservers', 'microsoft.dbforpostgresql/servers', 'microsoft.dbforpostgresql/flexibleservers'), "Not Applicable",
     (type == 'microsoft.documentdb/databaseaccounts' and properties.enableMultipleWriteLocations == "false"), "Not Enabled",
     (type == 'microsoft.documentdb/databaseaccounts' and properties.enableMultipleWriteLocations == "true"), "Enabled",
     (type == 'microsoft.cache/redis'), 'Not Applicable',
@@ -342,6 +363,8 @@ resources
     type in ('microsoft.compute/virtualmachines', 'microsoft.classiccompute/virtualmachines', 'microsoft.compute/virtualmachinescalesets', 'microsoft.web/sites', 'microsoft.web/serverfarms', 'microsoft.containerservice/managedclusters', 'microsoft.sql/servers/databases', 'microsoft.documentdb/databaseaccounts'), "Not Applicable",
     (type == 'microsoft.dbformysql/servers'), tostring(properties.storageProfile.storageAutogrow),
     (type == 'microsoft.dbformysql/flexibleservers'), "Not Applicable",
+    (type == 'microsoft.dbforpostgresql/servers'), "Not Applicable",
+    (type == 'microsoft.dbforpostgresql/flexibleservers'), "Not Applicable",
     (type == 'microsoft.cache/redis'), 'Not Applicable',
     (type == "microsoft.apimanagement/service"), "Not Applicable",
     (type contains "storageaccounts"), "Not Applicable",
@@ -361,6 +384,8 @@ resources
     (type == 'microsoft.sql/servers/databases' and sku.tier == 'DataWarehouse'), "Not Applicable",
     (type == 'microsoft.dbformysql/servers'), tostring(properties.replicationRole),
     (type == 'microsoft.dbformysql/flexibleservers'), iif(properties.haEnabled == "Enabled", 'Not Applicable', tostring(properties.replicationRole)),
+    (type == 'microsoft.dbforpostgresql/servers'), tostring(properties.replicationRole),
+    (type == 'microsoft.dbforpostgresql/flexibleservers'), iif(properties.haEnabled == "Enabled", 'Not Applicable', tostring(properties.replicationRole)),
     (type == 'microsoft.cache/redis'), 'Not Applicable',
     (type == "microsoft.apimanagement/service"), "Not Applicable",
     (type contains "storageaccounts"), tostring(split(skuName, '_', 1)[0]),
@@ -384,6 +409,7 @@ resources
     Location = tolower(location),
     ResourceGroup = resourceGroup,
     Zones = tolower(tostring(zones)),
+    Zone = az, 
     AvailabilityZone = tolower(avZones),
     AvailabilitySet = tolower(avSets),
     Capacity = tolower(Capacity),
@@ -422,3 +448,8 @@ resources
     AvailabilitySet == '-', 'None',
     isnotempty(AvailabilitySet), AvailabilitySet,
     "Unknown")
+| extend HighAvailability =  case(
+properties.highAvailability.mode == "ZoneRedundant", "Zone redundant",
+properties.highAvailability.mode == "SameZone", "Same zone",
+properties.highAvailability.mode)
+|extend GeoRedundantBackup = properties.backup.geoRedundantBackup  
