@@ -3473,7 +3473,7 @@
                                   {
                                     "operator": "contains",
                                     "thresholdValue": "Disabled",
-                                    "representation": "failed",
+                                    "representation": "2",
                                     "text": "{0}{1}"
                                   },
                                   {
@@ -3485,7 +3485,7 @@
                               }
                             },
                             {
-                              "columnMatch": "Geo Backup",
+                              "columnMatch": "GeoRedundantBackup",
                               "formatter": 18,
                               "formatOptions": {
                                 "thresholdsOptions": "icons",
@@ -3499,7 +3499,7 @@
                                   {
                                     "operator": "contains",
                                     "thresholdValue": "Disabled",
-                                    "representation": "failed",
+                                    "representation": "2",
                                     "text": "{0}{1}"
                                   },
                                   {
@@ -3521,7 +3521,7 @@
                           }
                         }
                       },
-                      "name": "PostgreSQL"
+                      "name": "kql_database_postgresqlflexible_resources_details"
                     }
                   ]
                 },
