@@ -1,3 +1,3 @@
 ${extend_resource}
-| project Type, SkuName, HighAvailability, GeoRedundantBackup, Zone, SubscriptionId, Name, State, Location, ResourceGroup
+| project Type, SkuName, State, Location, ResourceGroup, HighAvailability, GeoRedundantBackup, Zone, SubscriptionId, Name
 | where Type == 'microsoft.dbforpostgresql/flexibleservers'
