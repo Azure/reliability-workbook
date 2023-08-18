@@ -1246,6 +1246,104 @@
                       "type": 3,
                       "content": {
                         "version": "KqlItem/1.0",
+                        "query": ${kql_database_cosmosdb_resources_details_summary},
+                        "size": 3,
+                        "title": "Cosmos DB -  Recommendation Summary",
+                        "showExportToExcel": true,
+                        "queryType": 1,
+                        "resourceType": "microsoft.resourcegraph/resources",
+                        "crossComponentResources": [
+                          "{Subscriptions}"
+                        ],
+                        "gridSettings": {
+                          "formatters": [
+                            {
+                              "columnMatch": "ResourceTotal",
+                              "formatter": 22,
+                              "formatOptions": {
+                                "compositeBarSettings": {
+                                  "labelText": "",
+                                  "columnSettings": [
+                                    {
+                                      "columnName": "NotRunning",
+                                      "color": "lightBlue"
+                                    },
+                                    {
+                                      "columnName": "NoAZ",
+                                      "color": "orange"
+                                    },
+                                    {
+                                      "columnName": "ReplicaLt2",
+                                      "color": "purple"
+                                    },
+                                    {
+                                      "columnName": "NoAutomaticFailover",
+                                      "color": "red"
+                                    },
+                                    {
+                                      "columnName": "NoMultipleWriteLocations",
+                                      "color": "yellow"
+                                    },
+                                    {
+                                      "columnName": "UnhealthyBackup",
+                                      "color": "green"
+                                    }
+                                  ]
+                                }
+                              }
+                            },
+                            {
+                              "columnMatch": "UnhealthyBackup",
+                              "formatter": 0,
+                              "formatOptions": {
+                                "customColumnWidthSetting": "39.8571ch"
+                              }
+                            },
+                            {
+                              "columnMatch": "Group",
+                              "formatter": 1
+                            }
+                          ],
+                          "rowLimit": 10000,
+                          "labelSettings": [
+                            {
+                              "columnId": "ResourceTotal",
+                              "label": "Resource Total"
+                            },
+                            {
+                              "columnId": "NotRunning",
+                              "label": "Failed Status"
+                            },
+                            {
+                              "columnId": "NoAZ",
+                              "label": "No Availability Zone"
+                            },
+                            {
+                              "columnId": "ReplicaLt2",
+                              "label": "ReadReplica less than 2"
+                            },
+                            {
+                              "columnId": "NoAutomaticFailover",
+                              "label": "No Automatic Failover"
+                            },
+                            {
+                              "columnId": "NoMultipleWriteLocations",
+                              "label": "No Multiple Write Locations"
+                            },
+                            {
+                              "columnId": "UnhealthyBackup",
+                              "label": "No GRS Backup (within Periodic backup)"
+                            }
+                          ]
+                        },
+                        "sortBy": []
+                      },
+                      "name": "kql_database_cosmosdb_resources_details_summary"
+                    },
+                    {
+                      "type": 3,
+                      "content": {
+                        "version": "KqlItem/1.0",
                         "query": ${kql_database_cosmosdb_resources_details},
                         "size": 3,
                         "title": "Cosmos DB",
@@ -1400,7 +1498,7 @@
                                 "thresholdsGrid": [
                                   {
                                     "operator": "==",
-                                    "thresholdValue": "not Configured",
+                                    "thresholdValue": "not configured",
                                     "representation": "orange",
                                     "text": "{0}{1}"
                                   },
@@ -1468,13 +1566,18 @@
                                 "thresholdsGrid": [
                                   {
                                     "operator": "==",
-                                    "thresholdValue": "healthy",
+                                    "thresholdValue": "continuous",
+                                    "representation": "success"
+                                  },
+                                  {
+                                    "operator": "==",
+                                    "thresholdValue": "geo",
                                     "representation": "success",
                                     "text": "{0}{1}"
                                   },
                                   {
                                     "operator": "==",
-                                    "thresholdValue": "unhealthy",
+                                    "thresholdValue": "not geo",
                                     "representation": "2",
                                     "text": "{0}{1}"
                                   },
