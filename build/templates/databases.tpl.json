@@ -231,6 +231,76 @@
                       "type": 3,
                       "content": {
                         "version": "KqlItem/1.0",
+                        "query": ${kql_database_sqldb_resources_details_summary},
+                        "size": 3,
+                        "title": "Azure SQL Database - Recommendation Summary",
+                        "showExportToExcel": true,
+                        "queryType": 1,
+                        "resourceType": "microsoft.resourcegraph/resources",
+                        "crossComponentResources": [
+                          "{Subscriptions}"
+                        ],
+                        "gridSettings": {
+                          "formatters": [
+                            {
+                              "columnMatch": "ResourceTotal",
+                              "formatter": 22,
+                              "formatOptions": {
+                                "compositeBarSettings": {
+                                  "labelText": "",
+                                  "columnSettings": [
+                                    {
+                                      "columnName": "NotRunning",
+                                      "color": "lightBlue"
+                                    },
+                                    {
+                                      "columnName": "NotRecommendedSKU",
+                                      "color": "orange"
+                                    },
+                                    {
+                                      "columnName": "NoAVZone",
+                                      "color": "purple"
+                                    },
+                                    {
+                                      "columnName": "NoGRSBackup",
+                                      "color": "red"
+                                    }
+                                  ]
+                                }
+                              }
+                            }
+                          ],
+                          "rowLimit": 10000,
+                          "labelSettings": [
+                            {
+                              "columnId": "ResourceTotal",
+                              "label": "Resource Total"
+                            },
+                            {
+                              "columnId": "NotRunning",
+                              "label": "Failed Status"
+                            },
+                            {
+                              "columnId": "NotRecommendedSKU",
+                              "label": "Not production SKU"
+                            },
+                            {
+                              "columnId": "NoAVZone",
+                              "label": "No Availability Zone"
+                            },
+                            {
+                              "columnId": "NoGRSBackup",
+                              "label": "No GRS Backup"
+                            }
+                          ]
+                        }
+                      },
+                      "name": "kql_database_sqldb_resources_details_summary"
+                    },
+                    {
+                      "type": 3,
+                      "content": {
+                        "version": "KqlItem/1.0",
                         "query": ${kql_database_sqldb_resources_details},
                         "size": 3,
                         "title": "Azure SQL Database",
