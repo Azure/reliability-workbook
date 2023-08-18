@@ -2,6 +2,13 @@
 // Containers tab
 //-------------------------------------------
 locals {
+  kql_container_aks_resources_details_summary = templatefile(
+    "${path.module}/template_kql/container/container_aks_resources_details_summary.kql",
+    {
+      "extend_resource" = local.kql_extend_resource
+    }
+  )
+
   kql_container_aks_resources_details = templatefile(
     "${path.module}/template_kql/container/container_aks_resources_details.kql",
     {
@@ -10,7 +17,8 @@ locals {
   )
 
   workbook_containers_json = templatefile("${path.module}/templates/containers.tpl.json", {
-    "kql_container_aks_resources_details" = jsonencode(local.kql_container_aks_resources_details)
+    "kql_container_aks_resources_details_summary" = jsonencode(local.kql_container_aks_resources_details_summary)
+    "kql_container_aks_resources_details"         = jsonencode(local.kql_container_aks_resources_details)
   })
 }
 resource "random_uuid" "workbook_name_containers" {
