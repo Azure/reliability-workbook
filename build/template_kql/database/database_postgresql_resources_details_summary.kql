@@ -1,0 +1,5 @@
+${extend_resource}
+| project Type, SkuName, HighAvailability, GeoRedundantBackup, Zone, SubscriptionId, Name, State, Location, ResourceGroup, Backup
+| where Type == 'microsoft.dbforpostgresql/flexibleservers' 
+    or Type == 'microsoft.dbforpostgresql/servers' 
+| summarize ResourceTotal=count(Name), NotRunning=dcountif(Name, State !in~ ("ready", "paused")), NotRecommendedSKU=dcountif(Name, SkuName in~ ("standard", "basic", "burstable" )), NoAVZone=dcountif(Name, HighAvailability == "Disabled"), NoGRSBackup=dcountif(Name, GeoRedundantBackup == "Disabled" or Backup =="unhealthy")
