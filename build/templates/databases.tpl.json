@@ -2239,6 +2239,88 @@
                       "type": 3,
                       "content": {
                         "version": "KqlItem/1.0",
+                        "query": ${kql_database_mysqlflexible_resources_details_summary},
+                        "size": 3,
+                        "title": "MySQL - Flexible -  Recommendation Summary",
+                        "showExportToExcel": true,
+                        "queryType": 1,
+                        "resourceType": "microsoft.resourcegraph/resources",
+                        "crossComponentResources": [
+                          "{Subscriptions}"
+                        ],
+                        "gridSettings": {
+                          "formatters": [
+                            {
+                              "columnMatch": "ResourceTotal",
+                              "formatter": 22,
+                              "formatOptions": {
+                                "compositeBarSettings": {
+                                  "labelText": "",
+                                  "columnSettings": [
+                                    {
+                                      "columnName": "NotRunning",
+                                      "color": "lightBlue"
+                                    },
+                                    {
+                                      "columnName": "NoAVZone",
+                                      "color": "orange"
+                                    },
+                                    {
+                                      "columnName": "NoHA",
+                                      "color": "purple"
+                                    },
+                                    {
+                                      "columnName": "NoReplica",
+                                      "color": "red"
+                                    },
+                                    {
+                                      "columnName": "NoGeoBackup",
+                                      "color": "yellow"
+                                    }
+                                  ]
+                                }
+                              }
+                            },
+                            {
+                              "columnMatch": "Group",
+                              "formatter": 1
+                            }
+                          ],
+                          "rowLimit": 10000,
+                          "labelSettings": [
+                            {
+                              "columnId": "ResourceTotal",
+                              "label": "Resource Total"
+                            },
+                            {
+                              "columnId": "NotRunning",
+                              "label": "Failed Status"
+                            },
+                            {
+                              "columnId": "NoAVZone",
+                              "label": "No Availability Zone"
+                            },
+                            {
+                              "columnId": "NoHA",
+                              "label": "No High Availability"
+                            },
+                            {
+                              "columnId": "NoReplica",
+                              "label": "No Replica"
+                            },
+                            {
+                              "columnId": "NoGeoBackup",
+                              "label": "No Geo Backup"
+                            }
+                          ]
+                        }
+                      },
+                      "name": "kql_database_mysqlflexible_resources_details_summary"
+                    },
+                    {
+                      "type": 3,
+                      "content": {
+                        "version": "KqlItem/1.0",
                         "query": ${kql_database_mysqlflexible_resources_details},
                         "size": 3,
                         "title": "MySQL - Flexible",
@@ -2360,6 +2442,12 @@
                                     "text": "{0}{1}"
                                   },
                                   {
+                                    "operator": "==",
+                                    "thresholdValue": "not applicable",
+                                    "representation": "more",
+                                    "text": "{0}{1}"
+                                  },
+                                  {
                                     "operator": "Default",
                                     "thresholdValue": null,
                                     "representation": "unknown",
@@ -2394,6 +2482,12 @@
                                     "operator": "==",
                                     "thresholdValue": "configured",
                                     "representation": "success",
+                                    "text": "{0}{1}"
+                                  },
+                                  {
+                                    "operator": "==",
+                                    "thresholdValue": "not configured",
+                                    "representation": "2",
                                     "text": "{0}{1}"
                                   },
                                   {
@@ -2433,7 +2527,7 @@
                                   },
                                   {
                                     "operator": "==",
-                                    "thresholdValue": "master",
+                                    "thresholdValue": "source",
                                     "representation": "success",
                                     "text": "{0}{1}"
                                   },
@@ -2459,8 +2553,25 @@
                               }
                             },
                             {
-                              "columnMatch": "Backup",
-                              "formatter": 5
+                              "columnMatch": "GeoBackup",
+                              "formatter": 18,
+                              "formatOptions": {
+                                "thresholdsOptions": "icons",
+                                "thresholdsGrid": [
+                                  {
+                                    "operator": "==",
+                                    "thresholdValue": "enabled",
+                                    "representation": "success",
+                                    "text": "{0}{1}"
+                                  },
+                                  {
+                                    "operator": "Default",
+                                    "thresholdValue": null,
+                                    "representation": "warning",
+                                    "text": "{0}{1}"
+                                  }
+                                ]
+                              }
                             },
                             {
                               "columnMatch": "Environment",
@@ -2801,6 +2912,10 @@
                             {
                               "columnId": "ResourceGroup",
                               "label": "Resource Group"
+                            },
+                            {
+                              "columnId": "AutomaticFailover",
+                              "label": "High Availability"
                             },
                             {
                               "columnId": "StorageAutogrow",
