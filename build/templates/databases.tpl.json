@@ -3493,7 +3493,7 @@
                                 "thresholdsGrid": [
                                   {
                                     "operator": "==",
-                                    "thresholdValue": "basic",
+                                    "thresholdValue": "burstable",
                                     "representation": "orange",
                                     "text": "{0}{1}"
                                   },
