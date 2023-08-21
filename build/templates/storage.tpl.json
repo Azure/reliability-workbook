@@ -428,13 +428,13 @@
                   "thresholdsGrid": [
                     {
                       "operator": "contains",
-                      "thresholdValue": "ragrs",
+                      "thresholdValue": "ra-grs",
                       "representation": "success",
                       "text": "{0}{1}"
                     },
                     {
                       "operator": "contains",
-                      "thresholdValue": "ragzrs",
+                      "thresholdValue": "ra-gzrs",
                       "representation": "success",
                       "text": "{0}{1}"
                     },
