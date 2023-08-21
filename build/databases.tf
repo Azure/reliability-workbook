@@ -62,6 +62,12 @@ locals {
       "extend_resource" = local.kql_extend_resource
     }
   )
+  kql_database_redis_resources_details_summary = templatefile(
+    "${path.module}/template_kql/database/database_redis_resources_details_summary.kql",
+    {
+      "extend_resource" = local.kql_extend_resource
+    }
+  )
 
   workbook_databases_json = templatefile("${path.module}/templates/databases.tpl.json", {
     "kql_database_sqldb_resources_details"                 = jsonencode(local.kql_database_sqldb_resources_details)
@@ -74,6 +80,7 @@ locals {
     "kql_database_mysqlflexible_resources_details"         = jsonencode(local.kql_database_mysqlflexible_resources_details)
     "kql_database_mysqlflexible_resources_details_summary" = jsonencode(local.kql_database_mysqlflexible_resources_details_summary)
     "kql_database_redis_resources_details"                 = jsonencode(local.kql_database_redis_resources_details)
+    "kql_database_redis_resources_details_summary"         = jsonencode(local.kql_database_redis_resources_details_summary)
   })
 }
 resource "random_uuid" "workbook_name_databases" {
