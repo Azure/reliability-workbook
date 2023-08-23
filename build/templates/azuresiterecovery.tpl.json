@@ -182,7 +182,7 @@
                     "version": "KqlItem/1.0",
                     "query": ${kql_azuresiterecovery_resources_details},
                     "size": 0,
-                    "title": "List of Azure Site Recovery",
+                    "title": "List of Azure Site Recovery resources",
                     "exportedParameters": [
                       {
                         "fieldName": "Name",
@@ -288,6 +288,16 @@
                         {
                           "columnMatch": "Backup",
                           "formatter": 5
+                        },
+                        {
+                          "columnMatch": "asrProtectedTotalItemCounts",
+                          "formatter": 1,
+                          "numberFormat": {
+                            "unit": 0,
+                            "options": {
+                              "style": "decimal"
+                            }
+                          }
                         },
                         {
                           "columnMatch": "asrUnprotectedItemCounts",
@@ -402,7 +412,7 @@
                           "label": "Subscription"
                         },
                         {
-                          "columnId": "asrRrotectedTotalItemCounts",
+                          "columnId": "asrProtectedTotalItemCounts",
                           "label": "Protected Items"
                         },
                         {

@@ -396,48 +396,6 @@
                 "formatter": 5
               },
               {
-                "columnMatch": "SecondaryLocation",
-                "formatter": 18,
-                "formatOptions": {
-                  "thresholdsOptions": "icons",
-                  "thresholdsGrid": [
-                    {
-                      "operator": "==",
-                      "thresholdValue": "-",
-                      "representation": "2",
-                      "text": "Warning"
-                    },
-                    {
-                      "operator": "Default",
-                      "thresholdValue": null,
-                      "representation": "success",
-                      "text": "{0}{1}"
-                    }
-                  ]
-                }
-              },
-              {
-                "columnMatch": "SecondaryStatus",
-                "formatter": 18,
-                "formatOptions": {
-                  "thresholdsOptions": "icons",
-                  "thresholdsGrid": [
-                    {
-                      "operator": "==",
-                      "thresholdValue": "Available",
-                      "representation": "success",
-                      "text": "{0}{1}"
-                    },
-                    {
-                      "operator": "Default",
-                      "thresholdValue": null,
-                      "representation": "2",
-                      "text": "Warning"
-                    }
-                  ]
-                }
-              },
-              {
                 "columnMatch": "AccessTier",
                 "formatter": 18,
                 "formatOptions": {

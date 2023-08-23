@@ -282,7 +282,7 @@
                             },
                             {
                               "columnId": "NotRecommendedSKU",
-                              "label": "Not production SKU"
+                              "label": "Non-production SKU"
                             },
                             {
                               "columnId": "NoAVZone",
@@ -332,12 +332,6 @@
                                 "thresholdsGrid": [
                                   {
                                     "operator": "contains",
-                                    "thresholdValue": "basic",
-                                    "representation": "orange",
-                                    "text": "{0}{1}"
-                                  },
-                                  {
-                                    "operator": "contains",
                                     "thresholdValue": "system",
                                     "representation": "gray",
                                     "text": "{0}{1}"
@@ -355,9 +349,15 @@
                                     "text": "{0}{1}"
                                   },
                                   {
+                                    "operator": "regex",
+                                    "thresholdValue": "^(standard \\(DTU:(10|20|50)\\)|basic .+)$",
+                                    "representation": "orange",
+                                    "text": "{0}{1}"
+                                  },
+                                  {
                                     "operator": "contains",
                                     "thresholdValue": "standard",
-                                    "representation": "orange",
+                                    "representation": "green",
                                     "text": "{0}{1}"
                                   },
                                   {
@@ -381,6 +381,12 @@
                                   {
                                     "operator": "contains",
                                     "thresholdValue": "elastic",
+                                    "representation": "green",
+                                    "text": "{0}{1}"
+                                  },
+                                  {
+                                    "operator": "contains",
+                                    "thresholdValue": "generalpurpose",
                                     "representation": "green",
                                     "text": "{0}{1}"
                                   },
@@ -3029,11 +3035,11 @@
                             },
                             {
                               "columnId": "NotRecommendedTier",
-                              "label": "Not production Tier"
+                              "label": "Non-production Tier"
                             },
                             {
                               "columnId": "NotRecommendedSku",
-                              "label": "Not production SKU"
+                              "label": "Non-production SKU"
                             }
                           ]
                         }
