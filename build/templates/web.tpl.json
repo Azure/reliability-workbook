@@ -209,8 +209,82 @@
               "type": 3,
               "content": {
                 "version": "KqlItem/1.0",
+                "query": ${kql_webapp_appsvcplan_resources_details_summary},
+                "size": 3,
+                "title": "App Service Plan - Recommendation Summary",
+                "showExportToExcel": true,
+                "queryType": 1,
+                "resourceType": "microsoft.resourcegraph/resources",
+                "crossComponentResources": [
+                  "{Subscriptions}"
+                ],
+                "gridSettings": {
+                  "formatters": [
+                    {
+                      "columnMatch": "ResourceTotal",
+                      "formatter": 22,
+                      "formatOptions": {
+                        "compositeBarSettings": {
+                          "labelText": "",
+                          "columnSettings": [
+                            {
+                              "columnName": "NotRunning",
+                              "color": "lightBlue"
+                            },
+                            {
+                              "columnName": "NotRecommendedSKU",
+                              "color": "orange"
+                            },
+                            {
+                              "columnName": "NoAVZone",
+                              "color": "purple"
+                            },
+                            {
+                              "columnName": "CapacityLt2",
+                              "color": "red"
+                            }
+                          ]
+                        }
+                      }
+                    },
+                    {
+                      "columnMatch": "Group",
+                      "formatter": 1
+                    }
+                  ],
+                  "rowLimit": 10000,
+                  "labelSettings": [
+                    {
+                      "columnId": "ResourceTotal",
+                      "label": "Resource Total"
+                    },
+                    {
+                      "columnId": "NotRunning",
+                      "label": "Failed Status"
+                    },
+                    {
+                      "columnId": "NotRecommendedSKU",
+                      "label": "Non-production SKU"
+                    },
+                    {
+                      "columnId": "NoAVZone",
+                      "label": "No Availability Zone"
+                    },
+                    {
+                      "columnId": "CapacityLt2",
+                      "label": "Capacity less than 2"
+                    }
+                  ]
+                }
+              },
+              "name": "kql_webapp_appsvcplan_resources_details_summary"
+            },
+            {
+              "type": 3,
+              "content": {
+                "version": "KqlItem/1.0",
                 "query": ${kql_webapp_appsvcplan_resources_details},
-                "size": 0,
+                "size": 3,
                 "title": "App Service Plan",
                 "noDataMessage": "No App Service plans found",
                 "showExportToExcel": true,
@@ -252,8 +326,14 @@
                             "text": "{0}{1}"
                           },
                           {
+                            "operator": "contains",
+                            "thresholdValue": "workflowstandard",
+                            "representation": "success",
+                            "text": "{0}{1}"
+                          },
+                          {
                             "operator": "regex",
-                            "thresholdValue": "(free|shared|basic|standard|dynamic)",
+                            "thresholdValue": "^(free|shared|basic|standard|dynamic)$",
                             "representation": "2",
                             "text": "{0}{1}"
                           },
@@ -454,7 +534,7 @@
                   ]
                 }
               },
-              "name": "AppServicePlan query"
+              "name": "kql_webapp_appsvcplan_resources_details"
             }
           ]
         },
