@@ -480,6 +480,10 @@
                       "formatter": 5
                     },
                     {
+                      "columnMatch": "numberOfSite",
+                      "formatter": 1
+                    },
+                    {
                       "columnMatch": "Environment",
                       "formatter": 18,
                       "formatOptions": {
@@ -530,6 +534,14 @@
                     {
                       "columnId": "AvailabilityZone",
                       "label": "Availability Zone"
+                    },
+                    {
+                      "columnId": "Capacity",
+                      "label": "Number of Instances"
+                    },
+                    {
+                      "columnId": "numberOfSite",
+                      "label": "Number of Sites"
                     }
                   ]
                 }
