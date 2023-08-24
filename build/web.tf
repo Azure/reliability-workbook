@@ -2,6 +2,12 @@
 // Web tab
 //-------------------------------------------
 locals {
+  kql_webapp_appsvc_resources_details_summary = templatefile(
+    "${path.module}/template_kql/webapp/webapp_appsvc_resources_details_summary.kql",
+    {
+      "extend_resource" = local.kql_extend_resource
+    }
+  )
   kql_webapp_appsvc_resources_details = templatefile(
     "${path.module}/template_kql/webapp/webapp_appsvc_resources_details.kql",
     {
@@ -27,6 +33,7 @@ locals {
     }
   )
   workbook_web_json = templatefile("${path.module}/templates/web.tpl.json", {
+    "kql_webapp_appsvc_resources_details_summary"     = jsonencode(local.kql_webapp_appsvc_resources_details_summary)
     "kql_webapp_appsvc_resources_details"             = jsonencode(local.kql_webapp_appsvc_resources_details)
     "kql_webapp_appsvcplan_resources_details_summary" = jsonencode(local.kql_webapp_appsvcplan_resources_details_suumary)
     "kql_webapp_appsvcplan_resources_details"         = jsonencode(local.kql_webapp_appsvcplan_resources_details)

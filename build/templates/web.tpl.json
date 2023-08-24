@@ -593,6 +593,68 @@
         "type": 3,
         "content": {
           "version": "KqlItem/1.0",
+          "query": ${kql_webapp_appsvc_resources_details_summary},
+          "size": 3,
+          "title": "App Service - Web App - Recommendation Summary",
+          "showExportToExcel": true,
+          "queryType": 1,
+          "resourceType": "microsoft.resourcegraph/resources",
+          "crossComponentResources": [
+            "{Subscriptions}"
+          ],
+          "gridSettings": {
+            "formatters": [
+              {
+                "columnMatch": "ResourceTotal",
+                "formatter": 22,
+                "formatOptions": {
+                  "compositeBarSettings": {
+                    "labelText": "",
+                    "columnSettings": [
+                      {
+                        "columnName": "NotRunning",
+                        "color": "lightBlue"
+                      },
+                      {
+                        "columnName": "AlwaysOnDisabled",
+                        "color": "orange"
+                      },
+                      {
+                        "columnName": "AffinityEnabled",
+                        "color": "purple"
+                      }
+                    ]
+                  }
+                }
+              }
+            ],
+            "rowLimit": 10000,
+            "labelSettings": [
+              {
+                "columnId": "ResourceTotal",
+                "label": "Resource Total"
+              },
+              {
+                "columnId": "NotRunning",
+                "label": "Failed Status"
+              },
+              {
+                "columnId": "AlwaysOnDisabled",
+                "label": "AlwaysOn Disabled"
+              },
+              {
+                "columnId": "AffinityEnabled",
+                "label": "Affinity Enabled"
+              }
+            ]
+          }
+        },
+        "name": "kql_webapp_appsvc_resources_details_summary"
+      },
+      {
+        "type": 3,
+        "content": {
+          "version": "KqlItem/1.0",
           "query": ${kql_webapp_appsvc_resources_details},
           "size": 3,
           "title": "App Service - Web App",
@@ -748,6 +810,48 @@
               {
                 "columnMatch": "Backup",
                 "formatter": 5
+              },
+              {
+                "columnMatch": "AlwaysOnEnabled",
+                "formatter": 18,
+                "formatOptions": {
+                  "thresholdsOptions": "icons",
+                  "thresholdsGrid": [
+                    {
+                      "operator": "==",
+                      "thresholdValue": "false",
+                      "representation": "2",
+                      "text": "{0}{1}"
+                    },
+                    {
+                      "operator": "Default",
+                      "thresholdValue": null,
+                      "representation": "success",
+                      "text": "{0}{1}"
+                    }
+                  ]
+                }
+              },
+              {
+                "columnMatch": "AffinityEnabled",
+                "formatter": 18,
+                "formatOptions": {
+                  "thresholdsOptions": "icons",
+                  "thresholdsGrid": [
+                    {
+                      "operator": "==",
+                      "thresholdValue": "true",
+                      "representation": "2",
+                      "text": "{0}{1}"
+                    },
+                    {
+                      "operator": "Default",
+                      "thresholdValue": null,
+                      "representation": "success",
+                      "text": "{0}{1}"
+                    }
+                  ]
+                }
               },
               {
                 "columnMatch": "Environment",
