@@ -1009,6 +1009,35 @@
                 "type": 3,
                 "content": {
                   "version": "KqlItem/1.0",
+                  "query": ${kql_webapp_appservice_funcapp_resources_details_summary},
+                  "size": 3,
+                  "title": "App Service - Function App - Recommendation Summary",
+                  "showExportToExcel": true,
+                  "queryType": 1,
+                  "resourceType": "microsoft.resourcegraph/resources",
+                  "crossComponentResources": [
+                    "{Subscriptions}"
+                  ],
+                  "gridSettings": {
+                    "rowLimit": 10000,
+                    "labelSettings": [
+                      {
+                        "columnId": "ResourceTotal",
+                        "label": "Resource Total"
+                      },
+                      {
+                        "columnId": "NotRunning",
+                        "label": "Failed Status"
+                      }
+                    ]
+                  }
+                },
+                "name": "kql_webapp_appservice_funcapp_resources_details_summary"
+              },              
+              {
+                "type": 3,
+                "content": {
+                  "version": "KqlItem/1.0",
                   "query": ${kql_webapp_appservice_funcapp_resources_details},
                   "size": 3,
                   "title": "App Service - Function App",
@@ -1071,6 +1100,12 @@
                             {
                               "operator": "contains",
                               "thresholdValue": "premium",
+                              "representation": "success",
+                              "text": "{0}{1}"
+                            },
+                            {
+                              "operator": "contains",
+                              "thresholdValue": "standard",
                               "representation": "success",
                               "text": "{0}{1}"
                             },
