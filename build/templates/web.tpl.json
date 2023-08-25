@@ -332,8 +332,14 @@
                             "text": "{0}{1}"
                           },
                           {
+                            "operator": "contains",
+                            "thresholdValue": "standard",
+                            "representation": "success",
+                            "text": "{0}{1}"
+                          },
+                          {
                             "operator": "regex",
-                            "thresholdValue": "^(free|shared|basic|standard|dynamic)$",
+                            "thresholdValue": "^(free|shared|basic|dynamic)$",
                             "representation": "2",
                             "text": "{0}{1}"
                           },
