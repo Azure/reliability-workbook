@@ -1025,6 +1025,23 @@
                     "{Subscriptions}"
                   ],
                   "gridSettings": {
+                    "formatters": [
+                      {
+                        "columnMatch": "ResourceTotal",
+                        "formatter": 22,
+                        "formatOptions": {
+                          "compositeBarSettings": {
+                            "labelText": "",
+                            "columnSettings": [
+                              {
+                                "columnName": "NotRunning",
+                                "color": "lightBlue"
+                              }
+                            ]
+                          }
+                        }
+                      }
+                    ],
                     "rowLimit": 10000,
                     "labelSettings": [
                       {
