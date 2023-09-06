@@ -2930,75 +2930,14 @@
                         "value": "Yes"
                       },
                       "name": "text - 1"
-                    },{
-                      "type": 3,
+                    },
+                    {
+                      "type": 1,
                       "content": {
-                        "version": "KqlItem/1.0",
-                        "query": ${kql_database_postgresql_resources_details_summary},
-                        "size": 3,
-                        "title": "Azure PostgreSQL - Recommendation Summary",
-                        "showExportToExcel": true,
-                        "queryType": 1,
-                        "resourceType": "microsoft.resourcegraph/resources",
-                        "crossComponentResources": [
-                          "{Subscriptions}"
-                        ],
-                        "gridSettings": {
-                          "formatters": [
-                            {
-                              "columnMatch": "ResourceTotal",
-                              "formatter": 22,
-                              "formatOptions": {
-                                "compositeBarSettings": {
-                                  "labelText": "",
-                                  "columnSettings": [
-                                    {
-                                      "columnName": "NotRunning",
-                                      "color": "lightBlue"
-                                    },
-                                    {
-                                      "columnName": "NotRecommendedSKU",
-                                      "color": "orange"
-                                    },
-                                    {
-                                      "columnName": "NoAVZone",
-                                      "color": "purple"
-                                    },
-                                    {
-                                      "columnName": "NoGRSBackup",
-                                      "color": "red"
-                                    }
-                                  ]
-                                }
-                              }
-                            }
-                          ],
-                          "rowLimit": 10000,
-                          "labelSettings": [
-                            {
-                              "columnId": "ResourceTotal",
-                              "label": "Resource Total"
-                            },
-                            {
-                              "columnId": "NotRunning",
-                              "label": "Failed Status"
-                            },
-                            {
-                              "columnId": "NotRecommendedSKU",
-                              "label": "Not production SKU"
-                            },
-                            {
-                              "columnId": "NoAVZone",
-                              "label": "No Availability Zone"
-                            },
-                            {
-                              "columnId": "NoGRSBackup",
-                              "label": "No GRS Backup"
-                            }
-                          ]
-                        }
+                        "json": "Important\r\n\r\n* Azure Database for PostgreSQL - Single Server is on the retirement path. We strongly recommend for you to upgrade to Azure Database for PostgreSQL - Flexible Server. \r\n\r\n> For more information about migrating to Azure Database for PostgreSQL - Flexible Server, see [What's happening to Azure Database for PostgreSQL Single Server](https://learn.microsoft.com/en-us/azure/postgresql/single-server/whats-happening-to-postgresql-single-server)?",
+                        "style": "warning"
                       },
-                      "name": "kql_database_postgresql_resources_details_summary"
+                      "name": "postgresql-single-retirement"
                     },
                     {
                       "type": 3,
@@ -3453,6 +3392,76 @@
                       "type": 3,
                       "content": {
                         "version": "KqlItem/1.0",
+                        "query": ${kql_database_postgresql_resources_details_summary},
+                        "size": 3,
+                        "title": "PostgreSQL - Flexible - Recommendation Summary",
+                        "showExportToExcel": true,
+                        "queryType": 1,
+                        "resourceType": "microsoft.resourcegraph/resources",
+                        "crossComponentResources": [
+                          "{Subscriptions}"
+                        ],
+                        "gridSettings": {
+                          "formatters": [
+                            {
+                              "columnMatch": "ResourceTotal",
+                              "formatter": 22,
+                              "formatOptions": {
+                                "compositeBarSettings": {
+                                  "labelText": "",
+                                  "columnSettings": [
+                                    {
+                                      "columnName": "NotRunning",
+                                      "color": "lightBlue"
+                                    },
+                                    {
+                                      "columnName": "NotRecommendedSKU",
+                                      "color": "orange"
+                                    },
+                                    {
+                                      "columnName": "NoAVZone",
+                                      "color": "purple"
+                                    },
+                                    {
+                                      "columnName": "NoGRSBackup",
+                                      "color": "red"
+                                    }
+                                  ]
+                                }
+                              }
+                            }
+                          ],
+                          "rowLimit": 10000,
+                          "labelSettings": [
+                            {
+                              "columnId": "ResourceTotal",
+                              "label": "Resource Total"
+                            },
+                            {
+                              "columnId": "NotRunning",
+                              "label": "Failed Status"
+                            },
+                            {
+                              "columnId": "NotRecommendedSKU",
+                              "label": "Not production SKU"
+                            },
+                            {
+                              "columnId": "NoAVZone",
+                              "label": "No Availability Zone"
+                            },
+                            {
+                              "columnId": "NoGRSBackup",
+                              "label": "No Geo Backup"
+                            }
+                          ]
+                        }
+                      },
+                      "name": "kql_database_postgresql_resources_details_summary"
+                    },
+                    {
+                      "type": 3,
+                      "content": {
+                        "version": "KqlItem/1.0",
                         "query": ${kql_database_postgresqlflexible_resources_details},
                         "size": 1,
                         "title": "PostgreSQL - Flexible",
@@ -3613,6 +3622,32 @@
                               }
                             },
                             {
+                              "columnMatch": "Environment",
+                              "formatter": 18,
+                              "formatOptions": {
+                                "thresholdsOptions": "colors",
+                                "thresholdsGrid": [
+                                  {
+                                    "operator": "contains",
+                                    "thresholdValue": "prod",
+                                    "representation": "redBright",
+                                    "text": "{0}{1}"
+                                  },
+                                  {
+                                    "operator": "contains",
+                                    "thresholdValue": "Prod",
+                                    "representation": "redBright",
+                                    "text": "{0}{1}"
+                                  },
+                                  {
+                                    "operator": "Default",
+                                    "thresholdValue": null,
+                                    "text": "{0}{1}"
+                                  }
+                                ]
+                              }
+                            },
+                            {
                               "columnMatch": "GeoRedundantBackup",
                               "formatter": 18,
                               "formatOptions": {
@@ -3663,6 +3698,14 @@
                             {
                               "columnId": "HighAvailability",
                               "label": "High Availability"
+                            },
+                            {
+                              "columnId": "GeoRedundantBackup",
+                              "label": "GeoBackup"
+                            },
+                            {
+                              "columnId": "azone",
+                              "label": "AvailabilityZone"
                             }
                           ]
                         }
