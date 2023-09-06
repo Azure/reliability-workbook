@@ -180,8 +180,99 @@
                   "type": 3,
                   "content": {
                     "version": "KqlItem/1.0",
+                    "query": ${kql_azuresiterecovery_resources_details_summary},
+                    "size": 3,
+                    "title": "Azure Site Recovery resources - Recommendation Summary",
+                    "exportedParameters": [
+                      {
+                        "fieldName": "Name",
+                        "parameterName": "SiteRecoveryResourceId",
+                        "parameterType": 5,
+                        "defaultValue": ""
+                      }
+                    ],
+                    "showExportToExcel": true,
+                    "queryType": 1,
+                    "resourceType": "microsoft.resourcegraph/resources",
+                    "crossComponentResources": [
+                      "{Subscriptions}"
+                    ],
+                    "gridSettings": {
+                      "formatters": [
+                        {
+                          "columnMatch": "ResourceTotal",
+                          "formatter": 22,
+                          "formatOptions": {
+                            "compositeBarSettings": {
+                              "labelText": "",
+                              "columnSettings": [
+                                {
+                                  "columnName": "FailedStatus",
+                                  "color": "yellow"
+                                },
+                                {
+                                  "columnName": "StateNotSucceeded",
+                                  "color": "lightBlue"
+                                },
+                                {
+                                  "columnName": "UnprotectedStatus",
+                                  "color": "orange"
+                                },
+                                {
+                                  "columnName": "UnHealthyStatus",
+                                  "color": "purple"
+                                },
+                                {
+                                  "columnName": "UnHealthyFailover",
+                                  "color": "red"
+                                },
+                                {
+                                  "columnName": "IsReplicationAgentUpdateRequired",
+                                  "color": "green"
+                                }
+                              ]
+                            }
+                          }
+                        }
+                      ],
+                      "rowLimit": 10000,
+                      "labelSettings": [
+                        {
+                          "columnId": "ResourceTotal",
+                          "label": "Resource Total"
+                        },
+                        {
+                          "columnId": "FailedStatus",
+                          "label": "Failed Status"
+                        },
+                        {
+                          "columnId": "UnprotectedStatus",
+                          "label": "Unprotected Status"
+                        },
+                        {
+                          "columnId": "UnHealthyStatus",
+                          "label": "Unhealthy Replication Status"
+                        },
+                        {
+                          "columnId": "UnHealthyFailover",
+                          "label": "Unhealthy Failover Status"
+                        },
+                        {
+                          "columnId": "IsReplicationAgentUpdateRequired",
+                          "label": "Replication Agent update required"
+                        }
+                      ]
+                    },
+                    "sortBy": []
+                  },
+                  "name": "kql_azuresiterecovery_resources_details_summary"
+                },
+                {
+                  "type": 3,
+                  "content": {
+                    "version": "KqlItem/1.0",
                     "query": ${kql_azuresiterecovery_resources_details},
-                    "size": 0,
+                    "size": 3,
                     "title": "List of Azure Site Recovery resources",
                     "exportedParameters": [
                       {
@@ -442,7 +533,7 @@
                   "content": {
                     "version": "KqlItem/1.0",
                     "query": ${kql_azuresiterecovery_resources_protectedItem_details},
-                    "size": 0,
+                    "size": 3,
                     "title": "List of protected items (Please select the Site Recovery resource row in the above pane)",
                     "queryType": 1,
                     "resourceType": "microsoft.resourcegraph/resources",
