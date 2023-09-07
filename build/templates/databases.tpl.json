@@ -2268,6 +2268,10 @@
                                       "color": "lightBlue"
                                     },
                                     {
+                                      "columnName": "NotRecommendedSKU",
+                                      "color": "green"
+                                    },
+                                    {
                                       "columnName": "NoAVZone",
                                       "color": "orange"
                                     },
@@ -2301,6 +2305,10 @@
                             {
                               "columnId": "NotRunning",
                               "label": "Failed Status"
+                            },
+                            {
+                              "columnId": "NotRecommendedSKU",
+                              "label": "Non-production SKU"
                             },
                             {
                               "columnId": "NoAVZone",
@@ -2370,7 +2378,7 @@
                                   },
                                   {
                                     "operator": "==",
-                                    "thresholdValue": "basic",
+                                    "thresholdValue": "burstable",
                                     "representation": "orange",
                                     "text": "{0}{1}"
                                   },
