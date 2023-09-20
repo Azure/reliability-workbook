@@ -313,7 +313,9 @@ resources
     type == 'microsoft.dbformysql/flexibleservers', case(
         properties.highAvailability.mode == "Disabled" and properties.replicationRole != "Replica" , "Not Configured",
         properties.replicationRole == "Replica", "Not Applicable",
-        "Configured"
+        properties.highAvailability.mode == "ZoneRedundant", "Zone Redundant",
+        properties.highAvailability.mode == "SameZone", "Same Zone",
+        properties.highAvailability.mode
     ),
     type == 'microsoft.cache/redis', 'Not Applicable',
     type == "microsoft.apimanagement/service", "Not Applicable",

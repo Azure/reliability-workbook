@@ -2494,7 +2494,13 @@
                                 "thresholdsGrid": [
                                   {
                                     "operator": "==",
-                                    "thresholdValue": "configured",
+                                    "thresholdValue": "zone redundant",
+                                    "representation": "success",
+                                    "text": "{0}{1}"
+                                  },
+                                  {
+                                    "operator": "==",
+                                    "thresholdValue": "same zone",
                                     "representation": "success",
                                     "text": "{0}{1}"
                                   },
