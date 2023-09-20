@@ -3455,6 +3455,10 @@
                               "label": "No Availability Zone"
                             },
                             {
+                              "columnId": "NoReplica",
+                              "label": "No Replica"
+                            },
+                            {
                               "columnId": "NoGRSBackup",
                               "label": "No Geo Backup"
                             }
@@ -3653,6 +3657,57 @@
                               }
                             },
                             {
+                              "columnMatch": "ReplicationRole",
+                              "formatter": 18,
+                              "formatOptions": {
+                                "thresholdsOptions": "icons",
+                                "thresholdsGrid": [
+                                  {
+                                    "operator": "==",
+                                    "thresholdValue": "none",
+                                    "representation": "2",
+                                    "text": "{0}{1}"
+                                  },
+                                  {
+                                    "operator": "==",
+                                    "thresholdValue": "primary",
+                                    "representation": "success",
+                                    "text": "{0}{1}"
+                                  },
+                                  {
+                                    "operator": "==",
+                                    "thresholdValue": "asyncreplica",
+                                    "representation": "success",
+                                    "text": "{0}{1}"
+                                  },
+                                  {
+                                    "operator": "==",
+                                    "thresholdValue": "master",
+                                    "representation": "success",
+                                    "text": "{0}{1}"
+                                  },
+                                  {
+                                    "operator": "==",
+                                    "thresholdValue": "replica",
+                                    "representation": "success",
+                                    "text": "{0}{1}"
+                                  },
+                                  {
+                                    "operator": "==",
+                                    "thresholdValue": "not applicable",
+                                    "representation": "more",
+                                    "text": "{0}{1}"
+                                  },
+                                  {
+                                    "operator": "Default",
+                                    "thresholdValue": null,
+                                    "representation": "unknown",
+                                    "text": "{0}{1}"
+                                  }
+                                ]
+                              }
+                            },
+                            {
                               "columnMatch": "GeoRedundantBackup",
                               "formatter": 18,
                               "formatOptions": {
@@ -3711,7 +3766,12 @@
                             {
                               "columnId": "azone",
                               "label": "AvailabilityZone"
+                            },
+                            {
+                              "columnId": "ReplicationRole",
+                              "label": "Replication Role"
                             }
+
                           ]
                         }
                       },
