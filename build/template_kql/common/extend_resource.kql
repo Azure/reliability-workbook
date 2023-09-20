@@ -37,6 +37,7 @@ resources
     (type == 'microsoft.dbformysql/flexibleservers') or 
     (type == 'microsoft.cache/redis') or
     (type == "microsoft.apimanagement/service") or 
+    (type==  'microsoft.servicebus/namespaces') or
     (type == "microsoft.storage/storageaccounts" or type == "microsoft.classicstorage/storageaccounts") or 
     (type == "microsoft.network/azurefirewalls") or 
     (type == "microsoft.network/frontdoors") or
@@ -95,6 +96,7 @@ resources
     type == 'microsoft.dbformysql/flexibleservers', tostring(properties.state),
     type == 'microsoft.cache/redis', tostring(properties.provisioningState),
     type == "microsoft.apimanagement/service", tostring(properties.provisioningState),
+    type == 'microsoft.servicebus/namespaces',tostring(properties.provisioningState),
     type contains "storageaccounts", tostring(properties.provisioningState),
     type == "microsoft.network/azurefirewalls", tostring(properties.provisioningState),
     type == "microsoft.network/frontdoors", tostring(properties.resourceState),
@@ -119,6 +121,7 @@ resources
     type == 'microsoft.dbformysql/flexibleservers', tostring(sku.tier),
     type == 'microsoft.cache/redis', tostring(properties.sku.name),
     type == "microsoft.apimanagement/service", tostring(sku.name),
+    type == 'microsoft.servicebus/namespaces', tostring(sku.name),
     type contains 'storageaccounts', tostring(replace('-', '_', tostring(iff(type =~ "microsoft.storage/storageaccounts", sku.name, properties.accountType)))),
     type == "microsoft.network/azurefirewalls", tostring(properties.sku.name),
     type == "microsoft.network/frontdoors", "classic_frontdoor",
@@ -151,6 +154,7 @@ resources
     (type == 'microsoft.dbformysql/flexibleservers'), iif(properties.haEnabled == "Enabled", 'Configured', 'Not Configured'),
     (type == 'microsoft.cache/redis'), coalesce(tostring(array_length(parse_json(zones))), 'Not Configured'),
     (type == "microsoft.apimanagement/service"), coalesce(tostring(array_length(parse_json(zones))), 'Not Configured'),
+     (type == 'microsoft.servicebus/namespaces'), iff(properties.zoneRedundant == 'true', 'Configured', 'Not Configured'),
     (type contains 'storageaccounts'), case(split(skuName, '_', 1)[0] contains "zrs", "Configured", "Not Configured"),
     (type == "microsoft.network/azurefirewalls"), iif(isnotnull(zones), "Configured", "Not Configured"),
     (type == "microsoft.network/frontdoors"), "Not Applicable",
@@ -189,6 +193,7 @@ resources
     type == 'microsoft.dbformysql/flexibleservers', "Not Applicable",
     type == 'microsoft.cache/redis', "Not Applicable",
     type == "microsoft.apimanagement/service", "Not Applicable",
+    type == "microsoft.servicebus/namespaces", iif(zones in ('1', '2', '3'), "configured","not configured"),
     type contains "storageaccounts", "Not Applicable",
     type == "microsoft.network/azurefirewalls", "Not Applicable",
     type == "microsoft.network/frontdoors", "Not Applicable",
@@ -213,6 +218,7 @@ resources
     type == 'microsoft.dbformysql/flexibleservers', tostring(sku.capacity),
     type == 'microsoft.cache/redis', strcat(properties.sku.family, properties.sku.capacity),
     type == "microsoft.apimanagement/service", tostring(sku.capacity),
+    type == "microsoft.servicebus/namespaces",iif(isnotnull(sku.capacity), tostring(sku.capacity), "Not configured"),
     type contains "storageaccounts", "Not Applicable", 
     type == "microsoft.network/azurefirewalls", "Not Applicable",
     type == "microsoft.network/frontdoors", "Not Applicable",
@@ -237,6 +243,7 @@ resources
     type == 'microsoft.dbformysql/flexibleservers', 'Not Applicable',
     type == 'microsoft.cache/redis', 'Not Applicable',
     type == "microsoft.apimanagement/service", "Not Applicable",
+    type == "microsoft.servicebus/namespaces",properties.minimumTlsVersion,//use it for tls version, renaming the column
     type contains "storageaccounts", "Not Applicable",
     type == "microsoft.network/azurefirewalls", "Not Applicable",
     type == "microsoft.network/frontdoors", "Not Applicable",
@@ -261,6 +268,7 @@ resources
     type == 'microsoft.dbformysql/flexibleservers', 'Not Applicable',
     type == 'microsoft.cache/redis', 'Not Applicable',
     type == "microsoft.apimanagement/service", tostring(properties.platformVersion), //Field Override
+    type == "microsoft.servicebus/namespaces", "Not Applicable",
     type contains "storageaccounts", tostring(split(skuName, '_', 0)[0]),
     type == "microsoft.network/azurefirewalls", "Not Applicable",
     type == "microsoft.network/frontdoors", "Not Applicable",
@@ -286,6 +294,7 @@ resources
     type == 'microsoft.dbformysql/flexibleservers', "Not Applicable",
     type == 'microsoft.cache/redis', 'Not Applicable',
     type == "microsoft.apimanagement/service", tostring(properties.additionalLocations),
+    (type == "microsoft.servicebus/namespaces"), "Not Applicable",
     type contains "storageaccounts", case(
         location in~ ('qatarcentral'), 'Not Applicable',
         split(skuName, '_', 1)[0] startswith "ra", "Configured",
@@ -310,6 +319,7 @@ resources
     type == 'microsoft.dbformysql/flexibleservers', case(properties.haEnabled == "Enabled", "Configured", "Not Applicable"),
     type == 'microsoft.cache/redis', 'Not Applicable',
     type == "microsoft.apimanagement/service", "Not Applicable",
+    (type == "microsoft.servicebus/namespaces"), "Not Applicable",
     type contains "storageaccounts", "Not Applicable",
     type == "microsoft.network/azurefirewalls", "Not Applicable",
     type == "microsoft.network/frontdoors", "Not Applicable",
@@ -327,6 +337,7 @@ resources
     (type == 'microsoft.documentdb/databaseaccounts' and properties.enableMultipleWriteLocations == "true"), "Enabled",
     (type == 'microsoft.cache/redis'), 'Not Applicable',
     (type == "microsoft.apimanagement/service"), "Not Applicable",
+    (type == "microsoft.servicebus/namespaces"), "Not Applicable",
     (type contains "storageaccounts"), "Not Applicable",
     (type == "microsoft.network/azurefirewalls"), "Not Applicable",
     (type == "microsoft.network/frontdoors"), "Not Applicable",
@@ -344,6 +355,7 @@ resources
     (type == 'microsoft.dbformysql/flexibleservers'), "Not Applicable",
     (type == 'microsoft.cache/redis'), 'Not Applicable',
     (type == "microsoft.apimanagement/service"), "Not Applicable",
+    (type == "microsoft.servicebus/namespaces"), "Not Applicable",
     (type contains "storageaccounts"), "Not Applicable",
     (type == "microsoft.network/azurefirewalls"), "Not Applicable",
     (type == "microsoft.network/frontdoors"), "Not Applicable",
@@ -363,6 +375,7 @@ resources
     (type == 'microsoft.dbformysql/flexibleservers'), iif(properties.haEnabled == "Enabled", 'Not Applicable', tostring(properties.replicationRole)),
     (type == 'microsoft.cache/redis'), 'Not Applicable',
     (type == "microsoft.apimanagement/service"), "Not Applicable",
+    (type == "microsoft.servicebus/namespaces"), "Not Applicable",
     (type contains "storageaccounts"), tostring(split(skuName, '_', 1)[0]),
     (type == "microsoft.network/azurefirewalls"), "Not Applicable",
     (type == "microsoft.network/frontdoors"), "Not Applicable",
@@ -418,7 +431,4 @@ resources
     (Type == "microsoft.recoveryservices/vaults"), "Not Applicable",
     "Unknown"
     )
-| extend AvailabilitySet = case(
-    AvailabilitySet == '-', 'None',
-    isnotempty(AvailabilitySet), AvailabilitySet,
-    "Unknown")
+    
