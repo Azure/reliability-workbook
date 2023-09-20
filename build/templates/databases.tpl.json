@@ -3430,6 +3430,10 @@
                                     {
                                       "columnName": "NoGRSBackup",
                                       "color": "red"
+                                    },
+                                    {
+                                      "columnName": "NoReplica",
+                                      "color": "yellow"
                                     }
                                   ]
                                 }
