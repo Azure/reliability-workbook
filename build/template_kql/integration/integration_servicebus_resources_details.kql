@@ -1,0 +1,3 @@
+${extend_resource}
+| project Type, SkuName, Kind, SubscriptionId, Name, State, Location, ResourceGroup, AvailabilityZone, Zones=AvailabilitySet, Capacity, MinTLSVersion=FaultDomain, Environment
+| where Type == 'microsoft.servicebus/namespaces'

@@ -9,8 +9,22 @@ locals {
     }
   )
   workbook_integration_json = templatefile("${path.module}/templates/integration.tpl.json", {
-    "kql_integration_apim_resources_details" = jsonencode(local.kql_integration_apim_resources_details)
+    "kql_integration_apim_resources_details"               = jsonencode(local.kql_integration_apim_resources_details)
+    "kql_integration_servicebus_resources_details"         = jsonencode(local.kql_integration_servicebus_resources_details)
+    "kql_integration_servicebus_resources_details_summary" = jsonencode(local.kql_integration_servicebus_resources_details_summary)
   })
+  kql_integration_servicebus_resources_details = templatefile(
+    "${path.module}/template_kql/integration/integration_servicebus_resources_details.kql",
+    {
+      "extend_resource" = local.kql_extend_resource
+    }
+  )
+  kql_integration_servicebus_resources_details_summary = templatefile(
+    "${path.module}/template_kql/integration/integration_servicebus_resources_details_summary.kql",
+    {
+      "extend_resource" = local.kql_extend_resource
+    }
+  )
 }
 resource "random_uuid" "workbook_name_integration" {
   keepers = {
