@@ -3682,12 +3682,6 @@
                                   },
                                   {
                                     "operator": "==",
-                                    "thresholdValue": "master",
-                                    "representation": "success",
-                                    "text": "{0}{1}"
-                                  },
-                                  {
-                                    "operator": "==",
                                     "thresholdValue": "replica",
                                     "representation": "success",
                                     "text": "{0}{1}"
