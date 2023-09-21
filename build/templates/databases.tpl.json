@@ -3433,7 +3433,7 @@
                                     },
                                     {
                                       "columnName": "NoReplica",
-                                      "color": "yellow"
+                                      "color": "lightgreen"
                                     }
                                   ]
                                 }
