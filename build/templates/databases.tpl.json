@@ -3397,7 +3397,7 @@
                       "type": 3,
                       "content": {
                         "version": "KqlItem/1.0",
-                        "query": ${kql_database_postgresql_resources_details_summary},
+                        "query": ${kql_database_postgresqlflexible_resources_details_summary},
                         "size": 3,
                         "title": "PostgreSQL - Flexible - Recommendation Summary",
                         "showExportToExcel": true,
@@ -3463,13 +3463,17 @@
                               "label": "No Replica"
                             },
                             {
-                              "columnId": "NoGRSBackup",
+                              "columnId": "NoHA",
+                              "label": "No High Availability"
+                            },
+                            {
+                              "columnId": "NoGeoBackup",
                               "label": "No Geo Backup"
                             }
                           ]
                         }
                       },
-                      "name": "kql_database_postgresql_resources_details_summary"
+                      "name": "kql_database_postgresqlflexible_resources_details_summary"
                     },
                     {
                       "type": 3,
@@ -3609,6 +3613,38 @@
                               }
                             },
                             {
+                              "columnMatch": "AvailabilityZone",
+                              "formatter": 18,
+                              "formatOptions": {
+                                "thresholdsOptions": "colors",
+                                "thresholdsGrid": [
+                                  {
+                                    "operator": "==",
+                                    "thresholdValue": "not applicable",
+                                    "representation": "gray",
+                                    "text": "{0}{1}"
+                                  },
+                                  {
+                                    "operator": "==",
+                                    "thresholdValue": "not configured",
+                                    "representation": "orange",
+                                    "text": "not configured"
+                                  },
+                                  {
+                                    "operator": "==",
+                                    "thresholdValue": "configured",
+                                    "representation": "green",
+                                    "text": "{0}{1}"
+                                  },
+                                  {
+                                    "operator": "Default",
+                                    "thresholdValue": null,
+                                    "text": "{0}{1}"
+                                  }
+                                ]
+                              }
+                            },
+                            {
                               "columnMatch": "HighAvailability",
                               "formatter": 18,
                               "formatOptions": {
@@ -3675,7 +3711,7 @@
                                   {
                                     "operator": "==",
                                     "thresholdValue": "primary",
-                                    "representation": "success",
+                                    "representation": "2",
                                     "text": "{0}{1}"
                                   },
                                   {
@@ -3706,20 +3742,53 @@
                               }
                             },
                             {
-                              "columnMatch": "GeoRedundantBackup",
+                              "columnMatch": "AutomaticFailover",
+                              "formatter": 18,
+                              "formatOptions": {
+                                "thresholdsOptions": "colors",
+                                "thresholdsGrid": [
+                                  {
+                                    "operator": "==",
+                                    "thresholdValue": "not Configured",
+                                    "representation": "orange",
+                                    "text": "{0}{1}"
+                                  },
+                                  {
+                                    "operator": "==",
+                                    "thresholdValue": "not applicable",
+                                    "representation": "gray",
+                                    "text": "{0}{1}"
+                                  },
+                                  {
+                                    "operator": "==",
+                                    "thresholdValue": "zone redundant",
+                                    "representation": "green",
+                                    "text": "{0}{1}"
+                                  },
+                                  {
+                                    "operator": "Default",
+                                    "thresholdValue": null,
+                                    "representation": null,
+                                    "text": "{0}{1}"
+                                  }
+                                ]
+                              }
+                            },
+                            {
+                              "columnMatch": "GeoBackup",
                               "formatter": 18,
                               "formatOptions": {
                                 "thresholdsOptions": "icons",
                                 "thresholdsGrid": [
                                   {
                                     "operator": "contains",
-                                    "thresholdValue": "Enabled",
+                                    "thresholdValue": "enabled",
                                     "representation": "success",
                                     "text": "{0}{1}"
                                   },
                                   {
                                     "operator": "contains",
-                                    "thresholdValue": "Disabled",
+                                    "thresholdValue": "disabled",
                                     "representation": "2",
                                     "text": "{0}{1}"
                                   },
@@ -3754,16 +3823,12 @@
                               "label": "Resource Group"
                             },
                             {
-                              "columnId": "HighAvailability",
+                              "columnId": "AutomaticFailover",
                               "label": "High Availability"
                             },
                             {
-                              "columnId": "GeoRedundantBackup",
-                              "label": "GeoBackup"
-                            },
-                            {
-                              "columnId": "azone",
-                              "label": "AvailabilityZone"
+                              "columnId": "State",
+                              "label": "Status"
                             },
                             {
                               "columnId": "ReplicationRole",
