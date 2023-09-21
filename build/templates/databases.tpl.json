@@ -3438,6 +3438,14 @@
                                   ]
                                 }
                               }
+                            },
+                            {
+                              "columnMatch": "Primary",
+                              "formatter": 5
+                            },
+                            {
+                              "columnMatch": "AsyncReplica",
+                              "formatter": 5
                             }
                           ],
                           "rowLimit": 10000,
