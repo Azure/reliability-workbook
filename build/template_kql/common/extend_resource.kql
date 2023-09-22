@@ -329,17 +329,11 @@ resources
     (type == 'microsoft.documentdb/databaseaccounts' and properties.enableAutomaticFailover == "true"), "Configured",
     (type == 'microsoft.documentdb/databaseaccounts'), "Not Applicable",
     type == 'microsoft.dbformysql/servers', "Not Applicable",
-     type == 'microsoft.dbformysql/flexibleservers', case(
-        properties.highAvailability.mode == "Disabled" and properties.replicationRole != "Replica" , "Not Configured",
-        properties.replicationRole == "Replica", "Not Applicable",
-        properties.highAvailability.mode == "ZoneRedundant", "Zone Redundant",
-        properties.highAvailability.mode == "SameZone", "Same Zone",
-        properties.highAvailability.mode
-    ),
+    type == 'microsoft.dbformysql/flexibleservers', case(properties.haEnabled == "Enabled", "Configured", "Not Applicable"),
     type == 'microsoft.dbforpostgresql/servers', "Not Applicable",
-    type == 'microsoft.dbforpostgresql/flexibleservers', case(
-        properties.highAvailability.mode == "Disabled" and properties.replicationRole != "Replica" , "Not Configured",
-        properties.replicationRole == "Replica", "Not Applicable",
+   type == 'microsoft.dbforpostgresql/flexibleservers', case(
+        properties.highAvailability.mode == "Disabled" and properties.replicationRole != "GeoAsyncReplica" , "Not Configured",
+        properties.replicationRole == "GeoAsyncReplica", "Not Applicable",
         properties.highAvailability.mode == "ZoneRedundant", "Zone Redundant",
         properties.highAvailability.mode == "SameZone", "Same Zone",
         properties.highAvailability.mode
@@ -397,8 +391,8 @@ resources
     type in ('microsoft.compute/virtualmachines', 'microsoft.classiccompute/virtualmachines', 'microsoft.compute/virtualmachinescalesets', 'microsoft.web/sites', 'microsoft.web/serverfarms', 'microsoft.containerservice/managedclusters', 'microsoft.documentdb/databaseaccounts'), "Not Applicable",
     (type == 'microsoft.sql/servers/databases' and sku.tier <> 'DataWarehouse'), iif(isnotempty(properties.secondaryType), "replica", "master"),
     (type == 'microsoft.sql/servers/databases' and sku.tier == 'DataWarehouse'), "Not Applicable",
-    (type == 'microsoft.dbformysql/servers'), tostring(properties.replicationRole),
-    (type == 'microsoft.dbformysql/flexibleservers'), tostring(properties.replicationRole),
+    (type == 'microsoft.dbformysql/servers'), "Not Applicable",
+    (type == 'microsoft.dbformysql/flexibleservers'), iif(properties.haEnabled == "Enabled", 'Configured', 'Not Configured'),
     (type == 'microsoft.dbforpostgresql/servers'), tostring(properties.replicationRole),
     (type == 'microsoft.dbforpostgresql/flexibleservers'), tostring(properties.replicationRole),
     (type == 'microsoft.cache/redis'), 'Not Applicable',
@@ -453,7 +447,7 @@ resources
     (Type == 'microsoft.sql/servers/databases'), "Not Applicable", 
     (Type == 'microsoft.documentdb/databaseaccounts'), iif(properties.backupPolicy.periodicModeProperties.backupStorageRedundancy == "Geo", "Healthy", "Unhealthy"),
     (Type == 'microsoft.dbformysql/servers'), iif(properties.storageProfile.geoRedundantBackup == "Enabled", "Healthy", "Unhealthy"),
-    (Type == 'microsoft.dbforpostgresql/servers'), iif(properties.storageProfile.geoRedundantBackup == "enabled", "healthy", "unhealthy"),
+    (Type == 'microsoft.dbforpostgresql/servers'), iif(properties.storageProfile.geoRedundantBackup == "Enabled", "Healthy", "Unhealthy"),
     (Type == 'microsoft.dbforpostgresql/flexibleservers'), properties.backup.geoRedundantBackup,
     (Type contains "storageaccounts"), "Not Applicable",
     (Type == "microsoft.network/azurefirewalls"), "Not Applicable",
