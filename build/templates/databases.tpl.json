@@ -3430,10 +3430,6 @@
                                     {
                                       "columnName": "NoGRSBackup",
                                       "color": "red"
-                                    },
-                                    {
-                                      "columnName": "NoReplica",
-                                      "color": "lightgreen"
                                     }
                                   ]
                                 }
@@ -3465,10 +3461,6 @@
                             {
                               "columnId": "NoAVZone",
                               "label": "No Availability Zone"
-                            },
-                            {
-                              "columnId": "NoReplica",
-                              "label": "No Replica"
                             },
                             {
                               "columnId": "NoHA",
@@ -3705,51 +3697,6 @@
                               }
                             },
                             {
-                              "columnMatch": "ReplicationRole",
-                              "formatter": 18,
-                              "formatOptions": {
-                                "thresholdsOptions": "icons",
-                                "thresholdsGrid": [
-                                  {
-                                    "operator": "==",
-                                    "thresholdValue": "none",
-                                    "representation": "2",
-                                    "text": "{0}{1}"
-                                  },
-                                  {
-                                    "operator": "==",
-                                    "thresholdValue": "primary",
-                                    "representation": "2",
-                                    "text": "{0}{1}"
-                                  },
-                                  {
-                                    "operator": "==",
-                                    "thresholdValue": "asyncreplica",
-                                    "representation": "success",
-                                    "text": "{0}{1}"
-                                  },
-                                  {
-                                    "operator": "==",
-                                    "thresholdValue": "replica",
-                                    "representation": "success",
-                                    "text": "{0}{1}"
-                                  },
-                                  {
-                                    "operator": "==",
-                                    "thresholdValue": "not applicable",
-                                    "representation": "more",
-                                    "text": "{0}{1}"
-                                  },
-                                  {
-                                    "operator": "Default",
-                                    "thresholdValue": null,
-                                    "representation": "unknown",
-                                    "text": "{0}{1}"
-                                  }
-                                ]
-                              }
-                            },
-                            {
                               "columnMatch": "AutomaticFailover",
                               "formatter": 18,
                               "formatOptions": {
@@ -3796,7 +3743,7 @@
                                   },
                                   {
                                     "operator": "contains",
-                                    "thresholdValue": "disabled",
+                                    "thresholdValue": "unhealthy",
                                     "representation": "2",
                                     "text": "{0}{1}"
                                   },
