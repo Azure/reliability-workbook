@@ -3743,7 +3743,7 @@
                                   },
                                   {
                                     "operator": "contains",
-                                    "thresholdValue": "unhealthy",
+                                    "thresholdValue": "disabled",
                                     "representation": "2",
                                     "text": "{0}{1}"
                                   },
