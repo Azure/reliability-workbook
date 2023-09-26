@@ -448,7 +448,11 @@ resources
     (Type == 'microsoft.documentdb/databaseaccounts'), iif(properties.backupPolicy.periodicModeProperties.backupStorageRedundancy == "Geo", "Healthy", "Unhealthy"),
     (Type == 'microsoft.dbformysql/servers'), iif(properties.storageProfile.geoRedundantBackup == "Enabled", "Healthy", "Unhealthy"),
     (Type == 'microsoft.dbforpostgresql/servers'), iif(properties.storageProfile.geoRedundantBackup == "Enabled", "Healthy", "Unhealthy"),
-    (Type == 'microsoft.dbforpostgresql/flexibleservers'), properties.backup.geoRedundantBackup,
+    (Type == 'microsoft.dbforpostgresql/flexibleservers'), case(
+        properties.backup.geoRedundantBackup == "Disabled" and properties.replicationRole != "GeoAsyncReplica" , "Not Configured",
+        properties.replicationRole == "GeoAsyncReplica", "Not Applicable",
+        properties.backup.geoRedundantBackup
+    ),
     (Type contains "storageaccounts"), "Not Applicable",
     (Type == "microsoft.network/azurefirewalls"), "Not Applicable",
     (Type == "microsoft.recoveryservices/vaults"), "Not Applicable",
