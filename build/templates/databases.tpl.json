@@ -3484,7 +3484,7 @@
                       "content": {
                         "version": "KqlItem/1.0",
                         "query": ${kql_database_postgresqlflexible_resources_details},
-                        "size": 1,
+                        "size": 3,
                         "title": "PostgreSQL - Flexible",
                         "showExportToExcel": true,
                         "queryType": 1,
@@ -3620,24 +3620,24 @@
                               "columnMatch": "AvailabilityZone",
                               "formatter": 18,
                               "formatOptions": {
-                                "thresholdsOptions": "colors",
+                                "thresholdsOptions": "icons",
                                 "thresholdsGrid": [
                                   {
                                     "operator": "==",
                                     "thresholdValue": "not applicable",
-                                    "representation": "gray",
+                                    "representation": "unknown",
                                     "text": "{0}{1}"
                                   },
                                   {
                                     "operator": "==",
                                     "thresholdValue": "not configured",
-                                    "representation": "orange",
+                                    "representation": "2",
                                     "text": "not configured"
                                   },
                                   {
                                     "operator": "==",
                                     "thresholdValue": "configured",
-                                    "representation": "green",
+                                    "representation": "success",
                                     "text": "{0}{1}"
                                   },
                                   {
@@ -3678,24 +3678,24 @@
                               "columnMatch": "AutomaticFailover",
                               "formatter": 18,
                               "formatOptions": {
-                                "thresholdsOptions": "colors",
+                                "thresholdsOptions": "icons",
                                 "thresholdsGrid": [
                                   {
                                     "operator": "==",
                                     "thresholdValue": "not configured",
-                                    "representation": "orange",
+                                    "representation": "2",
                                     "text": "{0}{1}"
                                   },
                                   {
                                     "operator": "==",
                                     "thresholdValue": "not applicable",
-                                    "representation": "gray",
+                                    "representation": "unknown",
                                     "text": "{0}{1}"
                                   },
                                   {
                                     "operator": "==",
                                     "thresholdValue": "zone redundant",
-                                    "representation": "green",
+                                    "representation": "success",
                                     "text": "{0}{1}"
                                   },
                                   {
@@ -3723,6 +3723,12 @@
                                     "operator": "contains",
                                     "thresholdValue": "disabled",
                                     "representation": "2",
+                                    "text": "{0}{1}"
+                                  },
+                                  {
+                                    "operator": "contains",
+                                    "thresholdValue": "unavailable",
+                                    "representation": "unknown",
                                     "text": "{0}{1}"
                                   },
                                   {

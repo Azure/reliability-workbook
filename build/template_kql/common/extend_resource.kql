@@ -449,7 +449,7 @@ resources
     (Type == 'microsoft.dbformysql/servers'), iif(properties.storageProfile.geoRedundantBackup == "Enabled", "Healthy", "Unhealthy"),
     (Type == 'microsoft.dbforpostgresql/servers'), iif(properties.storageProfile.geoRedundantBackup == "Enabled", "Healthy", "Unhealthy"),
     (Type == 'microsoft.dbforpostgresql/flexibleservers'), case(
-        properties.backup.geoRedundantBackup == "Disabled" and properties.replicationRole != "GeoAsyncReplica" , "Not Configured",
+        properties.backup.geoRedundantBackup == "Disabled" and properties.replicationRole != "GeoAsyncReplica" , "Disabled",
         properties.replicationRole == "GeoAsyncReplica", "Not Applicable",
         properties.backup.geoRedundantBackup
     ),
