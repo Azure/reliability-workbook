@@ -3625,7 +3625,7 @@
                                   {
                                     "operator": "==",
                                     "thresholdValue": "not applicable",
-                                    "representation": "unknown",
+                                    "representation": "more",
                                     "text": "{0}{1}"
                                   },
                                   {
@@ -3689,7 +3689,7 @@
                                   {
                                     "operator": "==",
                                     "thresholdValue": "not applicable",
-                                    "representation": "unknown",
+                                    "representation": "more",
                                     "text": "{0}{1}"
                                   },
                                   {
@@ -3727,8 +3727,8 @@
                                   },
                                   {
                                     "operator": "contains",
-                                    "thresholdValue": "unavailable",
-                                    "representation": "unknown",
+                                    "thresholdValue": "not applicable",
+                                    "representation": "more",
                                     "text": "{0}{1}"
                                   },
                                   {
