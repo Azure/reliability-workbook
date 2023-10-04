@@ -331,9 +331,10 @@ resources
     type == 'microsoft.dbformysql/servers', "Not Applicable",
     type == 'microsoft.dbformysql/flexibleservers', case(properties.haEnabled == "Enabled", "Configured", "Not Applicable"),
     type == 'microsoft.dbforpostgresql/servers', "Not Applicable",
-   type == 'microsoft.dbforpostgresql/flexibleservers', case(
-        properties.highAvailability.mode == "Disabled" and properties.replicationRole != "GeoAsyncReplica" , "Not Configured",
+    type == 'microsoft.dbforpostgresql/flexibleservers', case(    
+    properties.highAvailability.mode == "Disabled" and properties.replicationRole !contains "AsyncReplica", "Not Configured",
         properties.replicationRole == "GeoAsyncReplica", "Not Applicable",
+        properties.replicationRole == "AsyncReplica", "Not Applicable",
         properties.highAvailability.mode == "ZoneRedundant", "Zone Redundant",
         properties.highAvailability.mode == "SameZone", "Same Zone",
         properties.highAvailability.mode
@@ -449,8 +450,9 @@ resources
     (Type == 'microsoft.dbformysql/servers'), iif(properties.storageProfile.geoRedundantBackup == "Enabled", "Healthy", "Unhealthy"),
     (Type == 'microsoft.dbforpostgresql/servers'), iif(properties.storageProfile.geoRedundantBackup == "Enabled", "Healthy", "Unhealthy"),
     (Type == 'microsoft.dbforpostgresql/flexibleservers'), case(
-        properties.backup.geoRedundantBackup == "Disabled" and properties.replicationRole != "GeoAsyncReplica" , "Disabled",
+    properties.backup.geoRedundantBackup == "Disabled" and properties.replicationRole !contains "AsyncReplica", "Not Configured",
         properties.replicationRole == "GeoAsyncReplica", "Not Applicable",
+        properties.replicationRole == "AsyncReplica", "Not Applicable",
         properties.backup.geoRedundantBackup
     ),
     (Type contains "storageaccounts"), "Not Applicable",
