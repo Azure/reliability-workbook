@@ -3688,6 +3688,12 @@
                                   },
                                   {
                                     "operator": "==",
+                                    "thresholdValue": "same zone",
+                                    "representation": "success",
+                                    "text": "{0}{1}"
+                                  },
+                                  {
+                                    "operator": "==",
                                     "thresholdValue": "not applicable",
                                     "representation": "more",
                                     "text": "{0}{1}"
