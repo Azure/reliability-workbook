@@ -1,4 +1,4 @@
 ${extend_resource}
 | project Type, SkuName, Kind, SubscriptionId, Name, State, Location, ResourceGroup, Zones, AvailabilityZone, AvailabilitySet, Capacity, FaultDomain, OSDisk, ReadReplica, AutomaticFailover, MultipleWriteLocations, StorageAutogrow, ReplicationRole, Backup = tolower(Backup), Environment
 | where Type == 'microsoft.sql/servers/databases' and SkuName contains "datawarehouse"
-| summarize ResourceTotal=count(Name), NotRunning=dcountif(Name, State !in~ ("online", "paused")), NoGRSBackup=dcountif(Name, OSDisk !~ "grs")
+| summarize ResourceTotal=count(Name), NotRunning=dcountif(Name, State !in~ ("online", "paused")), NoGRSBackup=dcountif(Name, OSDisk !~ "geo")

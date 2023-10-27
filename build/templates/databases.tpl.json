@@ -513,19 +513,19 @@
                                 "thresholdsGrid": [
                                   {
                                     "operator": "contains",
-                                    "thresholdValue": "grs",
+                                    "thresholdValue": "geo",
                                     "representation": "success",
                                     "text": "{0}{1}"
                                   },
                                   {
                                     "operator": "==",
-                                    "thresholdValue": "lrs",
+                                    "thresholdValue": "local",
                                     "representation": "2",
                                     "text": "{0}{1}"
                                   },
                                   {
                                     "operator": "==",
-                                    "thresholdValue": "zrs",
+                                    "thresholdValue": "zone",
                                     "representation": "2",
                                     "text": "{0}{1}"
                                   },
@@ -757,7 +757,7 @@
                             },
                             {
                               "columnId": "OSDisk",
-                              "label": "Storage Type"
+                              "label": "Backup Storage redundancy"
                             }
                           ]
                         }
@@ -952,19 +952,19 @@
                                 "thresholdsGrid": [
                                   {
                                     "operator": "contains",
-                                    "thresholdValue": "grs",
+                                    "thresholdValue": "geo",
                                     "representation": "success",
                                     "text": "{0}{1}"
                                   },
                                   {
                                     "operator": "==",
-                                    "thresholdValue": "lrs",
+                                    "thresholdValue": "local",
                                     "representation": "2",
                                     "text": "{0}{1}"
                                   },
                                   {
                                     "operator": "==",
-                                    "thresholdValue": "lrs",
+                                    "thresholdValue": "zone",
                                     "representation": "2",
                                     "text": "{0}{1}"
                                   },
@@ -1200,7 +1200,7 @@
                             },
                             {
                               "columnId": "OSDisk",
-                              "label": "Storage Type"
+                              "label": "Backup Storage redundancy"
                             }
                           ]
                         }

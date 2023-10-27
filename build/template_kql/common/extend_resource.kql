@@ -258,7 +258,7 @@ resources
     type == 'microsoft.web/sites', 'Not Applicable',
     type == 'microsoft.web/serverfarms', 'Not Applicable',
     type == 'microsoft.containerservice/managedclusters', AksNodePoolStorageAccountType,
-    type == 'microsoft.sql/servers/databases', properties.storageAccountType,
+    type == 'microsoft.sql/servers/databases', properties.currentBackupStorageRedundancy,
     type == 'microsoft.documentdb/databaseaccounts', 'Not Applicable',
     type == 'microsoft.dbformysql/servers', 'Not Applicable',
     type == 'microsoft.dbformysql/flexibleservers', 'Not Applicable',
