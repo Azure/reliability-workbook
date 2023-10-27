@@ -417,27 +417,21 @@
                 }
               },
               {
-                "columnMatch": "ReplicationType",
+                "columnMatch": "ReplicationRole",
                 "formatter": 18,
                 "formatOptions": {
                   "thresholdsOptions": "icons",
                   "thresholdsGrid": [
                     {
                       "operator": "contains",
-                      "thresholdValue": "RA-GRS",
+                      "thresholdValue": "ragrs",
                       "representation": "success",
                       "text": "{0}{1}"
                     },
                     {
                       "operator": "contains",
-                      "thresholdValue": "GRS",
-                      "representation": "2",
-                      "text": "{0}{1}"
-                    },
-                    {
-                      "operator": "contains",
-                      "thresholdValue": "ZRS",
-                      "representation": "2",
+                      "thresholdValue": "ragzrs",
+                      "representation": "success",
                       "text": "{0}{1}"
                     },
                     {
