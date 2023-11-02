@@ -10,6 +10,7 @@
                 "id": "aa0176d8-14ff-4dc5-9ae7-b8029f565674",
                 "version": "KqlParameterItem/1.0",
                 "name": "Subscriptions",
+                "label": "Subscriptions",
                 "type": 6,
                 "isRequired": true,
                 "multiSelect": true,
@@ -52,6 +53,7 @@
                 "id": "5a4f6d34-9f89-4ef8-b4ee-fb0580ec016d",
                 "version": "KqlParameterItem/1.0",
                 "name": "Environment",
+                "label": "Environment",
                 "type": 2,
                 "multiSelect": true,
                 "quote": "'",
@@ -63,7 +65,8 @@
                 "typeSettings": {
                 "additionalResourceOptions": [
                     "value::all"
-                ]
+                ],
+                "showDefault": false
                 },
                 "defaultValue": "value::all",
                 "queryType": 1,
@@ -236,6 +239,76 @@
                       "type": 3,
                       "content": {
                         "version": "KqlItem/1.0",
+                        "query": ${kql_database_sqldb_resources_details_summary},
+                        "size": 3,
+                        "title": "Azure SQL Database - Recommendation Summary",
+                        "showExportToExcel": true,
+                        "queryType": 1,
+                        "resourceType": "microsoft.resourcegraph/resources",
+                        "crossComponentResources": [
+                          "{Subscriptions}"
+                        ],
+                        "gridSettings": {
+                          "formatters": [
+                            {
+                              "columnMatch": "ResourceTotal",
+                              "formatter": 22,
+                              "formatOptions": {
+                                "compositeBarSettings": {
+                                  "labelText": "",
+                                  "columnSettings": [
+                                    {
+                                      "columnName": "NotRunning",
+                                      "color": "lightBlue"
+                                    },
+                                    {
+                                      "columnName": "NotRecommendedSKU",
+                                      "color": "orange"
+                                    },
+                                    {
+                                      "columnName": "NoAVZone",
+                                      "color": "purple"
+                                    },
+                                    {
+                                      "columnName": "NoGRSBackup",
+                                      "color": "red"
+                                    }
+                                  ]
+                                }
+                              }
+                            }
+                          ],
+                          "rowLimit": 10000,
+                          "labelSettings": [
+                            {
+                              "columnId": "ResourceTotal",
+                              "label": "Resource Total"
+                            },
+                            {
+                              "columnId": "NotRunning",
+                              "label": "Failed Status"
+                            },
+                            {
+                              "columnId": "NotRecommendedSKU",
+                              "label": "Non-production SKU"
+                            },
+                            {
+                              "columnId": "NoAVZone",
+                              "label": "No Availability Zone"
+                            },
+                            {
+                              "columnId": "NoGRSBackup",
+                              "label": "No GRS Backup"
+                            }
+                          ]
+                        }
+                      },
+                      "name": "kql_database_sqldb_resources_details_summary"
+                    },
+                    {
+                      "type": 3,
+                      "content": {
+                        "version": "KqlItem/1.0",
                         "query": ${kql_database_sqldb_resources_details},
                         "size": 3,
                         "title": "Azure SQL Database",
@@ -267,12 +340,6 @@
                                 "thresholdsGrid": [
                                   {
                                     "operator": "contains",
-                                    "thresholdValue": "basic",
-                                    "representation": "orange",
-                                    "text": "{0}{1}"
-                                  },
-                                  {
-                                    "operator": "contains",
                                     "thresholdValue": "system",
                                     "representation": "gray",
                                     "text": "{0}{1}"
@@ -290,9 +357,15 @@
                                     "text": "{0}{1}"
                                   },
                                   {
+                                    "operator": "regex",
+                                    "thresholdValue": "^(standard \\(DTU:(10|20|50)\\)|basic .+)$",
+                                    "representation": "orange",
+                                    "text": "{0}{1}"
+                                  },
+                                  {
                                     "operator": "contains",
                                     "thresholdValue": "standard",
-                                    "representation": "orange",
+                                    "representation": "green",
                                     "text": "{0}{1}"
                                   },
                                   {
@@ -316,6 +389,12 @@
                                   {
                                     "operator": "contains",
                                     "thresholdValue": "elastic",
+                                    "representation": "green",
+                                    "text": "{0}{1}"
+                                  },
+                                  {
+                                    "operator": "contains",
+                                    "thresholdValue": "generalpurpose",
                                     "representation": "green",
                                     "text": "{0}{1}"
                                   },
@@ -442,19 +521,19 @@
                                 "thresholdsGrid": [
                                   {
                                     "operator": "contains",
-                                    "thresholdValue": "grs",
+                                    "thresholdValue": "geo",
                                     "representation": "success",
                                     "text": "{0}{1}"
                                   },
                                   {
                                     "operator": "==",
-                                    "thresholdValue": "lrs",
+                                    "thresholdValue": "local",
                                     "representation": "2",
                                     "text": "{0}{1}"
                                   },
                                   {
                                     "operator": "==",
-                                    "thresholdValue": "zrs",
+                                    "thresholdValue": "zone",
                                     "representation": "2",
                                     "text": "{0}{1}"
                                   },
@@ -686,7 +765,7 @@
                             },
                             {
                               "columnId": "OSDisk",
-                              "label": "Storage Type"
+                              "label": "Backup Storage redundancy"
                             }
                           ]
                         }
@@ -733,6 +812,64 @@
                         "value": "Yes"
                       },
                       "name": "text - 3 - Copy - Copy"
+                    },
+                    {
+                      "type": 3,
+                      "content": {
+                        "version": "KqlItem/1.0",
+                        "size": 3,
+                        "query": ${kql_database_synapse_resources_details_summary},
+                        "title": "Dedicated SQL pool (formerly SQL DW) - Recommendation Summary",
+                        "showExportToExcel": true,
+                        "queryType": 1,
+                        "resourceType": "microsoft.resourcegraph/resources",
+                        "crossComponentResources": [
+                          "{Subscriptions}"
+                        ],
+                        "gridSettings": {
+                          "formatters": [
+                            {
+                              "columnMatch": "ResourceTotal",
+                              "formatter": 22,
+                              "formatOptions": {
+                                "compositeBarSettings": {
+                                  "labelText": "",
+                                  "columnSettings": [
+                                    {
+                                      "columnName": "NotRunning",
+                                      "color": "lightBlue"
+                                    },
+                                    {
+                                      "columnName": "NoGRSBackup",
+                                      "color": "orange"
+                                    }
+                                  ]
+                                }
+                              }
+                            },
+                            {
+                              "columnMatch": "Group",
+                              "formatter": 1
+                            }
+                          ],
+                          "rowLimit": 10000,
+                          "labelSettings": [
+                            {
+                              "columnId": "ResourceTotal",
+                              "label": "Resource Total"
+                            },
+                            {
+                              "columnId": "NotRunning",
+                              "label": "Failed Status"
+                            },
+                            {
+                              "columnId": "NoGRSBackup",
+                              "label": "No GRS Backup"
+                            }
+                          ]
+                        }
+                      },
+                      "name": "kql_database_synapse_resources_details_summary"
                     },
                     {
                       "type": 3,
@@ -823,19 +960,19 @@
                                 "thresholdsGrid": [
                                   {
                                     "operator": "contains",
-                                    "thresholdValue": "grs",
+                                    "thresholdValue": "geo",
                                     "representation": "success",
                                     "text": "{0}{1}"
                                   },
                                   {
                                     "operator": "==",
-                                    "thresholdValue": "lrs",
+                                    "thresholdValue": "local",
                                     "representation": "2",
                                     "text": "{0}{1}"
                                   },
                                   {
                                     "operator": "==",
-                                    "thresholdValue": "lrs",
+                                    "thresholdValue": "zone",
                                     "representation": "2",
                                     "text": "{0}{1}"
                                   },
@@ -1071,7 +1208,7 @@
                             },
                             {
                               "columnId": "OSDisk",
-                              "label": "Storage Type"
+                              "label": "Backup Storage redundancy"
                             }
                           ]
                         }
@@ -1118,6 +1255,104 @@
                         "value": "Yes"
                       },
                       "name": "text - 1"
+                    },
+                    {
+                      "type": 3,
+                      "content": {
+                        "version": "KqlItem/1.0",
+                        "query": ${kql_database_cosmosdb_resources_details_summary},
+                        "size": 3,
+                        "title": "Cosmos DB -  Recommendation Summary",
+                        "showExportToExcel": true,
+                        "queryType": 1,
+                        "resourceType": "microsoft.resourcegraph/resources",
+                        "crossComponentResources": [
+                          "{Subscriptions}"
+                        ],
+                        "gridSettings": {
+                          "formatters": [
+                            {
+                              "columnMatch": "ResourceTotal",
+                              "formatter": 22,
+                              "formatOptions": {
+                                "compositeBarSettings": {
+                                  "labelText": "",
+                                  "columnSettings": [
+                                    {
+                                      "columnName": "NotRunning",
+                                      "color": "lightBlue"
+                                    },
+                                    {
+                                      "columnName": "NoAZ",
+                                      "color": "orange"
+                                    },
+                                    {
+                                      "columnName": "ReplicaLt2",
+                                      "color": "purple"
+                                    },
+                                    {
+                                      "columnName": "NoAutomaticFailover",
+                                      "color": "red"
+                                    },
+                                    {
+                                      "columnName": "NoMultipleWriteLocations",
+                                      "color": "yellow"
+                                    },
+                                    {
+                                      "columnName": "UnhealthyBackup",
+                                      "color": "green"
+                                    }
+                                  ]
+                                }
+                              }
+                            },
+                            {
+                              "columnMatch": "UnhealthyBackup",
+                              "formatter": 0,
+                              "formatOptions": {
+                                "customColumnWidthSetting": "39.8571ch"
+                              }
+                            },
+                            {
+                              "columnMatch": "Group",
+                              "formatter": 1
+                            }
+                          ],
+                          "rowLimit": 10000,
+                          "labelSettings": [
+                            {
+                              "columnId": "ResourceTotal",
+                              "label": "Resource Total"
+                            },
+                            {
+                              "columnId": "NotRunning",
+                              "label": "Failed Status"
+                            },
+                            {
+                              "columnId": "NoAZ",
+                              "label": "No Availability Zone"
+                            },
+                            {
+                              "columnId": "ReplicaLt2",
+                              "label": "ReadReplica less than 2"
+                            },
+                            {
+                              "columnId": "NoAutomaticFailover",
+                              "label": "No Automatic Failover"
+                            },
+                            {
+                              "columnId": "NoMultipleWriteLocations",
+                              "label": "No Multiple Write Locations"
+                            },
+                            {
+                              "columnId": "UnhealthyBackup",
+                              "label": "No GRS Backup (within Periodic backup)"
+                            }
+                          ]
+                        },
+                        "sortBy": []
+                      },
+                      "name": "kql_database_cosmosdb_resources_details_summary"
                     },
                     {
                       "type": 3,
@@ -1277,7 +1512,7 @@
                                 "thresholdsGrid": [
                                   {
                                     "operator": "==",
-                                    "thresholdValue": "not Configured",
+                                    "thresholdValue": "not configured",
                                     "representation": "orange",
                                     "text": "{0}{1}"
                                   },
@@ -1345,13 +1580,18 @@
                                 "thresholdsGrid": [
                                   {
                                     "operator": "==",
-                                    "thresholdValue": "healthy",
+                                    "thresholdValue": "continuous",
+                                    "representation": "success"
+                                  },
+                                  {
+                                    "operator": "==",
+                                    "thresholdValue": "geo",
                                     "representation": "success",
                                     "text": "{0}{1}"
                                   },
                                   {
                                     "operator": "==",
-                                    "thresholdValue": "unhealthy",
+                                    "thresholdValue": "not geo",
                                     "representation": "2",
                                     "text": "{0}{1}"
                                   },
@@ -2013,6 +2253,96 @@
                       "type": 3,
                       "content": {
                         "version": "KqlItem/1.0",
+                        "query": ${kql_database_mysqlflexible_resources_details_summary},
+                        "size": 3,
+                        "title": "MySQL - Flexible -  Recommendation Summary",
+                        "showExportToExcel": true,
+                        "queryType": 1,
+                        "resourceType": "microsoft.resourcegraph/resources",
+                        "crossComponentResources": [
+                          "{Subscriptions}"
+                        ],
+                        "gridSettings": {
+                          "formatters": [
+                            {
+                              "columnMatch": "ResourceTotal",
+                              "formatter": 22,
+                              "formatOptions": {
+                                "compositeBarSettings": {
+                                  "labelText": "",
+                                  "columnSettings": [
+                                    {
+                                      "columnName": "NotRunning",
+                                      "color": "lightBlue"
+                                    },
+                                    {
+                                      "columnName": "NotRecommendedSKU",
+                                      "color": "green"
+                                    },
+                                    {
+                                      "columnName": "NoAVZone",
+                                      "color": "orange"
+                                    },
+                                    {
+                                      "columnName": "NoHA",
+                                      "color": "purple"
+                                    },
+                                    {
+                                      "columnName": "NoReplica",
+                                      "color": "red"
+                                    },
+                                    {
+                                      "columnName": "NoGeoBackup",
+                                      "color": "yellow"
+                                    }
+                                  ]
+                                }
+                              }
+                            },
+                            {
+                              "columnMatch": "Group",
+                              "formatter": 1
+                            }
+                          ],
+                          "rowLimit": 10000,
+                          "labelSettings": [
+                            {
+                              "columnId": "ResourceTotal",
+                              "label": "Resource Total"
+                            },
+                            {
+                              "columnId": "NotRunning",
+                              "label": "Failed Status"
+                            },
+                            {
+                              "columnId": "NotRecommendedSKU",
+                              "label": "Non-production SKU"
+                            },
+                            {
+                              "columnId": "NoAVZone",
+                              "label": "No Availability Zone"
+                            },
+                            {
+                              "columnId": "NoHA",
+                              "label": "No High Availability"
+                            },
+                            {
+                              "columnId": "NoReplica",
+                              "label": "No Replica"
+                            },
+                            {
+                              "columnId": "NoGeoBackup",
+                              "label": "No Geo Backup"
+                            }
+                          ]
+                        }
+                      },
+                      "name": "kql_database_mysqlflexible_resources_details_summary"
+                    },
+                    {
+                      "type": 3,
+                      "content": {
+                        "version": "KqlItem/1.0",
                         "query": ${kql_database_mysqlflexible_resources_details},
                         "size": 3,
                         "title": "MySQL - Flexible",
@@ -2056,7 +2386,7 @@
                                   },
                                   {
                                     "operator": "==",
-                                    "thresholdValue": "basic",
+                                    "thresholdValue": "burstable",
                                     "representation": "orange",
                                     "text": "{0}{1}"
                                   },
@@ -2134,6 +2464,12 @@
                                     "text": "{0}{1}"
                                   },
                                   {
+                                    "operator": "==",
+                                    "thresholdValue": "not applicable",
+                                    "representation": "more",
+                                    "text": "{0}{1}"
+                                  },
+                                  {
                                     "operator": "Default",
                                     "thresholdValue": null,
                                     "representation": "unknown",
@@ -2166,8 +2502,20 @@
                                 "thresholdsGrid": [
                                   {
                                     "operator": "==",
-                                    "thresholdValue": "configured",
+                                    "thresholdValue": "zone redundant",
                                     "representation": "success",
+                                    "text": "{0}{1}"
+                                  },
+                                  {
+                                    "operator": "==",
+                                    "thresholdValue": "same zone",
+                                    "representation": "success",
+                                    "text": "{0}{1}"
+                                  },
+                                  {
+                                    "operator": "==",
+                                    "thresholdValue": "not configured",
+                                    "representation": "2",
                                     "text": "{0}{1}"
                                   },
                                   {
@@ -2207,7 +2555,7 @@
                                   },
                                   {
                                     "operator": "==",
-                                    "thresholdValue": "master",
+                                    "thresholdValue": "source",
                                     "representation": "success",
                                     "text": "{0}{1}"
                                   },
@@ -2233,8 +2581,25 @@
                               }
                             },
                             {
-                              "columnMatch": "Backup",
-                              "formatter": 5
+                              "columnMatch": "GeoBackup",
+                              "formatter": 18,
+                              "formatOptions": {
+                                "thresholdsOptions": "icons",
+                                "thresholdsGrid": [
+                                  {
+                                    "operator": "==",
+                                    "thresholdValue": "enabled",
+                                    "representation": "success",
+                                    "text": "{0}{1}"
+                                  },
+                                  {
+                                    "operator": "Default",
+                                    "thresholdValue": null,
+                                    "representation": "warning",
+                                    "text": "{0}{1}"
+                                  }
+                                ]
+                              }
                             },
                             {
                               "columnMatch": "Environment",
@@ -2577,6 +2942,10 @@
                               "label": "Resource Group"
                             },
                             {
+                              "columnId": "AutomaticFailover",
+                              "label": "High Availability"
+                            },
+                            {
                               "columnId": "StorageAutogrow",
                               "label": "Storage Autogrow"
                             },
@@ -2624,6 +2993,80 @@
                         "value": "Yes"
                       },
                       "name": "text - 1"
+                    },
+                    {
+                      "type": 3,
+                      "content": {
+                        "version": "KqlItem/1.0",
+                        "query": ${kql_database_redis_resources_details_summary},
+                        "size": 3,
+                        "title": "Azure Cache for Redis -  Recommendation Summary",
+                        "showExportToExcel": true,
+                        "queryType": 1,
+                        "resourceType": "microsoft.resourcegraph/resources",
+                        "crossComponentResources": [
+                          "{Subscriptions}"
+                        ],
+                        "gridSettings": {
+                          "formatters": [
+                            {
+                              "columnMatch": "ResourceTotal",
+                              "formatter": 22,
+                              "formatOptions": {
+                                "compositeBarSettings": {
+                                  "labelText": "",
+                                  "columnSettings": [
+                                    {
+                                      "columnName": "NotRunning",
+                                      "color": "lightBlue"
+                                    },
+                                    {
+                                      "columnName": "NoAVZone",
+                                      "color": "orange"
+                                    },
+                                    {
+                                      "columnName": "NotRecommendedTier",
+                                      "color": "purple"
+                                    },
+                                    {
+                                      "columnName": "NotRecommendedSku",
+                                      "color": "red"
+                                    }
+                                  ]
+                                }
+                              }
+                            },
+                            {
+                              "columnMatch": "Group",
+                              "formatter": 1
+                            }
+                          ],
+                          "rowLimit": 10000,
+                          "labelSettings": [
+                            {
+                              "columnId": "ResourceTotal",
+                              "label": "Resource Total"
+                            },
+                            {
+                              "columnId": "NotRunning",
+                              "label": "Failed Status"
+                            },
+                            {
+                              "columnId": "NoAVZone",
+                              "label": "No Availability Zone"
+                            },
+                            {
+                              "columnId": "NotRecommendedTier",
+                              "label": "Non-production Tier"
+                            },
+                            {
+                              "columnId": "NotRecommendedSku",
+                              "label": "Non-production SKU"
+                            }
+                          ]
+                        }
+                      },
+                      "name": "kql_database_redis_resources_details_summary"
                     },
                     {
                       "type": 3,

@@ -1,4 +1,4 @@
 ${extend_resource}
 | project Type, SkuName, Kind, SubscriptionId, Name, State, Location, ResourceGroup, Zones, AvailabilityZone, AvailabilitySet, Capacity, FaultDomain, OSDisk, ReadReplica, AutomaticFailover, MultipleWriteLocations, StorageAutogrow, ReplicationRole, Backup = tolower(Backup), Environment
 | where Type =~ "microsoft.storage/storageaccounts" or Type =~ "microsoft.classicstorage/storageaccounts"
-| summarize ResourceTotal=count(Name), Storagev1=dcountif(Name, Kind == "storage"), NoReplica=dcountif(Name, ReadReplica == "not configured")
+| summarize ResourceTotal=count(Name), Storagev1=dcountif(Name, Kind == "storage" or Kind == "blobstorage"), NoReplica=dcountif(Name, ReadReplica == "not configured"), Classic=dcountif(Name, Type =~ "microsoft.classicstorage/storageaccounts")

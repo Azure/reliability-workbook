@@ -154,7 +154,11 @@ resources
     (type == 'microsoft.sql/servers/databases' and sku.tier == 'DataWarehouse'), "Not Applicable",
     (type == 'microsoft.documentdb/databaseaccounts'), iif(properties.locations[0].isZoneRedundant == "false", 'Not Configured', 'Configured'), 
     (type == 'microsoft.dbformysql/servers'), "Not Applicable",
-    (type == 'microsoft.dbformysql/flexibleservers'), iif(properties.haEnabled == "Enabled", 'Configured', 'Not Configured'),
+    (type == 'microsoft.dbformysql/flexibleservers'),case(
+        properties.highAvailability.mode == "ZoneRedundant", "Configured",
+        properties.replicationRole == "Replica", "Not Applicable",
+        'Not Configured'
+    ),
     (type == 'microsoft.dbforpostgresql/servers'), "Not Applicable",
     (type == 'microsoft.dbforpostgresql/flexibleservers'),case(
         properties.highAvailability.mode == "ZoneRedundant", "Configured",
@@ -273,7 +277,7 @@ resources
     type == 'microsoft.web/sites', 'Not Applicable',
     type == 'microsoft.web/serverfarms', 'Not Applicable',
     type == 'microsoft.containerservice/managedclusters', AksNodePoolStorageAccountType,
-    type == 'microsoft.sql/servers/databases', properties.storageAccountType,
+    type == 'microsoft.sql/servers/databases', properties.currentBackupStorageRedundancy,
     type == 'microsoft.documentdb/databaseaccounts', 'Not Applicable',
     type == 'microsoft.dbformysql/servers', 'Not Applicable',
     type == 'microsoft.dbformysql/flexibleservers', 'Not Applicable',
@@ -329,7 +333,13 @@ resources
     (type == 'microsoft.documentdb/databaseaccounts' and properties.enableAutomaticFailover == "true"), "Configured",
     (type == 'microsoft.documentdb/databaseaccounts'), "Not Applicable",
     type == 'microsoft.dbformysql/servers', "Not Applicable",
-    type == 'microsoft.dbformysql/flexibleservers', case(properties.haEnabled == "Enabled", "Configured", "Not Applicable"),
+    type == 'microsoft.dbformysql/flexibleservers', case(
+        properties.highAvailability.mode == "Disabled" and properties.replicationRole != "Replica" , "Not Configured",
+        properties.replicationRole == "Replica", "Not Applicable",
+        properties.highAvailability.mode == "ZoneRedundant", "Zone Redundant",
+        properties.highAvailability.mode == "SameZone", "Same Zone",
+        properties.highAvailability.mode
+    ),
     type == 'microsoft.dbforpostgresql/servers', "Not Applicable",
     type == 'microsoft.dbforpostgresql/flexibleservers', case(    
     properties.highAvailability.mode == "Disabled" and properties.replicationRole !contains "AsyncReplica", "Not Configured",
@@ -339,6 +349,7 @@ resources
         properties.highAvailability.mode == "SameZone", "Same Zone",
         properties.highAvailability.mode
     ),
+    type == 'microsoft.dbformysql/flexibleservers', case(properties.haEnabled == "Enabled", "Configured", "Not Applicable"),
     type == 'microsoft.cache/redis', 'Not Applicable',
     type == "microsoft.apimanagement/service", "Not Applicable",
     type contains "storageaccounts", "Not Applicable",
@@ -392,8 +403,8 @@ resources
     type in ('microsoft.compute/virtualmachines', 'microsoft.classiccompute/virtualmachines', 'microsoft.compute/virtualmachinescalesets', 'microsoft.web/sites', 'microsoft.web/serverfarms', 'microsoft.containerservice/managedclusters', 'microsoft.documentdb/databaseaccounts'), "Not Applicable",
     (type == 'microsoft.sql/servers/databases' and sku.tier <> 'DataWarehouse'), iif(isnotempty(properties.secondaryType), "replica", "master"),
     (type == 'microsoft.sql/servers/databases' and sku.tier == 'DataWarehouse'), "Not Applicable",
-    (type == 'microsoft.dbformysql/servers'), "Not Applicable",
-    (type == 'microsoft.dbformysql/flexibleservers'), iif(properties.haEnabled == "Enabled", 'Configured', 'Not Configured'),
+    (type == 'microsoft.dbformysql/servers'), tostring(properties.replicationRole),
+    (type == 'microsoft.dbformysql/flexibleservers'), tostring(properties.replicationRole),
     (type == 'microsoft.dbforpostgresql/servers'), tostring(properties.replicationRole),
     (type == 'microsoft.dbforpostgresql/flexibleservers'), tostring(properties.replicationRole),
     (type == 'microsoft.cache/redis'), 'Not Applicable',
@@ -433,10 +444,25 @@ resources
     properties
 | join kind = leftouter (
     recoveryservicesresources
-    | where name startswith "VM;"
-    | project Name = tolower(tostring(properties.dataSourceInfo.resourceID)), Backup = tostring(properties.protectionStatus)
+    | extend vmId = case(
+        properties.backupManagementType == "AzureIaasVM", tolower(tostring(properties.dataSourceInfo.resourceID)),
+        type == "microsoft.recoveryservices/vaults/replicationfabrics/replicationprotectioncontainers/replicationprotecteditems", tolower(tostring(properties.providerSpecificDetails.dataSourceInfo.resourceId)),
+        ''
     )
-    on Name
+    | extend asrId = iff(type == "microsoft.recoveryservices/vaults/replicationfabrics/replicationprotectioncontainers/replicationprotecteditems", tolower(tostring(strcat_array(array_slice(split(properties.recoveryFabricId, '/'), 0, 8), '/'))), '')
+    | extend resourceId = case(
+        properties.backupManagementType == "AzureIaasVM", vmId,
+        type == "microsoft.recoveryservices/vaults/replicationfabrics/replicationprotectioncontainers/replicationprotecteditems", asrId,
+        ''
+    )
+    | extend Backup = tostring(properties.protectionStatus)
+    | extend replicationHealth = properties.replicationHealth
+    | extend failoverHealth = properties.failoverHealth
+    | extend protectionStateDescription = properties.protectionStateDescription
+    | extend isReplicationAgentUpdateRequired = properties.providerSpecificDetails.isReplicationAgentUpdateRequired
+    | project resourceId, vmId, asrId, Backup, replicationHealth, failoverHealth, protectionStateDescription, isReplicationAgentUpdateRequired
+  )
+  on $left.Name == $right.resourceId
 | extend Backup = case(
     Backup == "Healthy" or Backup == "Unhealthy", Backup,
     "Unknown")
@@ -445,12 +471,13 @@ resources
     (Type == 'microsoft.classiccompute/virtualmachines'), iif(Backup == "Unknown", "Not Configured", Backup),
     (Type == "microsoft.compute/virtualmachinescalesets"), "Not Applicable", 
     (Type == "microsoft.containerservice/managedclusters"), "Not Applicable",
-    (Type == 'microsoft.sql/servers/databases'), "Not Applicable", 
-    (Type == 'microsoft.documentdb/databaseaccounts'), iif(properties.backupPolicy.periodicModeProperties.backupStorageRedundancy == "Geo", "Healthy", "Unhealthy"),
+    (Type == 'microsoft.sql/servers/databases'), "Not Applicable",
+    (Type == 'microsoft.documentdb/databaseaccounts'), iif(properties.backupPolicy.type!="Continuous",iif(properties.backupPolicy.periodicModeProperties.backupStorageRedundancy == "Geo", "Geo", "Not Geo"),"Continuous"),
     (Type == 'microsoft.dbformysql/servers'), iif(properties.storageProfile.geoRedundantBackup == "Enabled", "Healthy", "Unhealthy"),
+    (Type == 'microsoft.dbformysql/flexibleservers'), properties.backup.geoRedundantBackup,
     (Type == 'microsoft.dbforpostgresql/servers'), iif(properties.storageProfile.geoRedundantBackup == "Enabled", "Healthy", "Unhealthy"),
     (Type == 'microsoft.dbforpostgresql/flexibleservers'), case(
-    properties.backup.geoRedundantBackup == "Disabled" and properties.replicationRole !contains "AsyncReplica", "Disabled",
+        properties.backup.geoRedundantBackup == "Disabled" and properties.replicationRole !contains "AsyncReplica", "Disabled",
         properties.replicationRole == "GeoAsyncReplica", "Not Applicable",
         properties.replicationRole == "AsyncReplica", "Not Applicable",
         properties.backup.geoRedundantBackup
