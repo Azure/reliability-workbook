@@ -10,6 +10,7 @@
                 "id": "aa0176d8-14ff-4dc5-9ae7-b8029f565674",
                 "version": "KqlParameterItem/1.0",
                 "name": "Subscriptions",
+                "label": "Subscriptions",
                 "type": 6,
                 "isRequired": true,
                 "multiSelect": true,
@@ -52,6 +53,7 @@
                 "id": "5a4f6d34-9f89-4ef8-b4ee-fb0580ec016d",
                 "version": "KqlParameterItem/1.0",
                 "name": "Environment",
+                "label": "Environment",
                 "type": 2,
                 "multiSelect": true,
                 "quote": "'",
@@ -63,7 +65,8 @@
                 "typeSettings": {
                 "additionalResourceOptions": [
                     "value::all"
-                ]
+                ],
+                "showDefault": false
                 },
                 "defaultValue": "value::all",
                 "queryType": 1,
@@ -176,6 +179,31 @@
             "{Subscriptions}"
           ],
           "gridSettings": {
+            "formatters": [
+              {
+                "columnMatch": "ResourceTotal",
+                "formatter": 22,
+                "formatOptions": {
+                  "compositeBarSettings": {
+                    "labelText": "",
+                    "columnSettings": [
+                      {
+                        "columnName": "Storagev1",
+                        "color": "orange"
+                      },
+                      {
+                        "columnName": "NoReplica",
+                        "color": "blue"
+                      },
+                      {
+                        "columnName": "Classic",
+                        "color": "redBright"
+                      }
+                    ]
+                  }
+                }
+              }
+            ],
             "rowLimit": 10000,
             "labelSettings": [
               {
@@ -189,6 +217,10 @@
               {
                 "columnId": "NoReplica",
                 "label": "Replication Not Enabled"
+              },
+              {
+                "columnId": "Classic",
+                "label": "Classic"
               }
             ]
           }
@@ -232,8 +264,173 @@
                   "thresholdsOptions": "icons",
                   "thresholdsGrid": [
                     {
+                      "operator": "==",
+                      "thresholdValue": "blobstorage",
+                      "representation": "warning",
+                      "text": "{0}{1}"
+                    },
+                    {
+                      "operator": "==",
+                      "thresholdValue": "storage",
+                      "representation": "2",
+                      "text": "{0}{1}"
+                    },
+                    {
+                      "operator": "Default",
+                      "thresholdValue": null,
+                      "representation": "success",
+                      "text": "{0}{1}"
+                    }
+                  ]
+                }
+              },
+              {
+                "columnMatch": "SubscriptionId",
+                "formatter": 5
+              },
+              {
+                "columnMatch": "Location",
+                "formatter": 17
+              },
+              {
+                "columnMatch": "Zones",
+                "formatter": 5
+              },
+              {
+                "columnMatch": "AvailabilityZone",
+                "formatter": 5
+              },
+              {
+                "columnMatch": "AvailabilitySet",
+                "formatter": 5
+              },
+              {
+                "columnMatch": "Capacity",
+                "formatter": 5
+              },
+              {
+                "columnMatch": "FaultDomain",
+                "formatter": 5
+              },
+              {
+                "columnMatch": "OSDisk",
+                "formatter": 5
+              },
+              {
+                "columnMatch": "ReadReplica",
+                "formatter": 18,
+                "formatOptions": {
+                  "thresholdsOptions": "icons",
+                  "thresholdsGrid": [
+                    {
+                      "operator": "==",
+                      "thresholdValue": "configured",
+                      "representation": "success",
+                      "text": "{0}{1}"
+                    },
+                    {
+                      "operator": "==",
+                      "thresholdValue": "not configured",
+                      "representation": "2",
+                      "text": "{0}{1}"
+                    },
+                    {
+                      "operator": "==",
+                      "thresholdValue": "not applicable",
+                      "representation": "more",
+                      "text": "{0}{1}"
+                    },
+                    {
+                      "operator": "Default",
+                      "thresholdValue": null,
+                      "representation": "unknown",
+                      "text": "{0}{1}"
+                    }
+                  ]
+                }
+              },
+              {
+                "columnMatch": "AutomaticFailover",
+                "formatter": 5
+              },
+              {
+                "columnMatch": "MultipleWriteLocations",
+                "formatter": 5
+              },
+              {
+                "columnMatch": "StorageAutogrow",
+                "formatter": 5
+              },
+              {
+                "columnMatch": "Backup",
+                "formatter": 5
+              },
+              {
+                "columnMatch": "Environment",
+                "formatter": 18,
+                "formatOptions": {
+                  "thresholdsOptions": "colors",
+                  "thresholdsGrid": [
+                    {
                       "operator": "contains",
-                      "thresholdValue": "v2",
+                      "thresholdValue": "Prod",
+                      "representation": "redBright",
+                      "text": "{0}{1}"
+                    },
+                    {
+                      "operator": "contains",
+                      "thresholdValue": "prod",
+                      "representation": "redBright",
+                      "text": "{0}{1}"
+                    },
+                    {
+                      "operator": "Default",
+                      "thresholdValue": null,
+                      "text": "{0}{1}"
+                    }
+                  ]
+                }
+              },
+              {
+                "columnMatch": "SubscriptionName",
+                "formatter": 5
+              },
+              {
+                "columnMatch": "AccessTier",
+                "formatter": 18,
+                "formatOptions": {
+                  "thresholdsOptions": "icons",
+                  "thresholdsGrid": [
+                    {
+                      "operator": "==",
+                      "thresholdValue": "Hot",
+                      "representation": "success",
+                      "text": "{0}{1}"
+                    },
+                    {
+                      "operator": "Default",
+                      "thresholdValue": null,
+                      "representation": "2",
+                      "text": "Warning"
+                    }
+                  ]
+                }
+              },
+              {
+                "columnMatch": "ReplicationRole",
+                "formatter": 18,
+                "formatOptions": {
+                  "thresholdsOptions": "icons",
+                  "thresholdsGrid": [
+                    {
+                      "operator": "contains",
+                      "thresholdValue": "ragrs",
+                      "representation": "success",
+                      "text": "{0}{1}"
+                    },
+                    {
+                      "operator": "contains",
+                      "thresholdValue": "ragzrs",
                       "representation": "success",
                       "text": "{0}{1}"
                     },
@@ -242,6 +439,108 @@
                       "thresholdValue": null,
                       "representation": "2",
                       "text": "{0}{1}"
+                    }
+                  ]
+                }
+              },
+              {
+                "columnMatch": "type",
+                "formatter": 5
+              }
+            ],
+            "rowLimit": 10000,
+            "hierarchySettings": {
+              "treeType": 1,
+              "groupBy": [
+                "SubscriptionId"
+              ],
+              "expandTopLevel": false,
+              "finalBy": "Name"
+            },
+            "labelSettings": [
+              {
+                "columnId": "SkuName",
+                "label": "Sku Name"
+              },
+              {
+                "columnId": "SubscriptionId",
+                "label": "Subscription"
+              },
+              {
+                "columnId": "ResourceGroup",
+                "label": "Resource Group"
+              },
+              {
+                "columnId": "ReadReplica",
+                "label": "Read Replication"
+              },
+              {
+                "columnId": "ReplicationRole",
+                "label": "Replication Type"
+              }
+            ]
+          }
+        },
+        "name": "kql_storage_account_resources_details"
+      },
+      {
+        "type": 1,
+        "content": {
+          "json": "* Classic Storage Account are in path of retirement. Please migrate to Resource Manager based Storage Accounts immediately\r\n\r\n> Retirement announcement in the [docs](https://learn.microsoft.com/azure/storage/common/classic-account-migration-overview)",
+          "style": "warning"
+        },
+        "name": "text - 6"
+      },
+      {
+        "type": 3,
+        "content": {
+          "version": "KqlItem/1.0",
+          "query": ${kql_storage_account_classic_resources_details},
+          "size": 3,
+          "title": "Classic Storage Account",
+          "showExportToExcel": true,
+          "queryType": 1,
+          "resourceType": "microsoft.resourcegraph/resources",
+          "crossComponentResources": [
+            "{Subscriptions}"
+          ],
+          "gridSettings": {
+            "formatters": [
+              {
+                "columnMatch": "$gen_group",
+                "formatter": 13,
+                "formatOptions": {
+                  "linkTarget": "Resource",
+                  "showIcon": true
+                }
+              },
+              {
+                "columnMatch": "Subscription",
+                "formatter": 13,
+                "formatOptions": {
+                  "linkTarget": "Resource",
+                  "showIcon": true
+                }
+              },
+              {
+                "columnMatch": "Type",
+                "formatter": 5
+              },
+              {
+                "columnMatch": "Name",
+                "formatter": 5
+              },
+              {
+                "columnMatch": "Kind",
+                "formatter": 18,
+                "formatOptions": {
+                  "thresholdsOptions": "icons",
+                  "thresholdsGrid": [
+                    {
+                      "operator": "Default",
+                      "thresholdValue": null,
+                      "representation": "2",
+                      "text": "Classic"
                     }
                   ]
                 }
@@ -421,26 +720,38 @@
                 }
               },
               {
-                "columnMatch": "ReplicationType",
+                "columnMatch": "ReplicationRole",
                 "formatter": 18,
                 "formatOptions": {
                   "thresholdsOptions": "icons",
                   "thresholdsGrid": [
                     {
                       "operator": "contains",
-                      "thresholdValue": "RA-GRS",
+                      "thresholdValue": "ra-grs",
                       "representation": "success",
                       "text": "{0}{1}"
                     },
                     {
                       "operator": "contains",
-                      "thresholdValue": "GRS",
+                      "thresholdValue": "ra-gzrs",
+                      "representation": "success",
+                      "text": "{0}{1}"
+                    },
+                    {
+                      "operator": "contains",
+                      "thresholdValue": "grs",
                       "representation": "2",
                       "text": "{0}{1}"
                     },
                     {
                       "operator": "contains",
-                      "thresholdValue": "ZRS",
+                      "thresholdValue": "zrs",
+                      "representation": "success",
+                      "text": "{0}{1}"
+                    },
+                    {
+                      "operator": "contains",
+                      "thresholdValue": "lrs",
                       "representation": "2",
                       "text": "{0}{1}"
                     },
@@ -491,8 +802,7 @@
             ]
           }
         },
-        "name": "kql_storage_account_resources_details"
+        "name": "kql_storage_account_classic_resources_details"
       }
-    
     ]
 }

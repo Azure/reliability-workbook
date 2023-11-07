@@ -1,11 +1,18 @@
 resources
-| where type == "microsoft.insights/activitylogalerts"
-| mv-expand category = properties.condition.allOf
-| extend category = category.equals, alertEnabled = properties.enabled
-| where category == "ServiceHealth"
-| extend incidentType = iff(isnull(properties.condition.allOf[1]), "All", properties.condition.allOf)
-| extend incident = iff(incidentType contains "Incident" or incidentType == "All", "true", "false")
-| extend maintenance = iff(incidentType contains "Maintenance" or incidentType == "All", "true", "false")
-| extend informational = iff(incidentType contains "Informational" or incidentType contains "ActionRequired" or incidentType == "All", "true", "false")
-| extend security = iff(incidentType contains "Security" or incidentType == "All", "true", "false")
-| project id, name, subscriptionId, category, alertEnabled, incident, maintenance, informational, security
+| where type =~ "microsoft.insights/activitylogalerts"
+| mv-expand condition1 = properties.condition.allOf
+| mv-expand condition2 = condition1.anyOf
+| extend alertEnabled = tostring(properties.enabled)
+| summarize set_condition1=make_set(condition1.equals), set_condition2=make_set(condition2.equals) by id, name,type,tenantId,resourceGroup,subscriptionId, alertEnabled
+| where set_has_element(set_condition1, "ServiceHealth")
+| extend category = "ServiceHealth"
+| extend all = iff(set_has_element(set_condition1, "ServiceHealth") and array_length(set_condition2) == 0, true, false)
+// Service issue
+| extend incident = iff(all, true, iff(set_has_element(set_condition1, "Incident"), true, set_has_element(set_condition2, "Incident")))
+// Planned maintenance
+| extend maintenance = iff(all, true, iff(set_has_element(set_condition1, "Maintenance"), true, set_has_element(set_condition2, "Maintenance")))
+// Health advisories
+| extend informational = iff(all, true, iff(set_has_element(set_condition1, "Informational") or set_has_element(set_condition1, "ActionRequired"), true, set_has_element(set_condition2, "Informational") or set_has_element(set_condition2, "ActionRequired")))
+// Security advisory
+| extend security = iff(all, true, iff(set_has_element(set_condition1, "Security"), true, set_has_element(set_condition2, "Security")))
+| project id, name, subscriptionId, category, tostring(alertEnabled), tostring(incident), tostring(maintenance), tostring(informational), tostring(security)

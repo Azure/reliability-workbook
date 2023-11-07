@@ -10,6 +10,7 @@
                 "id": "aa0176d8-14ff-4dc5-9ae7-b8029f565674",
                 "version": "KqlParameterItem/1.0",
                 "name": "Subscriptions",
+                "label": "Subscriptions",
                 "type": 6,
                 "isRequired": true,
                 "multiSelect": true,
@@ -52,6 +53,7 @@
                 "id": "5a4f6d34-9f89-4ef8-b4ee-fb0580ec016d",
                 "version": "KqlParameterItem/1.0",
                 "name": "Environment",
+                "label": "Environment",
                 "type": 2,
                 "multiSelect": true,
                 "quote": "'",
@@ -63,7 +65,8 @@
                 "typeSettings": {
                 "additionalResourceOptions": [
                     "value::all"
-                ]
+                ],
+                "showDefault": false
                 },
                 "defaultValue": "value::all",
                 "queryType": 1,
@@ -172,8 +175,68 @@
                 "type": 3,
                 "content": {
                   "version": "KqlItem/1.0",
+                  "query": ${kql_container_aks_resources_details_summary},
+                  "size": 3,
+                  "title": "Azure Kubernetes Service - Recommendation Summary",
+                  "queryType": 1,
+                  "resourceType": "microsoft.resourcegraph/resources",
+                  "crossComponentResources": [
+                    "{Subscriptions}"
+                  ],
+                  "gridSettings": {
+                    "formatters": [
+                      {
+                        "columnMatch": "ResourceTotal",
+                        "formatter": 22,
+                        "formatOptions": {
+                          "compositeBarSettings": {
+                            "labelText": "",
+                            "columnSettings": [
+                              {
+                                "columnName": "NotRunning",
+                                "color": "lightBlue"
+                              },
+                              {
+                                "columnName": "NoAVZone",
+                                "color": "orange"
+                              },
+                              {
+                                "columnName": "CapacityLt2",
+                                "color": "purple"
+                              }
+                            ]
+                          }
+                        }
+                      }
+                    ],
+                    "labelSettings": [
+                      {
+                        "columnId": "ResourceTotal",
+                        "label": "Resource Total"
+                      },
+                      {
+                        "columnId": "NotRunning",
+                        "label": "Not Running"
+                      },
+                      {
+                        "columnId": "NoAVZone",
+                        "label": "No Availability Zone or less than 3"
+                      },
+                      {
+                        "columnId": "CapacityLt2",
+                        "label": "Capacity < 2"
+                      }
+                    ]
+                  }
+                },
+                "name": "kql_container_aks_resources_details_summary"
+              },
+              {
+                "type": 3,
+                "content": {
+                  "version": "KqlItem/1.0",
                   "query": ${kql_container_aks_resources_details},
-                  "size": 0,
+                  "size": 3,
                   "title": "Azure Kubernetes Service (AKS)",
                   "showExportToExcel": true,
                   "queryType": 1,
@@ -345,20 +408,8 @@
                           "thresholdsOptions": "icons",
                           "thresholdsGrid": [
                             {
-                              "operator": "==",
+                              "operator": "<",
                               "thresholdValue": "2",
-                              "representation": "2",
-                              "text": "{0}{1}"
-                            },
-                            {
-                              "operator": "==",
-                              "thresholdValue": "1",
-                              "representation": "2",
-                              "text": "{0}{1}"
-                            },
-                            {
-                              "operator": "==",
-                              "thresholdValue": "0",
                               "representation": "warning",
                               "text": "{0}{1}"
                             },

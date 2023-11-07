@@ -10,6 +10,7 @@
                 "id": "aa0176d8-14ff-4dc5-9ae7-b8029f565674",
                 "version": "KqlParameterItem/1.0",
                 "name": "Subscriptions",
+                "label": "Subscriptions",
                 "type": 6,
                 "isRequired": true,
                 "multiSelect": true,
@@ -52,6 +53,7 @@
                 "id": "5a4f6d34-9f89-4ef8-b4ee-fb0580ec016d",
                 "version": "KqlParameterItem/1.0",
                 "name": "Environment",
+                "label": "Environment",
                 "type": 2,
                 "multiSelect": true,
                 "quote": "'",
@@ -63,7 +65,8 @@
                 "typeSettings": {
                 "additionalResourceOptions": [
                     "value::all"
-                ]
+                ],
+                "showDefault": false
                 },
                 "defaultValue": "value::all",
                 "queryType": 1,
@@ -206,8 +209,82 @@
               "type": 3,
               "content": {
                 "version": "KqlItem/1.0",
+                "query": ${kql_webapp_appsvcplan_resources_details_summary},
+                "size": 3,
+                "title": "App Service Plan - Recommendation Summary",
+                "showExportToExcel": true,
+                "queryType": 1,
+                "resourceType": "microsoft.resourcegraph/resources",
+                "crossComponentResources": [
+                  "{Subscriptions}"
+                ],
+                "gridSettings": {
+                  "formatters": [
+                    {
+                      "columnMatch": "ResourceTotal",
+                      "formatter": 22,
+                      "formatOptions": {
+                        "compositeBarSettings": {
+                          "labelText": "",
+                          "columnSettings": [
+                            {
+                              "columnName": "NotRunning",
+                              "color": "lightBlue"
+                            },
+                            {
+                              "columnName": "NotRecommendedSKU",
+                              "color": "orange"
+                            },
+                            {
+                              "columnName": "NoAVZone",
+                              "color": "purple"
+                            },
+                            {
+                              "columnName": "CapacityLt2",
+                              "color": "red"
+                            }
+                          ]
+                        }
+                      }
+                    },
+                    {
+                      "columnMatch": "Group",
+                      "formatter": 1
+                    }
+                  ],
+                  "rowLimit": 10000,
+                  "labelSettings": [
+                    {
+                      "columnId": "ResourceTotal",
+                      "label": "Resource Total"
+                    },
+                    {
+                      "columnId": "NotRunning",
+                      "label": "Failed Status"
+                    },
+                    {
+                      "columnId": "NotRecommendedSKU",
+                      "label": "Non-production SKU"
+                    },
+                    {
+                      "columnId": "NoAVZone",
+                      "label": "No Availability Zone"
+                    },
+                    {
+                      "columnId": "CapacityLt2",
+                      "label": "Capacity less than 2"
+                    }
+                  ]
+                }
+              },
+              "name": "kql_webapp_appsvcplan_resources_details_summary"
+            },
+            {
+              "type": 3,
+              "content": {
+                "version": "KqlItem/1.0",
                 "query": ${kql_webapp_appsvcplan_resources_details},
-                "size": 0,
+                "size": 3,
                 "title": "App Service Plan",
                 "noDataMessage": "No App Service plans found",
                 "showExportToExcel": true,
@@ -249,8 +326,20 @@
                             "text": "{0}{1}"
                           },
                           {
+                            "operator": "contains",
+                            "thresholdValue": "workflowstandard",
+                            "representation": "success",
+                            "text": "{0}{1}"
+                          },
+                          {
+                            "operator": "contains",
+                            "thresholdValue": "standard",
+                            "representation": "success",
+                            "text": "{0}{1}"
+                          },
+                          {
                             "operator": "regex",
-                            "thresholdValue": "(free|shared|basic|standard|dynamic)",
+                            "thresholdValue": "^(free|shared|basic|dynamic)$",
                             "representation": "2",
                             "text": "{0}{1}"
                           },
@@ -397,6 +486,10 @@
                       "formatter": 5
                     },
                     {
+                      "columnMatch": "numberOfSite",
+                      "formatter": 1
+                    },
+                    {
                       "columnMatch": "Environment",
                       "formatter": 18,
                       "formatOptions": {
@@ -447,11 +540,19 @@
                     {
                       "columnId": "AvailabilityZone",
                       "label": "Availability Zone"
+                    },
+                    {
+                      "columnId": "Capacity",
+                      "label": "Number of Instances"
+                    },
+                    {
+                      "columnId": "numberOfSite",
+                      "label": "Number of Sites"
                     }
                   ]
                 }
               },
-              "name": "AppServicePlan query"
+              "name": "kql_webapp_appsvcplan_resources_details"
             }
           ]
         },
@@ -493,6 +594,68 @@
           "value": "Yes"
         },
         "name": "text - 3 - Copy"
+      },
+      {
+        "type": 3,
+        "content": {
+          "version": "KqlItem/1.0",
+          "query": ${kql_webapp_appsvc_resources_details_summary},
+          "size": 3,
+          "title": "App Service - Web App - Recommendation Summary",
+          "showExportToExcel": true,
+          "queryType": 1,
+          "resourceType": "microsoft.resourcegraph/resources",
+          "crossComponentResources": [
+            "{Subscriptions}"
+          ],
+          "gridSettings": {
+            "formatters": [
+              {
+                "columnMatch": "ResourceTotal",
+                "formatter": 22,
+                "formatOptions": {
+                  "compositeBarSettings": {
+                    "labelText": "",
+                    "columnSettings": [
+                      {
+                        "columnName": "NotRunning",
+                        "color": "lightBlue"
+                      },
+                      {
+                        "columnName": "AlwaysOnDisabled",
+                        "color": "orange"
+                      },
+                      {
+                        "columnName": "AffinityEnabled",
+                        "color": "purple"
+                      }
+                    ]
+                  }
+                }
+              }
+            ],
+            "rowLimit": 10000,
+            "labelSettings": [
+              {
+                "columnId": "ResourceTotal",
+                "label": "Resource Total"
+              },
+              {
+                "columnId": "NotRunning",
+                "label": "Failed Status"
+              },
+              {
+                "columnId": "AlwaysOnDisabled",
+                "label": "AlwaysOn Disabled"
+              },
+              {
+                "columnId": "AffinityEnabled",
+                "label": "Affinity Enabled"
+              }
+            ]
+          }
+        },
+        "name": "kql_webapp_appsvc_resources_details_summary"
       },
       {
         "type": 3,
@@ -655,6 +818,48 @@
                 "formatter": 5
               },
               {
+                "columnMatch": "AlwaysOnEnabled",
+                "formatter": 18,
+                "formatOptions": {
+                  "thresholdsOptions": "icons",
+                  "thresholdsGrid": [
+                    {
+                      "operator": "==",
+                      "thresholdValue": "false",
+                      "representation": "2",
+                      "text": "{0}{1}"
+                    },
+                    {
+                      "operator": "Default",
+                      "thresholdValue": null,
+                      "representation": "success",
+                      "text": "{0}{1}"
+                    }
+                  ]
+                }
+              },
+              {
+                "columnMatch": "AffinityEnabled",
+                "formatter": 18,
+                "formatOptions": {
+                  "thresholdsOptions": "icons",
+                  "thresholdsGrid": [
+                    {
+                      "operator": "==",
+                      "thresholdValue": "true",
+                      "representation": "2",
+                      "text": "{0}{1}"
+                    },
+                    {
+                      "operator": "Default",
+                      "thresholdValue": null,
+                      "representation": "success",
+                      "text": "{0}{1}"
+                    }
+                  ]
+                }
+              },
+              {
                 "columnMatch": "Environment",
                 "formatter": 18,
                 "formatOptions": {
@@ -810,6 +1015,52 @@
                 "type": 3,
                 "content": {
                   "version": "KqlItem/1.0",
+                  "query": ${kql_webapp_appservice_funcapp_resources_details_summary},
+                  "size": 3,
+                  "title": "App Service - Function App - Recommendation Summary",
+                  "showExportToExcel": true,
+                  "queryType": 1,
+                  "resourceType": "microsoft.resourcegraph/resources",
+                  "crossComponentResources": [
+                    "{Subscriptions}"
+                  ],
+                  "gridSettings": {
+                    "formatters": [
+                      {
+                        "columnMatch": "ResourceTotal",
+                        "formatter": 22,
+                        "formatOptions": {
+                          "compositeBarSettings": {
+                            "labelText": "",
+                            "columnSettings": [
+                              {
+                                "columnName": "NotRunning",
+                                "color": "lightBlue"
+                              }
+                            ]
+                          }
+                        }
+                      }
+                    ],
+                    "rowLimit": 10000,
+                    "labelSettings": [
+                      {
+                        "columnId": "ResourceTotal",
+                        "label": "Resource Total"
+                      },
+                      {
+                        "columnId": "NotRunning",
+                        "label": "Failed Status"
+                      }
+                    ]
+                  }
+                },
+                "name": "kql_webapp_appservice_funcapp_resources_details_summary"
+              },              
+              {
+                "type": 3,
+                "content": {
+                  "version": "KqlItem/1.0",
                   "query": ${kql_webapp_appservice_funcapp_resources_details},
                   "size": 3,
                   "title": "App Service - Function App",
@@ -872,6 +1123,12 @@
                             {
                               "operator": "contains",
                               "thresholdValue": "premium",
+                              "representation": "success",
+                              "text": "{0}{1}"
+                            },
+                            {
+                              "operator": "contains",
+                              "thresholdValue": "standard",
                               "representation": "success",
                               "text": "{0}{1}"
                             },

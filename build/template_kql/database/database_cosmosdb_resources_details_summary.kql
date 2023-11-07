@@ -1,0 +1,4 @@
+${extend_resource}
+| project Type, SkuName, Kind, SubscriptionId, Name, State, Location, ResourceGroup, Zones, AvailabilityZone, AvailabilitySet, Capacity, FaultDomain, OSDisk, ReadReplica, AutomaticFailover, MultipleWriteLocations, StorageAutogrow, ReplicationRole, Backup = tolower(Backup), Environment
+| where Type == 'microsoft.documentdb/databaseaccounts'
+| summarize ResourceTotal=count(Name), NotRunning=dcountif(Name, State !in~ ("succeeded")), NoAZ=dcountif(Name, AvailabilityZone == "not configured"), ReplicaLt2=dcountif(Name, toint(ReadReplica) < 2), NoAutomaticFailover=dcountif(Name, AutomaticFailover == "not configured"), NoMultipleWriteLocations=dcountif(Name, MultipleWriteLocations == "not enabled"), UnhealthyBackup=dcountif(Name, Backup == "not geo")

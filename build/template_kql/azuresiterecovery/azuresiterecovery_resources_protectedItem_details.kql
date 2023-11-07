@@ -1,0 +1,35 @@
+recoveryservicesresources
+| where type == "microsoft.recoveryservices/vaults/replicationfabrics/replicationprotectioncontainers/replicationprotecteditems"
+| extend asrId = tolower(tostring(strcat_array(array_slice(split(id, '/'), 0, 8), '/')))
+| where asrId == '{SiteRecoveryResourceId}'
+| extend vmId = tolower(tostring(properties.providerSpecificDetails.fabricObjectId))
+| extend replicationHealth = properties.replicationHealth
+| extend failoverHealth = properties.failoverHealth
+| extend protectionStateDescription = properties.protectionStateDescription
+| extend testFailoverState = properties.testFailoverState
+| extend initialRecoveryFabricLocation = properties.providerSpecificDetails.initialRecoveryFabricLocation
+| extend initialPrimaryFabricLocation = tostring(properties.providerSpecificDetails.initialPrimaryFabricLocation)
+| extend primaryFabricLocation = tostring(properties.providerSpecificDetails.primaryFabricLocation)
+| extend recoveryFabricLocation = properties.providerSpecificDetails.recoveryFabricLocation
+| extend lastHeartbeat = properties.providerSpecificDetails.lastHeartbeat
+| extend agentVersion = properties.providerSpecificDetails.agentVersion
+| extend rpoInSeconds = properties.providerSpecificDetails.rpoInSeconds
+| extend lastSuccessfulTestFailoverTime = properties.lastSuccessfulTestFailoverTime
+| extend isReplicationAgentUpdateRequired = tostring(properties.providerSpecificDetails.isReplicationAgentUpdateRequired)
+| extend diffNowAndlastSuccessfulTestFailoverTime = datetime_diff('day', now(), todatetime(lastSuccessfulTestFailoverTime))
+| extend activeLocation = tostring(properties.activeLocation)
+| extend currentVmLocation = iff(activeLocation == "Recovery", recoveryFabricLocation, primaryFabricLocation)
+| extend statusOfFailoverorFailback = case(
+    activeLocation == "Recovery" and primaryFabricLocation == initialPrimaryFabricLocation, "Failover",
+    activeLocation == "Recovery" and primaryFabricLocation != initialPrimaryFabricLocation, "Failback",
+    activeLocation == "Primary" and primaryFabricLocation == initialPrimaryFabricLocation, "Original",
+    activeLocation == "Primary" and primaryFabricLocation != initialPrimaryFabricLocation, "Failover",
+    protectionStateDescription
+)
+| join kind = leftouter(
+    resources
+    | where type =~ "microsoft.compute/virtualmachines"
+    | extend realVmId = tolower(tostring(id))
+) on $left.vmId == $right.realVmId
+| project vmId, realVmId, currentVmLocation, statusOfFailoverorFailback, replicationHealth, failoverHealth, protectionStateDescription, testFailoverState, activeLocation, primaryFabricLocation, recoveryFabricLocation, initialPrimaryFabricLocation, initialRecoveryFabricLocation, lastHeartbeat, agentVersion, rpoInSeconds, diffNowAndlastSuccessfulTestFailoverTime, isReplicationAgentUpdateRequired
+| order by tostring(vmId)

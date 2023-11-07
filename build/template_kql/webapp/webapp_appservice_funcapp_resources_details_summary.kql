@@ -1,3 +1,4 @@
 ${extend_resource}
 | project Type, SkuName, Kind, SubscriptionId, Name, State, Location, ResourceGroup, Zones, AvailabilityZone, Environment
 | where Type == 'microsoft.web/sites' and Kind contains 'functionapp' and Kind !contains 'workflowapp'
+| summarize ResourceTotal=count(Name), NotRunning=dcountif(Name, State !in~ ("running"))
