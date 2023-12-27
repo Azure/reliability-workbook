@@ -13,17 +13,15 @@ resources
     tolower(name) contains "test", "Test",
     "Undefined")
 | where environment in ({Environment})
-| join kind = innerunique(
+| join kind = inner(
     resources
-    | extend replaced_tags = replace('{}', 'null', tostring(tags))
-    | extend replaced_tags = parse_json(replaced_tags)
-    | mv-expand replaced_tags
-    | extend tagName = tostring(bag_keys(replaced_tags)[0])
-    | extend tagValue = tostring(replaced_tags['{TagName}'])
-    | where tagName has '{TagName}' and tagValue has '{TagValue}'
+    | extend tagName = tostring(bag_keys(tags)[0])
+    | extend tagValue = tostring(tags[tagName])
+    | distinct tagName,tagValue,id
+    | where (('*' in (dynamic([{TagName}])) or tagName in (dynamic([{TagName}])))) and (('*' in (dynamic([{TagValue}])) or tagValue in (dynamic([{TagValue}]))))
     | distinct id
-    )
-    on id
+)
+on id
 | where 
     (type == 'microsoft.compute/virtualmachines') or 
     (type == 'microsoft.classiccompute/virtualmachines') or 
