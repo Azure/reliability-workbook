@@ -26,7 +26,7 @@ resource "azurerm_mssql_server" "example" {
     for region in local.sql_server_region : region => local.sql_database_sku
   }
   name                         = "sqlserver-${each.key}-${random_string.uniqstr.result}"
-  resource_group_name          = var.rg.name
+  resource_group_name          = azurerm_resource_group.example.name
   location                     = each.key
   version                      = "12.0"
   administrator_login          = "sqladmin"

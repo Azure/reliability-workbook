@@ -312,7 +312,7 @@ on id
     type == "microsoft.apimanagement/service", tostring(properties.additionalLocations),
     type contains "storageaccounts", case(
         // Use the following query to get 3+0 regions: az account list-locations -o table --query '[?availabilityZoneMappings && (!metadata.pairedRegion || length(metadata.pairedRegion) == `0`)]'
-        location in~ ('qatarcentral', 'polandcentral', 'israelcentral', 'italynorth'), 'Not Applicable',
+        location in~ ('qatarcentral', 'polandcentral', 'israelcentral', 'italynorth') and split(skuName, '_', 1)[0] startswith "zrs" , 'Configured',
         split(skuName, '_', 1)[0] startswith "ra", "Configured",
         "Not Configured"
         ),

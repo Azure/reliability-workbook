@@ -434,30 +434,7 @@
               },
               {
                 "columnMatch": "ReplicationRole",
-                "formatter": 18,
-                "formatOptions": {
-                  "thresholdsOptions": "icons",
-                  "thresholdsGrid": [
-                    {
-                      "operator": "contains",
-                      "thresholdValue": "ragrs",
-                      "representation": "success",
-                      "text": "{0}{1}"
-                    },
-                    {
-                      "operator": "contains",
-                      "thresholdValue": "ragzrs",
-                      "representation": "success",
-                      "text": "{0}{1}"
-                    },
-                    {
-                      "operator": "Default",
-                      "thresholdValue": null,
-                      "representation": "2",
-                      "text": "{0}{1}"
-                    }
-                  ]
-                }
+                "formatter": 1
               },
               {
                 "columnMatch": "type",
@@ -488,7 +465,7 @@
               },
               {
                 "columnId": "ReadReplica",
-                "label": "Read Replication"
+                "label": "Replication"
               },
               {
                 "columnId": "ReplicationRole",
