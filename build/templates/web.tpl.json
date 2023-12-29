@@ -455,8 +455,8 @@
                         "thresholdsOptions": "icons",
                         "thresholdsGrid": [
                           {
-                            "operator": "regex",
-                            "thresholdValue": "(0|1)",
+                            "operator": "<=",
+                            "thresholdValue": "1",
                             "representation": "2",
                             "text": "{0}{1}"
                           },
