@@ -3,6 +3,7 @@ locals {
   sql_server_region = [
     "japaneast", // zone redundant
     "japanwest", // non-zone redundant
+    "canadacentral", // non-supported zone redundant for SQL Database
   ]
   // Define SQL Database SKU
   sql_database_sku = [
