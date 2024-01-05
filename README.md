@@ -96,6 +96,8 @@ VMs have to be running for disk information to be available.
 
 ### Deploy test environment
 
+#### How do I deploy a test environment?
+
 If you want to create a test environment to test this workbook, you need to deploy Azure resources to your subscription.
 To do this, we have prepared Terraform code in the `build/test_environment` folder.
 This directory is completely separated from the `build` directory in terms of Terraform.
