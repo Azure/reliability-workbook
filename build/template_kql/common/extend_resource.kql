@@ -145,7 +145,9 @@ on id
     (type == 'microsoft.web/sites'), "ASP AZ config",
     (type == 'microsoft.web/serverfarms'), iff(properties.zoneRedundant == 'true', 'Configured', 'Not Configured'),
     (type == 'microsoft.sql/servers/databases' and sku.tier <> 'DataWarehouse'), case( //SQL AZ SKU & region availability filter
-        sku.name == 'Basic' or sku.name == 'Standard' or sku.name == 'System', 'Not Applicable',
+        sku.tier == 'Basic' or sku.tier == 'Standard' or sku.name == 'System', 'Not Applicable',
+        // Outside of these regions, SQL DB is not available in AZ. Refer to: https://learn.microsoft.com/en-us/azure/azure-sql/database/high-availability-sla?view=azuresql&tabs=azure-powershell#general-purpose-service-tier-zone-redundant-availability
+        sku.tier == 'GeneralPurpose' and location !in~ ('brazilsouth', 'eastus', 'eastus2', 'southcentralus', 'westus2', 'westus3', 'francecentral', 'germanywestcentral', 'northeurope', 'norwayeast', 'uksouth', 'westeurope', 'swedencentral', 'switzerlandnorth', 'polandcentral', 'qatarcentral', 'uaenorth', 'southafricanorth', 'australiaeast', 'centralindia', 'japaneast', 'koreacentral', 'southeastasia', 'eastasia', 'chinanorth3', 'italynorth', 'israelcentral'), 'Not Applicable',
         properties.zoneRedundant == 'true', 'Configured',
         'Not Configured'
     ),
