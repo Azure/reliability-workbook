@@ -545,6 +545,25 @@
                   "content": {
                     "version": "NotebookGroup/1.0",
                     "groupType": "editable",
+                    "title": "Resiliency scenario",
+                    "expandable": true,
+                    "items": [
+                      {
+                        "type": 1,
+                        "content": {
+                          "json": "Resiliency scenario is a cross-service workbook feature that allows for the assessment and visualization of resilience configurations across different Azure services. It is not specific to individual services but rather spans across them to give a holistic view of the resilience status.\r\n\r\n**Cross Region Replication**\r\nThe Cross Region Replication Workbook is a tool designed to enhance the resilience of Azure deployments by enabling visibility into geo-redundant replication practices across regions. It identifies and highlights resources that are not currently leveraging cross-region replication, offering insights into potential areas for improvement. This allows users to better understand the distribution and replication status of their resources, and to develop strategies that fortify resilience against regional outages."
+                        },
+                        "name": "supported services"
+                      }
+                    ]
+                  },
+                  "name": "workbook_resiliency_scenario"
+                },
+                {
+                  "type": 12,
+                  "content": {
+                    "version": "NotebookGroup/1.0",
+                    "groupType": "editable",
                     "title": "Usage instructions",
                     "expandable": true,
                     "items": [
