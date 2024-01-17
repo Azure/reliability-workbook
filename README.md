@@ -2,7 +2,7 @@
 
 This workbook focus on the Reliability pillar of the Azure Well-Architected Framework and provides insights into the reliability aspects deployed in Azure subscriptions.
 
-## Deploy
+## Deploy workbooks
 
 This Reliability Workbook consists of several co-workbooks. For easy deployment, you can use the deployment tool. For more information about using this tool, see below.
 
@@ -93,6 +93,31 @@ Note: Change to the directory where your workbooks are located. This isn't neces
 #### Why is the disk information not available?
 
 VMs have to be running for disk information to be available.
+
+### Deploy test environment
+
+#### How do I deploy a test environment?
+
+If you want to create a test environment to test this workbook, you need to deploy Azure resources to your subscription.
+To do this, we have prepared Terraform code in the `build/test_environment` folder.
+This directory is completely separated from the `build` directory in terms of Terraform.
+In other words, you need to initialize the Terraform environment separately in the `build/test_environment` directory.
+
+> [!NOTE]
+> As it is still a work in progress, this test code may not yet contain the code to deploy all testing resources.
+
+You can create a test environment with the following steps.
+
+> [!NOTE]
+> Please refer to `variables.tf` and override the variables as needed.
+
+```shell
+cd test_environment
+terraform init
+terraform plan -out plan.out
+terraform apply plan.out
+```
+
 
 ## Contributing
 
