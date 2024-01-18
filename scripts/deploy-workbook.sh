@@ -189,7 +189,7 @@ do
 done
 
 overview_information=$(cat <<EOS
-          ,{
+          {
             "type": 1,
             "content": {
               "json": "* This workbook source is maintained publicly as OpenSource in [GitHub Repository](https://github.com/Azure/reliability-workbook). There is no Service Level guarantees or warranties associated with the usage of this workbook. Refer [license](https://github.com/Azure/reliability-workbook/blob/main/LICENSE) for more details.\r\n\r\n> If there are any bugs or suggestions for improvements, feel free to raise an issue in the above GitHub repository. In case you want to reach out to maintainers, please email to [FTA Reliability vTeam](mailto:fta-reliability-team@microsoft.com)",
@@ -204,7 +204,7 @@ escaped_replacement_text=$(printf '%s\n' "$overview_information" | sed 's:[\/&]:
 sed -i "s/\${overview_information}/$escaped_replacement_text/g" workbook.json
 
 link_of_Summary=$(cat <<EOS
-          ,{
+          {
             "id": "d6656d8e-acfc-4d7d-853d-a8c628907ba6",
             "cellValue": "selectedTab",
             "linkTarget": "parameter",
@@ -219,7 +219,7 @@ sed -i "s/\${link_of_Summary}/$escaped_replacement_text/g" workbook.json
 
 summary_id=$([ -f ReliabilityWorkbookSummary_id ] && cat ReliabilityWorkbookSummary_id | tr -d '\"')
 tab_of_Summary=$(cat <<EOS
-    ,{
+    {
       "type": 12,
       "content": {
         "version": "NotebookGroup/1.0",
@@ -241,7 +241,7 @@ sed -i "s/\${tab_of_Summary}/$escaped_replacement_text/g" workbook.json
 
 
 link_of_Advisor=$(cat <<EOS
-         ,{
+         {
             "id": "d983c7c7-b5a0-4245-86fa-52ac1266fb13",
             "cellValue": "selectedTab",
             "linkTarget": "parameter",
@@ -256,7 +256,7 @@ sed -i "s/\${link_of_Advisor}/$escaped_replacement_text/g" workbook.json
 
 advisor_id=$([ -f ReliabilityWorkbookAdvisor_id ] && cat ReliabilityWorkbookAdvisor_id | tr -d '\"')
 tab_of_Advisor=$(cat <<EOS
-    ,{
+    {
       "type": 12,
       "content": {
         "version": "NotebookGroup/1.0",
@@ -277,7 +277,7 @@ escaped_replacement_text=$(printf '%s\n' "$tab_of_Advisor" | sed 's:[\/&]:\\&:g;
 sed -i "s/\${tab_of_Advisor}/$escaped_replacement_text/g" workbook.json
 
 link_of_Export=$(cat <<EOS
-          ,{
+          {
             "id": "0f548bfa-f959-4a25-a9ac-7c986be6d33b",
             "cellValue": "selectedTab",
             "linkTarget": "parameter",
@@ -292,7 +292,7 @@ sed -i "s/\${link_of_Export}/$escaped_replacement_text/g" workbook.json
 
 export_id=$([ -f ReliabilityWorkbookExport_id ] && cat ReliabilityWorkbookExport_id | tr -d '\"')
 tab_of_Export=$(cat <<EOS
-    ,{
+    {
       "type": 12,
       "content": {
         "version": "NotebookGroup/1.0",
