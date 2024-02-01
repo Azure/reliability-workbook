@@ -162,7 +162,7 @@ on id
     (type == 'microsoft.dbforpostgresql/servers'), "Not Applicable",
     (type == 'microsoft.dbforpostgresql/flexibleservers'),case(
         properties.highAvailability.mode == "ZoneRedundant", "Configured",
-        properties.replicationRole == "Replica", "Not Applicable",
+        properties.replicationRole contains "Replica", "Not Applicable",
         'Not Configured'
     ),
     (type == 'microsoft.cache/redis'), coalesce(tostring(array_length(parse_json(zones))), 'Not Configured'),
