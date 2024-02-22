@@ -21,7 +21,7 @@ extend ReliabilityScore = case(
     Type == 'microsoft.dbformysql/flexibleservers', (DBOnlineStateCount + OtherSku + ReplicationEnabled + NAReplicationEnabled + AvZoneCount + NAAvZoneCount) * 100 / (4 * ResourceTotal),
     // PostgreSQL Flexible - 5 Checks // score = ("status" + "sku" + "AZ" + "HA" + "Geo Backup")
     Type == 'microsoft.dbforpostgresql/flexibleservers', (DBOnlineStateCount + OtherSku + (AvZoneCount + NAAvZoneCount) + (ConfiguredAutomaticFailover + NAAutomaticFailover) + (NABackupCount + EnabledBackupCount)) * 100 / (5 * ResourceTotal),
-    // Redis - 4 checks // score = (state + sku + AZ + capacity) * 100 / (4 * ResourceTotal)
+    // Redis - 4 checks // score = (state + sku + AZ + capacity(>=1)) * 100 / (4 * ResourceTotal)
     Type == 'microsoft.cache/redis', (SucceededStateCount + OtherSku + AvZoneCount + NAAvZoneCount + RedisDedicatedCapacityCount) * 100 / (4 * ResourceTotal),
     // APIM - 5 checks // score = ("Tier" + state + "capacity" + AZ + stv2platform) * 100 / (5 * ResourceTotal) 
     Type == 'microsoft.apimanagement/service', (OtherSku + SucceededStateCount + Gt1CapacityCount + AvZoneCount + Stv2ApimCount) * 100 / (5 * ResourceTotal),
