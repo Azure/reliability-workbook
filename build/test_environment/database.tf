@@ -1,8 +1,8 @@
 locals {
   // Define region
   sql_server_region = [
-    "japaneast", // zone redundant
-    "japanwest", // non-zone redundant
+    "japaneast",     // zone redundant
+    "japanwest",     // non-zone redundant
     "canadacentral", // non-supported zone redundant for SQL Database
   ]
   // Define SQL Database SKU
@@ -60,4 +60,58 @@ resource "azurerm_mssql_database" "zonal" {
   sku_name             = "GP_Gen5_2"
   zone_redundant       = true
   storage_account_type = each.value
+}
+
+// Create Redis Cache
+
+locals {
+  // Define the SKUs and capacity of the Redis cache to be created using maps and arrays.
+  redis_cache_sku_and_capacity_pattern = [
+    {
+      name     = "Basic"
+      sku      = "Basic"
+      family   = "C"
+      capacity = 0
+      zones    = null
+    },
+    {
+      name     = "Standard"
+      sku      = "Standard"
+      family   = "C"
+      capacity = 0
+      zones    = null
+    },
+    {
+      name     = "PremiumWithoutZone"
+      sku      = "Premium"
+      family   = "P"
+      capacity = 1
+      zones    = null
+    },
+    {
+      name     = "PremiumWithZone"
+      sku      = "Premium"
+      family   = "P"
+      capacity = 1
+      zones    = [1, 2, 3]
+    }
+  ]
+}
+resource "azurerm_redis_cache" "non_zone_redundant" {
+  for_each = {
+    for pair in local.redis_cache_sku_and_capacity_pattern : "${pair.name}-${pair.sku}-${pair.capacity}" => {
+      sku      = pair.sku
+      family   = pair.family
+      capacity = pair.capacity
+      zones    = pair.zones
+    }
+  }
+  name                = "redis-${each.key}-${random_string.uniqstr.result}"
+  location            = azurerm_resource_group.example.location
+  resource_group_name = azurerm_resource_group.example.name
+  capacity            = each.value.capacity
+  family              = each.value.family
+  sku_name            = each.value.sku
+  enable_non_ssl_port = false
+  zones               = each.value.zones
 }
