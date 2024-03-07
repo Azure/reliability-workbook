@@ -1,7 +1,8 @@
 ${extend_resource}
-| project Type, SkuName, Kind, SubscriptionId, Name, State, Location, ResourceGroup, Zones, AvailabilityZone, AvailabilitySet, Capacity, FaultDomain, OSDisk, ReadReplica, AutomaticFailover, MultipleWriteLocations, StorageAutogrow, ReplicationRole, Backup = tolower(Backup), Environment
+| project Type, SkuName, Kind, SubscriptionId, Name, State, Location, ResourceGroup, Zones, AvailabilityZone, AvailabilitySet, Capacity, FaultDomain, OSDisk, ReadReplica, AutomaticFailover, MultipleWriteLocations, StorageAutogrow, ReplicationRole, Backup = tolower(Backup), Environment,
+  vmId, replicationHealth, failoverHealth, protectionStateDescription, isReplicationAgentUpdateRequired // This is for calculating the score for ASRs
 | ${summarize_score}
     by Name, Type, Environment
 | ${calculate_score}
 | project Name, Type, Environment, tostring(ReliabilityScore)
-| sort by Type
+| sort by Name desc,Type

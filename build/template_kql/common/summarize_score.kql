@@ -1,5 +1,6 @@
 summarize 
     ResourceTotal=count(Name),
+    UniqueResourceTotal=array_length(make_set(Name)), // To prevent name duplication, for example Site Recovery
     OtherSku=dcountif(Name, ((SkuName !contains "shared") and (SkuName !contains "free") and (SkuName !contains "basic") and (SkuName !contains "develop") and (SkuName !contains "dynamic") and (SkuName !contains "burstable"))),
     DevelopmentSkuCount=dcountif(Name, SkuName contains "develop"), 
     SharedSkuCount=dcountif(Name, SkuName contains "shared"),
@@ -60,8 +61,18 @@ summarize
     V2AppGwSkuCount=dcountif(Name, SkuName contains "_v2" and Type == 'microsoft.network/applicationgateways'),
     AutoScaleAppGwCount=dcountif(Name, AutomaticFailover == "configured" and Type == 'microsoft.network/applicationgateways'),
     NoAutoScaleAppGwCount=dcountif(Name, AutomaticFailover == "not configured" and Type == 'microsoft.network/applicationgateways'),
+    // --- For ASR(the followings are the same as condition of azuresiterecovery_resources_details_summary.kql) ---
     AsrSucceededState=dcountif(Name, State == "succeeded" and Type == 'microsoft.recoveryservices/vaults'),
     NoAsrSucceededState=dcountif(Name, State != "succeeded" and Type == 'microsoft.recoveryservices/vaults'),
+    AsrSucceededReplHealth=dcountif(Name, replicationHealth == "Normal" and Type == 'microsoft.recoveryservices/vaults'),
+    NoAsrSucceededReplHealth=dcountif(Name, isnotnull(replicationHealth) and replicationHealth != "Normal" and Type == 'microsoft.recoveryservices/vaults'),
+    AsrSucceededFailoverHealth=dcountif(Name, failoverHealth == "Normal" and Type == 'microsoft.recoveryservices/vaults'),
+    NoAsrSucceededFailoverHealth=dcountif(Name, isnotnull(failoverHealth) and failoverHealth != "Normal" and Type == 'microsoft.recoveryservices/vaults'),
+    AsrSucceededProtectionStateDesc=dcountif(Name, protectionStateDescription == "Protected" and Type == 'microsoft.recoveryservices/vaults'),
+    NoAsrSucceededProtectionStateDesc=dcountif(Name, isnotnull(protectionStateDescription) and protectionStateDescription != "Protected" and Type == 'microsoft.recoveryservices/vaults'),
+    AsrSucceededReplicationAgentUpdate=dcountif(Name, isReplicationAgentUpdateRequired == false and Type == 'microsoft.recoveryservices/vaults'),
+    NoAsrSucceededReplicationAgentUpdate=dcountif(Name, isnotnull(isReplicationAgentUpdateRequired) and isReplicationAgentUpdateRequired == true and Type == 'microsoft.recoveryservices/vaults'),
+    // ------------------------------------------------------------------------------------------------------------
     AzFWSucceededStateCount=dcountif(Name, State == "succeeded" and Type == 'microsoft.network/azurefirewalls'),
     NoAzFWSucceededStateCount=dcountif(Name, State != "succeeded" and Type == 'microsoft.network/azurefirewalls'),
     SucceededStateCount=dcountif(Name, State == "succeeded"),

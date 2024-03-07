@@ -41,6 +41,8 @@ extend ReliabilityScore = case(
     Type == 'microsoft.network/publicipprefixes', (OtherSku + SucceededStateCount + AvZoneCount + NAAvZoneCount) * 100 / (3 * ResourceTotal),
     // VNET Gateway - 6 checks // score = (SKU + state + capacity + vpntype + generation + active-active) * 100 / (6 * ResourceTotal)
     Type == 'microsoft.network/virtualnetworkgateways', (AzVnetGwSkuCount + SucceededStateCount + Gt1CapacityCount + NACapacityCount + RouteVnetGwVpnTypeCount + Gen2VnetGwCount + NAGen2VnetGwCount + ActiveActiveVnetGwCount + NAActiveActiveVnetGwCount) * 100 / (6 * ResourceTotal),
-    // ASR - 1 check  // score = status * 100 / (1 * ResourceTotal)
-    Type == 'microsoft.recoveryservices/vaults', (AsrSucceededState) * 100 / (1 * ResourceTotal),
+    // ASR - 5 checks // score = (ASR succeeded status + ReplicationHealth + FailoverHealth + ProtectionStateDesc + ReplicationAgentUpdate) * 100 / (5 * ResourceTotal)
+    // ASRs contain multiple VM resources that are configured for replication and therefore maintain status in each of them. If none of the VMs are replicated, both the OK status and the NG status will be null. This means that if the OK status is calculated in the same way as other resources, by adding the OK statuses, the score will be zero.
+    // So, for ASR, if even one VM has an NG status, that status is treated as 0 and the score is calculated by subtracting the status of that status from 1.
+    Type == 'microsoft.recoveryservices/vaults', ((1-NoAsrSucceededState) + (1-NoAsrSucceededReplHealth) + (1-NoAsrSucceededFailoverHealth) + (1-NoAsrSucceededProtectionStateDesc) + (1-NoAsrSucceededReplicationAgentUpdate)) * 100 / (5 * UniqueResourceTotal),
     0)
