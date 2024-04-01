@@ -1,10 +1,10 @@
 resources
 | where resourceGroup in ({ResourceGroup})
 | extend environment = case(
-    tags.Environment <> "", tags.Environment,
-    tags.environment <> "", tags.environment,
-    tags.Env <> "", tags.Env,
-    tags.env <> "", tags.env,
+    tags.Environment <> "", replace("\\\\", "<Backslash>", tostring(tags.Environment)),
+    tags.environment <> "", replace("\\\\", "<Backslash>", tostring(tags.environment)),
+    tags.Env <> "", replace("\\\\", "<Backslash>", tostring(tags.Env)),
+    tags.env <> "", replace("\\\\", "<Backslash>", tostring(tags.env)),
     tolower(name) contains "prod", "Production",
     tolower(name) contains "dev", "Development",
     tolower(name) contains "qa", "QA",
@@ -15,8 +15,8 @@ resources
 | where environment in ({Environment})
 | join kind = inner(
     resources
-    | extend tagName = tostring(bag_keys(tags)[0])
-    | extend tagValue = tostring(tags[tagName])
+    | extend tagName = replace("\\\\", "<Backslash>", tostring(bag_keys(tags)[0]))
+    | extend tagValue = replace("\\\\", "<Backslash>", tostring(tags[tagName]))
     | distinct tagName,tagValue,id
     | where (('*' in (dynamic([{TagName}])) or tagName in (dynamic([{TagName}])))) and (('*' in (dynamic([{TagValue}])) or tagValue in (dynamic([{TagValue}]))))
     | distinct id
