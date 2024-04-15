@@ -13,7 +13,7 @@ extend ReliabilityScore = case(
     Type == 'microsoft.containerservice/managedclusters', (AvZoneCount + AvSetCount + Gt1CapacityCount + PremorUltOSDiskCount) * 100 / (3 * ResourceTotal),
     // SQLDB - 4 checks  // score = ("status" + "tier" + "storage acct. type"  + "AZ")* 100 / (5 * ResourceTotal)  //********* Future - "read replica count"
     Type == 'microsoft.sql/servers/databases', (DBOnlineStateCount + SqlPremiumOrBusinessCriticalOrDwh + DBGeoStorage + AvZoneCount + NAAvZoneCount) * 100 / (4 * ResourceTotal),
-    // CosmosDB - 4 checks // score = ("status" + "readreplicacount" + "AZ" + "multiWrite" + "AutoFailover") * 100 / (5 * ResourceTotal) // included NA items to show compliance
+    // CosmosDB - 5 checks // score = ("status" + "readreplicacount" + "AZ" + "multiWrite" + "AutoFailover") * 100 / (5 * ResourceTotal) // included NA items to show compliance
     Type == 'microsoft.documentdb/databaseaccounts', (DBOnlineStateCount + Gt0DbReplica + AvZoneCount + NAAvZoneCount + EnabledDbMultiWrite + NADbMultiWrite + ConfiguredAutomaticFailover + NAAutomaticFailover) * 100 / (5 * ResourceTotal),
     // MySQL - 5 checks // score = ("status" + "sku" + "grsbackup" + "storageautogrow" + "replication") * 100 / (5 * ResourceTotal) //********* Future - "Sku family Gen5", read replica
     Type == 'microsoft.dbformysql/servers', (DBOnlineStateCount + OtherSku + HealthyBackupCount + EnabledStorageAutogrow + ReplicationEnabled) * 100 / (5 * ResourceTotal),
