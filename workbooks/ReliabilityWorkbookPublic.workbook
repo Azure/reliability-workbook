@@ -58,7 +58,7 @@
             "multiSelect": true,
             "quote": "'",
             "delimiter": ",",
-            "query": "resources\r\n| extend Environment = case(\r\ntags.Environment <> \"\", tags.Environment,\r\ntags.environment <> \"\", tags.environment,\r\ntags.Env <> \"\", tags.Env,\r\ntags.env <> \"\", tags.env,\r\ntolower(name) contains \"prod\", \"Production\",\r\ntolower(name) contains \"dev\", \"Development\",\r\ntolower(name) contains \"qa\", \"QA\",\r\ntolower(name) contains \"uat\", \"UAT\",\r\ntolower(name) contains \"sit\", \"SIT\",\r\ntolower(name) contains \"test\", \"Test\",\r\n\"Undefined\")\r\n| distinct Environment",
+            "query": "resources\r\n| extend Environment = case(\r\ntags.Environment <> \"\", replace(\"\\\\\\\\\", \"<Backslash>\", tostring(tags.Environment)),\r\ntags.environment <> \"\", replace(\"\\\\\\\\\", \"<Backslash>\", tostring(tags.environment)),\r\ntags.Env <> \"\", replace(\"\\\\\\\\\", \"<Backslash>\", tostring(tags.Env)),\r\ntags.env <> \"\", replace(\"\\\\\\\\\", \"<Backslash>\", tostring(tags.env)),\r\ntolower(name) contains \"prod\", \"Production\",\r\ntolower(name) contains \"dev\", \"Development\",\r\ntolower(name) contains \"qa\", \"QA\",\r\ntolower(name) contains \"uat\", \"UAT\",\r\ntolower(name) contains \"sit\", \"SIT\",\r\ntolower(name) contains \"test\", \"Test\",\r\n\"Undefined\")\r\n| distinct Environment",
             "crossComponentResources": [
               "{Subscriptions}"
             ],
@@ -70,7 +70,10 @@
             },
             "defaultValue": "value::all",
             "queryType": 1,
-            "resourceType": "microsoft.resourcegraph/resources"
+            "resourceType": "microsoft.resourcegraph/resources",
+            "value": [
+              "value::all"
+            ]
           },
           {
             "id": "9d6afcdc-172c-4bef-8bab-dc372c5d3bb4",
@@ -81,7 +84,7 @@
             "multiSelect": true,
             "quote": "'",
             "delimiter": ",",
-            "query": "Resources\r\n| where tags != '' and tags != '[]'\r\n| mvexpand tags\r\n| extend tagName = tostring(bag_keys(tags)[0])\r\n| distinct tagName\r\n| sort by tagName asc",
+            "query": "Resources\r\n| where tags != '' and tags != '[]'\r\n| mvexpand tags\r\n| extend tagName = replace(\"\\\\\\\\\", \"<Backslash>\", tostring(bag_keys(tags)[0]))\r\n| distinct tagName\r\n| sort by tagName asc",
             "crossComponentResources": [
               "{Subscriptions}"
             ],
@@ -106,7 +109,7 @@
             "multiSelect": true,
             "quote": "'",
             "delimiter": ",",
-            "query": "Resources\r\n| mvexpand tags\r\n| extend tagName = tostring(bag_keys(tags)[0])\r\n| extend tagValue = tostring(tags[tagName])\r\n| where tags != '' and tags != '[]'  \r\n| where ('*' in (dynamic([{TagName}])) or tagName in (dynamic([{TagName}]))) \r\n| distinct tagValue\r\n| sort by tagValue asc",
+            "query": "Resources\r\n| mvexpand tags\r\n| extend tagName = replace(\"\\\\\\\\\", \"<Backslash>\", tostring(bag_keys(tags)[0]))\r\n| extend tagValue = replace(\"\\\\\\\\\", \"<Backslash>\", tostring(tags[tagName]))\r\n| where tags != '' and tags != '[]'  \r\n| where ('*' in (dynamic([{TagName}])) or tagName in (dynamic([{TagName}]))) \r\n| distinct tagValue\r\n| sort by tagValue asc",
             "crossComponentResources": [
               "{Subscriptions}"
             ],
