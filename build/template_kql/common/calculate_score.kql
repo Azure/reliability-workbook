@@ -13,13 +13,15 @@ extend ReliabilityScore = case(
     Type == 'microsoft.containerservice/managedclusters', (AvZoneCount + AvSetCount + Gt1CapacityCount + PremorUltOSDiskCount) * 100 / (3 * ResourceTotal),
     // SQLDB - 4 checks  // score = ("status" + "tier" + "storage acct. type"  + "AZ")* 100 / (5 * ResourceTotal)  //********* Future - "read replica count"
     Type == 'microsoft.sql/servers/databases', (DBOnlineStateCount + SqlPremiumOrBusinessCriticalOrDwh + DBGeoStorage + AvZoneCount + NAAvZoneCount) * 100 / (4 * ResourceTotal),
-    // CosmosDB - 4 checks // score = ( "readreplicacount" + "AZ" + "multiWrite" + "AutoFailover") * 100 / (4 * ResourceTotal) // included NA items to show compliance
-    Type == 'microsoft.documentdb/databaseaccounts', (Gt0DbReplica + AvZoneCount + NAAvZoneCount + EnabledDbMultiWrite + NADbMultiWrite + ConfiguredAutomaticFailover + NAAutomaticFailover) * 100 / (4 * ResourceTotal),
+    // CosmosDB - 5 checks // score = ("status" + "readreplicacount" + "AZ" + "multiWrite" + "AutoFailover") * 100 / (5 * ResourceTotal) // included NA items to show compliance
+    Type == 'microsoft.documentdb/databaseaccounts', (DBOnlineStateCount + Gt0DbReplica + AvZoneCount + NAAvZoneCount + EnabledDbMultiWrite + NADbMultiWrite + ConfiguredAutomaticFailover + NAAutomaticFailover) * 100 / (5 * ResourceTotal),
     // MySQL - 5 checks // score = ("status" + "sku" + "grsbackup" + "storageautogrow" + "replication") * 100 / (5 * ResourceTotal) //********* Future - "Sku family Gen5", read replica
     Type == 'microsoft.dbformysql/servers', (DBOnlineStateCount + OtherSku + HealthyBackupCount + EnabledStorageAutogrow + ReplicationEnabled) * 100 / (5 * ResourceTotal),
     // MySQL Flexible - 4 checks  // score = ("status" + "sku"  + "replication" + "HaEnabled") * 100 / (4 * ResourceTotal)    // included NA items to show compliance  //********* Future - "read replica", "automatic failover", "backup"
     Type == 'microsoft.dbformysql/flexibleservers', (DBOnlineStateCount + OtherSku + ReplicationEnabled + NAReplicationEnabled + AvZoneCount + NAAvZoneCount) * 100 / (4 * ResourceTotal),
-    // Redis - 4 checks // score = (state + sku + AZ + capacity) * 100 / (4 * ResourceTotal)
+    // PostgreSQL Flexible - 5 Checks // score = ("status" + "sku" + "AZ" + "HA" + "Geo Backup")
+    Type == 'microsoft.dbforpostgresql/flexibleservers', (DBOnlineStateCount + OtherSku + (AvZoneCount + NAAvZoneCount) + (ConfiguredAutomaticFailover + NAAutomaticFailover) + (NABackupCount + EnabledBackupCount)) * 100 / (5 * ResourceTotal),
+    // Redis - 4 checks // score = (state + sku + AZ + capacity(>=1)) * 100 / (4 * ResourceTotal)
     Type == 'microsoft.cache/redis', (SucceededStateCount + OtherSku + AvZoneCount + NAAvZoneCount + RedisDedicatedCapacityCount) * 100 / (4 * ResourceTotal),
     // APIM - 5 checks // score = ("Tier" + state + "capacity" + AZ + stv2platform) * 100 / (5 * ResourceTotal) 
     Type == 'microsoft.apimanagement/service', (OtherSku + SucceededStateCount + Gt1CapacityCount + AvZoneCount + Stv2ApimCount) * 100 / (5 * ResourceTotal),
@@ -39,6 +41,8 @@ extend ReliabilityScore = case(
     Type == 'microsoft.network/publicipprefixes', (OtherSku + SucceededStateCount + AvZoneCount + NAAvZoneCount) * 100 / (3 * ResourceTotal),
     // VNET Gateway - 6 checks // score = (SKU + state + capacity + vpntype + generation + active-active) * 100 / (6 * ResourceTotal)
     Type == 'microsoft.network/virtualnetworkgateways', (AzVnetGwSkuCount + SucceededStateCount + Gt1CapacityCount + NACapacityCount + RouteVnetGwVpnTypeCount + Gen2VnetGwCount + NAGen2VnetGwCount + ActiveActiveVnetGwCount + NAActiveActiveVnetGwCount) * 100 / (6 * ResourceTotal),
-    // ASR - 1 check  // score = status * 100 / (1 * ResourceTotal)
-    Type == 'microsoft.recoveryservices/vaults', (AsrSucceededState) * 100 / (1 * ResourceTotal),
+    // ASR - 5 checks // score = (ASR succeeded status + ReplicationHealth + FailoverHealth + ProtectionStateDesc + ReplicationAgentUpdate) * 100 / (5 * ResourceTotal)
+    // ASRs contain multiple VM resources that are configured for replication and therefore maintain status in each of them. If none of the VMs are replicated, both the OK status and the NG status will be null. This means that if the OK status is calculated in the same way as other resources, by adding the OK statuses, the score will be zero.
+    // So, for ASR, if even one VM has an NG status, that status is treated as 0 and the score is calculated by subtracting the status of that status from 1.
+    Type == 'microsoft.recoveryservices/vaults', ((1-NoAsrSucceededState) + (1-NoAsrSucceededReplHealth) + (1-NoAsrSucceededFailoverHealth) + (1-NoAsrSucceededProtectionStateDesc) + (1-NoAsrSucceededReplicationAgentUpdate)) * 100 / (5 * UniqueResourceTotal),
     0)

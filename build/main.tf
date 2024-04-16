@@ -162,8 +162,9 @@ locals {
     "tab_of_Export"        = ""
   })
 
-  armtemplate_json = templatefile("${path.module}/azuredeploy.tpl.json", {
-    "workbook_json" = jsonencode(local.workbook_data_json_for_community)
+  armtemplate_export_json = templatefile("${path.module}/azuredeploy.tpl.json", {
+    "workbook_json" = jsonencode(local.workbook_export_json)
+    "workbook_name" = "FTA - Reliability Workbook - Export"
   })
 
   //-------------------------------------------
@@ -198,4 +199,9 @@ resource "azurerm_application_insights_workbook" "example" {
 resource "local_file" "workbook_public" {
   filename = "${path.module}/artifacts/ReliabilityWorkbookPublic.workbook"
   content  = local.workbook_data_json_for_public
+}
+
+resource "local_file" "workbook_export" {
+  filename = "${path.module}/artifacts/azuredeploy_export.json"
+  content  = local.armtemplate_export_json
 }
