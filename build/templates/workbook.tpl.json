@@ -207,9 +207,7 @@
               "style": "tabs",
               "links": [
                 ${link_of_Summary}
-                ,
                 ${link_of_Advisor}
-                ,
                 {
                   "id": "9b8f2619-143e-47eb-a821-aadcf29c095d",
                   "cellValue": "selectedTab",
@@ -281,7 +279,7 @@
                   "linkLabel": "Service Alert",
                   "subTarget": "serviceAlerts",
                   "style": "link"
-                },
+                }
                 ${link_of_Export}
               ]
             },
@@ -292,9 +290,7 @@
             },
             "name": "Services"
           }
-          ,
           ${tab_of_Summary}
-          ,
           ${tab_of_Advisor}
           ,
           {
@@ -439,7 +435,6 @@
             ],
             "name": "Service Alert"
           }
-          ,
           ${tab_of_Export}
         ]
       },
@@ -521,7 +516,7 @@
                     "json": "## Reliability workbook\r\n\r\nThe objective of this workbook is to provide an overview of the configured state of deployment options that affect the resilience and/or availability SLA for common Azure resource types. The workbook is to be used as guidance only, and does not represent a guarantee for a service level.\r\n\r\n* Building a reliable application in the cloud is different from traditional application development. While historically you may have purchased levels of redundant higher-end hardware to minimize the chance of an entire application platform failing, in the cloud, we acknowledge up front that failures will happen. Instead of trying to prevent failures altogether, the goal is to minimize the effects of a single failing component.\r\n* To assess your workload using the tenets found in the Microsoft Azure Well-Architected Framework, see the [Microsoft Azure Well-Architected Review](https://learn.microsoft.com/assessments/?id=azure-architecture-review&mode=pre-assessment).\r\n* Reliable applications are:\r\n\t* Resilient and recover gracefully from failures, and they continue to function with minimal downtime and data loss before full recovery.\r\n\t* Highly available (HA) and run as designed in a healthy state with no significant downtime.\r\n* Understanding how these elements work together — and how they affect cost — is essential to building a reliable application. It can help you determine how much downtime is acceptable, the potential cost to your business, and which functions are necessary during a recovery.\r\n* Reliability considerations for individual Azure services are provided in the [Resiliency checklist for specific Azure services](https://learn.microsoft.com/azure/architecture/checklist/resiliency-per-service).\r\n\r\n> Reference: [Microsoft Azure Well-Architected Framework - Reliability Pillar](https://learn.microsoft.com/azure/architecture/framework/resiliency/overview)"
                   },
                   "name": "text - 0"
-                },
+                }
                 ${overview_information}
                 ,
                 {
