@@ -15,4 +15,4 @@ resources
 | extend informational = iff(all, true, iff(set_has_element(set_condition1, "Informational") or set_has_element(set_condition1, "ActionRequired"), true, set_has_element(set_condition2, "Informational") or set_has_element(set_condition2, "ActionRequired")))
 // Security advisory
 | extend security = iff(all, true, iff(set_has_element(set_condition1, "Security"), true, set_has_element(set_condition2, "Security")))
-| project id, name, subscriptionId, category, tostring(alertEnabled), tostring(incident), tostring(maintenance), tostring(informational), tostring(security)
+| project id, name, subscriptionId, category, tostring(alertEnabled), tostring(incident), tostring(security), tostring(maintenance), tostring(informational)

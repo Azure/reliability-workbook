@@ -54,6 +54,11 @@ This Reliability Workbook consists of several co-workbooks. For easy deployment,
     ```shell
     ./deploy-workbook.sh -s 00000000-0000-0000-0000-000000000000 -g myResourceGroup -c -l japaneast
     ```
+### Deploy only Export Workbook easily
+
+If you only want to deploy the Export workbook, you can deploy from the following button.
+
+[![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FAzure%2Freliability-workbook%2Fmain%2Fworkbooks%2Fazuredeploy_export.json)
 
 ## FAQ
 
