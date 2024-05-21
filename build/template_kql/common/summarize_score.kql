@@ -85,4 +85,5 @@ summarize
     ActiveActiveVnetGwCount=dcountif(Name, ReadReplica == "true" and Type == 'microsoft.network/virtualnetworkgateways'),
     NAActiveActiveVnetGwCount=dcountif(Name, ReadReplica == "not applicable" and Type == 'microsoft.network/virtualnetworkgateways'),
     Stv2ApimCount=dcountif(Name, OSDisk == "stv2" and Type == 'microsoft.apimanagement/service'),
-    NoMeetMinTLSVersion=dcountif(Name, todouble(MinTLSVersion) < 1.2)
+    MeetMinTLSVersionCount=dcountif(Name, todouble(MinTLSVersion) >= 1.2),
+    NoMeetMinTLSVersionCount=dcountif(Name, todouble(MinTLSVersion) < 1.2)
