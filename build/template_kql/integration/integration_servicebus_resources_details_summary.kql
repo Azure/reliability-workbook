@@ -1,6 +1,5 @@
 ${extend_resource}
-| project type,zones, sku=sku.name, sku.capacity, properties.provisioningState, properties.publicNetworkAccess,
-properties.status,properties.minimumTlsVersion,properties.zoneRedundant,properties.disableLocalAuth,properties.serviceBusEndpoint,GeoRedundant=properties.privateEndpointConnections
-| where type =='microsoft.servicebus/namespaces'
-| summarize ResourceTotal=count(Name), NotPremium=dcountif(Name, SkuName!= "Premium"), NoMultipleZones=dcountif(Name, Zones != "null"), NotSucceeded=dcountif(Name, State != "Succeeded")
-,NoAVZone=dcountif(Name, AvailabilityZone==false),NoMinimumTLSVersion=dcountif(Name,MinTLSVersion!=1.2), CapacityNotConfigured=dcountif(Name, Capacity=="Not configured")
+| project Type, Name, Zones, SkuName, State, AvailabilityZone, MinTLSVersion, Capacity
+| where Type =='microsoft.servicebus/namespaces'
+| summarize ResourceTotal=count(Name), NotSucceeded=dcountif(Name, State != "succeeded"), NotPremium=dcountif(Name, SkuName!= "premium"), NoMultipleZones=dcountif(Name, AvailabilityZone == "not configured")
+,NoMinimumTLSVersion=dcountif(Name,todouble(MinTLSVersion)<1.2), CapacityNotConfigured=dcountif(Name, toint(Capacity)<2)
