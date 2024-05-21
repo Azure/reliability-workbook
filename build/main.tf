@@ -15,16 +15,17 @@ provider "azurerm" {
 locals {
   workbook_data_json_for_community = var.deploy_community_edition_to_azure ? templatefile("${path.module}/templates/workbook.tpl.json", {
     // load workbook already deployed on Azure subscription or community GitHub repo
-    "summary_workbook_resource_id"           = azurerm_application_insights_workbook.summary[0].id
-    "azuresiterecovery_workbook_resource_id" = azurerm_application_insights_workbook.azuresiterecovery[0].id
-    "compute_workbook_resource_id"           = azurerm_application_insights_workbook.compute[0].id
-    "containers_workbook_resource_id"        = azurerm_application_insights_workbook.containers[0].id
-    "databases_workbook_resource_id"         = azurerm_application_insights_workbook.databases[0].id
-    "integration_workbook_resource_id"       = azurerm_application_insights_workbook.integration[0].id
-    "networking_workbook_resource_id"        = azurerm_application_insights_workbook.networking[0].id
-    "storage_workbook_resource_id"           = azurerm_application_insights_workbook.storage[0].id
-    "web_workbook_resource_id"               = azurerm_application_insights_workbook.web[0].id
-    "servicealert_workbook_resource_id"      = azurerm_application_insights_workbook.servicealert[0].id
+    "summary_workbook_resource_id"             = azurerm_application_insights_workbook.summary[0].id
+    "azuresiterecovery_workbook_resource_id"   = azurerm_application_insights_workbook.azuresiterecovery[0].id
+    "compute_workbook_resource_id"             = azurerm_application_insights_workbook.compute[0].id
+    "containers_workbook_resource_id"          = azurerm_application_insights_workbook.containers[0].id
+    "databases_workbook_resource_id"           = azurerm_application_insights_workbook.databases[0].id
+    "integration_workbook_resource_id"         = azurerm_application_insights_workbook.integration[0].id
+    "networking_workbook_resource_id"          = azurerm_application_insights_workbook.networking[0].id
+    "storage_workbook_resource_id"             = azurerm_application_insights_workbook.storage[0].id
+    "web_workbook_resource_id"                 = azurerm_application_insights_workbook.web[0].id
+    "servicealert_workbook_resource_id"        = azurerm_application_insights_workbook.servicealert[0].id
+    "resiliencyscenarios_workbook_resource_id" = azurerm_application_insights_workbook.resiliencyscenarios[0].id
 
     // Show information on Overview tab
     "overview_information" = <<-EOT
@@ -40,14 +41,14 @@ locals {
 
     // Enable Summary
     "link_of_Summary" = <<-EOT
-          ,{
+          {
             "id": "d6656d8e-acfc-4d7d-853d-a8c628907ba6",
             "cellValue": "selectedTab",
             "linkTarget": "parameter",
             "linkLabel": "Summary",
             "subTarget": "Summary2",
             "style": "link"
-          }
+          },
     EOT
 
     "tab_of_Summary" = <<-EOT
@@ -70,14 +71,14 @@ locals {
 
     // Enable Advisor
     "link_of_Advisor" = <<-EOT
-         ,{
+         {
             "id": "d983c7c7-b5a0-4245-86fa-52ac1266fb13",
             "cellValue": "selectedTab",
             "linkTarget": "parameter",
             "linkLabel": "Azure Advisor",
             "subTarget": "Advisor",
             "style": "link"
-          }
+          },
     EOT
 
     "tab_of_Advisor" = <<-EOT
@@ -131,16 +132,17 @@ locals {
   }) : null
 
   workbook_data_json_for_public = templatefile("${path.module}/templates/workbook.tpl.json", {
-    "summary_workbook_resource_id"           = "TBD"
-    "azuresiterecovery_workbook_resource_id" = "community-Workbooks/Azure Advisor/Reliability/AzureSiteRecovery"
-    "compute_workbook_resource_id"           = "community-Workbooks/Azure Advisor/Reliability/Compute"
-    "containers_workbook_resource_id"        = "community-Workbooks/Azure Advisor/Reliability/Containers"
-    "databases_workbook_resource_id"         = "community-Workbooks/Azure Advisor/Reliability/Databases"
-    "integration_workbook_resource_id"       = "community-Workbooks/Azure Advisor/Reliability/Integration"
-    "networking_workbook_resource_id"        = "community-Workbooks/Azure Advisor/Reliability/Networking"
-    "storage_workbook_resource_id"           = "community-Workbooks/Azure Advisor/Reliability/Storage"
-    "web_workbook_resource_id"               = "community-Workbooks/Azure Advisor/Reliability/Web"
-    "servicealert_workbook_resource_id"      = "community-Workbooks/Azure Advisor/Reliability/ServiceAlert"
+    "summary_workbook_resource_id"             = "TBD"
+    "azuresiterecovery_workbook_resource_id"   = "community-Workbooks/Azure Advisor/Reliability/AzureSiteRecovery"
+    "compute_workbook_resource_id"             = "community-Workbooks/Azure Advisor/Reliability/Compute"
+    "containers_workbook_resource_id"          = "community-Workbooks/Azure Advisor/Reliability/Containers"
+    "databases_workbook_resource_id"           = "community-Workbooks/Azure Advisor/Reliability/Databases"
+    "integration_workbook_resource_id"         = "community-Workbooks/Azure Advisor/Reliability/Integration"
+    "networking_workbook_resource_id"          = "community-Workbooks/Azure Advisor/Reliability/Networking"
+    "storage_workbook_resource_id"             = "community-Workbooks/Azure Advisor/Reliability/Storage"
+    "web_workbook_resource_id"                 = "community-Workbooks/Azure Advisor/Reliability/Web"
+    "servicealert_workbook_resource_id"        = "community-Workbooks/Azure Advisor/Reliability/ServiceAlert"
+    "resiliencyscenarios_workbook_resource_id" = "community-Workbooks/Azure Advisor/Reliability/ResiliencyScenarios"
 
     // Show information on Overview tab
     "overview_information" = <<-EOT
@@ -160,8 +162,9 @@ locals {
     "tab_of_Export"        = ""
   })
 
-  armtemplate_json = templatefile("${path.module}/azuredeploy.tpl.json", {
-    "workbook_json" = jsonencode(local.workbook_data_json_for_community)
+  armtemplate_export_json = templatefile("${path.module}/azuredeploy.tpl.json", {
+    "workbook_json" = jsonencode(local.workbook_export_json)
+    "workbook_name" = "FTA - Reliability Workbook - Export"
   })
 
   //-------------------------------------------
@@ -196,4 +199,9 @@ resource "azurerm_application_insights_workbook" "example" {
 resource "local_file" "workbook_public" {
   filename = "${path.module}/artifacts/ReliabilityWorkbookPublic.workbook"
   content  = local.workbook_data_json_for_public
+}
+
+resource "local_file" "workbook_export" {
+  filename = "${path.module}/artifacts/azuredeploy_export.json"
+  content  = local.armtemplate_export_json
 }

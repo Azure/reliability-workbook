@@ -6,6 +6,7 @@ ReliabilityWorkbookDatabases.workbook
 ReliabilityWorkbookExport.workbook
 ReliabilityWorkbookIntegration.workbook
 ReliabilityWorkbookNetworking.workbook
+ReliabilityWorkbookResiliencyScenarios.workbook
 ReliabilityWorkbookServiceAlert.workbook
 ReliabilityWorkbookStorage.workbook
 ReliabilityWorkbookSummary.workbook

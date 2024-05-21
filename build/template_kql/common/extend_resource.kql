@@ -1,10 +1,10 @@
 resources
 | where resourceGroup in ({ResourceGroup})
 | extend environment = case(
-    tags.Environment <> "", tags.Environment,
-    tags.environment <> "", tags.environment,
-    tags.Env <> "", tags.Env,
-    tags.env <> "", tags.env,
+    tags.Environment <> "", replace("\\\\", "<Backslash>", tostring(tags.Environment)),
+    tags.environment <> "", replace("\\\\", "<Backslash>", tostring(tags.environment)),
+    tags.Env <> "", replace("\\\\", "<Backslash>", tostring(tags.Env)),
+    tags.env <> "", replace("\\\\", "<Backslash>", tostring(tags.env)),
     tolower(name) contains "prod", "Production",
     tolower(name) contains "dev", "Development",
     tolower(name) contains "qa", "QA",
@@ -13,17 +13,15 @@ resources
     tolower(name) contains "test", "Test",
     "Undefined")
 | where environment in ({Environment})
-| join kind = innerunique(
+| join kind = inner(
     resources
-    | extend replaced_tags = replace('{}', 'null', tostring(tags))
-    | extend replaced_tags = parse_json(replaced_tags)
-    | mv-expand replaced_tags
-    | extend tagName = tostring(bag_keys(replaced_tags)[0])
-    | extend tagValue = tostring(replaced_tags['{TagName}'])
-    | where tagName has '{TagName}' and tagValue has '{TagValue}'
+    | extend tagName = replace("\\\\", "<Backslash>", tostring(bag_keys(tags)[0]))
+    | extend tagValue = replace("\\\\", "<Backslash>", tostring(tags[tagName]))
+    | distinct tagName,tagValue,id
+    | where (('*' in (dynamic([{TagName}])) or tagName in (dynamic([{TagName}])))) and (('*' in (dynamic([{TagValue}])) or tagValue in (dynamic([{TagValue}]))))
     | distinct id
-    )
-    on id
+)
+on id
 | where 
     (type == 'microsoft.compute/virtualmachines') or 
     (type == 'microsoft.classiccompute/virtualmachines') or 
@@ -34,7 +32,9 @@ resources
     (type == 'microsoft.sql/servers/databases') or 
     (type == 'microsoft.documentdb/databaseaccounts') or 
     (type == 'microsoft.dbformysql/servers') or 
-    (type == 'microsoft.dbformysql/flexibleservers') or 
+    (type == 'microsoft.dbformysql/flexibleservers') or
+    (type == 'microsoft.dbforpostgresql/servers') or 
+    (type == 'microsoft.dbforpostgresql/flexibleservers') or 
     (type == 'microsoft.cache/redis') or
     (type == "microsoft.apimanagement/service") or 
     (type==  'microsoft.servicebus/namespaces') or
@@ -94,6 +94,8 @@ resources
     type == 'microsoft.documentdb/databaseaccounts', tostring(properties.provisioningState),
     type == 'microsoft.dbformysql/servers', tostring(properties.userVisibleState),
     type == 'microsoft.dbformysql/flexibleservers', tostring(properties.state),
+    type == 'microsoft.dbforpostgresql/servers', tostring(properties.userVisibleState),
+    type == 'microsoft.dbforpostgresql/flexibleservers', tostring(properties.state),
     type == 'microsoft.cache/redis', tostring(properties.provisioningState),
     type == "microsoft.apimanagement/service", tostring(properties.provisioningState),
     type == 'microsoft.servicebus/namespaces',tostring(properties.provisioningState),
@@ -119,6 +121,8 @@ resources
     type == 'microsoft.documentdb/databaseaccounts', tostring(properties.databaseAccountOfferType),
     type == 'microsoft.dbformysql/servers', tostring(sku.tier),
     type == 'microsoft.dbformysql/flexibleservers', tostring(sku.tier),
+    type == 'microsoft.dbforpostgresql/servers', tostring(sku.tier),
+    type == 'microsoft.dbforpostgresql/flexibleservers', tostring(sku.tier),
     type == 'microsoft.cache/redis', tostring(properties.sku.name),
     type == "microsoft.apimanagement/service", tostring(sku.name),
     type == 'microsoft.servicebus/namespaces', tostring(sku.name),
@@ -134,7 +138,8 @@ resources
     "Undefined"
     )
 | extend avZones = case(
-    location !in~ ('brazilsouth', 'canadacentral', 'centralus', 'eastus', 'eastus2', 'southcentralus', 'usgovvirginia', 'westus2', 'westus3', 'francecentral', 'germanywestcentral', 'northeurope', 'norwayeast', 'uksouth', 'westeurope', 'swedencentral', 'switzerlandnorth', 'polandcentral', 'qatarcentral', 'uaenorth', 'southafricanorth', 'australiaeast', 'centralindia', 'japaneast', 'koreacentral', 'southeastasia', 'eastasia', 'chinanorth3'), 'Not Applicable',
+    // reffer to: https://learn.microsoft.com/en-us/azure/reliability/availability-zones-service-support#azure-regions-with-availability-zone-support
+    location !in~ ('brazilsouth', 'canadacentral', 'centralus', 'eastus', 'eastus2', 'southcentralus', 'usgovvirginia', 'westus2', 'westus3', 'francecentral', 'germanywestcentral', 'northeurope', 'norwayeast', 'uksouth', 'westeurope', 'swedencentral', 'switzerlandnorth', 'polandcentral', 'qatarcentral', 'uaenorth', 'southafricanorth', 'australiaeast', 'centralindia', 'japaneast', 'koreacentral', 'southeastasia', 'eastasia', 'chinanorth3', 'italynorth', 'israelcentral'), 'Not Applicable',
     (type == 'microsoft.compute/virtualmachines'), coalesce(tostring(zones[0]), 'Not Configured'),
     (type == 'microsoft.classiccompute/virtualmachines'), 'Not Applicable',
     (type == 'microsoft.compute/virtualmachinescalesets'), coalesce(tostring(array_length(parse_json(zones))), 'Not Configured'),
@@ -143,15 +148,26 @@ resources
     (type == 'microsoft.web/sites'), "ASP AZ config",
     (type == 'microsoft.web/serverfarms'), iff(properties.zoneRedundant == 'true', 'Configured', 'Not Configured'),
     (type == 'microsoft.sql/servers/databases' and sku.tier <> 'DataWarehouse'), case( //SQL AZ SKU & region availability filter
-    sku.name == 'Basic' or sku.name == 'Standard' or sku.name == 'System', 'Not Applicable',
-    sku.name == 'GeneralPurpose' and location !in~ ('westeurope', 'northeurope', 'westus2', 'francecentral', 'eastus', 'eastus2', 'southeastasia', 'qatarcentral', 'australiaeast', 'japaneast', 'uksouth'), 'Not Applicable',
-    properties.zoneRedundant == 'true', 'Configured',
-    'Not Configured'
+        sku.tier == 'Basic' or sku.tier == 'Standard' or sku.name == 'System', 'Not Applicable',
+        // Outside of these regions, SQL DB is not available in AZ. Refer to: https://learn.microsoft.com/en-us/azure/azure-sql/database/high-availability-sla?view=azuresql&tabs=azure-powershell#general-purpose-service-tier-zone-redundant-availability
+        sku.tier == 'GeneralPurpose' and location !in~ ('brazilsouth', 'eastus', 'eastus2', 'southcentralus', 'westus2', 'westus3', 'francecentral', 'germanywestcentral', 'northeurope', 'norwayeast', 'uksouth', 'westeurope', 'swedencentral', 'switzerlandnorth', 'polandcentral', 'qatarcentral', 'uaenorth', 'southafricanorth', 'australiaeast', 'centralindia', 'japaneast', 'koreacentral', 'southeastasia', 'eastasia', 'chinanorth3', 'italynorth', 'israelcentral'), 'Not Applicable',
+        properties.zoneRedundant == 'true', 'Configured',
+        'Not Configured'
     ),
     (type == 'microsoft.sql/servers/databases' and sku.tier == 'DataWarehouse'), "Not Applicable",
     (type == 'microsoft.documentdb/databaseaccounts'), iif(properties.locations[0].isZoneRedundant == "false", 'Not Configured', 'Configured'), 
     (type == 'microsoft.dbformysql/servers'), "Not Applicable",
-    (type == 'microsoft.dbformysql/flexibleservers'), iif(properties.haEnabled == "Enabled", 'Configured', 'Not Configured'),
+    (type == 'microsoft.dbformysql/flexibleservers'),case(
+        properties.highAvailability.mode == "ZoneRedundant", "Configured",
+        properties.replicationRole == "Replica", "Not Applicable",
+        'Not Configured'
+    ),
+    (type == 'microsoft.dbforpostgresql/servers'), "Not Applicable",
+    (type == 'microsoft.dbforpostgresql/flexibleservers'),case(
+        properties.highAvailability.mode == "ZoneRedundant", "Configured",
+        properties.replicationRole contains "Replica", "Not Applicable",
+        'Not Configured'
+    ),
     (type == 'microsoft.cache/redis'), coalesce(tostring(array_length(parse_json(zones))), 'Not Configured'),
     (type == "microsoft.apimanagement/service"), coalesce(tostring(array_length(parse_json(zones))), 'Not Configured'),
      (type == 'microsoft.servicebus/namespaces'), iff(properties.zoneRedundant == 'true', 'Configured', 'Not Configured'),
@@ -191,9 +207,11 @@ resources
     type == 'microsoft.documentdb/databaseaccounts', 'Not Applicable',
     type == 'microsoft.dbformysql/servers', "Not Applicable",
     type == 'microsoft.dbformysql/flexibleservers', "Not Applicable",
+    type == 'microsoft.dbforpostgresql/servers', "Not Applicable",
+    type == 'microsoft.dbforpostgresql/flexibleservers', "Not Applicable",
     type == 'microsoft.cache/redis', "Not Applicable",
     type == "microsoft.apimanagement/service", "Not Applicable",
-    type == "microsoft.servicebus/namespaces", iif(zones in ('1', '2', '3'), "configured","not configured"),
+    type == "microsoft.servicebus/namespaces",tostring(iif(isempty(sku.capacity), "Not Applicable", sku.capacity)),
     type contains "storageaccounts", "Not Applicable",
     type == "microsoft.network/azurefirewalls", "Not Applicable",
     type == "microsoft.network/frontdoors", "Not Applicable",
@@ -216,9 +234,11 @@ resources
     type == 'microsoft.documentdb/databaseaccounts', 'Not Applicable',
     type == 'microsoft.dbformysql/servers', tostring(sku.capacity),
     type == 'microsoft.dbformysql/flexibleservers', tostring(sku.capacity),
+    type == 'microsoft.dbforpostgresql/servers', tostring(sku.capacity),
+    type == 'microsoft.dbforpostgresql/flexibleservers', tostring(sku.capacity),
     type == 'microsoft.cache/redis', strcat(properties.sku.family, properties.sku.capacity),
     type == "microsoft.apimanagement/service", tostring(sku.capacity),
-    type == "microsoft.servicebus/namespaces",iif(isnotnull(sku.capacity), tostring(sku.capacity), "Not configured"),
+    type == "microsoft.servicebus/namespaces",tostring(iif(isempty(sku.capacity), "Not Applicable", sku.capacity)),
     type contains "storageaccounts", "Not Applicable", 
     type == "microsoft.network/azurefirewalls", "Not Applicable",
     type == "microsoft.network/frontdoors", "Not Applicable",
@@ -241,9 +261,11 @@ resources
     type == 'microsoft.documentdb/databaseaccounts', 'Not Applicable',
     type == 'microsoft.dbformysql/servers', 'Not Applicable',
     type == 'microsoft.dbformysql/flexibleservers', 'Not Applicable',
+    type == 'microsoft.dbforpostgresql/servers', 'Not Applicable',
+    type == 'microsoft.dbforpostgresql/flexibleservers', 'Not Applicable',
     type == 'microsoft.cache/redis', 'Not Applicable',
     type == "microsoft.apimanagement/service", "Not Applicable",
-    type == "microsoft.servicebus/namespaces",properties.minimumTlsVersion,//use it for tls version, renaming the column
+    type == "microsoft.servicebus/namespaces", "Not Applicable",
     type contains "storageaccounts", "Not Applicable",
     type == "microsoft.network/azurefirewalls", "Not Applicable",
     type == "microsoft.network/frontdoors", "Not Applicable",
@@ -262,10 +284,12 @@ resources
     type == 'microsoft.web/sites', 'Not Applicable',
     type == 'microsoft.web/serverfarms', 'Not Applicable',
     type == 'microsoft.containerservice/managedclusters', AksNodePoolStorageAccountType,
-    type == 'microsoft.sql/servers/databases', properties.storageAccountType,
+    type == 'microsoft.sql/servers/databases', properties.currentBackupStorageRedundancy,
     type == 'microsoft.documentdb/databaseaccounts', 'Not Applicable',
     type == 'microsoft.dbformysql/servers', 'Not Applicable',
     type == 'microsoft.dbformysql/flexibleservers', 'Not Applicable',
+    type == 'microsoft.dbforpostgresql/servers', 'Not Applicable',
+    type == 'microsoft.dbforpostgresql/flexibleservers', 'Not Applicable',
     type == 'microsoft.cache/redis', 'Not Applicable',
     type == "microsoft.apimanagement/service", tostring(properties.platformVersion), //Field Override
     type == "microsoft.servicebus/namespaces", "Not Applicable",
@@ -292,11 +316,14 @@ resources
     type == 'microsoft.documentdb/databaseaccounts', tostring(array_length(parse_json(properties.readLocations))),
     type == 'microsoft.dbformysql/servers', "Not Applicable",
     type == 'microsoft.dbformysql/flexibleservers', "Not Applicable",
+    type == 'microsoft.dbforpostgresql/servers', "Not Applicable",
+    type == 'microsoft.dbforpostgresql/flexibleservers', "Not Applicable",
     type == 'microsoft.cache/redis', 'Not Applicable',
     type == "microsoft.apimanagement/service", tostring(properties.additionalLocations),
     (type == "microsoft.servicebus/namespaces"), "Not Applicable",
     type contains "storageaccounts", case(
-        location in~ ('qatarcentral'), 'Not Applicable',
+        // Use the following query to get 3+0 regions: az account list-locations -o table --query '[?availabilityZoneMappings && (!metadata.pairedRegion || length(metadata.pairedRegion) == `0`)]'
+        location in~ ('qatarcentral', 'polandcentral', 'israelcentral', 'italynorth') and split(skuName, '_', 1)[0] startswith "zrs" , 'Configured',
         split(skuName, '_', 1)[0] startswith "ra", "Configured",
         "Not Configured"
         ),
@@ -316,6 +343,22 @@ resources
     (type == 'microsoft.documentdb/databaseaccounts' and properties.enableAutomaticFailover == "true"), "Configured",
     (type == 'microsoft.documentdb/databaseaccounts'), "Not Applicable",
     type == 'microsoft.dbformysql/servers', "Not Applicable",
+    type == 'microsoft.dbformysql/flexibleservers', case(
+        properties.highAvailability.mode == "Disabled" and properties.replicationRole != "Replica" , "Not Configured",
+        properties.replicationRole == "Replica", "Not Applicable",
+        properties.highAvailability.mode == "ZoneRedundant", "Zone Redundant",
+        properties.highAvailability.mode == "SameZone", "Same Zone",
+        properties.highAvailability.mode
+    ),
+    type == 'microsoft.dbforpostgresql/servers', "Not Applicable",
+    type == 'microsoft.dbforpostgresql/flexibleservers', case(    
+    properties.highAvailability.mode == "Disabled" and properties.replicationRole !contains "AsyncReplica", "Not Configured",
+        properties.replicationRole == "GeoAsyncReplica", "Not Applicable",
+        properties.replicationRole == "AsyncReplica", "Not Applicable",
+        properties.highAvailability.mode == "ZoneRedundant", "Zone Redundant",
+        properties.highAvailability.mode == "SameZone", "Same Zone",
+        properties.highAvailability.mode
+    ),
     type == 'microsoft.dbformysql/flexibleservers', case(properties.haEnabled == "Enabled", "Configured", "Not Applicable"),
     type == 'microsoft.cache/redis', 'Not Applicable',
     type == "microsoft.apimanagement/service", "Not Applicable",
@@ -332,7 +375,7 @@ resources
     "Undefined"
     )
 | extend MultipleWriteLocations = case(
-    type in ('microsoft.compute/virtualmachines', 'microsoft.classiccompute/virtualmachines', 'microsoft.compute/virtualmachinescalesets', 'microsoft.web/sites', 'microsoft.web/serverfarms', 'microsoft.containerservice/managedclusters', 'microsoft.sql/servers/databases', 'microsoft.dbformysql/servers', 'microsoft.dbformysql/flexibleservers'), "Not Applicable",
+    type in ('microsoft.compute/virtualmachines', 'microsoft.classiccompute/virtualmachines', 'microsoft.compute/virtualmachinescalesets', 'microsoft.web/sites', 'microsoft.web/serverfarms', 'microsoft.containerservice/managedclusters', 'microsoft.sql/servers/databases', 'microsoft.dbformysql/servers', 'microsoft.dbformysql/flexibleservers', 'microsoft.dbforpostgresql/servers', 'microsoft.dbforpostgresql/flexibleservers'), "Not Applicable",
     (type == 'microsoft.documentdb/databaseaccounts' and properties.enableMultipleWriteLocations == "false"), "Not Enabled",
     (type == 'microsoft.documentdb/databaseaccounts' and properties.enableMultipleWriteLocations == "true"), "Enabled",
     (type == 'microsoft.cache/redis'), 'Not Applicable',
@@ -353,6 +396,8 @@ resources
     type in ('microsoft.compute/virtualmachines', 'microsoft.classiccompute/virtualmachines', 'microsoft.compute/virtualmachinescalesets', 'microsoft.web/sites', 'microsoft.web/serverfarms', 'microsoft.containerservice/managedclusters', 'microsoft.sql/servers/databases', 'microsoft.documentdb/databaseaccounts'), "Not Applicable",
     (type == 'microsoft.dbformysql/servers'), tostring(properties.storageProfile.storageAutogrow),
     (type == 'microsoft.dbformysql/flexibleservers'), "Not Applicable",
+    (type == 'microsoft.dbforpostgresql/servers'), tostring(properties.storageProfile.storageAutogrow),
+    (type == 'microsoft.dbforpostgresql/flexibleservers'), "Not Applicable",
     (type == 'microsoft.cache/redis'), 'Not Applicable',
     (type == "microsoft.apimanagement/service"), "Not Applicable",
     (type == "microsoft.servicebus/namespaces"), "Not Applicable",
@@ -372,7 +417,9 @@ resources
     (type == 'microsoft.sql/servers/databases' and sku.tier <> 'DataWarehouse'), iif(isnotempty(properties.secondaryType), "replica", "master"),
     (type == 'microsoft.sql/servers/databases' and sku.tier == 'DataWarehouse'), "Not Applicable",
     (type == 'microsoft.dbformysql/servers'), tostring(properties.replicationRole),
-    (type == 'microsoft.dbformysql/flexibleservers'), iif(properties.haEnabled == "Enabled", 'Not Applicable', tostring(properties.replicationRole)),
+    (type == 'microsoft.dbformysql/flexibleservers'), tostring(properties.replicationRole),
+    (type == 'microsoft.dbforpostgresql/servers'), tostring(properties.replicationRole),
+    (type == 'microsoft.dbforpostgresql/flexibleservers'), tostring(properties.replicationRole),
     (type == 'microsoft.cache/redis'), 'Not Applicable',
     (type == "microsoft.apimanagement/service"), "Not Applicable",
     (type == "microsoft.servicebus/namespaces"), "Not Applicable",
@@ -387,6 +434,10 @@ resources
     (type == "microsoft.recoveryservices/vaults"), "Not Applicable",
     "Undefined"
     )
+| extend MinTLSVersion = case(
+    type == "microsoft.servicebus/namespaces", tostring(properties.minimumTlsVersion),
+    "Undefined"
+)
 | project 
     Type = tolower(type),
     SkuName = tolower(skuName),
@@ -408,13 +459,29 @@ resources
     StorageAutogrow = tolower(StorageAutogrow),
     ReplicationRole = tolower(ReplicationRole),
     Environment = environment,
+    MinTLSVersion,
     properties
 | join kind = leftouter (
     recoveryservicesresources
-    | where name startswith "VM;"
-    | project Name = tolower(tostring(properties.dataSourceInfo.resourceID)), Backup = tostring(properties.protectionStatus)
+    | extend vmId = case(
+        properties.backupManagementType == "AzureIaasVM", tolower(tostring(properties.dataSourceInfo.resourceID)),
+        type == "microsoft.recoveryservices/vaults/replicationfabrics/replicationprotectioncontainers/replicationprotecteditems", tolower(tostring(properties.providerSpecificDetails.dataSourceInfo.resourceId)),
+        ''
     )
-    on Name
+    | extend asrId = iff(type == "microsoft.recoveryservices/vaults/replicationfabrics/replicationprotectioncontainers/replicationprotecteditems", tolower(tostring(strcat_array(array_slice(split(properties.recoveryFabricId, '/'), 0, 8), '/'))), '')
+    | extend resourceId = case(
+        properties.backupManagementType == "AzureIaasVM", vmId,
+        type == "microsoft.recoveryservices/vaults/replicationfabrics/replicationprotectioncontainers/replicationprotecteditems", asrId,
+        ''
+    )
+    | extend Backup = tostring(properties.protectionStatus)
+    | extend replicationHealth = properties.replicationHealth
+    | extend failoverHealth = properties.failoverHealth
+    | extend protectionStateDescription = properties.protectionStateDescription
+    | extend isReplicationAgentUpdateRequired = properties.providerSpecificDetails.isReplicationAgentUpdateRequired
+    | project resourceId, vmId, asrId, Backup, replicationHealth, failoverHealth, protectionStateDescription, isReplicationAgentUpdateRequired
+  )
+  on $left.Name == $right.resourceId
 | extend Backup = case(
     Backup == "Healthy" or Backup == "Unhealthy", Backup,
     "Unknown")
@@ -423,12 +490,23 @@ resources
     (Type == 'microsoft.classiccompute/virtualmachines'), iif(Backup == "Unknown", "Not Configured", Backup),
     (Type == "microsoft.compute/virtualmachinescalesets"), "Not Applicable", 
     (Type == "microsoft.containerservice/managedclusters"), "Not Applicable",
-    (Type == 'microsoft.sql/servers/databases'), "Not Applicable", 
-    (Type == 'microsoft.documentdb/databaseaccounts'), iif(properties.backupPolicy.periodicModeProperties.backupStorageRedundancy == "Geo", "Healthy", "Unhealthy"),
+    (Type == 'microsoft.sql/servers/databases'), "Not Applicable",
+    (Type == 'microsoft.documentdb/databaseaccounts'), iif(properties.backupPolicy.type!="Continuous",iif(properties.backupPolicy.periodicModeProperties.backupStorageRedundancy == "Geo", "Geo", "Not Geo"),"Continuous"),
     (Type == 'microsoft.dbformysql/servers'), iif(properties.storageProfile.geoRedundantBackup == "Enabled", "Healthy", "Unhealthy"),
+    (Type == 'microsoft.dbformysql/flexibleservers'), properties.backup.geoRedundantBackup,
+    (Type == 'microsoft.dbforpostgresql/servers'), iif(properties.storageProfile.geoRedundantBackup == "Enabled", "Healthy", "Unhealthy"),
+    (Type == 'microsoft.dbforpostgresql/flexibleservers'), case(
+        properties.backup.geoRedundantBackup == "Disabled" and properties.replicationRole !contains "AsyncReplica", "Disabled",
+        properties.replicationRole == "GeoAsyncReplica", "Not Applicable",
+        properties.replicationRole == "AsyncReplica", "Not Applicable",
+        properties.backup.geoRedundantBackup
+    ),
     (Type contains "storageaccounts"), "Not Applicable",
     (Type == "microsoft.network/azurefirewalls"), "Not Applicable",
     (Type == "microsoft.recoveryservices/vaults"), "Not Applicable",
     "Unknown"
     )
-    
+| extend AvailabilitySet = case(
+    AvailabilitySet == '-', 'None',
+    isnotempty(AvailabilitySet), AvailabilitySet,
+    "Unknown")

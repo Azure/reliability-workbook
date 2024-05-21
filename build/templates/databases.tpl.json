@@ -10,6 +10,7 @@
                 "id": "aa0176d8-14ff-4dc5-9ae7-b8029f565674",
                 "version": "KqlParameterItem/1.0",
                 "name": "Subscriptions",
+                "label": "Subscriptions",
                 "type": 6,
                 "isRequired": true,
                 "multiSelect": true,
@@ -52,18 +53,20 @@
                 "id": "5a4f6d34-9f89-4ef8-b4ee-fb0580ec016d",
                 "version": "KqlParameterItem/1.0",
                 "name": "Environment",
+                "label": "Environment",
                 "type": 2,
                 "multiSelect": true,
                 "quote": "'",
                 "delimiter": ",",
-                "query": "resources\r\n| extend Environment = case(\r\ntags.Environment <> \"\", tags.Environment,\r\ntags.environment <> \"\", tags.environment,\r\ntags.Env <> \"\", tags.Env,\r\ntags.env <> \"\", tags.env,\r\ntolower(name) contains \"prod\", \"Production\",\r\ntolower(name) contains \"dev\", \"Development\",\r\ntolower(name) contains \"qa\", \"QA\",\r\ntolower(name) contains \"uat\", \"UAT\",\r\ntolower(name) contains \"sit\", \"SIT\",\r\ntolower(name) contains \"test\", \"Test\",\r\n\"Undefined\")\r\n| distinct Environment",
+                "query": "resources\r\n| extend Environment = case(\r\ntags.Environment <> \"\", replace(\"\\\\\\\\\", \"<Backslash>\", tostring(tags.Environment)),\r\ntags.environment <> \"\", replace(\"\\\\\\\\\", \"<Backslash>\", tostring(tags.environment)),\r\ntags.Env <> \"\", replace(\"\\\\\\\\\", \"<Backslash>\", tostring(tags.Env)),\r\ntags.env <> \"\", replace(\"\\\\\\\\\", \"<Backslash>\", tostring(tags.env)),\r\ntolower(name) contains \"prod\", \"Production\",\r\ntolower(name) contains \"dev\", \"Development\",\r\ntolower(name) contains \"qa\", \"QA\",\r\ntolower(name) contains \"uat\", \"UAT\",\r\ntolower(name) contains \"sit\", \"SIT\",\r\ntolower(name) contains \"test\", \"Test\",\r\n\"Undefined\")\r\n| distinct Environment",
                 "crossComponentResources": [
                 "{Subscriptions}"
                 ],
                 "typeSettings": {
                 "additionalResourceOptions": [
                     "value::all"
-                ]
+                ],
+                "showDefault": false
                 },
                 "defaultValue": "value::all",
                 "queryType": 1,
@@ -75,16 +78,24 @@
                 "name": "TagName",
                 "label": "Tag Name",
                 "type": 2,
-                "query": "Resources\r\n| where tags != '' and tags != '[]'\r\n| mvexpand tags\r\n| extend tagName = tostring(bag_keys(tags)[0])\r\n| distinct tagName\r\n| sort by tagName asc",
+                "multiSelect": true,
+                "quote": "'",
+                "delimiter": ",",
+                "query": "Resources\r\n| where tags != '' and tags != '[]'\r\n| mvexpand tags\r\n| extend tagName = replace(\"\\\\\\\\\", \"<Backslash>\", tostring(bag_keys(tags)[0]))\r\n| distinct tagName\r\n| sort by tagName asc",
                 "crossComponentResources": [
-                "{Subscriptions}"
+                  "{Subscriptions}"
                 ],
                 "typeSettings": {
-                "additionalResourceOptions": []
+                  "additionalResourceOptions": [
+                    "value::all"
+                  ],
+                  "selectAllValue": "*"
                 },
                 "queryType": 1,
                 "resourceType": "microsoft.resourcegraph/resources",
-                "value": null
+                "value": [
+                  "value::all"
+                ]
             },
             {
                 "id": "95781001-338b-4ed3-81dc-ce16f2a98bf0",
@@ -92,16 +103,24 @@
                 "name": "TagValue",
                 "label": "Tag Value",
                 "type": 2,
-                "query": "Resources\r\n| mvexpand tags\r\n| extend tagName = tostring(bag_keys(tags)[0])\r\n| extend tagValue = tostring(tags[tagName])\r\n| where tags != '' and tags != '[]' and tostring(bag_keys(tags)[0]) == '{TagName}'\r\n| distinct tagValue\r\n| sort by tagValue asc",
+                "multiSelect": true,
+                "quote": "'",
+                "delimiter": ",",
+                "query": "Resources\r\n| mvexpand tags\r\n| extend tagName = replace(\"\\\\\\\\\", \"<Backslash>\", tostring(bag_keys(tags)[0]))\r\n| extend tagValue = replace(\"\\\\\\\\\", \"<Backslash>\", tostring(tags[tagName]))\r\n| where tags != '' and tags != '[]'  \r\n| where ('*' in (dynamic([{TagName}])) or tagName in (dynamic([{TagName}]))) \r\n| distinct tagValue\r\n| sort by tagValue asc",
                 "crossComponentResources": [
-                "{Subscriptions}"
+                  "{Subscriptions}"
                 ],
                 "typeSettings": {
-                "additionalResourceOptions": []
+                  "additionalResourceOptions": [
+                    "value::all"
+                  ],
+                  "selectAllValue": "*"
                 },
                 "queryType": 1,
                 "resourceType": "microsoft.resourcegraph/resources",
-                "value": null
+                "value": [
+                  "value::all"
+                ]
             },
             {
                 "id": "e929bc01-08ec-45fe-bc6a-4e0267460dfa",
@@ -181,6 +200,14 @@
                       "style": "link"
                     },
                     {
+                      "id": "fe5d57cb-c0e8-4661-b932-953cdb6e5e50",
+                      "cellValue": "selectedTab",
+                      "linkTarget": "parameter",
+                      "linkLabel": "PostgreSQL",
+                      "subTarget": "PostgreSQL",
+                      "style": "link"
+                    },
+                    {
                       "id": "fe5d57cb-c0e8-4661-b932-953cdb6e5e49",
                       "cellValue": "selectedTab",
                       "linkTarget": "parameter",
@@ -228,6 +255,76 @@
                       "type": 3,
                       "content": {
                         "version": "KqlItem/1.0",
+                        "query": ${kql_database_sqldb_resources_details_summary},
+                        "size": 3,
+                        "title": "Azure SQL Database - Recommendation Summary",
+                        "showExportToExcel": true,
+                        "queryType": 1,
+                        "resourceType": "microsoft.resourcegraph/resources",
+                        "crossComponentResources": [
+                          "{Subscriptions}"
+                        ],
+                        "gridSettings": {
+                          "formatters": [
+                            {
+                              "columnMatch": "ResourceTotal",
+                              "formatter": 22,
+                              "formatOptions": {
+                                "compositeBarSettings": {
+                                  "labelText": "",
+                                  "columnSettings": [
+                                    {
+                                      "columnName": "NotRunning",
+                                      "color": "lightBlue"
+                                    },
+                                    {
+                                      "columnName": "NotRecommendedSKU",
+                                      "color": "orange"
+                                    },
+                                    {
+                                      "columnName": "NoAVZone",
+                                      "color": "purple"
+                                    },
+                                    {
+                                      "columnName": "NoGRSBackup",
+                                      "color": "red"
+                                    }
+                                  ]
+                                }
+                              }
+                            }
+                          ],
+                          "rowLimit": 10000,
+                          "labelSettings": [
+                            {
+                              "columnId": "ResourceTotal",
+                              "label": "Resource Total"
+                            },
+                            {
+                              "columnId": "NotRunning",
+                              "label": "Failed Status"
+                            },
+                            {
+                              "columnId": "NotRecommendedSKU",
+                              "label": "Non-production SKU"
+                            },
+                            {
+                              "columnId": "NoAVZone",
+                              "label": "No Availability Zone"
+                            },
+                            {
+                              "columnId": "NoGRSBackup",
+                              "label": "No GRS Backup"
+                            }
+                          ]
+                        }
+                      },
+                      "name": "kql_database_sqldb_resources_details_summary"
+                    },
+                    {
+                      "type": 3,
+                      "content": {
+                        "version": "KqlItem/1.0",
                         "query": ${kql_database_sqldb_resources_details},
                         "size": 3,
                         "title": "Azure SQL Database",
@@ -259,12 +356,6 @@
                                 "thresholdsGrid": [
                                   {
                                     "operator": "contains",
-                                    "thresholdValue": "basic",
-                                    "representation": "orange",
-                                    "text": "{0}{1}"
-                                  },
-                                  {
-                                    "operator": "contains",
                                     "thresholdValue": "system",
                                     "representation": "gray",
                                     "text": "{0}{1}"
@@ -282,9 +373,15 @@
                                     "text": "{0}{1}"
                                   },
                                   {
+                                    "operator": "regex",
+                                    "thresholdValue": "^(standard \\(DTU:(10|20|50)\\)|basic .+)$",
+                                    "representation": "orange",
+                                    "text": "{0}{1}"
+                                  },
+                                  {
                                     "operator": "contains",
                                     "thresholdValue": "standard",
-                                    "representation": "orange",
+                                    "representation": "green",
                                     "text": "{0}{1}"
                                   },
                                   {
@@ -308,6 +405,12 @@
                                   {
                                     "operator": "contains",
                                     "thresholdValue": "elastic",
+                                    "representation": "green",
+                                    "text": "{0}{1}"
+                                  },
+                                  {
+                                    "operator": "contains",
+                                    "thresholdValue": "generalpurpose",
                                     "representation": "green",
                                     "text": "{0}{1}"
                                   },
@@ -434,19 +537,19 @@
                                 "thresholdsGrid": [
                                   {
                                     "operator": "contains",
-                                    "thresholdValue": "grs",
+                                    "thresholdValue": "geo",
                                     "representation": "success",
                                     "text": "{0}{1}"
                                   },
                                   {
                                     "operator": "==",
-                                    "thresholdValue": "lrs",
+                                    "thresholdValue": "local",
                                     "representation": "2",
                                     "text": "{0}{1}"
                                   },
                                   {
                                     "operator": "==",
-                                    "thresholdValue": "zrs",
+                                    "thresholdValue": "zone",
                                     "representation": "2",
                                     "text": "{0}{1}"
                                   },
@@ -678,7 +781,7 @@
                             },
                             {
                               "columnId": "OSDisk",
-                              "label": "Storage Type"
+                              "label": "Backup Storage redundancy"
                             }
                           ]
                         }
@@ -725,6 +828,64 @@
                         "value": "Yes"
                       },
                       "name": "text - 3 - Copy - Copy"
+                    },
+                    {
+                      "type": 3,
+                      "content": {
+                        "version": "KqlItem/1.0",
+                        "size": 3,
+                        "query": ${kql_database_synapse_resources_details_summary},
+                        "title": "Dedicated SQL pool (formerly SQL DW) - Recommendation Summary",
+                        "showExportToExcel": true,
+                        "queryType": 1,
+                        "resourceType": "microsoft.resourcegraph/resources",
+                        "crossComponentResources": [
+                          "{Subscriptions}"
+                        ],
+                        "gridSettings": {
+                          "formatters": [
+                            {
+                              "columnMatch": "ResourceTotal",
+                              "formatter": 22,
+                              "formatOptions": {
+                                "compositeBarSettings": {
+                                  "labelText": "",
+                                  "columnSettings": [
+                                    {
+                                      "columnName": "NotRunning",
+                                      "color": "lightBlue"
+                                    },
+                                    {
+                                      "columnName": "NoGRSBackup",
+                                      "color": "orange"
+                                    }
+                                  ]
+                                }
+                              }
+                            },
+                            {
+                              "columnMatch": "Group",
+                              "formatter": 1
+                            }
+                          ],
+                          "rowLimit": 10000,
+                          "labelSettings": [
+                            {
+                              "columnId": "ResourceTotal",
+                              "label": "Resource Total"
+                            },
+                            {
+                              "columnId": "NotRunning",
+                              "label": "Failed Status"
+                            },
+                            {
+                              "columnId": "NoGRSBackup",
+                              "label": "No GRS Backup"
+                            }
+                          ]
+                        }
+                      },
+                      "name": "kql_database_synapse_resources_details_summary"
                     },
                     {
                       "type": 3,
@@ -815,19 +976,19 @@
                                 "thresholdsGrid": [
                                   {
                                     "operator": "contains",
-                                    "thresholdValue": "grs",
+                                    "thresholdValue": "geo",
                                     "representation": "success",
                                     "text": "{0}{1}"
                                   },
                                   {
                                     "operator": "==",
-                                    "thresholdValue": "lrs",
+                                    "thresholdValue": "local",
                                     "representation": "2",
                                     "text": "{0}{1}"
                                   },
                                   {
                                     "operator": "==",
-                                    "thresholdValue": "lrs",
+                                    "thresholdValue": "zone",
                                     "representation": "2",
                                     "text": "{0}{1}"
                                   },
@@ -1063,7 +1224,7 @@
                             },
                             {
                               "columnId": "OSDisk",
-                              "label": "Storage Type"
+                              "label": "Backup Storage redundancy"
                             }
                           ]
                         }
@@ -1110,6 +1271,104 @@
                         "value": "Yes"
                       },
                       "name": "text - 1"
+                    },
+                    {
+                      "type": 3,
+                      "content": {
+                        "version": "KqlItem/1.0",
+                        "query": ${kql_database_cosmosdb_resources_details_summary},
+                        "size": 3,
+                        "title": "Cosmos DB -  Recommendation Summary",
+                        "showExportToExcel": true,
+                        "queryType": 1,
+                        "resourceType": "microsoft.resourcegraph/resources",
+                        "crossComponentResources": [
+                          "{Subscriptions}"
+                        ],
+                        "gridSettings": {
+                          "formatters": [
+                            {
+                              "columnMatch": "ResourceTotal",
+                              "formatter": 22,
+                              "formatOptions": {
+                                "compositeBarSettings": {
+                                  "labelText": "",
+                                  "columnSettings": [
+                                    {
+                                      "columnName": "NotRunning",
+                                      "color": "lightBlue"
+                                    },
+                                    {
+                                      "columnName": "NoAZ",
+                                      "color": "orange"
+                                    },
+                                    {
+                                      "columnName": "ReplicaLt2",
+                                      "color": "purple"
+                                    },
+                                    {
+                                      "columnName": "NoAutomaticFailover",
+                                      "color": "red"
+                                    },
+                                    {
+                                      "columnName": "NoMultipleWriteLocations",
+                                      "color": "yellow"
+                                    },
+                                    {
+                                      "columnName": "UnhealthyBackup",
+                                      "color": "green"
+                                    }
+                                  ]
+                                }
+                              }
+                            },
+                            {
+                              "columnMatch": "UnhealthyBackup",
+                              "formatter": 0,
+                              "formatOptions": {
+                                "customColumnWidthSetting": "39.8571ch"
+                              }
+                            },
+                            {
+                              "columnMatch": "Group",
+                              "formatter": 1
+                            }
+                          ],
+                          "rowLimit": 10000,
+                          "labelSettings": [
+                            {
+                              "columnId": "ResourceTotal",
+                              "label": "Resource Total"
+                            },
+                            {
+                              "columnId": "NotRunning",
+                              "label": "Failed Status"
+                            },
+                            {
+                              "columnId": "NoAZ",
+                              "label": "No Availability Zone"
+                            },
+                            {
+                              "columnId": "ReplicaLt2",
+                              "label": "ReadReplica less than 2"
+                            },
+                            {
+                              "columnId": "NoAutomaticFailover",
+                              "label": "No Automatic Failover"
+                            },
+                            {
+                              "columnId": "NoMultipleWriteLocations",
+                              "label": "No Multiple Write Locations"
+                            },
+                            {
+                              "columnId": "UnhealthyBackup",
+                              "label": "No GRS Backup (within Periodic backup)"
+                            }
+                          ]
+                        },
+                        "sortBy": []
+                      },
+                      "name": "kql_database_cosmosdb_resources_details_summary"
                     },
                     {
                       "type": 3,
@@ -1269,7 +1528,7 @@
                                 "thresholdsGrid": [
                                   {
                                     "operator": "==",
-                                    "thresholdValue": "not Configured",
+                                    "thresholdValue": "not configured",
                                     "representation": "orange",
                                     "text": "{0}{1}"
                                   },
@@ -1337,13 +1596,18 @@
                                 "thresholdsGrid": [
                                   {
                                     "operator": "==",
-                                    "thresholdValue": "healthy",
+                                    "thresholdValue": "continuous",
+                                    "representation": "success"
+                                  },
+                                  {
+                                    "operator": "==",
+                                    "thresholdValue": "geo",
                                     "representation": "success",
                                     "text": "{0}{1}"
                                   },
                                   {
                                     "operator": "==",
-                                    "thresholdValue": "unhealthy",
+                                    "thresholdValue": "not geo",
                                     "representation": "2",
                                     "text": "{0}{1}"
                                   },
@@ -1521,7 +1785,7 @@
                     {
                       "type": 1,
                       "content": {
-                        "json": "[SLA for Azure Database for MySQL server](https://azure.microsoft.com/support/legal/sla/mysql/)\r\n* Single Server: We guarantee at least 99.99% of the time customers will have connectivity between their Microsoft Azure Database for MySQL Server and our Internet gateway\r\n* Flexible Server:\r\n\t- We guarantee at least 99.99% of the time customers will have connectivity to their Microsoft Azure Database for MySQL – Flexible server configured with Zone Redundant High Availability.\r\n\t- We guarantee at least 99.95% of the time customers will have connectivity to their Microsoft Azure Database for MySQL – Flexible server configured with Same Zone High Availability.\r\n\t- We guarantee at least 99.9% of the time customers will have connectivity to their Microsoft Azure Database for MySQL – Flexible server configured without any redundancy.\r\n\r\n> SLA accurate at time of release. Latest information is available [here](https://azure.microsoft.com/support/legal/sla/mysql/)",
+                        "json": "[SLA for Azure Database for MySQL server - Flexible Server](https://azure.microsoft.com/support/legal/sla/mysql/)\r\n- We guarantee at least 99.99% of the time customers will have connectivity to their Microsoft Azure Database for MySQL – Flexible server configured with Zone Redundant High Availability.\r\n- We guarantee at least 99.95% of the time customers will have connectivity to their Microsoft Azure Database for MySQL – Flexible server configured with Same Zone High Availability.\r\n- We guarantee at least 99.9% of the time customers will have connectivity to their Microsoft Azure Database for MySQL – Flexible server configured without any redundancy.\r\n\r\n> SLA accurate at time of release. Latest information is available [here](https://azure.microsoft.com/support/legal/sla/mysql/)",
                         "style": "upsell"
                       },
                       "conditionalVisibility": {
@@ -1543,6 +1807,715 @@
                         "value": "Yes"
                       },
                       "name": "text - 1"
+                    },
+                    {
+                      "type": 3,
+                      "content": {
+                        "version": "KqlItem/1.0",
+                        "query": ${kql_database_mysqlflexible_resources_details_summary},
+                        "size": 3,
+                        "title": "MySQL - Flexible -  Recommendation Summary",
+                        "showExportToExcel": true,
+                        "queryType": 1,
+                        "resourceType": "microsoft.resourcegraph/resources",
+                        "crossComponentResources": [
+                          "{Subscriptions}"
+                        ],
+                        "gridSettings": {
+                          "formatters": [
+                            {
+                              "columnMatch": "ResourceTotal",
+                              "formatter": 22,
+                              "formatOptions": {
+                                "compositeBarSettings": {
+                                  "labelText": "",
+                                  "columnSettings": [
+                                    {
+                                      "columnName": "NotRunning",
+                                      "color": "lightBlue"
+                                    },
+                                    {
+                                      "columnName": "NotRecommendedSKU",
+                                      "color": "green"
+                                    },
+                                    {
+                                      "columnName": "NoAVZone",
+                                      "color": "orange"
+                                    },
+                                    {
+                                      "columnName": "NoHA",
+                                      "color": "purple"
+                                    },
+                                    {
+                                      "columnName": "NoReplica",
+                                      "color": "red"
+                                    },
+                                    {
+                                      "columnName": "NoGeoBackup",
+                                      "color": "yellow"
+                                    }
+                                  ]
+                                }
+                              }
+                            },
+                            {
+                              "columnMatch": "Group",
+                              "formatter": 1
+                            }
+                          ],
+                          "rowLimit": 10000,
+                          "labelSettings": [
+                            {
+                              "columnId": "ResourceTotal",
+                              "label": "Resource Total"
+                            },
+                            {
+                              "columnId": "NotRunning",
+                              "label": "Failed Status"
+                            },
+                            {
+                              "columnId": "NotRecommendedSKU",
+                              "label": "Non-production SKU"
+                            },
+                            {
+                              "columnId": "NoAVZone",
+                              "label": "No Availability Zone"
+                            },
+                            {
+                              "columnId": "NoHA",
+                              "label": "No High Availability"
+                            },
+                            {
+                              "columnId": "NoReplica",
+                              "label": "No Replica"
+                            },
+                            {
+                              "columnId": "NoGeoBackup",
+                              "label": "No Geo Backup"
+                            }
+                          ]
+                        }
+                      },
+                      "name": "kql_database_mysqlflexible_resources_details_summary"
+                    },
+                    {
+                      "type": 3,
+                      "content": {
+                        "version": "KqlItem/1.0",
+                        "query": ${kql_database_mysqlflexible_resources_details},
+                        "size": 3,
+                        "title": "MySQL - Flexible",
+                        "showExportToExcel": true,
+                        "queryType": 1,
+                        "resourceType": "microsoft.resourcegraph/resources",
+                        "crossComponentResources": [
+                          "{Subscriptions}"
+                        ],
+                        "gridSettings": {
+                          "formatters": [
+                            {
+                              "columnMatch": "$gen_group",
+                              "formatter": 13,
+                              "formatOptions": {
+                                "linkTarget": "Resource",
+                                "showIcon": true
+                              }
+                            },
+                            {
+                              "columnMatch": "Type",
+                              "formatter": 5
+                            },
+                            {
+                              "columnMatch": "SkuName",
+                              "formatter": 18,
+                              "formatOptions": {
+                                "thresholdsOptions": "colors",
+                                "thresholdsGrid": [
+                                  {
+                                    "operator": "==",
+                                    "thresholdValue": "generalpurpose",
+                                    "representation": "green",
+                                    "text": "{0}{1}"
+                                  },
+                                  {
+                                    "operator": "==",
+                                    "thresholdValue": "memoryoptimized",
+                                    "representation": "green",
+                                    "text": "{0}{1}"
+                                  },
+                                  {
+                                    "operator": "==",
+                                    "thresholdValue": "burstable",
+                                    "representation": "orange",
+                                    "text": "{0}{1}"
+                                  },
+                                  {
+                                    "operator": "Default",
+                                    "thresholdValue": null,
+                                    "text": "{0}{1}"
+                                  }
+                                ]
+                              }
+                            },
+                            {
+                              "columnMatch": "Kind",
+                              "formatter": 5
+                            },
+                            {
+                              "columnMatch": "SubscriptionId",
+                              "formatter": 5
+                            },
+                            {
+                              "columnMatch": "Name",
+                              "formatter": 5
+                            },
+                            {
+                              "columnMatch": "State",
+                              "formatter": 18,
+                              "formatOptions": {
+                                "thresholdsOptions": "icons",
+                                "thresholdsGrid": [
+                                  {
+                                    "operator": "==",
+                                    "thresholdValue": "ready",
+                                    "representation": "success",
+                                    "text": "{0}{1}"
+                                  },
+                                  {
+                                    "operator": "!=",
+                                    "thresholdValue": "ready",
+                                    "representation": "2",
+                                    "text": "{0}{1}"
+                                  },
+                                  {
+                                    "operator": "Default",
+                                    "thresholdValue": null,
+                                    "representation": "Blank",
+                                    "text": "{0}{1}"
+                                  }
+                                ]
+                              }
+                            },
+                            {
+                              "columnMatch": "Location",
+                              "formatter": 17
+                            },
+                            {
+                              "columnMatch": "Zones",
+                              "formatter": 5
+                            },
+                            {
+                              "columnMatch": "AvailabilityZone",
+                              "formatter": 18,
+                              "formatOptions": {
+                                "thresholdsOptions": "icons",
+                                "thresholdsGrid": [
+                                  {
+                                    "operator": "==",
+                                    "thresholdValue": "configured",
+                                    "representation": "success",
+                                    "text": "{0}{1}"
+                                  },
+                                  {
+                                    "operator": "==",
+                                    "thresholdValue": "not configured",
+                                    "representation": "2",
+                                    "text": "{0}{1}"
+                                  },
+                                  {
+                                    "operator": "==",
+                                    "thresholdValue": "not applicable",
+                                    "representation": "more",
+                                    "text": "{0}{1}"
+                                  },
+                                  {
+                                    "operator": "Default",
+                                    "thresholdValue": null,
+                                    "representation": "unknown",
+                                    "text": "{0}{1}"
+                                  }
+                                ]
+                              }
+                            },
+                            {
+                              "columnMatch": "AvailabilitySet",
+                              "formatter": 5
+                            },
+                            {
+                              "columnMatch": "FaultDomain",
+                              "formatter": 5
+                            },
+                            {
+                              "columnMatch": "OSDisk",
+                              "formatter": 5
+                            },
+                            {
+                              "columnMatch": "ReadReplica",
+                              "formatter": 5
+                            },
+                            {
+                              "columnMatch": "AutomaticFailover",
+                              "formatter": 18,
+                              "formatOptions": {
+                                "thresholdsOptions": "icons",
+                                "thresholdsGrid": [
+                                  {
+                                    "operator": "==",
+                                    "thresholdValue": "zone redundant",
+                                    "representation": "success",
+                                    "text": "{0}{1}"
+                                  },
+                                  {
+                                    "operator": "==",
+                                    "thresholdValue": "same zone",
+                                    "representation": "success",
+                                    "text": "{0}{1}"
+                                  },
+                                  {
+                                    "operator": "==",
+                                    "thresholdValue": "not configured",
+                                    "representation": "2",
+                                    "text": "{0}{1}"
+                                  },
+                                  {
+                                    "operator": "==",
+                                    "thresholdValue": "not applicable",
+                                    "representation": "more",
+                                    "text": "{0}{1}"
+                                  },
+                                  {
+                                    "operator": "Default",
+                                    "thresholdValue": null,
+                                    "representation": "unknown",
+                                    "text": "{0}{1}"
+                                  }
+                                ]
+                              }
+                            },
+                            {
+                              "columnMatch": "MultipleWriteLocations",
+                              "formatter": 5
+                            },
+                            {
+                              "columnMatch": "StorageAutogrow",
+                              "formatter": 5
+                            },
+                            {
+                              "columnMatch": "ReplicationRole",
+                              "formatter": 18,
+                              "formatOptions": {
+                                "thresholdsOptions": "icons",
+                                "thresholdsGrid": [
+                                  {
+                                    "operator": "==",
+                                    "thresholdValue": "none",
+                                    "representation": "2",
+                                    "text": "{0}{1}"
+                                  },
+                                  {
+                                    "operator": "==",
+                                    "thresholdValue": "source",
+                                    "representation": "success",
+                                    "text": "{0}{1}"
+                                  },
+                                  {
+                                    "operator": "==",
+                                    "thresholdValue": "replica",
+                                    "representation": "success",
+                                    "text": "{0}{1}"
+                                  },
+                                  {
+                                    "operator": "==",
+                                    "thresholdValue": "not applicable",
+                                    "representation": "more",
+                                    "text": "{0}{1}"
+                                  },
+                                  {
+                                    "operator": "Default",
+                                    "thresholdValue": null,
+                                    "representation": "unknown",
+                                    "text": "{0}{1}"
+                                  }
+                                ]
+                              }
+                            },
+                            {
+                              "columnMatch": "GeoBackup",
+                              "formatter": 18,
+                              "formatOptions": {
+                                "thresholdsOptions": "icons",
+                                "thresholdsGrid": [
+                                  {
+                                    "operator": "==",
+                                    "thresholdValue": "enabled",
+                                    "representation": "success",
+                                    "text": "{0}{1}"
+                                  },
+                                  {
+                                    "operator": "Default",
+                                    "thresholdValue": null,
+                                    "representation": "warning",
+                                    "text": "{0}{1}"
+                                  }
+                                ]
+                              }
+                            },
+                            {
+                              "columnMatch": "Environment",
+                              "formatter": 18,
+                              "formatOptions": {
+                                "thresholdsOptions": "colors",
+                                "thresholdsGrid": [
+                                  {
+                                    "operator": "contains",
+                                    "thresholdValue": "prod",
+                                    "representation": "redBright",
+                                    "text": "{0}{1}"
+                                  },
+                                  {
+                                    "operator": "contains",
+                                    "thresholdValue": "Prod",
+                                    "representation": "redBright",
+                                    "text": "{0}{1}"
+                                  },
+                                  {
+                                    "operator": "Default",
+                                    "thresholdValue": null,
+                                    "text": "{0}{1}"
+                                  }
+                                ]
+                              }
+                            },
+                            {
+                              "columnMatch": "SubscriptionName",
+                              "formatter": 5
+                            },
+                            {
+                              "columnMatch": "Tier",
+                              "formatter": 18,
+                              "formatOptions": {
+                                "thresholdsOptions": "icons",
+                                "thresholdsGrid": [
+                                  {
+                                    "operator": "==",
+                                    "thresholdValue": "Basic",
+                                    "representation": "2",
+                                    "text": "{0}{1}"
+                                  },
+                                  {
+                                    "operator": "==",
+                                    "thresholdValue": "GeneralPurpose",
+                                    "representation": "success",
+                                    "text": "{0}{1}"
+                                  },
+                                  {
+                                    "operator": "==",
+                                    "thresholdValue": "MemoryOptimized",
+                                    "representation": "success",
+                                    "text": "{0}{1}"
+                                  },
+                                  {
+                                    "operator": "Default",
+                                    "thresholdValue": null,
+                                    "representation": "unknown",
+                                    "text": "{0}{1}"
+                                  }
+                                ]
+                              }
+                            },
+                            {
+                              "columnMatch": "SslEnforcement",
+                              "formatter": 18,
+                              "formatOptions": {
+                                "thresholdsOptions": "icons",
+                                "thresholdsGrid": [
+                                  {
+                                    "operator": "==",
+                                    "thresholdValue": "Enabled",
+                                    "representation": "success",
+                                    "text": "{0}{1}"
+                                  },
+                                  {
+                                    "operator": "==",
+                                    "thresholdValue": "Disabled",
+                                    "representation": "2",
+                                    "text": "{0}{1}"
+                                  },
+                                  {
+                                    "operator": "Default",
+                                    "thresholdValue": null,
+                                    "representation": "unknown",
+                                    "text": "{0}{1}"
+                                  }
+                                ]
+                              }
+                            },
+                            {
+                              "columnMatch": "HaState",
+                              "formatter": 18,
+                              "formatOptions": {
+                                "thresholdsOptions": "icons",
+                                "thresholdsGrid": [
+                                  {
+                                    "operator": "==",
+                                    "thresholdValue": "Healthy",
+                                    "representation": "success",
+                                    "text": "{0}{1}"
+                                  },
+                                  {
+                                    "operator": "!=",
+                                    "thresholdValue": "Healthy",
+                                    "representation": "2",
+                                    "text": "{0}{1}"
+                                  },
+                                  {
+                                    "operator": "Default",
+                                    "thresholdValue": null,
+                                    "representation": "unknown",
+                                    "text": "{0}{1}"
+                                  }
+                                ]
+                              }
+                            },
+                            {
+                              "columnMatch": "HaEnabled",
+                              "formatter": 18,
+                              "formatOptions": {
+                                "thresholdsOptions": "icons",
+                                "thresholdsGrid": [
+                                  {
+                                    "operator": "==",
+                                    "thresholdValue": "Enabled",
+                                    "representation": "success",
+                                    "text": "{0}{1}"
+                                  },
+                                  {
+                                    "operator": "==",
+                                    "thresholdValue": "Disabled",
+                                    "representation": "2",
+                                    "text": "{0}{1}"
+                                  },
+                                  {
+                                    "operator": "Default",
+                                    "thresholdValue": null,
+                                    "representation": "unknown",
+                                    "text": "{0}{1}"
+                                  }
+                                ]
+                              }
+                            },
+                            {
+                              "columnMatch": "ReplicationConfiguration",
+                              "formatter": 18,
+                              "formatOptions": {
+                                "thresholdsOptions": "icons",
+                                "thresholdsGrid": [
+                                  {
+                                    "operator": "==",
+                                    "thresholdValue": "Not Configured",
+                                    "representation": "2",
+                                    "text": "{0}{1}"
+                                  },
+                                  {
+                                    "operator": "==",
+                                    "thresholdValue": "Configured",
+                                    "representation": "success",
+                                    "text": "{0}{1}"
+                                  },
+                                  {
+                                    "operator": "==",
+                                    "thresholdValue": "NA",
+                                    "text": "{0}{1}"
+                                  },
+                                  {
+                                    "operator": "Default",
+                                    "thresholdValue": null,
+                                    "representation": "unknown",
+                                    "text": "{0}{1}"
+                                  }
+                                ]
+                              }
+                            },
+                            {
+                              "columnMatch": "Endpoint",
+                              "formatter": 5
+                            },
+                            {
+                              "columnMatch": "Details",
+                              "formatter": 5
+                            },
+                            {
+                              "columnMatch": "Status",
+                              "formatter": 18,
+                              "formatOptions": {
+                                "thresholdsOptions": "icons",
+                                "thresholdsGrid": [
+                                  {
+                                    "operator": "==",
+                                    "thresholdValue": "Ready",
+                                    "representation": "success",
+                                    "text": "{0}{1}"
+                                  },
+                                  {
+                                    "operator": "Default",
+                                    "thresholdValue": null,
+                                    "representation": "unknown",
+                                    "text": "{0}{1}"
+                                  }
+                                ]
+                              }
+                            },
+                            {
+                              "columnMatch": "SkuFamily",
+                              "formatter": 18,
+                              "formatOptions": {
+                                "thresholdsOptions": "icons",
+                                "thresholdsGrid": [
+                                  {
+                                    "operator": "==",
+                                    "thresholdValue": "Gen5",
+                                    "representation": "success",
+                                    "text": "{0}{1}"
+                                  },
+                                  {
+                                    "operator": "!=",
+                                    "thresholdValue": "Gen5",
+                                    "representation": "2",
+                                    "text": "{0}{1}"
+                                  },
+                                  {
+                                    "operator": "Default",
+                                    "thresholdValue": null,
+                                    "representation": "unknown",
+                                    "text": "{0}{1}"
+                                  }
+                                ]
+                              }
+                            },
+                            {
+                              "columnMatch": "GeoRedundantBackup",
+                              "formatter": 18,
+                              "formatOptions": {
+                                "thresholdsOptions": "icons",
+                                "thresholdsGrid": [
+                                  {
+                                    "operator": "==",
+                                    "thresholdValue": "Enabled",
+                                    "representation": "success",
+                                    "text": "{0}{1}"
+                                  },
+                                  {
+                                    "operator": "==",
+                                    "thresholdValue": "Disabled",
+                                    "representation": "2",
+                                    "text": "{0}{1}"
+                                  },
+                                  {
+                                    "operator": "Default",
+                                    "thresholdValue": null,
+                                    "representation": "unknown",
+                                    "text": "{0}{1}"
+                                  }
+                                ]
+                              }
+                            },
+                            {
+                              "columnMatch": "InfrastructureEncryption",
+                              "formatter": 18,
+                              "formatOptions": {
+                                "thresholdsOptions": "icons",
+                                "thresholdsGrid": [
+                                  {
+                                    "operator": "==",
+                                    "thresholdValue": "Enabled",
+                                    "representation": "success",
+                                    "text": "{0}{1}"
+                                  },
+                                  {
+                                    "operator": "==",
+                                    "thresholdValue": "Disabled",
+                                    "representation": "2",
+                                    "text": "{0}{1}"
+                                  },
+                                  {
+                                    "operator": "Default",
+                                    "thresholdValue": null,
+                                    "representation": "unknown",
+                                    "text": "{0}{1}"
+                                  }
+                                ]
+                              }
+                            },
+                            {
+                              "columnMatch": "TlsEnforcement",
+                              "formatter": 18,
+                              "formatOptions": {
+                                "thresholdsOptions": "icons",
+                                "thresholdsGrid": [
+                                  {
+                                    "operator": "==",
+                                    "thresholdValue": "TLSEnforcementDisabled",
+                                    "representation": "2",
+                                    "text": "{0}{1}"
+                                  },
+                                  {
+                                    "operator": "==",
+                                    "thresholdValue": "TLSEnforcementEnabled",
+                                    "representation": "success",
+                                    "text": "{0}{1}"
+                                  },
+                                  {
+                                    "operator": "Default",
+                                    "thresholdValue": null,
+                                    "representation": "unknown",
+                                    "text": "{0}{1}"
+                                  }
+                                ]
+                              }
+                            }
+                          ],
+                          "rowLimit": 10000,
+                          "hierarchySettings": {
+                            "treeType": 1,
+                            "groupBy": [
+                              "SubscriptionId"
+                            ],
+                            "expandTopLevel": false,
+                            "finalBy": "Name"
+                          },
+                          "labelSettings": [
+                            {
+                              "columnId": "SkuName",
+                              "label": "Sku Name"
+                            },
+                            {
+                              "columnId": "SubscriptionId",
+                              "label": "Subscription"
+                            },
+                            {
+                              "columnId": "State",
+                              "label": "Status"
+                            },
+                            {
+                              "columnId": "ResourceGroup",
+                              "label": "Resource Group"
+                            },
+                            {
+                              "columnId": "AutomaticFailover",
+                              "label": "High Availability"
+                            },
+                            {
+                              "columnId": "StorageAutogrow",
+                              "label": "Storage Autogrow"
+                            },
+                            {
+                              "columnId": "ReplicationRole",
+                              "label": "Replication Role"
+                            }
+                          ]
+                        }
+                      },
+                      "name": "kql_database_mysqlflexible_resources_details"
                     },
                     {
                       "type": 1,
@@ -2000,14 +2973,835 @@
                         "sortBy": []
                       },
                       "name": "kql_database_mysqlsingle_resources_details"
+                    }
+                  ]
+                },
+                "conditionalVisibility": {
+                  "parameterName": "selectedTab",
+                  "comparison": "isEqualTo",
+                  "value": "MySQL"
+                },
+                "name": "MySQL"
+              },
+              {
+                "type": 12,
+                "content": {
+                  "version": "NotebookGroup/1.0",
+                  "groupType": "editable",
+                  "items": [
+                    {
+                      "type": 1,
+                      "content": {
+                        "json": "[SLA for Azure Cache for Redis](https://azure.microsoft.com/support/legal/sla/cache/)\r\n\r\n* For any Standard, Premium, Enterprise, and Enterprise Flash tier Cache, we guarantee that you will have connectivity to the Cache Endpoint at least 99.9% of the time.\r\n* For any Enterprise and Enterprise Flash tier Cache deployed to three or more Availability Zones in the same Azure region, we guarantee that you will have connectivity to the Cache Endpoint at least 99.99% of the time.\r\n* For any Enterprise and Enterprise Flash tier Cache deployed (1) to at least three Azure regions and three or more Availability Zones in each region and (2) with active geo-replication enabled for all Cache instances, we guarantee that you will have connectivity to one regional Cache Endpoint at least 99.999% of the time.\r\n\r\n> SLA accurate at time of release. Latest information is available [here](https://azure.microsoft.com/support/legal/sla/cache/)",
+                        "style": "upsell"
+                      },
+                      "name": "text - 0"
+                    },
+                    {
+                      "type": 1,
+                      "content": {
+                        "json": "[Redis best practices](https://learn.microsoft.com/azure/architecture/framework/services/data/azure-cache-redis/reliability)\r\n\r\n* It is recommended to choose premium or enterprise tiers for better HA capability\r\n* Basic tier is not covered by SLA and hence should be avoided for production deployments.\r\n* It is recommended to avoid SKUs having shared CPUs for better resiliency & performance, SKU details can be referred in [docs](https://learn.microsoft.com/azure/azure-cache-for-redis/cache-planning-faq#azure-cache-for-redis-performance)\r\n* Enable Availability Zone if the region supports Availability Zones\r\n* Geo replication is preferred for DR across regions (active geo replication in case of enterprise tier). In this case replicas greater than 1 is not supported.\r\n\r\n> Azure generally recommends to leverage [Availability Zone](https://learn.microsoft.com/azure/availability-zones/az-overview) for better High Availability within the region by leveraging multiple zones inside region. By architecting your solutions to use replicated services in zones, you can protect your apps and data from the loss of a datacenter. \r\n\r\n> At this point, not all Azure regions and services support Availability Zones, the support matrix can be found [here](https://learn.microsoft.com/azure/availability-zones/az-region). Whenerver there is a Zonal recommendation for a particular service from this workbook, please note that that is applicable only for the regions supporting Availability Zones from the earlier list.\r\n",
+                        "style": "info"
+                      },
+                      "conditionalVisibility": {
+                        "parameterName": "Help",
+                        "comparison": "isEqualTo",
+                        "value": "Yes"
+                      },
+                      "name": "text - 1"
                     },
                     {
                       "type": 3,
                       "content": {
                         "version": "KqlItem/1.0",
-                        "query": ${kql_database_mysqlflexible_resources_details},
+                        "query": ${kql_database_redis_resources_details_summary},
                         "size": 3,
-                        "title": "MySQL - Flexible",
+                        "title": "Azure Cache for Redis -  Recommendation Summary",
+                        "showExportToExcel": true,
+                        "queryType": 1,
+                        "resourceType": "microsoft.resourcegraph/resources",
+                        "crossComponentResources": [
+                          "{Subscriptions}"
+                        ],
+                        "gridSettings": {
+                          "formatters": [
+                            {
+                              "columnMatch": "ResourceTotal",
+                              "formatter": 22,
+                              "formatOptions": {
+                                "compositeBarSettings": {
+                                  "labelText": "",
+                                  "columnSettings": [
+                                    {
+                                      "columnName": "NotRunning",
+                                      "color": "lightBlue"
+                                    },
+                                    {
+                                      "columnName": "NoAVZone",
+                                      "color": "orange"
+                                    },
+                                    {
+                                      "columnName": "NotRecommendedTier",
+                                      "color": "purple"
+                                    },
+                                    {
+                                      "columnName": "NotRecommendedSku",
+                                      "color": "red"
+                                    }
+                                  ]
+                                }
+                              }
+                            },
+                            {
+                              "columnMatch": "Group",
+                              "formatter": 1
+                            }
+                          ],
+                          "rowLimit": 10000,
+                          "labelSettings": [
+                            {
+                              "columnId": "ResourceTotal",
+                              "label": "Resource Total"
+                            },
+                            {
+                              "columnId": "NotRunning",
+                              "label": "Failed Status"
+                            },
+                            {
+                              "columnId": "NoAVZone",
+                              "label": "No Availability Zone"
+                            },
+                            {
+                              "columnId": "NotRecommendedTier",
+                              "label": "Non-production Tier"
+                            },
+                            {
+                              "columnId": "NotRecommendedSku",
+                              "label": "Non-production SKU"
+                            }
+                          ]
+                        }
+                      },
+                      "name": "kql_database_redis_resources_details_summary"
+                    },
+                    {
+                      "type": 3,
+                      "content": {
+                        "version": "KqlItem/1.0",
+                        "query": ${kql_database_redis_resources_details},
+                        "size": 1,
+                        "title": "Azure Cache for Redis",
+                        "showExportToExcel": true,
+                        "queryType": 1,
+                        "resourceType": "microsoft.resourcegraph/resources",
+                        "crossComponentResources": [
+                          "{Subscriptions}"
+                        ],
+                        "gridSettings": {
+                          "formatters": [
+                            {
+                              "columnMatch": "$gen_group",
+                              "formatter": 13,
+                              "formatOptions": {
+                                "linkTarget": "Resource",
+                                "showIcon": true
+                              }
+                            },
+                            {
+                              "columnMatch": "Subscription",
+                              "formatter": 13,
+                              "formatOptions": {
+                                "linkTarget": "Resource",
+                                "showIcon": true
+                              }
+                            },
+                            {
+                              "columnMatch": "Type",
+                              "formatter": 5
+                            },
+                            {
+                              "columnMatch": "SkuName",
+                              "formatter": 18,
+                              "formatOptions": {
+                                "thresholdsOptions": "icons",
+                                "thresholdsGrid": [
+                                  {
+                                    "operator": "contains",
+                                    "thresholdValue": "premium",
+                                    "representation": "success",
+                                    "text": "{0}{1}"
+                                  },
+                                  {
+                                    "operator": "contains",
+                                    "thresholdValue": "enterprise",
+                                    "representation": "success",
+                                    "text": "{0}{1}"
+                                  },
+                                  {
+                                    "operator": "contains",
+                                    "thresholdValue": "basic",
+                                    "representation": "2",
+                                    "text": "{0}{1}"
+                                  },
+                                  {
+                                    "operator": "contains",
+                                    "thresholdValue": "standard",
+                                    "representation": "success",
+                                    "text": "{0}{1}"
+                                  },
+                                  {
+                                    "operator": "Default",
+                                    "thresholdValue": null,
+                                    "representation": "unknown",
+                                    "text": "{0}{1}"
+                                  }
+                                ]
+                              }
+                            },
+                            {
+                              "columnMatch": "Kind",
+                              "formatter": 5
+                            },
+                            {
+                              "columnMatch": "SubscriptionId",
+                              "formatter": 5
+                            },
+                            {
+                              "columnMatch": "Name",
+                              "formatter": 5
+                            },
+                            {
+                              "columnMatch": "State",
+                              "formatter": 18,
+                              "formatOptions": {
+                                "thresholdsOptions": "icons",
+                                "thresholdsGrid": [
+                                  {
+                                    "operator": "==",
+                                    "thresholdValue": "succeeded",
+                                    "representation": "success",
+                                    "text": "{0}{1}"
+                                  },
+                                  {
+                                    "operator": "Default",
+                                    "thresholdValue": null,
+                                    "representation": "warning",
+                                    "text": "{0}{1}"
+                                  }
+                                ]
+                              }
+                            },
+                            {
+                              "columnMatch": "Location",
+                              "formatter": 17
+                            },
+                            {
+                              "columnMatch": "Zones",
+                              "formatter": 5
+                            },
+                            {
+                              "columnMatch": "AvailabilityZone",
+                              "formatter": 18,
+                              "formatOptions": {
+                                "thresholdsOptions": "icons",
+                                "thresholdsGrid": [
+                                  {
+                                    "operator": "==",
+                                    "thresholdValue": "not applicable",
+                                    "representation": "more",
+                                    "text": "{0}{1}"
+                                  },
+                                  {
+                                    "operator": "==",
+                                    "thresholdValue": "not configured",
+                                    "representation": "2",
+                                    "text": "{0}{1}"
+                                  },
+                                  {
+                                    "operator": "regex",
+                                    "thresholdValue": "(1|2|3)",
+                                    "representation": "success",
+                                    "text": "{0}{1}"
+                                  },
+                                  {
+                                    "operator": "Default",
+                                    "thresholdValue": null,
+                                    "representation": "unknown",
+                                    "text": "{0}{1}"
+                                  }
+                                ]
+                              }
+                            },
+                            {
+                              "columnMatch": "AvailabilitySet",
+                              "formatter": 5
+                            },
+                            {
+                              "columnMatch": "Capacity",
+                              "formatter": 18,
+                              "formatOptions": {
+                                "thresholdsOptions": "icons",
+                                "thresholdsGrid": [
+                                  {
+                                    "operator": "==",
+                                    "thresholdValue": "c0",
+                                    "representation": "2",
+                                    "text": "{0}{1}"
+                                  },
+                                  {
+                                    "operator": "Default",
+                                    "thresholdValue": null,
+                                    "representation": "success",
+                                    "text": "{0}{1}"
+                                  }
+                                ]
+                              },
+                              "tooltipFormat": {
+                                "tooltip": "Shared or Dedicated CPU"
+                              }
+                            },
+                            {
+                              "columnMatch": "FaultDomain",
+                              "formatter": 5
+                            },
+                            {
+                              "columnMatch": "OSDisk",
+                              "formatter": 5
+                            },
+                            {
+                              "columnMatch": "ReadReplica",
+                              "formatter": 5
+                            },
+                            {
+                              "columnMatch": "AutomaticFailover",
+                              "formatter": 5
+                            },
+                            {
+                              "columnMatch": "MultipleWriteLocations",
+                              "formatter": 5
+                            },
+                            {
+                              "columnMatch": "StorageAutogrow",
+                              "formatter": 5
+                            },
+                            {
+                              "columnMatch": "ReplicationRole",
+                              "formatter": 5
+                            },
+                            {
+                              "columnMatch": "Backup",
+                              "formatter": 5
+                            },
+                            {
+                              "columnMatch": "Environment",
+                              "formatter": 18,
+                              "formatOptions": {
+                                "thresholdsOptions": "colors",
+                                "thresholdsGrid": [
+                                  {
+                                    "operator": "contains",
+                                    "thresholdValue": "prod",
+                                    "representation": "redBright",
+                                    "text": "{0}{1}"
+                                  },
+                                  {
+                                    "operator": "contains",
+                                    "thresholdValue": "Prod",
+                                    "representation": "redBright",
+                                    "text": "{0}{1}"
+                                  },
+                                  {
+                                    "operator": "Default",
+                                    "thresholdValue": null,
+                                    "text": "{0}{1}"
+                                  }
+                                ]
+                              }
+                            }
+                          ],
+                          "rowLimit": 10000,
+                          "hierarchySettings": {
+                            "treeType": 1,
+                            "groupBy": [
+                              "SubscriptionId"
+                            ],
+                            "finalBy": "Name"
+                          },
+                          "labelSettings": [
+                            {
+                              "columnId": "SkuName",
+                              "label": "Tier"
+                            },
+                            {
+                              "columnId": "SubscriptionId",
+                              "label": "Subscription"
+                            },
+                            {
+                              "columnId": "ResourceGroup",
+                              "label": "Resource Group"
+                            },
+                            {
+                              "columnId": "Capacity",
+                              "label": "SKU"
+                            }
+                          ]
+                        }
+                      },
+                      "name": "Azure Cache for Redis"
+                    }
+                  ]
+                },
+                "conditionalVisibility": {
+                  "parameterName": "selectedTab",
+                  "comparison": "isEqualTo",
+                  "value": "Redis"
+                },
+                "name": "Redis"
+              },
+              {
+                "type": 12,
+                "content": {
+                  "version": "NotebookGroup/1.0",
+                  "groupType": "editable",
+                  "items": [
+                    {
+                      "type": 1,
+                      "content": {
+                        "json": "[SLA for Azure Database for PostgreSQL - Flexible Server](https://azure.microsoft.com/support/legal/sla/)\r\n\r\n- We guarantee at least 99.99% of the time customers will have connectivity to their Microsoft Azure Database for PostgreSQL– Flexible server configured with Zone Redundant High Availability.\r\n- We guarantee at least 99.95% of the time customers will have connectivity to their Microsoft Azure Database for PostgreSQL– Flexible server configured with Same Zone High Availability.\r\n- We guarantee at least 99.9% of the time customers will have connectivity to their Microsoft Azure Database for PostgreSQL– Flexible server configured without any redundancy.\r\n\r\n\r\n> SLA accurate at time of release. Latest information is available [here](https://azure.microsoft.com/support/legal/sla/)",
+                        "style": "upsell"
+                      },
+                      "conditionalVisibility": {
+                        "parameterName": "SLA",
+                        "comparison": "isEqualTo",
+                        "value": "Yes"
+                      },
+                      "name": "text - 0"
+                    },
+                    {
+                      "type": 1,
+                      "content": {
+                        "json": "[Azure Well-Architected Framework review - Azure Database for PostgreSQL](https://learn.microsoft.com/azure/well-architected/service-guides/postgresql)\r\n\r\n* **High Availability**: Deploy across multiple Availability Zones where possible for fault tolerance and uninterrupted service during zone-level outages.\r\n* **Automated Backups**: Utilize automated backups with geo-redundant storage and point-in-time restore capabilities to minimize data loss.\r\n* **Capacity Planning**: Regularly review growth patterns and perform capacity planning to ensure the database scales with demand.\r\n* **Zone-Redundant Configuration**: Choose zone-redundant configurations in supported regions to facilitate automatic failover and maintain high availability.\r\n* **Storage Autogrow**: Enable storage autogrow to automatically manage storage capacity, preventing disruptions due to space limitations.\r\n* **Performance Monitoring**: Implement a robust monitoring system to track database performance and health, enabling proactive issue resolution.\r\n* **Maintenance Scheduling**: Perform maintenance and updates during off-peak hours to reduce the impact on database availability.\r\n\r\nPlease also read the following reliability best practices for PostgreSQL: [High availability (Reliability) in Azure Database for PostgreSQL - Flexible Server](https://learn.microsoft.com/azure/reliability/reliability-postgresql-flexible-server)\r\n\r\nTo configure high availability, please refer to the following documentation: [Manage high availability in Flexible Server](https://learn.microsoft.com/en-us/azure/postgresql/flexible-server/how-to-manage-high-availability-portal)\r\n\r\n> Azure generally recommends to leverage [Availability Zone](https://learn.microsoft.com/azure/availability-zones/az-overview) for better High Availability within the region by leveraging multiple zones inside region. By architecting your solutions to use replicated services in zones, you can protect your apps and data from the loss of a datacenter. \r\n\r\n> At this point, not all Azure regions and services support Availability Zones, the support matrix can be found [here](https://learn.microsoft.com/azure/availability-zones/az-region). Whenerver there is a Zonal recommendation for a particular service from this workbook, please note that that is applicable only for the regions supporting Availability Zones from the earlier list.\r\n",
+                        "style": "info"
+                      },
+                      "conditionalVisibility": {
+                        "parameterName": "Help",
+                        "comparison": "isEqualTo",
+                        "value": "Yes"
+                      },
+                      "name": "text - 1"
+                    },
+                    {
+                      "type": 3,
+                      "content": {
+                        "version": "KqlItem/1.0",
+                        "query": ${kql_database_postgresqlflexible_resources_details_summary},
+                        "size": 3,
+                        "title": "PostgreSQL - Flexible - Recommendation Summary",
+                        "showExportToExcel": true,
+                        "queryType": 1,
+                        "resourceType": "microsoft.resourcegraph/resources",
+                        "crossComponentResources": [
+                          "{Subscriptions}"
+                        ],
+                        "gridSettings": {
+                          "formatters": [
+                            {
+                              "columnMatch": "ResourceTotal",
+                              "formatter": 22,
+                              "formatOptions": {
+                                "compositeBarSettings": {
+                                  "labelText": "",
+                                  "columnSettings": [
+                                    {
+                                      "columnName": "NotRunning",
+                                      "color": "lightBlue"
+                                    },
+                                    {
+                                      "columnName": "NotRecommendedSKU",
+                                      "color": "green"
+                                    },
+                                    {
+                                      "columnName": "NoAVZone",
+                                      "color": "orange"
+                                    },
+                                    {
+                                      "columnName": "NoHA",
+                                      "color": "purple"
+                                    },
+                                    {
+                                      "columnName": "NoGeoBackup",
+                                      "color": "yellow"
+                                    }
+                                  ]
+                                }
+                              }
+                            },
+                            {
+                              "columnMatch": "Primary",
+                              "formatter": 5
+                            },
+                            {
+                              "columnMatch": "AsyncReplica",
+                              "formatter": 5
+                            }
+                          ],
+                          "rowLimit": 10000,
+                          "labelSettings": [
+                            {
+                              "columnId": "ResourceTotal",
+                              "label": "Resource Total"
+                            },
+                            {
+                              "columnId": "NotRunning",
+                              "label": "Failed Status"
+                            },
+                            {
+                              "columnId": "NotRecommendedSKU",
+                              "label": "Non-production SKU"
+                            },
+                            {
+                              "columnId": "NoAVZone",
+                              "label": "No Availability Zone"
+                            },
+                            {
+                              "columnId": "NoHA",
+                              "label": "No High Availability"
+                            },
+                            {
+                              "columnId": "NoGeoBackup",
+                              "label": "No Geo Backup"
+                            }
+                          ]
+                        }
+                      },
+                      "name": "kql_database_postgresqlflexible_resources_details_summary"
+                    },
+                    {
+                      "type": 3,
+                      "content": {
+                        "version": "KqlItem/1.0",
+                        "query": ${kql_database_postgresqlflexible_resources_details},
+                        "size": 3,
+                        "title": "PostgreSQL - Flexible",
+                        "showExportToExcel": true,
+                        "queryType": 1,
+                        "resourceType": "microsoft.resourcegraph/resources",
+                        "crossComponentResources": [
+                          "{Subscriptions}"
+                        ],
+                        "gridSettings": {
+                          "formatters": [
+                            {
+                              "columnMatch": "$gen_group",
+                              "formatter": 13,
+                              "formatOptions": {
+                                "linkTarget": "Resource",
+                                "showIcon": true
+                              }
+                            },
+                            {
+                              "columnMatch": "Subscription",
+                              "formatter": 13,
+                              "formatOptions": {
+                                "linkTarget": "Resource",
+                                "showIcon": true
+                              }
+                            },
+                            {
+                              "columnMatch": "Type",
+                              "formatter": 5
+                            },
+
+                            {
+                              "columnMatch": "SubscriptionId",
+                              "formatter": 5
+                            },
+                            {
+                              "columnMatch": "Name",
+                              "formatter": 5
+                            },
+                            {
+                              "columnMatch": "location",
+                              "formatter": 17
+                            },
+                            {
+                              "columnMatch": "Zones",
+                              "formatter": 5
+                            },
+                            {
+                              "columnMatch": "Status",
+                              "formatter": 18,
+                              "formatOptions": {
+                                "thresholdsOptions": "colors",
+                                "thresholdsGrid": [
+                                  {
+                                    "operator": "contains",
+                                    "thresholdValue": "Stopped",
+                                    "representation": "orange",
+                                    "text": "{0}{1}"
+                                  },
+                                  {
+                                    "operator": "contains",
+                                    "thresholdValue": "Available",
+                                    "representation": "green",
+                                    "text": "{0}{1}"
+                                  },
+                                  {
+                                    "operator": "Default",
+                                    "thresholdValue": null,
+                                    "text": "{0}{1}"
+                                  }
+                                ]
+                              }
+                            },
+                            {
+                              "columnMatch": "State",
+                              "formatter": 18,
+                              "formatOptions": {
+                                "thresholdsOptions": "icons",
+                                "thresholdsGrid": [
+                                  {
+                                    "operator": "==",
+                                    "thresholdValue": "ready",
+                                    "representation": "success",
+                                    "text": "{0}{1}"
+                                  },
+                                  {
+                                    "operator": "!=",
+                                    "thresholdValue": "ready",
+                                    "representation": "2",
+                                    "text": "{0}{1}"
+                                  },
+                                  {
+                                    "operator": "Default",
+                                    "thresholdValue": null,
+                                    "representation": null,
+                                    "text": "{0}{1}"
+                                  }
+                                ]
+                              }
+                            },
+                            {
+                              "columnMatch": "SkuName",
+                              "formatter": 18,
+                              "formatOptions": {
+                                "thresholdsOptions": "colors",
+                                "thresholdsGrid": [
+                                  {
+                                    "operator": "==",
+                                    "thresholdValue": "burstable",
+                                    "representation": "orange",
+                                    "text": "{0}{1}"
+                                  },
+                                  {
+                                    "operator": "==",
+                                    "thresholdValue": "memoryoptimized",
+                                    "representation": "green",
+                                    "text": "{0}{1}"
+                                  },
+                                  {
+                                    "operator": "==",
+                                    "thresholdValue": "generalpurpose",
+                                    "representation": "green",
+                                    "text": "{0}{1}"
+                                  },
+                                  {
+                                    "operator": "Default",
+                                    "thresholdValue": null,
+                                    "text": "{0}{1}"
+                                  }
+                                ]
+                              }
+                            },
+                            {
+                              "columnMatch": "AvailabilityZone",
+                              "formatter": 18,
+                              "formatOptions": {
+                                "thresholdsOptions": "icons",
+                                "thresholdsGrid": [
+                                  {
+                                    "operator": "==",
+                                    "thresholdValue": "not applicable",
+                                    "representation": "more",
+                                    "text": "{0}{1}"
+                                  },
+                                  {
+                                    "operator": "==",
+                                    "thresholdValue": "not configured",
+                                    "representation": "2",
+                                    "text": "not configured"
+                                  },
+                                  {
+                                    "operator": "==",
+                                    "thresholdValue": "configured",
+                                    "representation": "success",
+                                    "text": "{0}{1}"
+                                  },
+                                  {
+                                    "operator": "Default",
+                                    "thresholdValue": null,
+                                    "text": "{0}{1}"
+                                  }
+                                ]
+                              }
+                            },
+                            {
+                              "columnMatch": "Environment",
+                              "formatter": 18,
+                              "formatOptions": {
+                                "thresholdsOptions": "colors",
+                                "thresholdsGrid": [
+                                  {
+                                    "operator": "contains",
+                                    "thresholdValue": "prod",
+                                    "representation": "redBright",
+                                    "text": "{0}{1}"
+                                  },
+                                  {
+                                    "operator": "contains",
+                                    "thresholdValue": "Prod",
+                                    "representation": "redBright",
+                                    "text": "{0}{1}"
+                                  },
+                                  {
+                                    "operator": "Default",
+                                    "thresholdValue": null,
+                                    "text": "{0}{1}"
+                                  }
+                                ]
+                              }
+                            },
+                            {
+                              "columnMatch": "AutomaticFailover",
+                              "formatter": 18,
+                              "formatOptions": {
+                                "thresholdsOptions": "icons",
+                                "thresholdsGrid": [
+                                  {
+                                    "operator": "==",
+                                    "thresholdValue": "not configured",
+                                    "representation": "2",
+                                    "text": "{0}{1}"
+                                  },
+                                  {
+                                    "operator": "==",
+                                    "thresholdValue": "same zone",
+                                    "representation": "success",
+                                    "text": "{0}{1}"
+                                  },
+                                  {
+                                    "operator": "==",
+                                    "thresholdValue": "not applicable",
+                                    "representation": "more",
+                                    "text": "{0}{1}"
+                                  },
+                                  {
+                                    "operator": "==",
+                                    "thresholdValue": "zone redundant",
+                                    "representation": "success",
+                                    "text": "{0}{1}"
+                                  },
+                                  {
+                                    "operator": "Default",
+                                    "thresholdValue": null,
+                                    "representation": null,
+                                    "text": "{0}{1}"
+                                  }
+                                ]
+                              }
+                            },
+                            {
+                              "columnMatch": "GeoBackup",
+                              "formatter": 18,
+                              "formatOptions": {
+                                "thresholdsOptions": "icons",
+                                "thresholdsGrid": [
+                                  {
+                                    "operator": "contains",
+                                    "thresholdValue": "enabled",
+                                    "representation": "success",
+                                    "text": "{0}{1}"
+                                  },
+                                  {
+                                    "operator": "contains",
+                                    "thresholdValue": "disabled",
+                                    "representation": "2",
+                                    "text": "{0}{1}"
+                                  },
+                                  {
+                                    "operator": "contains",
+                                    "thresholdValue": "not applicable",
+                                    "representation": "more",
+                                    "text": "{0}{1}"
+                                  },
+                                  {
+                                    "operator": "Default",
+                                    "thresholdValue": null,
+                                    "text": "{0}{1}"
+                                  }
+                                ]
+                              }
+                            }
+                          ],
+                          "rowLimit": 10000,
+                          "hierarchySettings": {
+                            "treeType": 1,
+                            "groupBy": [
+                              "SubscriptionId"
+                            ],
+                            "finalBy": "Name"
+                          },
+                          "labelSettings": [
+                            {
+                              "columnId": "SkuName",
+                              "label": "Sku Name"
+                            },
+                            {
+                              "columnId": "SubscriptionId",
+                              "label": "Subscription"
+                            },
+                            {
+                              "columnId": "ResourceGroup",
+                              "label": "Resource Group"
+                            },
+                            {
+                              "columnId": "AutomaticFailover",
+                              "label": "High Availability"
+                            },
+                            {
+                              "columnId": "State",
+                              "label": "Status"
+                            },
+                            {
+                              "columnId": "ReplicationRole",
+                              "label": "Replication Role"
+                            }
+
+                          ]
+                        }
+                      },
+                      "name": "kql_database_postgresqlflexible_resources_details"
+                    },
+                    {
+                      "type": 1,
+                      "content": {
+                        "json": "Important\r\n\r\n* Azure Database for PostgreSQL - Single Server is on the retirement path. We strongly recommend for you to upgrade to Azure Database for PostgreSQL - Flexible Server. \r\n\r\n> For more information about migrating to Azure Database for PostgreSQL - Flexible Server, see [What's happening to Azure Database for PostgreSQL Single Server](https://learn.microsoft.com/en-us/azure/postgresql/single-server/whats-happening-to-postgresql-single-server)?",
+                        "style": "warning"
+                      },
+                      "conditionalVisibility": {
+                        "parameterName": "Help",
+                        "comparison": "isEqualTo",
+                        "value": "Yes"
+                      },
+                      "name": "postgresql-single-retirement"
+                    },
+                    {
+                      "type": 3,
+                      "content": {
+                        "version": "KqlItem/1.0",
+                        "query": ${kql_database_postgresqlsingle_resources_details},
+                        "size": 3,
+                        "title": "PostgreSQL - Single",
                         "showExportToExcel": true,
                         "queryType": 1,
                         "resourceType": "microsoft.resourcegraph/resources",
@@ -2036,8 +3830,8 @@
                                 "thresholdsGrid": [
                                   {
                                     "operator": "==",
-                                    "thresholdValue": "generalpurpose",
-                                    "representation": "green",
+                                    "thresholdValue": "basic",
+                                    "representation": "orange",
                                     "text": "{0}{1}"
                                   },
                                   {
@@ -2048,8 +3842,8 @@
                                   },
                                   {
                                     "operator": "==",
-                                    "thresholdValue": "basic",
-                                    "representation": "orange",
+                                    "thresholdValue": "generalpurpose",
+                                    "representation": "green",
                                     "text": "{0}{1}"
                                   },
                                   {
@@ -2093,7 +3887,7 @@
                                   {
                                     "operator": "Default",
                                     "thresholdValue": null,
-                                    "representation": "Blank",
+                                    "representation": null,
                                     "text": "{0}{1}"
                                   }
                                 ]
@@ -2109,20 +3903,34 @@
                             },
                             {
                               "columnMatch": "AvailabilityZone",
+                              "formatter": 5
+                            },
+                            {
+                              "columnMatch": "AvailabilitySet",
+                              "formatter": 5
+                            },
+                            {
+                              "columnMatch": "Capacity",
                               "formatter": 18,
                               "formatOptions": {
                                 "thresholdsOptions": "icons",
                                 "thresholdsGrid": [
                                   {
                                     "operator": "==",
-                                    "thresholdValue": "configured",
-                                    "representation": "success",
+                                    "thresholdValue": "0",
+                                    "representation": "2",
                                     "text": "{0}{1}"
                                   },
                                   {
                                     "operator": "==",
-                                    "thresholdValue": "not configured",
+                                    "thresholdValue": "1",
                                     "representation": "2",
+                                    "text": "{0}{1}"
+                                  },
+                                  {
+                                    "operator": "!=",
+                                    "thresholdValue": "1",
+                                    "representation": "success",
                                     "text": "{0}{1}"
                                   },
                                   {
@@ -2133,10 +3941,6 @@
                                   }
                                 ]
                               }
-                            },
-                            {
-                              "columnMatch": "AvailabilitySet",
-                              "formatter": 5
                             },
                             {
                               "columnMatch": "FaultDomain",
@@ -2152,20 +3956,28 @@
                             },
                             {
                               "columnMatch": "AutomaticFailover",
+                              "formatter": 5
+                            },
+                            {
+                              "columnMatch": "MultipleWriteLocations",
+                              "formatter": 5
+                            },
+                            {
+                              "columnMatch": "StorageAutogrow",
                               "formatter": 18,
                               "formatOptions": {
                                 "thresholdsOptions": "icons",
                                 "thresholdsGrid": [
                                   {
                                     "operator": "==",
-                                    "thresholdValue": "configured",
+                                    "thresholdValue": "enabled",
                                     "representation": "success",
                                     "text": "{0}{1}"
                                   },
                                   {
                                     "operator": "==",
-                                    "thresholdValue": "not applicable",
-                                    "representation": "more",
+                                    "thresholdValue": "disabled",
+                                    "representation": "2",
                                     "text": "{0}{1}"
                                   },
                                   {
@@ -2176,14 +3988,6 @@
                                   }
                                 ]
                               }
-                            },
-                            {
-                              "columnMatch": "MultipleWriteLocations",
-                              "formatter": 5
-                            },
-                            {
-                              "columnMatch": "StorageAutogrow",
-                              "formatter": 5
                             },
                             {
                               "columnMatch": "ReplicationRole",
@@ -2210,9 +4014,30 @@
                                     "text": "{0}{1}"
                                   },
                                   {
+                                    "operator": "Default",
+                                    "thresholdValue": null,
+                                    "representation": "unknown",
+                                    "text": "{0}{1}"
+                                  }
+                                ]
+                              }
+                            },
+                            {
+                              "columnMatch": "Backup",
+                              "formatter": 18,
+                              "formatOptions": {
+                                "thresholdsOptions": "icons",
+                                "thresholdsGrid": [
+                                  {
                                     "operator": "==",
-                                    "thresholdValue": "not applicable",
-                                    "representation": "more",
+                                    "thresholdValue": "healthy",
+                                    "representation": "success",
+                                    "text": "{0}{1}"
+                                  },
+                                  {
+                                    "operator": "==",
+                                    "thresholdValue": "unhealthy",
+                                    "representation": "2",
                                     "text": "{0}{1}"
                                   },
                                   {
@@ -2225,10 +4050,6 @@
                               }
                             },
                             {
-                              "columnMatch": "Backup",
-                              "formatter": 5
-                            },
-                            {
                               "columnMatch": "Environment",
                               "formatter": 18,
                               "formatOptions": {
@@ -2236,13 +4057,13 @@
                                 "thresholdsGrid": [
                                   {
                                     "operator": "contains",
-                                    "thresholdValue": "prod",
+                                    "thresholdValue": "Prod",
                                     "representation": "redBright",
                                     "text": "{0}{1}"
                                   },
                                   {
                                     "operator": "contains",
-                                    "thresholdValue": "Prod",
+                                    "thresholdValue": "prod",
                                     "representation": "redBright",
                                     "text": "{0}{1}"
                                   },
@@ -2257,6 +4078,27 @@
                             {
                               "columnMatch": "SubscriptionName",
                               "formatter": 5
+                            },
+                            {
+                              "columnMatch": "Status",
+                              "formatter": 18,
+                              "formatOptions": {
+                                "thresholdsOptions": "icons",
+                                "thresholdsGrid": [
+                                  {
+                                    "operator": "==",
+                                    "thresholdValue": "Ready",
+                                    "representation": "success",
+                                    "text": "{0}{1}"
+                                  },
+                                  {
+                                    "operator": "Default",
+                                    "thresholdValue": null,
+                                    "representation": "unknown",
+                                    "text": "{0}{1}"
+                                  }
+                                ]
+                              }
                             },
                             {
                               "columnMatch": "Tier",
@@ -2279,148 +4121,6 @@
                                   {
                                     "operator": "==",
                                     "thresholdValue": "MemoryOptimized",
-                                    "representation": "success",
-                                    "text": "{0}{1}"
-                                  },
-                                  {
-                                    "operator": "Default",
-                                    "thresholdValue": null,
-                                    "representation": "unknown",
-                                    "text": "{0}{1}"
-                                  }
-                                ]
-                              }
-                            },
-                            {
-                              "columnMatch": "SslEnforcement",
-                              "formatter": 18,
-                              "formatOptions": {
-                                "thresholdsOptions": "icons",
-                                "thresholdsGrid": [
-                                  {
-                                    "operator": "==",
-                                    "thresholdValue": "Enabled",
-                                    "representation": "success",
-                                    "text": "{0}{1}"
-                                  },
-                                  {
-                                    "operator": "==",
-                                    "thresholdValue": "Disabled",
-                                    "representation": "2",
-                                    "text": "{0}{1}"
-                                  },
-                                  {
-                                    "operator": "Default",
-                                    "thresholdValue": null,
-                                    "representation": "unknown",
-                                    "text": "{0}{1}"
-                                  }
-                                ]
-                              }
-                            },
-                            {
-                              "columnMatch": "HaState",
-                              "formatter": 18,
-                              "formatOptions": {
-                                "thresholdsOptions": "icons",
-                                "thresholdsGrid": [
-                                  {
-                                    "operator": "==",
-                                    "thresholdValue": "Healthy",
-                                    "representation": "success",
-                                    "text": "{0}{1}"
-                                  },
-                                  {
-                                    "operator": "!=",
-                                    "thresholdValue": "Healthy",
-                                    "representation": "2",
-                                    "text": "{0}{1}"
-                                  },
-                                  {
-                                    "operator": "Default",
-                                    "thresholdValue": null,
-                                    "representation": "unknown",
-                                    "text": "{0}{1}"
-                                  }
-                                ]
-                              }
-                            },
-                            {
-                              "columnMatch": "HaEnabled",
-                              "formatter": 18,
-                              "formatOptions": {
-                                "thresholdsOptions": "icons",
-                                "thresholdsGrid": [
-                                  {
-                                    "operator": "==",
-                                    "thresholdValue": "Enabled",
-                                    "representation": "success",
-                                    "text": "{0}{1}"
-                                  },
-                                  {
-                                    "operator": "==",
-                                    "thresholdValue": "Disabled",
-                                    "representation": "2",
-                                    "text": "{0}{1}"
-                                  },
-                                  {
-                                    "operator": "Default",
-                                    "thresholdValue": null,
-                                    "representation": "unknown",
-                                    "text": "{0}{1}"
-                                  }
-                                ]
-                              }
-                            },
-                            {
-                              "columnMatch": "ReplicationConfiguration",
-                              "formatter": 18,
-                              "formatOptions": {
-                                "thresholdsOptions": "icons",
-                                "thresholdsGrid": [
-                                  {
-                                    "operator": "==",
-                                    "thresholdValue": "Not Configured",
-                                    "representation": "2",
-                                    "text": "{0}{1}"
-                                  },
-                                  {
-                                    "operator": "==",
-                                    "thresholdValue": "Configured",
-                                    "representation": "success",
-                                    "text": "{0}{1}"
-                                  },
-                                  {
-                                    "operator": "==",
-                                    "thresholdValue": "NA",
-                                    "text": "{0}{1}"
-                                  },
-                                  {
-                                    "operator": "Default",
-                                    "thresholdValue": null,
-                                    "representation": "unknown",
-                                    "text": "{0}{1}"
-                                  }
-                                ]
-                              }
-                            },
-                            {
-                              "columnMatch": "Endpoint",
-                              "formatter": 5
-                            },
-                            {
-                              "columnMatch": "Details",
-                              "formatter": 5
-                            },
-                            {
-                              "columnMatch": "Status",
-                              "formatter": 18,
-                              "formatOptions": {
-                                "thresholdsOptions": "icons",
-                                "thresholdsGrid": [
-                                  {
-                                    "operator": "==",
-                                    "thresholdValue": "Ready",
                                     "representation": "success",
                                     "text": "{0}{1}"
                                   },
@@ -2489,57 +4189,23 @@
                             },
                             {
                               "columnMatch": "InfrastructureEncryption",
-                              "formatter": 18,
-                              "formatOptions": {
-                                "thresholdsOptions": "icons",
-                                "thresholdsGrid": [
-                                  {
-                                    "operator": "==",
-                                    "thresholdValue": "Enabled",
-                                    "representation": "success",
-                                    "text": "{0}{1}"
-                                  },
-                                  {
-                                    "operator": "==",
-                                    "thresholdValue": "Disabled",
-                                    "representation": "2",
-                                    "text": "{0}{1}"
-                                  },
-                                  {
-                                    "operator": "Default",
-                                    "thresholdValue": null,
-                                    "representation": "unknown",
-                                    "text": "{0}{1}"
-                                  }
-                                ]
-                              }
+                              "formatter": 5
                             },
                             {
                               "columnMatch": "TlsEnforcement",
-                              "formatter": 18,
-                              "formatOptions": {
-                                "thresholdsOptions": "icons",
-                                "thresholdsGrid": [
-                                  {
-                                    "operator": "==",
-                                    "thresholdValue": "TLSEnforcementDisabled",
-                                    "representation": "2",
-                                    "text": "{0}{1}"
-                                  },
-                                  {
-                                    "operator": "==",
-                                    "thresholdValue": "TLSEnforcementEnabled",
-                                    "representation": "success",
-                                    "text": "{0}{1}"
-                                  },
-                                  {
-                                    "operator": "Default",
-                                    "thresholdValue": null,
-                                    "representation": "unknown",
-                                    "text": "{0}{1}"
-                                  }
-                                ]
-                              }
+                              "formatter": 5
+                            },
+                            {
+                              "columnMatch": "SslEnforcement",
+                              "formatter": 5
+                            },
+                            {
+                              "columnMatch": "Endpoint",
+                              "formatter": 5
+                            },
+                            {
+                              "columnMatch": "Details",
+                              "formatter": 5
                             }
                           ],
                           "rowLimit": 10000,
@@ -2561,10 +4227,6 @@
                               "label": "Subscription"
                             },
                             {
-                              "columnId": "State",
-                              "label": "Status"
-                            },
-                            {
                               "columnId": "ResourceGroup",
                               "label": "Resource Group"
                             },
@@ -2577,319 +4239,19 @@
                               "label": "Replication Role"
                             }
                           ]
-                        }
-                      },
-                      "name": "kql_database_mysqlflexible_resources_details"
-                    }
-                  ]
-                },
-                "conditionalVisibility": {
-                  "parameterName": "selectedTab",
-                  "comparison": "isEqualTo",
-                  "value": "MySQL"
-                },
-                "name": "MySQL"
-              },
-              {
-                "type": 12,
-                "content": {
-                  "version": "NotebookGroup/1.0",
-                  "groupType": "editable",
-                  "items": [
-                    {
-                      "type": 1,
-                      "content": {
-                        "json": "[SLA for Azure Cache for Redis](https://azure.microsoft.com/support/legal/sla/cache/)\r\n\r\n* For any Standard, Premium, Enterprise, and Enterprise Flash tier Cache, we guarantee that you will have connectivity to the Cache Endpoint at least 99.9% of the time.\r\n* For any Enterprise and Enterprise Flash tier Cache deployed to three or more Availability Zones in the same Azure region, we guarantee that you will have connectivity to the Cache Endpoint at least 99.99% of the time.\r\n* For any Enterprise and Enterprise Flash tier Cache deployed (1) to at least three Azure regions and three or more Availability Zones in each region and (2) with active geo-replication enabled for all Cache instances, we guarantee that you will have connectivity to one regional Cache Endpoint at least 99.999% of the time.\r\n\r\n> SLA accurate at time of release. Latest information is available [here](https://azure.microsoft.com/support/legal/sla/cache/)",
-                        "style": "upsell"
-                      },
-                      "name": "text - 0"
-                    },
-                    {
-                      "type": 1,
-                      "content": {
-                    "json": "[Redis best practices](https://learn.microsoft.com/azure/architecture/framework/services/data/azure-cache-redis/reliability)\r\n\r\n* It is recommended to choose premium or enterprise tiers for better HA capability\r\n* Basic tier is not covered by SLA and hence should be avoided for production deployments.\r\n* It is recommended to avoid SKUs having shared CPUs for better resiliency & performance, SKU details can be referred in [docs](https://learn.microsoft.com/azure/azure-cache-for-redis/cache-planning-faq#azure-cache-for-redis-performance)\r\n* Enable Availability Zone if the region supports Availability Zones\r\n* Geo replication is preferred for DR across regions (active geo replication in case of enterprise tier). In this case replicas greater than 1 is not supported.\r\n\r\n> Azure generally recommends to leverage [Availability Zone](https://learn.microsoft.com/azure/availability-zones/az-overview) for better High Availability within the region by leveraging multiple zones inside region. By architecting your solutions to use replicated services in zones, you can protect your apps and data from the loss of a datacenter. \r\n\r\n> At this point, not all Azure regions and services support Availability Zones, the support matrix can be found [here](https://learn.microsoft.com/azure/availability-zones/az-region). Whenerver there is a Zonal recommendation for a particular service from this workbook, please note that that is applicable only for the regions supporting Availability Zones from the earlier list.\r\n",
-                        "style": "info"
-                      },
-                      "conditionalVisibility": {
-                        "parameterName": "Help",
-                        "comparison": "isEqualTo",
-                        "value": "Yes"
-                      },
-                      "name": "text - 1"
-                    },
-                    {
-                      "type": 3,
-                      "content": {
-                        "version": "KqlItem/1.0",
-                        "query": ${kql_database_redis_resources_details},
-                        "size": 1,
-                        "title": "Azure Cache for Redis",
-                        "showExportToExcel": true,
-                        "queryType": 1,
-                        "resourceType": "microsoft.resourcegraph/resources",
-                        "crossComponentResources": [
-                          "{Subscriptions}"
-                          ],
-                          "gridSettings": {
-                            "formatters": [
-                              {
-                                "columnMatch": "$gen_group",
-                                "formatter": 13,
-                                "formatOptions": {
-                                  "linkTarget": "Resource",
-                                  "showIcon": true
-                                }
-                              },
-                              {
-                                "columnMatch": "Subscription",
-                                "formatter": 13,
-                                "formatOptions": {
-                                  "linkTarget": "Resource",
-                                  "showIcon": true
-                                }
-                              },
-                              {
-                                "columnMatch": "Type",
-                                "formatter": 5
-                              },
-                              {
-                                "columnMatch": "SkuName",
-                                "formatter": 18,
-                                "formatOptions": {
-                                  "thresholdsOptions": "icons",
-                                  "thresholdsGrid": [
-                                    {
-                                      "operator": "contains",
-                                      "thresholdValue": "premium",
-                                      "representation": "success",
-                                      "text": "{0}{1}"
-                                    },
-                                    {
-                                      "operator": "contains",
-                                      "thresholdValue": "enterprise",
-                                      "representation": "success",
-                                      "text": "{0}{1}"
-                                    },
-                                    {
-                                      "operator": "contains",
-                                      "thresholdValue": "basic",
-                                      "representation": "2",
-                                      "text": "{0}{1}"
-                                    },
-                                    {
-                                      "operator": "contains",
-                                      "thresholdValue": "standard",
-                                      "representation": "success",
-                                      "text": "{0}{1}"
-                                    },
-                                    {
-                                      "operator": "Default",
-                                      "thresholdValue": null,
-                                      "representation": "unknown",
-                                      "text": "{0}{1}"
-                                    }
-                                  ]
-                                }
-                              },
-                              {
-                                "columnMatch": "Kind",
-                                "formatter": 5
-                              },
-                              {
-                                "columnMatch": "SubscriptionId",
-                                "formatter": 5
-                              },
-                              {
-                                "columnMatch": "Name",
-                                "formatter": 5
-                              },
-                              {
-                                "columnMatch": "State",
-                                "formatter": 18,
-                                "formatOptions": {
-                                  "thresholdsOptions": "icons",
-                                  "thresholdsGrid": [
-                                    {
-                                      "operator": "==",
-                                      "thresholdValue": "succeeded",
-                                      "representation": "success",
-                                      "text": "{0}{1}"
-                                    },
-                                    {
-                                      "operator": "Default",
-                                      "thresholdValue": null,
-                                      "representation": "warning",
-                                      "text": "{0}{1}"
-                                    }
-                                  ]
-                                }
-                              },
-                              {
-                              "columnMatch": "Location",
-                              "formatter": 17
-                            },
-                            {
-                                "columnMatch": "Zones",
-                                "formatter": 5
-                              },
-                              {
-                                "columnMatch": "AvailabilityZone",
-                                "formatter": 18,
-                                "formatOptions": {
-                                  "thresholdsOptions": "icons",
-                                  "thresholdsGrid": [
-                                    {
-                                      "operator": "==",
-                                      "thresholdValue": "not applicable",
-                                      "representation": "more",
-                                      "text": "{0}{1}"
-                                    },
-                                    {
-                                      "operator": "==",
-                                      "thresholdValue": "not configured",
-                                      "representation": "2",
-                                      "text": "{0}{1}"
-                                    },
-                                    {
-                                      "operator": "regex",
-                                      "thresholdValue": "(1|2|3)",
-                                      "representation": "success",
-                                      "text": "{0}{1}"
-                                    },
-                                    {
-                                      "operator": "Default",
-                                      "thresholdValue": null,
-                                      "representation": "unknown",
-                                      "text": "{0}{1}"
-                                    }
-                                  ]
-                                }
-                              },
-                              {
-                                "columnMatch": "AvailabilitySet",
-                                "formatter": 5
-                              },
-                              {
-                                "columnMatch": "Capacity",
-                                "formatter": 18,
-                                "formatOptions": {
-                                  "thresholdsOptions": "icons",
-                                  "thresholdsGrid": [
-                                    {
-                                "operator": "==",
-                                "thresholdValue": "c0",
-                                      "representation": "2",
-                                      "text": "{0}{1}"
-                                    },
-                                    {
-                                      "operator": "Default",
-                                      "thresholdValue": null,
-                                      "representation": "success",
-                                      "text": "{0}{1}"
-                                    }
-                                  ]
-                                },
-                                "tooltipFormat": {
-                                  "tooltip": "Shared or Dedicated CPU"
-                                }
-                              },
-                              {
-                                "columnMatch": "FaultDomain",
-                                "formatter": 5
-                              },
-                              {
-                                "columnMatch": "OSDisk",
-                                "formatter": 5
-                              },
-                              {
-                                "columnMatch": "ReadReplica",
-                                "formatter": 5
-                              },
-                              {
-                                "columnMatch": "AutomaticFailover",
-                                "formatter": 5
-                              },
-                              {
-                                "columnMatch": "MultipleWriteLocations",
-                                "formatter": 5
-                              },
-                              {
-                                "columnMatch": "StorageAutogrow",
-                                "formatter": 5
-                              },
-                              {
-                                "columnMatch": "ReplicationRole",
-                                "formatter": 5
-                              },
-                              {
-                                "columnMatch": "Backup",
-                                "formatter": 5
-                              },
-                              {
-                                "columnMatch": "Environment",
-                                "formatter": 18,
-                                "formatOptions": {
-                                  "thresholdsOptions": "colors",
-                                  "thresholdsGrid": [
-                                    {
-                                      "operator": "contains",
-                                      "thresholdValue": "prod",
-                                      "representation": "redBright",
-                                      "text": "{0}{1}"
-                                    },
-                                    {
-                                      "operator": "contains",
-                                      "thresholdValue": "Prod",
-                                      "representation": "redBright",
-                                      "text": "{0}{1}"
-                                    },
-                                    {
-                                      "operator": "Default",
-                                      "thresholdValue": null,
-                                      "text": "{0}{1}"
-                                    }
-                                  ]
-                                }
-                              }
-                            ],
-                            "rowLimit": 10000,
-                            "hierarchySettings": {
-                              "treeType": 1,
-                              "groupBy": [
-                                "SubscriptionId"
-                              ],
-                              "finalBy": "Name"
-                      },
-                            "labelSettings": [
-                              {
-                                "columnId": "SkuName",
-                                "label": "Tier"
-                              },
-                              {
-                                "columnId": "SubscriptionId",
-                                "label": "Subscription"
-                              },
-                              {
-                                "columnId": "ResourceGroup",
-                                "label": "Resource Group"
-                              },
-                              {
-                                "columnId": "Capacity",
-                                "label": "SKU"
-                              }
-                            ]
-                          }
                         },
-                      "name": "Azure Cache for Redis"
+                        "sortBy": []
+                      },
+                      "name": "kql_database_postgresqlsingle_resources_details"
                     }
                   ]
                 },
                 "conditionalVisibility": {
                   "parameterName": "selectedTab",
                   "comparison": "isEqualTo",
-                  "value": "Redis"
+                  "value": "PostgreSQL"
                 },
-                "name": "Redis"
+                "name": "PostgreSQL"
               }
             ]
           },

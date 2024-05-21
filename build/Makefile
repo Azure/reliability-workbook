@@ -7,7 +7,7 @@ help:
 .DEFAULT_GOAL := help
 
 .PHONY: all
-all: init build-workbook build-workbook-public build-bicep ## Execute all steps
+all: init build-workbook build-workbook-public build-workbook-export build-bicep ## Execute all steps
 
 .PHONY: init
 init: ## Initialize terraform
@@ -26,6 +26,11 @@ build-workbook: ## Execute terraform plan
 .PHONY: build-workbook-public
 build-workbook-public: ## Execute terraform plan to generate public edition
 	terraform plan -input=false -no-color -out tfplan -target local_file.workbook_public
+	terraform apply -no-color tfplan
+
+.PHONY: build-workbook-export
+build-workbook-export: ## Execute terraform plan to generate public edition
+	terraform plan -input=false -no-color -out tfplan -target local_file.workbook_export
 	terraform apply -no-color tfplan
 
 .PHONY: build-bicep

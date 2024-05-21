@@ -204,14 +204,14 @@ escaped_replacement_text=$(printf '%s\n' "$overview_information" | sed 's:[\/&]:
 sed -i "s/\${overview_information}/$escaped_replacement_text/g" workbook.json
 
 link_of_Summary=$(cat <<EOS
-          ,{
+          {
             "id": "d6656d8e-acfc-4d7d-853d-a8c628907ba6",
             "cellValue": "selectedTab",
             "linkTarget": "parameter",
             "linkLabel": "Summary",
             "subTarget": "Summary2",
             "style": "link"
-          }
+          },
 EOS
 )
 escaped_replacement_text=$(printf '%s\n' "$link_of_Summary" | sed 's:[\/&]:\\&:g;$!s/$/\\/')
@@ -241,14 +241,14 @@ sed -i "s/\${tab_of_Summary}/$escaped_replacement_text/g" workbook.json
 
 
 link_of_Advisor=$(cat <<EOS
-         ,{
+         {
             "id": "d983c7c7-b5a0-4245-86fa-52ac1266fb13",
             "cellValue": "selectedTab",
             "linkTarget": "parameter",
             "linkLabel": "Azure Advisor",
             "subTarget": "Advisor",
             "style": "link"
-          }
+          },
 EOS
 )
 escaped_replacement_text=$(printf '%s\n' "$link_of_Advisor" | sed 's:[\/&]:\\&:g;$!s/$/\\/')

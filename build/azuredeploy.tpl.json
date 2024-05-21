@@ -11,7 +11,7 @@
     "parameters": {
       "workbookDisplayName": {
         "type": "string",
-        "defaultValue": "FTA - Reliability Workbook",
+        "defaultValue": "${workbook_name}",
         "metadata": {
           "description": "Name of Workbook"
         }
@@ -30,7 +30,7 @@
     "resources": [
       {
         "type": "Microsoft.Insights/workbooks",
-        "apiVersion": "2021-03-08",
+        "apiVersion": "2023-06-01",
         "name": "[parameters('workbookId')]",
         "location": "[resourceGroup().location]",
         "kind": "shared",
