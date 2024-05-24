@@ -156,6 +156,604 @@
         "name": "parameters - 13"
       },
       {
+        "type": 12,
+        "content": {
+          "version": "NotebookGroup/1.0",
+          "groupType": "editable",
+          "items": [
+            {
+              "type": 11,
+              "content": {
+                "version": "LinkItem/1.0",
+                "style": "tabs",
+                "links": [
+                  {
+                    "id": "0f2833bb-ccf9-4292-a3d5-8f3070f906ef",
+                    "cellValue": "selectedTab",
+                    "linkTarget": "parameter",
+                    "linkLabel": "API Management",
+                    "subTarget": "APIM",
+                    "style": "link"
+                  },
+                  {
+                    "id": "363da150-0a6e-4601-a225-b6d59a1be19e",
+                    "cellValue": "selectedTab",
+                    "linkTarget": "parameter",
+                    "linkLabel": "Service Bus",
+                    "subTarget": "ServiceBus",
+                    "style": "link"
+                  }
+                ]
+              },
+              "name": "links - 0"
+            },
+            {
+              "type": 12,
+              "content": {
+                "version": "NotebookGroup/1.0",
+                "groupType": "editable",
+                "items": [
+                  {
+                    "type": 1,
+                    "content": {
+                      "json": "[SLA for Service Bus](https://azure.microsoft.com/support/legal/sla/)\r\n* For Service Bus Relays, we guarantee that at least 99.9% of the time, properly configured applications will be able to establish a connection to a deployed Relay.\r\n* For Service Bus Queues and Topics, we guarantee that at least 99.9% of the time , properly configured applications will be able to send or receive messages or perform other operations on a deployed Queue or Topic.",
+                      "style": "upsell"
+                    },
+                    "conditionalVisibility": {
+                      "parameterName": "SLA",
+                      "comparison": "isEqualTo",
+                      "value": "Yes"
+                    },
+                    "name": "text - 2 - Copy - Copy"
+                  },
+                  {
+                    "type": 1,
+                    "content": {
+                      "json": "* Please note the non-Premium tier is for non-production use cases and evaluations. It does not offer an SLA.\r\n* Its highly recommended to use Premium tier for Production environment as it covers High Availability, mission-critical messaging with queues and topics with Geo-Disaster Recovery and zone redundancy.\r\n\r\n",
+                      "style": "info"
+                    },
+                    "conditionalVisibility": {
+                      "parameterName": "Help",
+                      "comparison": "isEqualTo",
+                      "value": "Yes"
+                    },
+                    "name": "text - 3 - Copy - Copy - Copy"
+                  },
+                  {
+                    "type": 3,
+                    "content": {
+                      "version": "KqlItem/1.0",
+                      "query": ${kql_integration_servicebus_resources_details_summary},
+                      "size": 3,
+                      "title": "Service Bus - Recommendation Summary",
+                      "showExportToExcel": true,
+                      "queryType": 1,
+                      "resourceType": "microsoft.resourcegraph/resources",
+                      "crossComponentResources": [
+                        "value::all"
+                      ],
+                      "gridSettings": {
+                        "formatters": [
+                          {
+                            "columnMatch": "Type",
+                            "formatter": 5
+                          },
+                          {
+                            "columnMatch": "Kind",
+                            "formatter": 5
+                          },
+                          {
+                            "columnMatch": "SubscriptionId",
+                            "formatter": 5
+                          },
+                          {
+                            "columnMatch": "Name",
+                            "formatter": 5
+                          },
+                          {
+                            "columnMatch": "Location",
+                            "formatter": 17
+                          },
+                          {
+                            "columnMatch": "AvailabilityZone",
+                            "formatter": 18,
+                            "formatOptions": {
+                              "thresholdsOptions": "icons",
+                              "thresholdsGrid": [
+                                {
+                                  "operator": "==",
+                                  "thresholdValue": "not applicable",
+                                  "representation": "more",
+                                  "text": "{0}{1}"
+                                },
+                                {
+                                  "operator": "==",
+                                  "thresholdValue": "not configured",
+                                  "representation": "2",
+                                  "text": "{0}{1}"
+                                },
+                                {
+                                  "operator": "==",
+                                  "thresholdValue": "1",
+                                  "representation": "2",
+                                  "text": "{0}{1}"
+                                },
+                                {
+                                  "operator": "==",
+                                  "thresholdValue": "2",
+                                  "representation": "success",
+                                  "text": "{0}{1}"
+                                },
+                                {
+                                  "operator": "==",
+                                  "thresholdValue": "3",
+                                  "representation": "success",
+                                  "text": "{0}{1}"
+                                },
+                                {
+                                  "operator": "==",
+                                  "thresholdValue": "configured",
+                                  "representation": "success",
+                                  "text": "{0}{1}"
+                                },
+                                {
+                                  "operator": "Default",
+                                  "thresholdValue": null,
+                                  "representation": "Unknown",
+                                  "text": "{0}{1}"
+                                }
+                              ]
+                            }
+                          },
+                          {
+                            "columnMatch": "Environment",
+                            "formatter": 18,
+                            "formatOptions": {
+                              "thresholdsOptions": "colors",
+                              "thresholdsGrid": [
+                                {
+                                  "operator": "contains",
+                                  "thresholdValue": "prod",
+                                  "representation": "redBright",
+                                  "text": "{0}{1}"
+                                },
+                                {
+                                  "operator": "contains",
+                                  "thresholdValue": "Prod",
+                                  "representation": "redBright",
+                                  "text": "{0}{1}"
+                                },
+                                {
+                                  "operator": "Default",
+                                  "thresholdValue": null,
+                                  "text": "{0}{1}"
+                                }
+                              ]
+                            }
+                          },
+                          {
+                            "columnMatch": "OSDisk",
+                            "formatter": 5
+                          },
+                          {
+                            "columnMatch": "ReadReplica",
+                            "formatter": 5
+                          },
+                          {
+                            "columnMatch": "AutomaticFailover",
+                            "formatter": 5
+                          },
+                          {
+                            "columnMatch": "MultipleWriteLocations",
+                            "formatter": 5
+                          },
+                          {
+                            "columnMatch": "StorageAutogrow",
+                            "formatter": 5
+                          },
+                          {
+                            "columnMatch": "ReplicationRole",
+                            "formatter": 5
+                          },
+                          {
+                            "columnMatch": "properties",
+                            "formatter": 5
+                          },
+                          {
+                            "columnMatch": "Backup",
+                            "formatter": 5
+                          },
+                          {
+                            "columnMatch": "SubscriptionName",
+                            "formatter": 5
+                          },
+                          {
+                            "columnMatch": "Tier",
+                            "formatter": 18,
+                            "formatOptions": {
+                              "thresholdsOptions": "icons",
+                              "thresholdsGrid": [
+                                {
+                                  "operator": "==",
+                                  "thresholdValue": "Premium",
+                                  "representation": "success",
+                                  "text": "{0}{1}"
+                                },
+                                {
+                                  "operator": "Default",
+                                  "thresholdValue": null,
+                                  "representation": "2",
+                                  "text": "{0}{1}"
+                                }
+                              ]
+                            }
+                          }
+                        ],
+                        "labelSettings": [
+                          {
+                            "columnId": "ResourceTotal",
+                            "label": "Resource Total"
+                          },
+                          {
+                            "columnId": "NotPremium",
+                            "label": "Non-Premium SKU"
+                          },
+                          {
+                            "columnId": "NoMultipleZones",
+                            "label": "No Availability Zone"
+                          },
+                          {
+                            "columnId": "NotSucceeded",
+                            "label": "Failed Status"
+                          },
+                          {
+                            "columnId": "NoMinimumTLSVersion",
+                            "label": "Outdated TLS version"
+                          },
+                          {
+                            "columnId": "CapacityNotConfigured",
+                            "label": "Capacity < 2"
+                          }
+                        ]
+                      },
+                      "sortBy": []
+                    },
+                    "name": "kql_integration_servicebus_resources_details_summary"
+                  },
+                  {
+                    "type": 3,
+                    "content": {
+                      "version": "KqlItem/1.0",
+                      "query": ${kql_integration_servicebus_resources_details},
+                      "size": 3,
+                      "title": "Service Bus",
+                      "showExportToExcel": true,
+                      "queryType": 1,
+                      "resourceType": "microsoft.resourcegraph/resources",
+                      "crossComponentResources": [
+                        "{Subscriptions}"
+                      ],
+                      "gridSettings": {
+                        "formatters": [
+                          {
+                            "columnMatch": "$gen_group",
+                            "formatter": 13,
+                            "formatOptions": {
+                              "linkTarget": "Resource",
+                              "showIcon": true
+                            }
+                          },
+                          {
+                            "columnMatch": "Type",
+                            "formatter": 5
+                          },
+                          {
+                            "columnMatch": "SkuName",
+                            "formatter": 18,
+                            "formatOptions": {
+                              "thresholdsOptions": "icons",
+                              "thresholdsGrid": [
+                                {
+                                  "operator": "==",
+                                  "thresholdValue": "developer",
+                                  "representation": "2",
+                                  "text": "{0}{1}"
+                                },
+                                {
+                                  "operator": "==",
+                                  "thresholdValue": "basic",
+                                  "representation": "2",
+                                  "text": "{0}{1}"
+                                },
+                                {
+                                  "operator": "==",
+                                  "thresholdValue": "standard",
+                                  "representation": "2",
+                                  "text": "{0}{1}"
+                                },
+                                {
+                                  "operator": "==",
+                                  "thresholdValue": "premium",
+                                  "representation": "success",
+                                  "text": "{0}{1}"
+                                },
+                                {
+                                  "operator": "==",
+                                  "thresholdValue": "isolated",
+                                  "representation": "success",
+                                  "text": "{0}{1}"
+                                },
+                                {
+                                  "operator": "Default",
+                                  "thresholdValue": null,
+                                  "representation": "unknown",
+                                  "text": "{0}{1}"
+                                }
+                              ]
+                            }
+                          },
+                          {
+                            "columnMatch": "Kind",
+                            "formatter": 5
+                          },
+                          {
+                            "columnMatch": "SubscriptionId",
+                            "formatter": 5
+                          },
+                          {
+                            "columnMatch": "Name",
+                            "formatter": 5
+                          },
+                          {
+                            "columnMatch": "State",
+                            "formatter": 18,
+                            "formatOptions": {
+                              "thresholdsOptions": "colors",
+                              "thresholdsGrid": [
+                                {
+                                  "operator": "==",
+                                  "thresholdValue": "succeeded",
+                                  "representation": "green",
+                                  "text": "{0}{1}"
+                                },
+                                {
+                                  "operator": "!=",
+                                  "thresholdValue": "succeeded",
+                                  "representation": "orange",
+                                  "text": "{0}{1}"
+                                },
+                                {
+                                  "operator": "Default",
+                                  "thresholdValue": null,
+                                  "text": "{0}{1}"
+                                }
+                              ]
+                            }
+                          },
+                          {
+                            "columnMatch": "Location",
+                            "formatter": 17
+                          },
+                          {
+                            "columnMatch": "AvailabilityZone",
+                            "formatter": 18,
+                            "formatOptions": {
+                              "thresholdsOptions": "icons",
+                              "thresholdsGrid": [
+                                {
+                                  "operator": "==",
+                                  "thresholdValue": "not configured",
+                                  "representation": "2",
+                                  "text": "{0}{1}"
+                                },
+                                {
+                                  "operator": "==",
+                                  "thresholdValue": "not applicable",
+                                  "representation": "more",
+                                  "text": "{0}{1}"
+                                },
+                                {
+                                  "operator": "==",
+                                  "thresholdValue": "configured",
+                                  "representation": "success",
+                                  "text": "{0}{1}"
+                                },
+                                {
+                                  "operator": "==",
+                                  "thresholdValue": "undefined",
+                                  "representation": "unknown",
+                                  "text": "{0}{1}"
+                                },
+                                {
+                                  "operator": "Default",
+                                  "thresholdValue": null,
+                                  "representation": "more",
+                                  "text": "{0}{1}"
+                                }
+                              ]
+                            }
+                          },
+                          {
+                            "columnMatch": "Capacity",
+                            "formatter": 18,
+                            "formatOptions": {
+                              "thresholdsOptions": "icons",
+                              "thresholdsGrid": [
+                                {
+                                  "operator": ">=",
+                                  "thresholdValue": "2",
+                                  "representation": "success",
+                                  "text": "{0}{1}"
+                                },
+                                {
+                                  "operator": "==",
+                                  "thresholdValue": "1",
+                                  "representation": "2",
+                                  "text": "{0}{1}"
+                                },
+                                {
+                                  "operator": "Default",
+                                  "thresholdValue": null,
+                                  "representation": "more",
+                                  "text": "{0}not applicable"
+                                }
+                              ]
+                            }
+                          },
+                          {
+                            "columnMatch": "MinTLSVersion",
+                            "formatter": 18,
+                            "formatOptions": {
+                              "thresholdsOptions": "icons",
+                              "thresholdsGrid": [
+                                {
+                                  "operator": "==",
+                                  "thresholdValue": "1.2",
+                                  "representation": "success",
+                                  "text": "{0}{1}"
+                                },
+                                {
+                                  "operator": "!=",
+                                  "thresholdValue": "1.2",
+                                  "representation": "2",
+                                  "text": "{0}{1}"
+                                },
+                                {
+                                  "operator": "Default",
+                                  "thresholdValue": null,
+                                  "representation": "more",
+                                  "text": "{0}{1}"
+                                }
+                              ]
+                            }
+                          },
+                          {
+                            "columnMatch": "Environment",
+                            "formatter": 18,
+                            "formatOptions": {
+                              "thresholdsOptions": "colors",
+                              "thresholdsGrid": [
+                                {
+                                  "operator": "contains",
+                                  "thresholdValue": "Prod",
+                                  "representation": "redBright",
+                                  "text": "{0}{1}"
+                                },
+                                {
+                                  "operator": "contains",
+                                  "thresholdValue": "prod",
+                                  "representation": "redBright",
+                                  "text": "{0}{1}"
+                                },
+                                {
+                                  "operator": "Default",
+                                  "thresholdValue": null,
+                                  "text": "{0}{1}"
+                                }
+                              ]
+                            }
+                          },
+                          {
+                            "columnMatch": "Zones",
+                            "formatter": 5
+                          },
+                          {
+                            "columnMatch": "OSDisk",
+                            "formatter": 5
+                          },
+                          {
+                            "columnMatch": "ReadReplica",
+                            "formatter": 5
+                          },
+                          {
+                            "columnMatch": "AutomaticFailover",
+                            "formatter": 5
+                          },
+                          {
+                            "columnMatch": "MultipleWriteLocations",
+                            "formatter": 5
+                          },
+                          {
+                            "columnMatch": "StorageAutogrow",
+                            "formatter": 5
+                          },
+                          {
+                            "columnMatch": "ReplicationRole",
+                            "formatter": 5
+                          },
+                          {
+                            "columnMatch": "Backup",
+                            "formatter": 5
+                          },
+                          {
+                            "columnMatch": "SubscriptionName",
+                            "formatter": 5
+                          },
+                          {
+                            "columnMatch": "Tier",
+                            "formatter": 18,
+                            "formatOptions": {
+                              "thresholdsOptions": "icons",
+                              "thresholdsGrid": [
+                                {
+                                  "operator": "==",
+                                  "thresholdValue": "Premium",
+                                  "representation": "success",
+                                  "text": "{0}{1}"
+                                },
+                                {
+                                  "operator": "Default",
+                                  "thresholdValue": null,
+                                  "representation": "2",
+                                  "text": "{0}{1}"
+                                }
+                              ]
+                            }
+                          }
+                        ],
+                        "hierarchySettings": {
+                          "treeType": 1,
+                          "groupBy": [
+                            "SubscriptionId"
+                          ],
+                          "expandTopLevel": false,
+                          "finalBy": "Name"
+                        },
+                        "labelSettings": [
+                          {
+                            "columnId": "SkuName",
+                            "label": "SKU"
+                          },
+                          {
+                            "columnId": "SubscriptionId",
+                            "label": "Subscription"
+                          },
+                          {
+                            "columnId": "ResourceGroup",
+                            "label": "Resource Group"
+                          }
+                        ]
+                      },
+                      "sortBy": []
+                    },
+                    "name": "kql_integration_servicebus_resources_details"
+                  }
+                ]
+              },
+              "conditionalVisibility": {
+                "parameterName": "selectedTab",
+                "comparison": "isEqualTo",
+                "value": "ServiceBus"
+              },
+              "name": "Service Bus"
+            },
+            {
+              "type": 12,
+              "content": {
+                "version": "NotebookGroup/1.0",
+                "groupType": "editable",
+                "items": [
+      {
         "type": 1,
         "content": {
           "json": "[SLA for API Management](https://azure.microsoft.com/support/legal/sla/api-management/)\r\n* We guarantee that API Management Service instances running in the Consumption Tier, Basic Tier, Standard Tier, and Premium Tier deployments scaled within a single region will respond to requests to perform operations at least 99.95% of the time.\r\n* We guarantee that API Management Service instances running in the Premium Tier with deployments scaled across two or more regions will respond to requests to perform operations at least 99.99% of the time.\r\n* No SLA is provided for the following:​\r\n * Developer tier of the API Management Service.\r\n * Any self-hosted API Management components.​\r\n \r\n> SLA accurate at time of release. Latest information is available [here](https://azure.microsoft.com/support/legal/sla/api-management/)",
@@ -526,4 +1124,21 @@
         "name": "kql_integration_apim_resources_details"
       }
     ]
+              },
+              "conditionalVisibility": {
+                "parameterName": "selectedTab",
+                "comparison": "isEqualTo",
+                "value": "APIM"
+              },
+              "name": "API Management"
+            }
+          ]
+        },
+        "name": "Integration"
+      }
+    ],
+    "fallbackResourceIds": [
+      "Azure Monitor"
+    ],
+    "$schema": "https://github.com/Microsoft/Application-Insights-Workbooks/blob/master/schema/workbook.json"
 }

@@ -37,6 +37,7 @@ on id
     (type == 'microsoft.dbforpostgresql/flexibleservers') or 
     (type == 'microsoft.cache/redis') or
     (type == "microsoft.apimanagement/service") or 
+    (type==  'microsoft.servicebus/namespaces') or
     (type == "microsoft.storage/storageaccounts" or type == "microsoft.classicstorage/storageaccounts") or 
     (type == "microsoft.network/azurefirewalls") or 
     (type == "microsoft.network/frontdoors") or
@@ -97,6 +98,7 @@ on id
     type == 'microsoft.dbforpostgresql/flexibleservers', tostring(properties.state),
     type == 'microsoft.cache/redis', tostring(properties.provisioningState),
     type == "microsoft.apimanagement/service", tostring(properties.provisioningState),
+    type == 'microsoft.servicebus/namespaces',tostring(properties.provisioningState),
     type contains "storageaccounts", tostring(properties.provisioningState),
     type == "microsoft.network/azurefirewalls", tostring(properties.provisioningState),
     type == "microsoft.network/frontdoors", tostring(properties.resourceState),
@@ -123,6 +125,7 @@ on id
     type == 'microsoft.dbforpostgresql/flexibleservers', tostring(sku.tier),
     type == 'microsoft.cache/redis', tostring(properties.sku.name),
     type == "microsoft.apimanagement/service", tostring(sku.name),
+    type == 'microsoft.servicebus/namespaces', tostring(sku.name),
     type contains 'storageaccounts', tostring(replace('-', '_', tostring(iff(type =~ "microsoft.storage/storageaccounts", sku.name, properties.accountType)))),
     type == "microsoft.network/azurefirewalls", tostring(properties.sku.name),
     type == "microsoft.network/frontdoors", "classic_frontdoor",
@@ -167,6 +170,7 @@ on id
     ),
     (type == 'microsoft.cache/redis'), coalesce(tostring(array_length(parse_json(zones))), 'Not Configured'),
     (type == "microsoft.apimanagement/service"), coalesce(tostring(array_length(parse_json(zones))), 'Not Configured'),
+    (type == 'microsoft.servicebus/namespaces'), iff(properties.zoneRedundant == 'true', 'Configured', 'Not Configured'),
     (type contains 'storageaccounts'), case(split(skuName, '_', 1)[0] contains "zrs", "Configured", "Not Configured"),
     (type == "microsoft.network/azurefirewalls"), iif(isnotnull(zones), "Configured", "Not Configured"),
     (type == "microsoft.network/frontdoors"), "Not Applicable",
@@ -207,6 +211,7 @@ on id
     type == 'microsoft.dbforpostgresql/flexibleservers', "Not Applicable",
     type == 'microsoft.cache/redis', "Not Applicable",
     type == "microsoft.apimanagement/service", "Not Applicable",
+    type == "microsoft.servicebus/namespaces", "Not Applicable",
     type contains "storageaccounts", "Not Applicable",
     type == "microsoft.network/azurefirewalls", "Not Applicable",
     type == "microsoft.network/frontdoors", "Not Applicable",
@@ -233,6 +238,7 @@ on id
     type == 'microsoft.dbforpostgresql/flexibleservers', tostring(sku.capacity),
     type == 'microsoft.cache/redis', strcat(properties.sku.family, properties.sku.capacity),
     type == "microsoft.apimanagement/service", tostring(sku.capacity),
+    type == "microsoft.servicebus/namespaces",tostring(iif(isempty(sku.capacity), "Not Applicable", sku.capacity)),
     type contains "storageaccounts", "Not Applicable", 
     type == "microsoft.network/azurefirewalls", "Not Applicable",
     type == "microsoft.network/frontdoors", "Not Applicable",
@@ -259,6 +265,7 @@ on id
     type == 'microsoft.dbforpostgresql/flexibleservers', 'Not Applicable',
     type == 'microsoft.cache/redis', 'Not Applicable',
     type == "microsoft.apimanagement/service", "Not Applicable",
+    type == "microsoft.servicebus/namespaces", "Not Applicable",
     type contains "storageaccounts", "Not Applicable",
     type == "microsoft.network/azurefirewalls", "Not Applicable",
     type == "microsoft.network/frontdoors", "Not Applicable",
@@ -285,6 +292,7 @@ on id
     type == 'microsoft.dbforpostgresql/flexibleservers', 'Not Applicable',
     type == 'microsoft.cache/redis', 'Not Applicable',
     type == "microsoft.apimanagement/service", tostring(properties.platformVersion), //Field Override
+    type == "microsoft.servicebus/namespaces", "Not Applicable",
     type contains "storageaccounts", tostring(split(skuName, '_', 0)[0]),
     type == "microsoft.network/azurefirewalls", "Not Applicable",
     type == "microsoft.network/frontdoors", "Not Applicable",
@@ -312,6 +320,7 @@ on id
     type == 'microsoft.dbforpostgresql/flexibleservers', "Not Applicable",
     type == 'microsoft.cache/redis', 'Not Applicable',
     type == "microsoft.apimanagement/service", tostring(properties.additionalLocations),
+    (type == "microsoft.servicebus/namespaces"), "Not Applicable",
     type contains "storageaccounts", case(
         // Use the following query to get 3+0 regions: az account list-locations -o table --query '[?availabilityZoneMappings && (!metadata.pairedRegion || length(metadata.pairedRegion) == `0`)]'
         location in~ ('qatarcentral', 'polandcentral', 'israelcentral', 'italynorth') and split(skuName, '_', 1)[0] startswith "zrs" , 'Configured',
@@ -353,6 +362,7 @@ on id
     type == 'microsoft.dbformysql/flexibleservers', case(properties.haEnabled == "Enabled", "Configured", "Not Applicable"),
     type == 'microsoft.cache/redis', 'Not Applicable',
     type == "microsoft.apimanagement/service", "Not Applicable",
+    (type == "microsoft.servicebus/namespaces"), "Not Applicable",
     type contains "storageaccounts", "Not Applicable",
     type == "microsoft.network/azurefirewalls", "Not Applicable",
     type == "microsoft.network/frontdoors", "Not Applicable",
@@ -370,6 +380,7 @@ on id
     (type == 'microsoft.documentdb/databaseaccounts' and properties.enableMultipleWriteLocations == "true"), "Enabled",
     (type == 'microsoft.cache/redis'), 'Not Applicable',
     (type == "microsoft.apimanagement/service"), "Not Applicable",
+    (type == "microsoft.servicebus/namespaces"), "Not Applicable",
     (type contains "storageaccounts"), "Not Applicable",
     (type == "microsoft.network/azurefirewalls"), "Not Applicable",
     (type == "microsoft.network/frontdoors"), "Not Applicable",
@@ -389,6 +400,7 @@ on id
     (type == 'microsoft.dbforpostgresql/flexibleservers'), "Not Applicable",
     (type == 'microsoft.cache/redis'), 'Not Applicable',
     (type == "microsoft.apimanagement/service"), "Not Applicable",
+    (type == "microsoft.servicebus/namespaces"), "Not Applicable",
     (type contains "storageaccounts"), "Not Applicable",
     (type == "microsoft.network/azurefirewalls"), "Not Applicable",
     (type == "microsoft.network/frontdoors"), "Not Applicable",
@@ -410,6 +422,7 @@ on id
     (type == 'microsoft.dbforpostgresql/flexibleservers'), tostring(properties.replicationRole),
     (type == 'microsoft.cache/redis'), 'Not Applicable',
     (type == "microsoft.apimanagement/service"), "Not Applicable",
+    (type == "microsoft.servicebus/namespaces"), "Not Applicable",
     (type contains "storageaccounts"), tostring(split(skuName, '_', 1)[0]),
     (type == "microsoft.network/azurefirewalls"), "Not Applicable",
     (type == "microsoft.network/frontdoors"), "Not Applicable",
@@ -421,6 +434,10 @@ on id
     (type == "microsoft.recoveryservices/vaults"), "Not Applicable",
     "Undefined"
     )
+| extend MinTLSVersion = case(
+    type == "microsoft.servicebus/namespaces", tostring(properties.minimumTlsVersion),
+    "Undefined"
+)
 | project 
     Type = tolower(type),
     SkuName = tolower(skuName),
@@ -442,6 +459,7 @@ on id
     StorageAutogrow = tolower(StorageAutogrow),
     ReplicationRole = tolower(ReplicationRole),
     Environment = environment,
+    MinTLSVersion,
     properties
 | join kind = leftouter (
     recoveryservicesresources
