@@ -3788,11 +3788,6 @@
                         "json": "Important\r\n\r\n* Azure Database for PostgreSQL - Single Server is on the retirement path. We strongly recommend for you to upgrade to Azure Database for PostgreSQL - Flexible Server. \r\n\r\n> For more information about migrating to Azure Database for PostgreSQL - Flexible Server, see [What's happening to Azure Database for PostgreSQL Single Server](https://learn.microsoft.com/en-us/azure/postgresql/single-server/whats-happening-to-postgresql-single-server)?",
                         "style": "warning"
                       },
-                      "conditionalVisibility": {
-                        "parameterName": "Help",
-                        "comparison": "isEqualTo",
-                        "value": "Yes"
-                      },
                       "name": "postgresql-single-retirement"
                     },
                     {
