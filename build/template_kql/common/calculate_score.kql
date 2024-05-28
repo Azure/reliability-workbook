@@ -45,4 +45,6 @@ extend ReliabilityScore = case(
     // ASRs contain multiple VM resources that are configured for replication and therefore maintain status in each of them. If none of the VMs are replicated, both the OK status and the NG status will be null. This means that if the OK status is calculated in the same way as other resources, by adding the OK statuses, the score will be zero.
     // So, for ASR, if even one VM has an NG status, that status is treated as 0 and the score is calculated by subtracting the status of that status from 1.
     Type == 'microsoft.recoveryservices/vaults', ((1-NoAsrSucceededState) + (1-NoAsrSucceededReplHealth) + (1-NoAsrSucceededFailoverHealth) + (1-NoAsrSucceededProtectionStateDesc) + (1-NoAsrSucceededReplicationAgentUpdate)) * 100 / (5 * UniqueResourceTotal),
+    // Service Bus - 5 checks // score = (Failed Status + Non-Premium SKU + No Availability Zone + Outdated TLS version + Capacity < 2)
+    Type == 'microsoft.servicebus/namespaces', (SucceededStateCount + PremiumSkuCount + AvZoneCount + NAAvZoneCount + MeetMinTLSVersionCount + Gt1CapacityCount) * 100 / (5 * ResourceTotal),
     0)

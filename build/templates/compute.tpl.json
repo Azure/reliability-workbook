@@ -351,13 +351,14 @@
                                   },
                                   {
                                     "operator": "==",
-                                    "thresholdValue": "vm deallocated",
-                                    "representation": "gray",
+                                    "thresholdValue": "vm stopped",
+                                    "representation": "redBright",
                                     "text": "{0}{1}"
                                   },
                                   {
                                     "operator": "Default",
                                     "thresholdValue": null,
+                                    "representation": "gray",
                                     "text": "{0}{1}"
                                   }
                                 ]

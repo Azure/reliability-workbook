@@ -3500,86 +3500,8 @@
                               }
                             },
                             {
-                              "columnMatch": "Subscription",
-                              "formatter": 13,
-                              "formatOptions": {
-                                "linkTarget": "Resource",
-                                "showIcon": true
-                              }
-                            },
-                            {
                               "columnMatch": "Type",
                               "formatter": 5
-                            },
-
-                            {
-                              "columnMatch": "SubscriptionId",
-                              "formatter": 5
-                            },
-                            {
-                              "columnMatch": "Name",
-                              "formatter": 5
-                            },
-                            {
-                              "columnMatch": "location",
-                              "formatter": 17
-                            },
-                            {
-                              "columnMatch": "Zones",
-                              "formatter": 5
-                            },
-                            {
-                              "columnMatch": "Status",
-                              "formatter": 18,
-                              "formatOptions": {
-                                "thresholdsOptions": "colors",
-                                "thresholdsGrid": [
-                                  {
-                                    "operator": "contains",
-                                    "thresholdValue": "Stopped",
-                                    "representation": "orange",
-                                    "text": "{0}{1}"
-                                  },
-                                  {
-                                    "operator": "contains",
-                                    "thresholdValue": "Available",
-                                    "representation": "green",
-                                    "text": "{0}{1}"
-                                  },
-                                  {
-                                    "operator": "Default",
-                                    "thresholdValue": null,
-                                    "text": "{0}{1}"
-                                  }
-                                ]
-                              }
-                            },
-                            {
-                              "columnMatch": "State",
-                              "formatter": 18,
-                              "formatOptions": {
-                                "thresholdsOptions": "icons",
-                                "thresholdsGrid": [
-                                  {
-                                    "operator": "==",
-                                    "thresholdValue": "ready",
-                                    "representation": "success",
-                                    "text": "{0}{1}"
-                                  },
-                                  {
-                                    "operator": "!=",
-                                    "thresholdValue": "ready",
-                                    "representation": "2",
-                                    "text": "{0}{1}"
-                                  },
-                                  {
-                                    "operator": "Default",
-                                    "thresholdValue": null,
-                                    "representation": null,
-                                    "text": "{0}{1}"
-                                  }
-                                ]
-                              }
                             },
                             {
                               "columnMatch": "SkuName",
@@ -3614,6 +3536,49 @@
                               }
                             },
                             {
+                              "columnMatch": "SubscriptionId",
+                              "formatter": 5
+                            },
+                            {
+                              "columnMatch": "Name",
+                              "formatter": 5
+                            },
+                            {
+                              "columnMatch": "State",
+                              "formatter": 18,
+                              "formatOptions": {
+                                "thresholdsOptions": "icons",
+                                "thresholdsGrid": [
+                                  {
+                                    "operator": "==",
+                                    "thresholdValue": "ready",
+                                    "representation": "success",
+                                    "text": "{0}{1}"
+                                  },
+                                  {
+                                    "operator": "!=",
+                                    "thresholdValue": "ready",
+                                    "representation": "2",
+                                    "text": "{0}{1}"
+                                  },
+                                  {
+                                    "operator": "Default",
+                                    "thresholdValue": null,
+                                    "representation": null,
+                                    "text": "{0}{1}"
+                                  }
+                                ]
+                              }
+                            },
+                            {
+                              "columnMatch": "Location",
+                              "formatter": 17
+                            },
+                            {
+                              "columnMatch": "Zones",
+                              "formatter": 5
+                            },
+                            {
                               "columnMatch": "AvailabilityZone",
                               "formatter": 18,
                               "formatOptions": {
@@ -3635,32 +3600,6 @@
                                     "operator": "==",
                                     "thresholdValue": "configured",
                                     "representation": "success",
-                                    "text": "{0}{1}"
-                                  },
-                                  {
-                                    "operator": "Default",
-                                    "thresholdValue": null,
-                                    "text": "{0}{1}"
-                                  }
-                                ]
-                              }
-                            },
-                            {
-                              "columnMatch": "Environment",
-                              "formatter": 18,
-                              "formatOptions": {
-                                "thresholdsOptions": "colors",
-                                "thresholdsGrid": [
-                                  {
-                                    "operator": "contains",
-                                    "thresholdValue": "prod",
-                                    "representation": "redBright",
-                                    "text": "{0}{1}"
-                                  },
-                                  {
-                                    "operator": "contains",
-                                    "thresholdValue": "Prod",
-                                    "representation": "redBright",
                                     "text": "{0}{1}"
                                   },
                                   {
@@ -3741,6 +3680,66 @@
                                   }
                                 ]
                               }
+                            },
+                            {
+                              "columnMatch": "Environment",
+                              "formatter": 18,
+                              "formatOptions": {
+                                "thresholdsOptions": "colors",
+                                "thresholdsGrid": [
+                                  {
+                                    "operator": "contains",
+                                    "thresholdValue": "prod",
+                                    "representation": "redBright",
+                                    "text": "{0}{1}"
+                                  },
+                                  {
+                                    "operator": "contains",
+                                    "thresholdValue": "Prod",
+                                    "representation": "redBright",
+                                    "text": "{0}{1}"
+                                  },
+                                  {
+                                    "operator": "Default",
+                                    "thresholdValue": null,
+                                    "text": "{0}{1}"
+                                  }
+                                ]
+                              }
+                            },
+                            {
+                              "columnMatch": "Subscription",
+                              "formatter": 13,
+                              "formatOptions": {
+                                "linkTarget": "Resource",
+                                "showIcon": true
+                              }
+                            },
+                            {
+                              "columnMatch": "Status",
+                              "formatter": 18,
+                              "formatOptions": {
+                                "thresholdsOptions": "colors",
+                                "thresholdsGrid": [
+                                  {
+                                    "operator": "contains",
+                                    "thresholdValue": "Stopped",
+                                    "representation": "orange",
+                                    "text": "{0}{1}"
+                                  },
+                                  {
+                                    "operator": "contains",
+                                    "thresholdValue": "Available",
+                                    "representation": "green",
+                                    "text": "{0}{1}"
+                                  },
+                                  {
+                                    "operator": "Default",
+                                    "thresholdValue": null,
+                                    "text": "{0}{1}"
+                                  }
+                                ]
+                              }
                             }
                           ],
                           "rowLimit": 10000,
@@ -3761,6 +3760,10 @@
                               "label": "Subscription"
                             },
                             {
+                              "columnId": "State",
+                              "label": "Status"
+                            },
+                            {
                               "columnId": "ResourceGroup",
                               "label": "Resource Group"
                             },
@@ -3769,14 +3772,9 @@
                               "label": "High Availability"
                             },
                             {
-                              "columnId": "State",
-                              "label": "Status"
-                            },
-                            {
                               "columnId": "ReplicationRole",
                               "label": "Replication Role"
                             }
-
                           ]
                         }
                       },
@@ -3787,11 +3785,6 @@
                       "content": {
                         "json": "Important\r\n\r\n* Azure Database for PostgreSQL - Single Server is on the retirement path. We strongly recommend for you to upgrade to Azure Database for PostgreSQL - Flexible Server. \r\n\r\n> For more information about migrating to Azure Database for PostgreSQL - Flexible Server, see [What's happening to Azure Database for PostgreSQL Single Server](https://learn.microsoft.com/en-us/azure/postgresql/single-server/whats-happening-to-postgresql-single-server)?",
                         "style": "warning"
-                      },
-                      "conditionalVisibility": {
-                        "parameterName": "Help",
-                        "comparison": "isEqualTo",
-                        "value": "Yes"
                       },
                       "name": "postgresql-single-retirement"
                     },
