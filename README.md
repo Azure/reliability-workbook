@@ -54,6 +54,9 @@ This Reliability Workbook consists of several co-workbooks. For easy deployment,
     ```shell
     ./deploy-workbook.sh -s 00000000-0000-0000-0000-000000000000 -g myResourceGroup -c -l japaneast
     ```
+
+    If there are any issues with the deployment script, review the `deploy-workbook.sh` script in `scripts/deploy-workbook.sh` for any errors or misconfigurations.
+
 ### Deploy only Export Workbook easily
 
 If you only want to deploy the Export workbook, you can deploy from the following button.
