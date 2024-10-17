@@ -305,6 +305,19 @@
                         "sortBy": []
                       },
                       "name": "query - 0"
+                    },
+                    {
+                      "type": 1,
+                      "content": {
+                        "json": "> For premium storage accounts, GRS is not available. Instead, consider using ZRS and relying on AVD mechanisms like CloudCache for replication.",
+                        "style": "info"
+                      },
+                      "conditionalVisibility": {
+                        "parameterName": "Help",
+                        "comparison": "isEqualTo",
+                        "value": "Yes"
+                      },
+                      "name": "Premium Storage Recommendation"
                     }
               ]
             },
