@@ -35,8 +35,8 @@ jobs:
         shell: bash
         working-directory: build
     steps:
-      - uses: actions/checkout@main
-      - uses: hashicorp/setup-terraform@v2
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: hashicorp/setup-terraform@633666f66e0061ca3b725c73b2ec20cd13a8fdd1 # v2.0.3
 
       - name: Build workbook by Terraform
         run: make all
@@ -45,7 +45,7 @@ jobs:
         run: ls -lR
 
       - name: Upload workbook files
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@ff15f0306b3f739f7b6fd43fb5d26cd321bd4de5 # v3.2.1
         with:
           name: asset
           path: |
@@ -61,7 +61,7 @@ jobs:
     needs: build-and-attach
     steps:
       # Drafts your next Release notes as Pull Requests are merged into "master"
-      - uses: release-drafter/release-drafter@v5
+      - uses: release-drafter/release-drafter@09c613e259eb8d4e7c81c2cb00618eb5fc4575a7 # v5.25.0
         id: release_drafter
         # (Optional) specify config name to use, relative to .github/. Default: release-drafter.yml
         # with:
@@ -71,19 +71,19 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Generate token
         id: generate_token
-        uses: tibdex/github-app-token@v1
+        uses: tibdex/github-app-token@32691ba7c9e7063bd457bd8f2a5703138591fa58 # v1.9.0
         with:
           app_id: ${{ secrets.FOR_COMMIT_BOT_APP_ID }}
           private_key: ${{ secrets.FOR_COMMIT_BOT_PRIVATE_KEY }}
       # Checkout code
-      - uses: actions/checkout@main
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           token: ${{steps.generate_token.outputs.token}}
       - name: Download asset
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@9bc31d5ccc31df68ecc42ccf4149144866c47d8a # v3.0.2
       - name: Display structure of downloaded files
         run: ls -lR
-      - uses: shogo82148/actions-upload-release-asset@v1
+      - uses: shogo82148/actions-upload-release-asset@9ee13965a8a51926f330b424693f25fcff8f2ef6 # v1.10.6
         with:
           upload_url: ${{ steps.release_drafter.outputs.upload_url }}
           asset_path: |
@@ -92,7 +92,7 @@ jobs:
       - name: Move files from asset to workbooks directory
         run: |
           mv -f asset/* workbooks/
-      - uses: EndBug/add-and-commit@v9.0.1
+      - uses: EndBug/add-and-commit@998652d28d7702d095d40f52ae42982a80ae8c7d # v9.0.1
         with:
           author_name: github-actions
           author_email: '41898282+github-actions[bot]@users.noreply.github.com'
